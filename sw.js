@@ -4,13 +4,15 @@ const CACHE = 'miloplay-v1';
 
 const GAMES = [
 // GAMES:BEGIN
-  'aim-trainer', 'astro-blaster', 'ball-blast', 'battleship', 'blackjack', 'blast-arena',
-  'block-stacker', 'blockcraft', 'brick-breaker', 'checkers', 'coin-tycoon', 'color-rush',
-  'connect-four', 'crazy-eights', 'dash-runner', 'dots-and-boxes', 'flap-rocket', 'freecell',
-  'g2048', 'golf-solitaire', 'gomoku', 'highway-rush', 'hoop-shot', 'klondike', 'lights-out',
-  'maze-runner', 'memory-match', 'minesweeper', 'neon-snake', 'pong-duel', 'pyramid-solitaire',
-  'reversi', 'sky-hopper', 'slide-puzzle', 'snake-royale', 'spider-solitaire', 'terra-dig',
-  'tic-tac-toe', 'tower-stack', 'turbo-drift', 'video-poker', 'war-cards', 'whack-a-mole'
+  'aim-trainer', 'anagram-hunt', 'astro-blaster', 'ball-blast', 'battleship', 'blackjack',
+  'blast-arena', 'block-stacker', 'blockcraft', 'brick-breaker', 'checkers', 'coin-tycoon',
+  'color-rush', 'connect-four', 'crazy-eights', 'dash-runner', 'dots-and-boxes', 'flap-rocket',
+  'freecell', 'g2048', 'golf-solitaire', 'gomoku', 'hangman', 'highway-rush', 'hoop-shot',
+  'klondike', 'letter-drop', 'lights-out', 'mancala', 'maze-runner', 'memory-match',
+  'minesweeper', 'neon-snake', 'nim', 'pong-duel', 'pyramid-solitaire', 'reversi', 'sky-hopper',
+  'slide-puzzle', 'snake-royale', 'spider-solitaire', 'sudoku', 'terra-dig', 'tic-tac-toe',
+  'tower-stack', 'turbo-drift', 'typing-test', 'video-poker', 'war-cards', 'whack-a-mole',
+  'word-grid', 'word-ladder', 'word-search', 'word-sleuth'
 // GAMES:END
 ];
 
