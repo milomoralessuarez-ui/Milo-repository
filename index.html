@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MiloPlay — free browser games, no downloads</title>
+<meta name="description" content="Play 30 free games instantly in your browser: voxel sandboxes, arena shooters, puzzles, racers and arcade classics. No downloads, no sign-up, works on phones.">
+<meta name="theme-color" content="#0b0e1a">
+<meta name="color-scheme" content="dark light">
+
+<meta property="og:title" content="MiloPlay — free browser games">
+<meta property="og:description" content="30 free games that run instantly in your browser. No downloads, no sign-up.">
+<meta property="og:type" content="website">
+
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%237c5cff'/><stop offset='1' stop-color='%2322d3ee'/></linearGradient></defs><rect width='100' height='100' rx='24' fill='url(%23g)'/><text x='50' y='72' font-size='58' text-anchor='middle'>🎮</text></svg>">
+<link rel="manifest" href="manifest.webmanifest">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<div id="boot" style="position:fixed;inset:0;z-index:999;display:grid;place-items:center;background:#0b0e1a;color:#a8b0d8;font-family:system-ui,sans-serif">
+  <div style="text-align:center">
+    <div style="font-size:2.6rem">🎮</div>
+    <div style="margin-top:8px;font-weight:600">Loading MiloPlay…</div>
+  </div>
+</div>
+
+<header class="header">
+  <button class="icon-btn menu-btn" id="menu" type="button" aria-label="Open menu">☰</button>
+
+  <a class="logo" href="#/" aria-label="MiloPlay home">
+    <span class="logo-mark">🎮</span>
+    <span class="logo-text">Milo<b>Play</b></span>
+  </a>
+
+  <div class="search" id="search" role="search">
+    <span class="s-icon" aria-hidden="true">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+        <circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>
+      </svg>
+    </span>
+    <input id="q" type="search" placeholder="Search 30 games…  (press /)" autocomplete="off"
+           spellcheck="false" aria-label="Search games">
+    <button class="s-clear" id="s-clear" type="button" aria-label="Clear search">×</button>
+    <div class="suggest" id="suggest" role="listbox"></div>
+  </div>
+
+  <div class="header-actions">
+    <button class="icon-btn" id="theme" type="button" aria-label="Toggle theme">🌙</button>
+  </div>
+</header>
+
+<div class="scrim" id="scrim"></div>
+
+<div class="shell">
+  <aside class="sidebar" id="sidebar">
+    <nav id="sidenav"></nav>
+  </aside>
+  <main class="main" id="main"></main>
+</div>
+
+<footer class="footer">
+  <p><strong>MiloPlay</strong> — 30 original games, free forever. No ads, no accounts, no tracking.</p>
+  <p style="margin-top:6px">
+    <a href="#/browse">All games</a> ·
+    <a href="#/elsewhere">Games elsewhere</a> ·
+    <a href="#/about">About</a>
+  </p>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script src="assets/js/engine.js"></script>
+
+<!-- Sandbox -->
+<script src="assets/js/games/blockcraft.js"></script>
+<script src="assets/js/games/terra-dig.js"></script>
+
+<!-- Action -->
+<script src="assets/js/games/blast-arena.js"></script>
+<script src="assets/js/games/snake-royale.js"></script>
+<script src="assets/js/games/astro-blaster.js"></script>
+<script src="assets/js/games/ball-blast.js"></script>
+
+<!-- Arcade -->
+<script src="assets/js/games/neon-snake.js"></script>
+<script src="assets/js/games/brick-breaker.js"></script>
+<script src="assets/js/games/flap-rocket.js"></script>
+<script src="assets/js/games/sky-hopper.js"></script>
+<script src="assets/js/games/dash-runner.js"></script>
+<script src="assets/js/games/color-rush.js"></script>
+<script src="assets/js/games/tower-stack.js"></script>
+
+<!-- Puzzle -->
+<script src="assets/js/games/block-stacker.js"></script>
+<script src="assets/js/games/g2048.js"></script>
+<script src="assets/js/games/minesweeper.js"></script>
+<script src="assets/js/games/slide-puzzle.js"></script>
+<script src="assets/js/games/lights-out.js"></script>
+<script src="assets/js/games/maze-runner.js"></script>
+
+<!-- Racing -->
+<script src="assets/js/games/turbo-drift.js"></script>
+<script src="assets/js/games/highway-rush.js"></script>
+
+<!-- Sports -->
+<script src="assets/js/games/pong-duel.js"></script>
+<script src="assets/js/games/hoop-shot.js"></script>
+
+<!-- Strategy -->
+<script src="assets/js/games/connect-four.js"></script>
+<script src="assets/js/games/tic-tac-toe.js"></script>
+<script src="assets/js/games/reversi.js"></script>
+
+<!-- Casual -->
+<script src="assets/js/games/memory-match.js"></script>
+<script src="assets/js/games/whack-a-mole.js"></script>
+<script src="assets/js/games/aim-trainer.js"></script>
+<script src="assets/js/games/coin-tycoon.js"></script>
+
+<script src="assets/js/app.js"></script>
+<script>
+  if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+    addEventListener('load', function () {
+      navigator.serviceWorker.register('sw.js').catch(function () { /* offline support is optional */ });
+    });
+  }
+</script>
+</body>
+</html>
