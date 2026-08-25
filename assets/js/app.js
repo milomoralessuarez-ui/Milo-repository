@@ -548,6 +548,11 @@
   function render() {
     if (current) { try { current.destroy(); } catch (e) { } current = null; }
 
+    // A game may have grabbed the pointer or gone fullscreen. Neither should
+    // survive a navigation, and a destroy that threw may not have undone them.
+    if (document.pointerLockElement) { try { document.exitPointerLock(); } catch (e) { } }
+    if (document.fullscreenElement) { document.exitFullscreen().catch(function () { }); }
+
     var r = state.route = parseHash();
     var main = $('#main');
     var view;

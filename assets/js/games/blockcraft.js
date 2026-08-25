@@ -348,6 +348,22 @@
     var saveTimer = null;
     var target = null;        // {x,y,z, nx,ny,nz}
 
+    /* --- DOM extras: crosshair + hotbar ---
+       Built detached, because glGame primes the game (which paints the hotbar)
+       during construction; they get attached to the HUD once it exists. */
+    var cross = document.createElement('div');
+    cross.style.cssText = 'position:absolute;left:50%;top:50%;width:22px;height:22px;' +
+      'margin:-11px 0 0 -11px;pointer-events:none;z-index:6;opacity:.85';
+    cross.innerHTML = '<svg viewBox="0 0 22 22"><path d="M11 3v6M11 13v6M3 11h6M13 11h6" ' +
+      'stroke="#fff" stroke-width="2" stroke-linecap="round" ' +
+      'style="filter:drop-shadow(0 0 2px rgba(0,0,0,.9))"/></svg>';
+
+    var hotbar = document.createElement('div');
+    hotbar.style.cssText = 'position:absolute;left:50%;bottom:14px;transform:translateX(-50%);' +
+      'display:flex;gap:5px;padding:5px;border-radius:12px;z-index:6;pointer-events:auto;' +
+      'background:rgba(8,10,26,.55);border:1px solid rgba(255,255,255,.14);' +
+      'backdrop-filter:blur(8px)';
+
     var runner = Milo.glGame(host, {
       id: 'blockcraft',
       stats: ['Mined', 'Placed', 'FPS'],
@@ -387,21 +403,7 @@
 
     var g = runner.g;
     if (!g) return runner;   // WebGL unavailable — glGame already rendered a notice
-
-    /* --- DOM extras: crosshair + hotbar --- */
-    var cross = document.createElement('div');
-    cross.style.cssText = 'position:absolute;left:50%;top:50%;width:22px;height:22px;' +
-      'margin:-11px 0 0 -11px;pointer-events:none;z-index:6;opacity:.85';
-    cross.innerHTML = '<svg viewBox="0 0 22 22"><path d="M11 3v6M11 13v6M3 11h6M13 11h6" ' +
-      'stroke="#fff" stroke-width="2" stroke-linecap="round" ' +
-      'style="filter:drop-shadow(0 0 2px rgba(0,0,0,.9))"/></svg>';
     g.hud.appendChild(cross);
-
-    var hotbar = document.createElement('div');
-    hotbar.style.cssText = 'position:absolute;left:50%;bottom:14px;transform:translateX(-50%);' +
-      'display:flex;gap:5px;padding:5px;border-radius:12px;z-index:6;pointer-events:auto;' +
-      'background:rgba(8,10,26,.55);border:1px solid rgba(255,255,255,.14);' +
-      'backdrop-filter:blur(8px)';
     g.hud.appendChild(hotbar);
 
     function drawHotbar() {
@@ -462,18 +464,22 @@
     function start(g) {
       var saved = Milo.store.get('blockcraft:world', null);
       var seed = (saved && saved.seed) || Math.floor(Math.random() * 100000);
-      world = new World(seed);
-      world.generate();
-      if (saved && saved.edits) world.applyEdits(saved.edits);
-      Milo.store.set('blockcraft:world', { seed: seed, edits: world.edits });
 
-      chunks = [];
-      meshQueue = [];
-      for (var cz = 0; cz < CZ; cz++) {
-        for (var cx = 0; cx < CX; cx++) {
-          var c = { cx: cx, cz: cz, opaque: null, alpha: null };
-          chunks.push(c);
-          meshQueue.push(c);
+      // Restarting only respawns the player; the world (and your builds) stay.
+      if (!world || world.seed !== seed) {
+        world = new World(seed);
+        world.generate();
+        if (saved && saved.edits) world.applyEdits(saved.edits);
+        Milo.store.set('blockcraft:world', { seed: seed, edits: world.edits });
+
+        chunks = [];
+        meshQueue = [];
+        for (var cz = 0; cz < CZ; cz++) {
+          for (var cx = 0; cx < CX; cx++) {
+            var c = { cx: cx, cz: cz, opaque: null, alpha: null };
+            chunks.push(c);
+            meshQueue.push(c);
+          }
         }
       }
 
@@ -498,7 +504,7 @@
         return dx * dx + dz * dz;
       }
 
-      g.requestLock();
+      if (g.state === 'play') g.requestLock();
     }
 
     /* --- meshing --- */

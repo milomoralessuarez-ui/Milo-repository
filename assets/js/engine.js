@@ -464,6 +464,25 @@
     };
   }
 
+  /**
+   * Runs a game's preload + first init, then shows the start overlay.
+   * Priming before the first frame means the game renders behind that overlay
+   * instead of drawing from an empty state. If a game throws while starting up
+   * we tear its runner down before rethrowing — otherwise its global key and
+   * mouse listeners would survive and fire on whatever the player opens next.
+   */
+  function prime(api, cfg, g, onPrimed) {
+    try {
+      if (cfg.preload) cfg.preload(g);
+      if (cfg.init) cfg.init(g);
+      if (onPrimed) onPrimed();
+      if (cfg.autoStart) g.restart(); else g.showStart();
+    } catch (err) {
+      try { api.destroy(); } catch (e) { /* already half torn down */ }
+      throw err;
+    }
+  }
+
   /** Optional on-screen controls for touch devices. */
   function addTouchControls(hud, cfg, input) {
     if (cfg.touch === 'dpad' || cfg.touch === 'dpad+a') {
@@ -519,7 +538,7 @@
     host.appendChild(canvas);
 
     var input = new Input(host);
-    var raf = 0, last = 0, destroyed = false;
+    var raf = 0, last = 0, destroyed = false, primed = false;
     var scale = 1, ox = 0, oy = 0, dpr = 1;
 
     var g = {
@@ -607,6 +626,8 @@
 
     /* --- loop --- */
     function paint() {
+      // Nothing to draw until cfg.init has populated g.data.
+      if (!primed) return;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       if (cfg.bg) {
@@ -635,13 +656,7 @@
     function vis() { if (document.hidden && g.state === 'play' && cfg.pauseOnBlur !== false) g.pause(); }
     document.addEventListener('visibilitychange', vis);
 
-    resize();
-    if (cfg.preload) cfg.preload(g);
-    if (cfg.autoStart) g.restart(); else g.showStart();
-    last = performance.now();
-    raf = requestAnimationFrame(tick);
-
-    return {
+    var api = {
       g: g,
       destroy: function () {
         destroyed = true;
@@ -656,6 +671,12 @@
         host.innerHTML = '';
       }
     };
+
+    resize();
+    prime(api, cfg, g, function () { primed = true; });
+    last = performance.now();
+    raf = requestAnimationFrame(tick);
+    return api;
   };
 
   /* ------------------------------------------------------- DOM-based game */
@@ -698,10 +719,7 @@
       })(last);
     }
 
-    if (cfg.preload) cfg.preload(g);
-    if (cfg.autoStart) g.restart(); else g.showStart();
-
-    return {
+    var api = {
       g: g,
       destroy: function () {
         destroyed = true;
@@ -712,6 +730,9 @@
         host.innerHTML = '';
       }
     };
+
+    prime(api, cfg, g);
+    return api;
   };
 
   /* ----------------------------------------------------------- WebGL game */
@@ -853,13 +874,7 @@
     function vis() { if (document.hidden && g.state === 'play') g.pause(); }
     document.addEventListener('visibilitychange', vis);
 
-    resize();
-    if (cfg.preload) cfg.preload(g);
-    if (cfg.autoStart) g.restart(); else g.showStart();
-    last = performance.now();
-    raf = requestAnimationFrame(tick);
-
-    return {
+    var api = {
       g: g,
       destroy: function () {
         destroyed = true;
@@ -878,6 +893,12 @@
         host.innerHTML = '';
       }
     };
+
+    resize();
+    prime(api, cfg, g);
+    last = performance.now();
+    raf = requestAnimationFrame(tick);
+    return api;
   };
 
   /* -------------------------------------------------------- registration */
