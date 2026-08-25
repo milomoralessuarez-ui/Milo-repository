@@ -183,13 +183,15 @@ across navigation.
 ## Deploying
 
 `.github/workflows/deploy.yml` publishes the repository to GitHub Pages on
-every push to `main`. To turn it on:
+every push to the repository's **default branch** (whatever it is called — the
+workflow reads it rather than hardcoding `main`). To turn it on:
 
 1. **Settings → Pages → Build and deployment → Source: GitHub Actions**
-2. Push to `main`.
+2. Push to the default branch.
 
-The site is then live at
-`https://<user>.github.io/<repo>/`.
+The site is then live at `https://<user>.github.io/<repo>/`. Nothing is
+published until you enable Pages yourself — until then the workflow simply has
+nowhere to deploy to.
 
 ### A shorter URL
 
