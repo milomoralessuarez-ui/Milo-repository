@@ -688,21 +688,36 @@
   /* ---------------------------------------------------------------- theme */
 
   function setupTheme() {
+    var root = document.documentElement;
     var saved = store.get('theme', null);
-    if (saved) document.documentElement.setAttribute('data-theme', saved);
+    if (saved) root.setAttribute('data-theme', saved);
     var btn = $('#theme');
-    function icon() {
-      var dark = document.documentElement.getAttribute('data-theme') !== 'light';
-      btn.textContent = dark ? '🌙' : '☀️';
+
+    // With nothing stamped on the root, the OS preference decides, so the
+    // button has to resolve the theme actually in effect rather than read
+    // the attribute alone.
+    function isDark() {
+      var stamp = root.getAttribute('data-theme');
+      if (stamp) return stamp !== 'light';
+      return !(window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches);
     }
+    function icon() { btn.textContent = isDark() ? '🌙' : '☀️'; }
+
     icon();
     btn.addEventListener('click', function () {
-      var dark = document.documentElement.getAttribute('data-theme') !== 'light';
-      var next = dark ? 'light' : 'dark';
-      document.documentElement.setAttribute('data-theme', next);
+      var next = isDark() ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
       store.set('theme', next);
       icon();
     });
+
+    // Follow the OS while the visitor hasn't chosen a theme themselves.
+    if (window.matchMedia) {
+      var mq = window.matchMedia('(prefers-color-scheme: light)');
+      var onChange = function () { if (!store.get('theme', null)) icon(); };
+      if (mq.addEventListener) mq.addEventListener('change', onChange);
+      else if (mq.addListener) mq.addListener(onChange);
+    }
   }
 
   /* -------------------------------------------------------------- sidebar */
@@ -713,9 +728,13 @@
   /* ----------------------------------------------------------------- boot */
 
   function boot() {
-    if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
+    // Capability sniffing marks plenty of desktops as touch devices, which
+    // would park a d-pad over the game. Wait for a real touch instead; the
+    // (pointer: coarse) media query already covers phones and tablets.
+    window.addEventListener('touchstart', function onFirstTouch() {
       document.body.classList.add('touch');
-    }
+      window.removeEventListener('touchstart', onFirstTouch);
+    }, { passive: true });
     setupTheme();
     setupSearch();
     $('#menu').addEventListener('click', openSidebar);

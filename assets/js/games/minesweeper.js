@@ -21,7 +21,7 @@
       build(g);
       g.set('Mines', MINES);
       g.set('Time', '0:00');
-      g.set('Best', g.best ? U.time(g.best) : '—');
+      g.set('Best', bestTime() ? U.time(bestTime()) : '—');
     }
 
     function build(g) {
@@ -79,6 +79,10 @@
         if (e.cancelable) e.preventDefault();
       });
     }
+
+    /** Fastest clear, in seconds. Tracked separately: the engine's own best is
+        a points score (higher is better), which is not a time. */
+    function bestTime() { return Milo.store.get('best:minesweeper-time', 0) || 0; }
 
     function idx(x, y) { return y * COLS + x; }
     function around(i, fn) {
@@ -180,9 +184,9 @@
       d.done = true;
       // Score is time taken, so a *lower* number is better — track it separately.
       var t = Math.round(d.time);
-      var prev = Milo.store.get('best:minesweeper-time', 0);
+      var prev = bestTime();
       if (!prev || t < prev) Milo.store.set('best:minesweeper-time', t);
-      Milo.store.set('best:minesweeper', Math.max(0, 9999 - t));
+      g.set('Best', U.time(bestTime()));
       g.win({
         emo: '🚩', title: 'Field cleared!',
         text: 'You swept all ' + MINES + ' mines in ' + U.time(t) + '.',

@@ -133,6 +133,7 @@
       bg: '#0a0f22',
       stats: ['Coins', 'Mined', 'Blocks'],
       touch: 'dpad',
+      touchButtons: [{ key: 'b', label: 'PLACE' }],
       noContextMenu: true,
       wheel: true,
       emo: '🪓',
@@ -150,8 +151,9 @@
       },
 
       onPointer: function (g, type, x, y, e) {
-        var d = g.data;
-        if (type === 'down' && e && e.button === 2) placeAt(g, x, y);
+        if (type !== 'down') return;
+        // Right-click places on a mouse; on touch, hold PLACE and tap.
+        if ((e && e.button === 2) || g.input.down('b')) placeAt(g, x, y);
       },
 
       update: function (g, dt) {
@@ -191,8 +193,9 @@
         d.cam.x = U.clamp(p.x - g.W / 2, 0, MW * TS - g.W);
         d.cam.y = U.clamp(p.y - g.H / 2, 0, MH * TS - g.H);
 
-        // Digging: hold the left button on a tile within reach.
-        if (i.pdown) {
+        // Digging: hold the left button on a tile within reach. Placing (right
+        // button, or the PLACE pad on touch) must not dig at the same time.
+        if (i.pdown && i.pbutton === 0 && !i.down('b')) {
           var wx = i.px + d.cam.x, wy = i.py + d.cam.y;
           var tx = Math.floor(wx / TS), ty = Math.floor(wy / TS);
           var reach = U.dist(wx, wy, p.x, p.y + p.h / 2) < TS * 5.5;
@@ -289,9 +292,10 @@
         c.fillRect(px2 - 3 + (p.vx > 5 ? 2 : p.vx < -5 ? -2 : 0), py2 + 5, 2, 2.5);
         c.fillRect(px2 + 1 + (p.vx > 5 ? 2 : p.vx < -5 ? -2 : 0), py2 + 5, 2, 2.5);
 
-        // hotbar
+        // Hotbar, lifted clear of the on-screen d-pad when there is one.
+        var touch = Milo.touchLayout();
         var hbW = PLACEABLE.length * 40;
-        var hx = (g.W - hbW) / 2, hy = g.H - 52;
+        var hx = (g.W - hbW) / 2, hy = g.H - (touch ? 178 : 52);
         c.fillStyle = 'rgba(8,10,26,.6)';
         U.roundRect(c, hx - 6, hy - 6, hbW + 12, 46, 10); c.fill();
         PLACEABLE.forEach(function (id, i2) {
@@ -310,9 +314,10 @@
 
         c.fillStyle = 'rgba(255,255,255,.55)';
         c.font = '600 12px Outfit, sans-serif';
-        c.textAlign = 'left';
-        c.fillText('Left click: dig   ·   Right click: place   ·   1–6 or scroll: choose block',
-          14, g.H - 62);
+        c.textAlign = 'center';
+        c.fillText(touch ? 'Tap to dig  ·  hold PLACE and tap to build'
+          : 'Left click: dig   ·   Right click: place   ·   1–6 or scroll: choose block',
+          g.W / 2, hy - 12);
       },
 
       destroy: function (g) { if (g.data.map) save(g.data); }

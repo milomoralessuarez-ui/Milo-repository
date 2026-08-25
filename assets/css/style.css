@@ -35,6 +35,10 @@
   --r-lg: 22px;
   --r-xl: 30px;
 
+  --glow-a: rgba(124, 92, 255, .26);
+  --glow-b: rgba(34, 211, 238, .18);
+  --glow-c: rgba(255, 77, 157, .12);
+
   --shadow: 0 10px 34px rgba(0, 0, 0, .45);
   --shadow-lg: 0 24px 60px rgba(0, 0, 0, .55);
   --ring: 0 0 0 2px var(--bg), 0 0 0 4px var(--brand);
@@ -50,6 +54,33 @@
   color-scheme: dark;
 }
 
+/* MiloPlay is dark-first: the arcade look above is the default identity, so
+   :root carries the complete dark palette. The light palette is defined once
+   and applied in two places — when the viewer's OS asks for light and nothing
+   has been stamped on the root, and when a light theme is stamped explicitly
+   (by the in-page toggle, or by a host that themes the page). Keeping both
+   rules in one declaration list means neither theme can drift from the other. */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg: #f4f6fd;
+    --bg-2: #ffffff;
+    --surface: #ffffff;
+    --surface-2: #eef1fb;
+    --surface-3: #e2e7f8;
+    --line: #d8def2;
+    --line-soft: #e6eaf7;
+    --text: #131735;
+    --text-2: #545c85;
+    --text-3: #7d85ab;
+    --glow-a: rgba(124, 92, 255, .16);
+    --glow-b: rgba(34, 211, 238, .14);
+    --glow-c: rgba(255, 77, 157, .08);
+    --shadow: 0 10px 30px rgba(28, 36, 84, .10);
+    --shadow-lg: 0 22px 50px rgba(28, 36, 84, .16);
+    color-scheme: light;
+  }
+}
+
 :root[data-theme="light"] {
   --bg: #f4f6fd;
   --bg-2: #ffffff;
@@ -61,6 +92,9 @@
   --text: #131735;
   --text-2: #545c85;
   --text-3: #7d85ab;
+  --glow-a: rgba(124, 92, 255, .16);
+  --glow-b: rgba(34, 211, 238, .14);
+  --glow-c: rgba(255, 77, 157, .08);
   --shadow: 0 10px 30px rgba(28, 36, 84, .10);
   --shadow-lg: 0 22px 50px rgba(28, 36, 84, .16);
   color-scheme: light;
@@ -90,15 +124,9 @@ body::before {
   pointer-events: none;
   z-index: 0;
   background:
-    radial-gradient(760px 460px at 12% -8%, rgba(124, 92, 255, .26), transparent 62%),
-    radial-gradient(700px 420px at 92% 4%, rgba(34, 211, 238, .18), transparent 60%),
-    radial-gradient(620px 400px at 60% 100%, rgba(255, 77, 157, .12), transparent 62%);
-}
-:root[data-theme="light"] body::before {
-  background:
-    radial-gradient(760px 460px at 12% -8%, rgba(124, 92, 255, .16), transparent 62%),
-    radial-gradient(700px 420px at 92% 4%, rgba(34, 211, 238, .14), transparent 60%),
-    radial-gradient(620px 400px at 60% 100%, rgba(255, 77, 157, .08), transparent 62%);
+    radial-gradient(760px 460px at 12% -8%, var(--glow-a), transparent 62%),
+    radial-gradient(700px 420px at 92% 4%, var(--glow-b), transparent 60%),
+    radial-gradient(620px 400px at 60% 100%, var(--glow-c), transparent 62%);
 }
 
 a { color: inherit; text-decoration: none; }
@@ -340,8 +368,10 @@ button, input, select { font: inherit; color: inherit; }
   border: 1px solid var(--line);
   box-shadow: var(--shadow-lg);
   isolation: isolate;
+  /* Always a dark gradient panel, so its text colour is fixed rather than
+     inherited from whichever theme is active. */
+  color: #fff;
 }
-:root[data-theme="light"] .hero { color: #fff; }
 
 .hero::after {
   content: "";
@@ -683,9 +713,12 @@ button, input, select { font: inherit; color: inherit; }
   border-bottom: 1px solid var(--line-soft);
 }
 .stage-bar .tile { width: 34px; height: 34px; border-radius: 9px; font-size: 17px; aspect-ratio: auto; flex-shrink: 0; }
+.stage-bar > div:not(.tile) { min-width: 0; }
+.stage-bar .n,
+.stage-bar .c { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .stage-bar .n { font-weight: 750; font-size: .98rem; letter-spacing: -.01em; }
 .stage-bar .c { font-size: .75rem; color: var(--text-3); }
-.stage-bar .sp { margin-left: auto; }
+.stage-bar .sp { margin-left: auto; flex: 0 0 auto; }
 
 .stage {
   position: relative;
@@ -849,9 +882,28 @@ kbd {
   user-select: none;
   -webkit-user-select: none;
 }
+
+/* Show on-screen controls where there is no precise pointer, and on hybrid
+   devices as soon as the player actually touches the screen. A desktop with a
+   mouse gets neither, so the pads never cover the game there.
+   The button row needs `display: flex`, so it is switched on here too rather
+   than in its own rule — otherwise it would override the hidden default. */
+@media (pointer: coarse) {
+  .touch-pad { display: block; }
+  .tp-btns { display: flex; }
+}
 body.touch .touch-pad { display: block; }
+body.touch .tp-btns { display: flex; }
 
 .tp-dpad { left: 16px; bottom: 16px; width: 132px; height: 132px; }
+
+/* On a phone-sized stage the pads are scaled down rather than re-laid-out, so
+   the band they occupy stays predictable: ~124px up from the bottom edge.
+   Games lift their own bottom UI above that. */
+@media (max-width: 560px) {
+  .tp-dpad { transform: scale(.82); transform-origin: left bottom; }
+  .tp-btns { transform: scale(.85); transform-origin: right bottom; }
+}
 .tp-dpad .k {
   position: absolute;
   width: 44px; height: 44px;
@@ -869,7 +921,7 @@ body.touch .touch-pad { display: block; }
 .tp-dpad .left { left: 0; top: 44px }
 .tp-dpad .right { left: 88px; top: 44px }
 
-.tp-btns { right: 16px; bottom: 16px; display: flex; gap: 10px; align-items: flex-end; }
+.tp-btns { right: 16px; bottom: 16px; gap: 10px; align-items: flex-end; }
 .tp-btn {
   width: 62px; height: 62px;
   border-radius: 50%;
@@ -883,6 +935,45 @@ body.touch .touch-pad { display: block; }
   cursor: pointer;
 }
 .tp-btn.on { background: var(--brand); }
+
+/* Blockcraft hotbar — nine block slots along the bottom of the stage. */
+.bc-hotbar {
+  position: absolute;
+  left: 50%;
+  bottom: 14px;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 5px;
+  padding: 5px;
+  max-width: calc(100% - 20px);
+  border-radius: 12px;
+  z-index: 6;
+  pointer-events: auto;
+  background: rgba(8, 10, 26, .55);
+  border: 1px solid rgba(255, 255, 255, .14);
+  backdrop-filter: blur(8px);
+}
+.bc-hotbar button {
+  width: 38px;
+  height: 38px;
+  flex: 0 0 auto;
+  border-radius: 9px;
+  cursor: pointer;
+  display: grid;
+  place-items: end center;
+  padding: 0 0 2px;
+  font: 700 9px/1 var(--font);
+  color: rgba(255, 255, 255, .85);
+  text-shadow: 0 1px 2px #000;
+}
+/* Clear of the on-screen d-pad, and small enough to fit a phone-wide stage. */
+@media (pointer: coarse) {
+  .bc-hotbar { bottom: 140px; }
+}
+@media (max-width: 560px) {
+  .bc-hotbar { gap: 3px; padding: 4px; }
+  .bc-hotbar button { width: 29px; height: 29px; border-radius: 7px; font-size: 8px; }
+}
 
 /* ==========================================================================
    Misc

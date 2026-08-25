@@ -358,11 +358,10 @@
       'stroke="#fff" stroke-width="2" stroke-linecap="round" ' +
       'style="filter:drop-shadow(0 0 2px rgba(0,0,0,.9))"/></svg>';
 
+    // Layout lives in .bc-hotbar so it can respond to stage width and to
+    // whether on-screen controls are occupying the bottom of the stage.
     var hotbar = document.createElement('div');
-    hotbar.style.cssText = 'position:absolute;left:50%;bottom:14px;transform:translateX(-50%);' +
-      'display:flex;gap:5px;padding:5px;border-radius:12px;z-index:6;pointer-events:auto;' +
-      'background:rgba(8,10,26,.55);border:1px solid rgba(255,255,255,.14);' +
-      'backdrop-filter:blur(8px)';
+    hotbar.className = 'bc-hotbar';
 
     var runner = Milo.glGame(host, {
       id: 'blockcraft',
@@ -412,11 +411,8 @@
         var b = document.createElement('button');
         b.type = 'button';
         b.title = BLOCKS[id].name;
-        b.style.cssText = 'width:38px;height:38px;border-radius:9px;cursor:pointer;' +
-          'display:grid;place-items:end center;padding-bottom:2px;font:700 9px/1 system-ui;' +
-          'color:rgba(255,255,255,.85);text-shadow:0 1px 2px #000;' +
-          'background:' + SWATCH[id] + ';border:2px solid ' +
-          (i === slot ? '#fff' : 'rgba(255,255,255,.18)');
+        b.style.background = SWATCH[id];
+        b.style.border = '2px solid ' + (i === slot ? '#fff' : 'rgba(255,255,255,.18)');
         b.textContent = i + 1;
         b.addEventListener('click', function (e) {
           e.stopPropagation();

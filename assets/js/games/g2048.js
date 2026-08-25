@@ -48,6 +48,7 @@
       var d = g.data;
       d.grid = new Array(N * N).fill(0);
       d.won = false;
+      d.paused = false;
       build(g);
       add(d); add(d);
       paint(g);
@@ -103,7 +104,7 @@
 
     function move(g, dir) {
       var d = g.data;
-      if (g.state !== 'play') return;
+      if (g.state !== 'play' || d.paused) return;
       var before = d.grid.join(',');
       var gained = 0;
 
@@ -132,10 +133,27 @@
 
       if (!d.won && d.grid.indexOf(2048) !== -1) {
         d.won = true;
-        g.win({ score: g.score, emo: '🏅', title: 'You made 2048!', text: 'Keep playing for a bigger tile.' });
-        // Winning does not end the run — let the player carry on.
-        g.clearOverlay();
-        g.state = 'play';
+        // Reaching 2048 is a win, but it does not have to end the run — so
+        // hold the board with a flag rather than moving to the 'over' state,
+        // which would turn Space into "restart".
+        d.paused = true;
+        Milo.store.setBest('g2048', g.score);
+        g.best = Milo.store.best('g2048');
+        Milo.sound.win();
+        g.overlay({
+          emo: '🏅',
+          title: 'You made 2048!',
+          text: 'You can stop here — or carry on for 4096.',
+          score: g.score,
+          best: g.best,
+          actions: [
+            {
+              label: 'Keep playing', primary: true,
+              onClick: function () { d.paused = false; g.clearOverlay(); }
+            },
+            { label: 'New game', onClick: function () { g.restart(); } }
+          ]
+        });
         return;
       }
       if (stuck(d)) {

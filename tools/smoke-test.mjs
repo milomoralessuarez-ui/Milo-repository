@@ -61,7 +61,8 @@ for (const game of games) {
   await page.goto(`${BASE}/#/play/${encodeURIComponent(game.id)}`, { waitUntil: 'load' });
   await page.waitForTimeout(350);
 
-  // The start overlay's primary button begins the run.
+  // Most games open on a start overlay; idle games (autoStart) begin straight
+  // away and legitimately have no Play button.
   const playBtn = page.locator('.overlay .btn-primary').first();
   let started = false;
   try {
@@ -69,17 +70,27 @@ for (const game of games) {
     await playBtn.click();
     started = true;
   } catch {
-    const diag = await page
-      .evaluate(() => {
-        const s = document.querySelector('#stage');
-        return {
-          hash: location.hash,
-          overlay: !!document.querySelector('.overlay'),
-          stage: s ? s.innerHTML.slice(0, 200) : 'NO STAGE ELEMENT',
-        };
-      })
-      .catch(() => ({ diag: 'unavailable' }));
-    errors.push(`[${game.id}] no start button appeared — ${JSON.stringify(diag)}`);
+    const autoStarted = await page
+      .evaluate((id) => {
+        const def = window.Milo.byId[id];
+        return !!def && !document.querySelector('.overlay');
+      }, game.id)
+      .catch(() => false);
+    if (autoStarted) {
+      started = true;
+    } else {
+      const diag = await page
+        .evaluate(() => {
+          const s = document.querySelector('#stage');
+          return {
+            hash: location.hash,
+            overlay: !!document.querySelector('.overlay'),
+            stage: s ? s.innerHTML.slice(0, 200) : 'NO STAGE ELEMENT',
+          };
+        })
+        .catch(() => ({ diag: 'unavailable' }));
+      errors.push(`[${game.id}] no start button appeared — ${JSON.stringify(diag)}`);
+    }
   }
 
   if (started) {

@@ -56,12 +56,14 @@ official pages.
 
 ```
 index.html                  page shell + one <script> tag per game
-assets/css/style.css        all styling, dark theme with a light mode
+assets/css/style.css        all styling, dark-first with a full light theme
 assets/js/engine.js         the shared game framework
 assets/js/app.js            the portal: routing, search, favourites, player
 assets/js/games/*.js        one file per game, each self-registering
 sw.js                       service worker for offline play
 tools/smoke-test.mjs        headless test that plays every game
+tools/build-single.mjs      bundles the site into one self-contained file
+dist/miloplay.html          that bundle — open it directly, no server needed
 ```
 
 ### The engine
@@ -132,6 +134,22 @@ Two things worth knowing:
 
 ---
 
+### One-file build
+
+`dist/miloplay.html` is the entire site — CSS, engine, all 30 games — inlined
+into a single 375 KB file with no external references. Open it straight from
+disk, email it, or drop it on a USB stick and it works. Rebuild it after
+changing anything:
+
+```bash
+node tools/build-single.mjs
+```
+
+The multi-file version under `assets/` stays the source of truth; the bundle is
+generated from it and is never edited by hand.
+
+---
+
 ## Testing
 
 `tools/smoke-test.mjs` opens the site in headless Chromium, plays **every**
@@ -198,5 +216,8 @@ deploy this repository as-is with no build command.
   cached, so it keeps working without a connection.
 - **Mobile.** Every game gets on-screen controls automatically on touch
   devices, and the layout adapts down to phone width.
+- **Themes.** The design is dark-first, but a visitor whose system asks for
+  light gets the light palette on their first visit; the header toggle
+  overrides either way and remembers the choice.
 - **Accessibility.** The site is keyboard-navigable, respects
-  `prefers-reduced-motion`, and ships light and dark themes.
+  `prefers-reduced-motion`, and gives focus a visible state.

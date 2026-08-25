@@ -195,6 +195,7 @@
     this.hit = Object.create(null);      // edge-triggered, cleared each frame
     this.px = 0; this.py = 0;            // pointer in design space
     this.pdown = false;
+    this.pbutton = 0;                    // 0 left, 1 middle, 2 right (0 for touch)
     this.ptap = false;                   // edge-triggered
     this.prelease = false;
     this.wheel = 0;
@@ -483,6 +484,15 @@
     }
   }
 
+  /**
+   * True when on-screen controls are (or will be) covering the stage edges,
+   * so games can lift their own bottom-of-screen UI clear of them.
+   */
+  Milo.touchLayout = function () {
+    return (global.matchMedia && global.matchMedia('(pointer: coarse)').matches) ||
+      document.body.classList.contains('touch');
+  };
+
   /** Optional on-screen controls for touch devices. */
   function addTouchControls(hud, cfg, input) {
     if (cfg.touch === 'dpad' || cfg.touch === 'dpad+a') {
@@ -598,6 +608,7 @@
       var d = toDesign(p.clientX, p.clientY);
       input.px = d.x; input.py = d.y;
       input.pdown = true; input.ptap = true;
+      input.pbutton = e.touches ? 0 : (e.button || 0);
       if (cfg.onPointer) cfg.onPointer(g, 'down', d.x, d.y, e);
       if (e.cancelable) e.preventDefault();
     }
