@@ -24,6 +24,8 @@
     { id: 'Puzzle', icon: '🧩', blurb: 'Take your time and think it through.' },
     { id: 'Racing', icon: '🏎️', blurb: 'Fast lanes, tight corners, no brakes.' },
     { id: 'Sports', icon: '🏓', blurb: 'Beat the bot, beat your best.' },
+    { id: 'Cards', icon: '🃏', blurb: 'Solitaires, casino classics and card duels.' },
+    { id: 'Word', icon: '🔤', blurb: 'Letters, anagrams and things to spell out.' },
     { id: 'Casual', icon: '🍭', blurb: 'Relaxed games for a five-minute break.' },
     { id: 'Strategy', icon: '♟️', blurb: 'Outsmart the opponent, one move at a time.' }
   ];

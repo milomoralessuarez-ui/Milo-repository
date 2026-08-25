@@ -2,14 +2,32 @@
  * Headless smoke test: loads the site, then plays every registered game for a
  * short burst while watching for console errors, page exceptions and stalls.
  *
- *   node tools/smoke-test.mjs [baseUrl]
+ *   node tools/smoke-test.mjs [baseUrl] [--only=id,id,...] [--since=<git-ref>]
+ *
+ * --only limits the run to the named games; --since limits it to games whose
+ * files changed against a git ref. Both are for iterating on a batch without
+ * paying for the whole catalogue.
  *
  * Requires playwright on NODE_PATH (globally installed in this environment).
  */
 import { chromium } from 'playwright';
 
-const BASE = process.argv[2] || 'http://127.0.0.1:8099';
-const PLAY_MS = 1600;
+const args = process.argv.slice(2);
+const BASE = args.find((a) => !a.startsWith('--')) || 'http://127.0.0.1:8099';
+const onlyArg = (args.find((a) => a.startsWith('--only=')) || '').slice(7);
+const sinceArg = (args.find((a) => a.startsWith('--since=')) || '').slice(8);
+const PLAY_MS = Number((args.find((a) => a.startsWith('--play=')) || '').slice(7)) || 1200;
+
+let only = onlyArg ? new Set(onlyArg.split(',').map((s) => s.trim()).filter(Boolean)) : null;
+if (sinceArg) {
+  const { execSync } = await import('node:child_process');
+  const changed = execSync(`git diff --name-only ${sinceArg} -- assets/js/games`, { encoding: 'utf8' })
+    .split('\n')
+    .map((p) => p.trim())
+    .filter((p) => p.endsWith('.js'))
+    .map((p) => p.split('/').pop().replace(/\.js$/, ''));
+  only = new Set([...(only || []), ...changed]);
+}
 
 const IGNORE = [
   /favicon/i,
@@ -44,10 +62,18 @@ page.on('pageerror', (e) => {
 await page.goto(BASE, { waitUntil: 'networkidle' });
 await page.waitForFunction(() => window.Milo && window.Milo.games.length > 0, null, { timeout: 15000 });
 
-const games = await page.evaluate(() =>
+const allGames = await page.evaluate(() =>
   window.Milo.games.map((g) => ({ id: g.id, title: g.title, category: g.category }))
 );
-console.log(`Loaded portal with ${games.length} games.\n`);
+const games = only ? allGames.filter((g) => only.has(g.id)) : allGames;
+console.log(
+  `Loaded portal with ${allGames.length} games` +
+  (only ? `; testing ${games.length} of them.` : '.') + '\n'
+);
+if (only) {
+  const missing = [...only].filter((id) => !allGames.some((g) => g.id === id));
+  if (missing.length) errors.push(`[boot] requested games not registered: ${missing.join(', ')}`);
+}
 
 // The portal itself must render its home view.
 const homeCards = await page.locator('.card').count();

@@ -3,16 +3,15 @@
 const CACHE = 'miloplay-v1';
 
 const GAMES = [
-  'blockcraft', 'terra-dig',
-  'blast-arena', 'snake-royale', 'astro-blaster', 'ball-blast',
-  'neon-snake', 'brick-breaker', 'flap-rocket', 'sky-hopper',
-  'dash-runner', 'color-rush', 'tower-stack',
-  'block-stacker', 'g2048', 'minesweeper', 'slide-puzzle',
-  'lights-out', 'maze-runner',
-  'turbo-drift', 'highway-rush',
-  'pong-duel', 'hoop-shot',
-  'connect-four', 'tic-tac-toe', 'reversi',
-  'memory-match', 'whack-a-mole', 'aim-trainer', 'coin-tycoon'
+// GAMES:BEGIN
+  'aim-trainer', 'astro-blaster', 'ball-blast', 'battleship', 'blackjack', 'blast-arena',
+  'block-stacker', 'blockcraft', 'brick-breaker', 'checkers', 'coin-tycoon', 'color-rush',
+  'connect-four', 'crazy-eights', 'dash-runner', 'dots-and-boxes', 'flap-rocket', 'freecell',
+  'g2048', 'golf-solitaire', 'gomoku', 'highway-rush', 'hoop-shot', 'klondike', 'lights-out',
+  'maze-runner', 'memory-match', 'minesweeper', 'neon-snake', 'pong-duel', 'pyramid-solitaire',
+  'reversi', 'sky-hopper', 'slide-puzzle', 'snake-royale', 'spider-solitaire', 'terra-dig',
+  'tic-tac-toe', 'tower-stack', 'turbo-drift', 'video-poker', 'war-cards', 'whack-a-mole'
+// GAMES:END
 ];
 
 const ASSETS = [
@@ -21,6 +20,8 @@ const ASSETS = [
   './manifest.webmanifest',
   './assets/css/style.css',
   './assets/js/engine.js',
+  './assets/js/lib/cards.js',
+  './assets/js/lib/words.js',
   './assets/js/app.js',
   ...GAMES.map((g) => `./assets/js/games/${g}.js`)
 ];
