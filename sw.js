@@ -14,13 +14,13 @@ const GAMES = [
   'laser-maze', 'letter-drop', 'lights-out', 'lunar-lander', 'make-24', 'mancala', 'mastermind',
   'math-blitz', 'maze-muncher', 'maze-runner', 'memory-match', 'memory-sequence', 'minesweeper',
   'mini-golf', 'missile-defense', 'neon-snake', 'nim', 'nonogram', 'one-line', 'paper-claim',
-  'peg-solitaire', 'penalty-shootout', 'perfect-circle', 'piano-tap', 'plinko', 'pong-duel',
-  'pyramid-solitaire', 'reaction-time', 'reversi', 'rise-up', 'road-hopper', 'simon-says',
-  'sky-hopper', 'slide-puzzle', 'snake-royale', 'space-defender', 'spider-solitaire',
-  'stack-ball', 'sudoku', 'tank-arena', 'terra-dig', 'tic-tac-toe', 'tower-defence',
-  'tower-of-hanoi', 'tower-stack', 'turbo-drift', 'typing-test', 'ultimate-ttt', 'video-poker',
-  'war-cards', 'water-sort', 'whack-a-mole', 'word-grid', 'word-ladder', 'word-search',
-  'word-sleuth', 'zig-zag'
+  'peg-solitaire', 'penalty-shootout', 'perfect-circle', 'piano-tap', 'pinball', 'plinko',
+  'pong-duel', 'pyramid-solitaire', 'quick-math', 'reaction-time', 'reversi', 'rise-up',
+  'road-hopper', 'simon-says', 'sky-hopper', 'slide-puzzle', 'snake-royale', 'space-defender',
+  'space-trader', 'spider-solitaire', 'stack-ball', 'sudoku', 'sweet-match', 'tank-arena',
+  'terra-dig', 'tic-tac-toe', 'tower-defence', 'tower-of-hanoi', 'tower-stack', 'turbo-drift',
+  'typing-test', 'ultimate-ttt', 'video-poker', 'war-cards', 'water-sort', 'whack-a-mole',
+  'word-grid', 'word-ladder', 'word-search', 'word-sleuth', 'zig-zag'
 // GAMES:END
 ];
 
