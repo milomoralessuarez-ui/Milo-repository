@@ -6,19 +6,20 @@ const GAMES = [
 // GAMES:BEGIN
   'aim-trainer', 'air-hockey', 'anagram-hunt', 'archery', 'asteroid-field', 'astro-blaster',
   'ball-blast', 'battleship', 'blackjack', 'blast-arena', 'blob-eater', 'block-stacker',
-  'blockcraft', 'bowling', 'box-push', 'brick-breaker', 'bubble-pop', 'checkers', 'coin-tycoon',
-  'color-rush', 'connect-four', 'crazy-eights', 'darts', 'dash-runner', 'dots-and-boxes',
-  'flap-rocket', 'freecell', 'fruit-slice', 'g2048', 'gem-swap', 'golf-solitaire', 'gomoku',
-  'hangman', 'helix-drop', 'highway-rush', 'hoop-shot', 'jump-quest', 'klondike', 'knife-throw',
-  'letter-drop', 'lights-out', 'lunar-lander', 'mancala', 'mastermind', 'math-blitz',
-  'maze-muncher', 'maze-runner', 'memory-match', 'minesweeper', 'mini-golf', 'missile-defense',
-  'neon-snake', 'nim', 'paper-claim', 'peg-solitaire', 'penalty-shootout', 'perfect-circle',
-  'piano-tap', 'plinko', 'pong-duel', 'pyramid-solitaire', 'reaction-time', 'reversi',
-  'rise-up', 'road-hopper', 'simon-says', 'sky-hopper', 'slide-puzzle', 'snake-royale',
-  'space-defender', 'spider-solitaire', 'sudoku', 'terra-dig', 'tic-tac-toe', 'tower-defence',
-  'tower-of-hanoi', 'tower-stack', 'turbo-drift', 'typing-test', 'video-poker', 'war-cards',
-  'water-sort', 'whack-a-mole', 'word-grid', 'word-ladder', 'word-search', 'word-sleuth',
-  'zig-zag'
+  'blockcraft', 'bowling', 'box-push', 'brick-breaker', 'bubble-pop', 'cannon-siege',
+  'cave-flyer', 'checkers', 'coin-tycoon', 'color-rush', 'connect-four', 'crazy-eights',
+  'darts', 'dash-runner', 'dots-and-boxes', 'flap-rocket', 'freecell', 'fruit-slice', 'g2048',
+  'gem-swap', 'golf-solitaire', 'gomoku', 'hangman', 'helix-drop', 'highway-rush', 'hoop-shot',
+  'jump-quest', 'klondike', 'knife-throw', 'letter-drop', 'lights-out', 'lunar-lander',
+  'make-24', 'mancala', 'mastermind', 'math-blitz', 'maze-muncher', 'maze-runner',
+  'memory-match', 'memory-sequence', 'minesweeper', 'mini-golf', 'missile-defense',
+  'neon-snake', 'nim', 'nonogram', 'paper-claim', 'peg-solitaire', 'penalty-shootout',
+  'perfect-circle', 'piano-tap', 'plinko', 'pong-duel', 'pyramid-solitaire', 'reaction-time',
+  'reversi', 'rise-up', 'road-hopper', 'simon-says', 'sky-hopper', 'slide-puzzle',
+  'snake-royale', 'space-defender', 'spider-solitaire', 'sudoku', 'terra-dig', 'tic-tac-toe',
+  'tower-defence', 'tower-of-hanoi', 'tower-stack', 'turbo-drift', 'typing-test', 'video-poker',
+  'war-cards', 'water-sort', 'whack-a-mole', 'word-grid', 'word-ladder', 'word-search',
+  'word-sleuth', 'zig-zag'
 // GAMES:END
 ];
 
