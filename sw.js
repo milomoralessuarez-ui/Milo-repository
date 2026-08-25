@@ -5,16 +5,18 @@ const CACHE = 'miloplay-v1';
 const GAMES = [
 // GAMES:BEGIN
   'aim-trainer', 'anagram-hunt', 'asteroid-field', 'astro-blaster', 'ball-blast', 'battleship',
-  'blackjack', 'blast-arena', 'block-stacker', 'blockcraft', 'brick-breaker', 'checkers',
-  'coin-tycoon', 'color-rush', 'connect-four', 'crazy-eights', 'dash-runner', 'dots-and-boxes',
-  'flap-rocket', 'freecell', 'g2048', 'golf-solitaire', 'gomoku', 'hangman', 'highway-rush',
-  'hoop-shot', 'klondike', 'letter-drop', 'lights-out', 'mancala', 'mastermind', 'math-blitz',
-  'maze-muncher', 'maze-runner', 'memory-match', 'minesweeper', 'missile-defense', 'neon-snake',
-  'nim', 'peg-solitaire', 'pong-duel', 'pyramid-solitaire', 'reversi', 'road-hopper',
-  'sky-hopper', 'slide-puzzle', 'snake-royale', 'space-defender', 'spider-solitaire', 'sudoku',
-  'terra-dig', 'tic-tac-toe', 'tower-of-hanoi', 'tower-stack', 'turbo-drift', 'typing-test',
-  'video-poker', 'war-cards', 'whack-a-mole', 'word-grid', 'word-ladder', 'word-search',
-  'word-sleuth'
+  'blackjack', 'blast-arena', 'block-stacker', 'blockcraft', 'brick-breaker', 'bubble-pop',
+  'checkers', 'coin-tycoon', 'color-rush', 'connect-four', 'crazy-eights', 'dash-runner',
+  'dots-and-boxes', 'flap-rocket', 'freecell', 'fruit-slice', 'g2048', 'gem-swap',
+  'golf-solitaire', 'gomoku', 'hangman', 'helix-drop', 'highway-rush', 'hoop-shot', 'klondike',
+  'letter-drop', 'lights-out', 'mancala', 'mastermind', 'math-blitz', 'maze-muncher',
+  'maze-runner', 'memory-match', 'minesweeper', 'missile-defense', 'neon-snake', 'nim',
+  'peg-solitaire', 'perfect-circle', 'piano-tap', 'pong-duel', 'pyramid-solitaire',
+  'reaction-time', 'reversi', 'rise-up', 'road-hopper', 'simon-says', 'sky-hopper',
+  'slide-puzzle', 'snake-royale', 'space-defender', 'spider-solitaire', 'sudoku', 'terra-dig',
+  'tic-tac-toe', 'tower-of-hanoi', 'tower-stack', 'turbo-drift', 'typing-test', 'video-poker',
+  'war-cards', 'water-sort', 'whack-a-mole', 'word-grid', 'word-ladder', 'word-search',
+  'word-sleuth', 'zig-zag'
 // GAMES:END
 ];
 
