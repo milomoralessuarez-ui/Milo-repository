@@ -10,20 +10,21 @@ const GAMES = [
   'brick-breaker', 'bubble-pop', 'bug-blaster', 'burrow-blast', 'cannon-siege', 'cave-flyer',
   'checkers', 'chess-blitz', 'coin-tycoon', 'color-rush', 'connect-four', 'crazy-eights',
   'darts', 'dash-runner', 'dot-connect', 'dots-and-boxes', 'farm-idle', 'flap-rocket',
-  'freecell', 'fruit-slice', 'futoshiki', 'g2048', 'galaxy-raid', 'gem-swap', 'golf-solitaire',
-  'gomoku', 'gravity-swap', 'hangman', 'helix-drop', 'hex-game', 'highway-rush', 'hole-eater',
-  'hoop-shot', 'ice-slide', 'jump-quest', 'klondike', 'knife-throw', 'laser-maze', 'lava-run',
-  'letter-drop', 'lights-out', 'lunar-lander', 'make-24', 'mancala', 'mastermind', 'math-blitz',
-  'maze-muncher', 'maze-runner', 'memory-match', 'memory-sequence', 'merge-drop', 'minesweeper',
-  'mini-golf', 'missile-defense', 'neon-snake', 'nim', 'nine-mens-morris', 'nonogram',
+  'fling-fortress', 'freecell', 'fruit-slice', 'futoshiki', 'g2048', 'galaxy-raid', 'gem-swap',
+  'golf-solitaire', 'gomoku', 'gravity-swap', 'hangman', 'helix-drop', 'hex-game',
+  'highway-rush', 'hole-eater', 'hoop-shot', 'ice-slide', 'jump-quest', 'klondike',
+  'knife-throw', 'laser-dodge', 'laser-maze', 'lava-run', 'letter-drop', 'lights-out',
+  'lunar-lander', 'make-24', 'mancala', 'mastermind', 'math-blitz', 'maze-muncher',
+  'maze-runner', 'memory-match', 'memory-sequence', 'merge-drop', 'minesweeper', 'mini-golf',
+  'missile-defense', 'neon-snake', 'nim', 'nine-mens-morris', 'ninja-climb', 'nonogram',
   'one-line', 'paper-claim', 'peg-solitaire', 'penalty-shootout', 'perfect-circle', 'piano-tap',
   'pinball', 'plinko', 'pong-duel', 'pyramid-solitaire', 'quick-math', 'reaction-time',
-  'reversi', 'rhythm-tap', 'rise-up', 'road-hopper', 'simon-says', 'sky-hopper', 'slide-puzzle',
-  'snake-royale', 'space-defender', 'space-trader', 'spider-solitaire', 'stack-ball', 'sudoku',
-  'sweet-match', 'tank-arena', 'terra-dig', 'tic-tac-toe', 'tile-match', 'tower-defence',
-  'tower-of-hanoi', 'tower-stack', 'turbo-drift', 'typing-test', 'ultimate-ttt', 'video-poker',
-  'war-cards', 'water-sort', 'whack-a-mole', 'word-grid', 'word-ladder', 'word-search',
-  'word-sleuth', 'zig-zag'
+  'reversi', 'rhythm-tap', 'rise-up', 'road-hopper', 'rolling-ball', 'simon-says', 'sky-hopper',
+  'slide-puzzle', 'snake-royale', 'space-defender', 'space-trader', 'spider-solitaire',
+  'stack-ball', 'sudoku', 'sweet-match', 'tank-arena', 'terra-dig', 'tic-tac-toe', 'tile-match',
+  'tower-defence', 'tower-of-hanoi', 'tower-stack', 'turbo-drift', 'typing-test',
+  'ultimate-ttt', 'video-poker', 'war-cards', 'water-sort', 'whack-a-mole', 'word-grid',
+  'word-ladder', 'word-search', 'word-sleuth', 'zig-zag'
 // GAMES:END
 ];
 
