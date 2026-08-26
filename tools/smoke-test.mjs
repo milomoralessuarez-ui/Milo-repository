@@ -2,11 +2,12 @@
  * Headless smoke test: loads the site, then plays every registered game for a
  * short burst while watching for console errors, page exceptions and stalls.
  *
- *   node tools/smoke-test.mjs [baseUrl] [--only=id,id,...] [--since=<git-ref>]
+ *   node tools/smoke-test.mjs [baseUrl] [--only=id,id,...] [--since=<git-ref>] [--shard=i/N]
  *
  * --only limits the run to the named games; --since limits it to games whose
  * files changed against a git ref. Both are for iterating on a batch without
- * paying for the whole catalogue.
+ * paying for the whole catalogue. --shard=2/4 plays every 4th game starting
+ * at the 2nd, so a full run can be split across parallel processes.
  *
  * Requires playwright on NODE_PATH (globally installed in this environment).
  */
@@ -65,7 +66,12 @@ await page.waitForFunction(() => window.Milo && window.Milo.games.length > 0, nu
 const allGames = await page.evaluate(() =>
   window.Milo.games.map((g) => ({ id: g.id, title: g.title, category: g.category }))
 );
-const games = only ? allGames.filter((g) => only.has(g.id)) : allGames;
+let games = only ? allGames.filter((g) => only.has(g.id)) : allGames;
+const shardArg = (args.find((a) => a.startsWith('--shard=')) || '').slice(8);
+if (shardArg) {
+  const [i, n] = shardArg.split('/').map(Number);
+  games = games.filter((_, k) => k % n === i - 1);
+}
 console.log(
   `Loaded portal with ${allGames.length} games` +
   (only ? `; testing ${games.length} of them.` : '.') + '\n'

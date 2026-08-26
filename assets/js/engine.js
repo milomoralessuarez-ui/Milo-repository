@@ -449,6 +449,27 @@
     };
   }
 
+  /**
+   * When a variant is being mounted (see Milo.registerVariant), rewrite the
+   * cfg the base game handed us so the chrome, the overlays and the high-score
+   * slot all belong to the variant rather than the original.
+   */
+  function applyVariant(cfg) {
+    var vr = Milo._variant;
+    if (!vr) return cfg;
+    cfg = Object.assign({}, cfg);
+    cfg.id = vr.id;
+    if (vr.title) {
+      cfg.title = vr.title;
+      if (cfg.start) cfg.start = Object.assign({}, cfg.start, { title: vr.title });
+    }
+    if (vr.emo) {
+      cfg.emo = vr.emo;
+      if (cfg.start && cfg.start.emo) cfg.start = Object.assign({}, cfg.start, { emo: vr.emo });
+    }
+    return cfg;
+  }
+
   /** Standard key handling: Esc/P pauses, Space/Enter starts or replays. */
   function wireKeys(cfg, g) {
     g.input._onKey = function (e, name) {
@@ -538,11 +559,16 @@
    * Returns an object with `.destroy()` — the portal calls it on navigation.
    */
   Milo.arcade = function (host, cfg) {
-    cfg = cfg || {};
+    cfg = applyVariant(cfg || {});
+    // Variants tune real difficulty by scaling game time, and get their own
+    // look from a cheap hue rotation over everything the base game draws.
+    var vr = Milo._variant;
+    var timeScale = (vr && vr.speed) || 1;
     var W = cfg.w || 800, H = cfg.h || 500;
     var mode = cfg.fit || 'contain';
     var canvas = el('canvas');
     var ctx = canvas.getContext('2d');
+    if (vr && vr.hue) canvas.style.filter = 'hue-rotate(' + vr.hue + 'deg)' + (vr.sat ? ' saturate(' + vr.sat + ')' : '');
 
     host.innerHTML = '';
     host.appendChild(canvas);
@@ -653,7 +679,7 @@
     function tick(now) {
       if (destroyed) return;
       raf = requestAnimationFrame(tick);
-      var dt = Math.min((now - last) / 1000, .05);
+      var dt = Math.min((now - last) / 1000, .05) * timeScale;
       last = now;
       g.dt = dt;
       if (g.state === 'play') {
@@ -697,7 +723,7 @@
    * Connect Four…). Same chrome, but the game builds DOM inside `g.root`.
    */
   Milo.domGame = function (host, cfg) {
-    cfg = cfg || {};
+    cfg = applyVariant(cfg || {});
     var root = el('div');
     root.style.cssText = 'position:absolute;inset:0;display:flex;align-items:center;' +
       'justify-content:center;padding:58px 14px 18px;overflow:auto;';
@@ -753,7 +779,7 @@
    * pointer lock and mouse-look deltas; the game supplies init/frame.
    */
   Milo.glGame = function (host, cfg) {
-    cfg = cfg || {};
+    cfg = applyVariant(cfg || {});
     var canvas = el('canvas');
     host.innerHTML = '';
     host.appendChild(canvas);
@@ -922,6 +948,31 @@
     def.category = def.category || 'Arcade';
     def.tags = def.tags || [];
     def.colors = def.colors || ['#7c5cff', '#22d3ee'];
+    Milo.games.push(def);
+    Milo.byId[def.id] = def;
+  };
+
+  /**
+   * A variant is a real remix of a registered game: its own catalogue entry,
+   * title, description, thumbnail and high-score slot, with gameplay retuned
+   * through `speed` (game-time multiplier — 0.7 is gentle, 1.5 is frantic)
+   * and restyled through `hue`/`sat`. The base game's mount runs unmodified;
+   * the runners read Milo._variant while it does. Load variant files after
+   * every base game file.
+   */
+  Milo._variant = null;
+  Milo.registerVariant = function (baseId, v) {
+    var base = Milo.byId[baseId];
+    if (!base || Milo.byId[v.id]) return;
+    var def = Object.assign({}, base, v);
+    def.variantOf = baseId;
+    def.tags = (v.tags || base.tags || []).slice();
+    def.featured = false;
+    def.mount = function (host) {
+      Milo._variant = def;
+      try { return base.mount(host); }
+      finally { Milo._variant = null; }
+    };
     Milo.games.push(def);
     Milo.byId[def.id] = def;
   };

@@ -27,8 +27,56 @@
     { id: 'Cards', icon: '🃏', blurb: 'Solitaires, casino classics and card duels.' },
     { id: 'Word', icon: '🔤', blurb: 'Letters, anagrams and things to spell out.' },
     { id: 'Casual', icon: '🍭', blurb: 'Relaxed games for a five-minute break.' },
-    { id: 'Strategy', icon: '♟️', blurb: 'Outsmart the opponent, one move at a time.' }
+    { id: 'Strategy', icon: '♟️', blurb: 'Outsmart the opponent, one move at a time.' },
+    { id: 'Trivia', icon: '🧠', blurb: 'Quizzes and brain teasers on every topic.' }
   ];
+
+  // Search aliases: the famous games people actually type, mapped to the
+  // closest thing in the catalogue. "minecraft" should find Blockcraft.
+  var ALIASES = {
+    'blockcraft': ['minecraft', 'mine craft', 'voxel builder', 'crafting'],
+    'terra-dig': ['terraria', 'minecraft 2d'],
+    'polly-track': ['polytrack', 'poly track', 'trackmania', 'track builder racing'],
+    'g2048': ['2048', 'twenty forty eight'],
+    'dash-runner': ['subway surfers', 'temple run'],
+    'snake-royale': ['slither', 'slither.io', 'snake io'],
+    'blob-eater': ['agar', 'agar.io'],
+    'paper-claim': ['paper.io', 'splix'],
+    'stack-ball': ['slope'],
+    'helix-drop': ['helix jump'],
+    'maze-muncher': ['pacman', 'pac-man', 'pac man'],
+    'brick-breaker': ['breakout', 'arkanoid'],
+    'space-defender': ['space invaders', 'galaga'],
+    'flap-rocket': ['flappy bird', 'flappy'],
+    'block-stacker': ['tetris'],
+    'sweet-match': ['candy crush', 'match 3', 'match three'],
+    'merge-drop': ['suika', 'watermelon game'],
+    'pong-duel': ['pong'],
+    'astro-blaster': ['asteroids'],
+    'road-hopper': ['crossy road', 'frogger'],
+    'tank-arena': ['diep.io', 'tank battle'],
+    'hole-eater': ['hole.io'],
+    'fruit-slice': ['fruit ninja'],
+    'jump-quest': ['mario', 'platformer adventure'],
+    'blast-arena': ['bomberman'],
+    'knife-throw': ['knife hit'],
+    'turbo-drift': ['drift hunters', 'drifting'],
+    'highway-rush': ['traffic racer'],
+    'penalty-shootout': ['penalty kicks', 'football', 'soccer'],
+    'hoop-shot': ['basketball'],
+    'tower-defence': ['bloons', 'tower defense'],
+    'chess-blitz': ['chess'],
+    'klondike': ['solitaire classic'],
+    'minesweeper': ['mines'],
+    'galaxy-raid': ['galaga', 'shoot em up']
+  };
+
+  function applyAliases() {
+    Object.keys(ALIASES).forEach(function (id) {
+      var gm = Milo.byId[id];
+      if (gm) gm.aliases = (gm.aliases || []).concat(ALIASES[id]);
+    });
+  }
 
   // Officially-hosted games elsewhere on the web. We link out rather than
   // embed — these are other people's sites and framing them is not ours to do.
@@ -104,6 +152,14 @@
     var t = game.title.toLowerCase();
     if (t === q) return 100;
     if (t.indexOf(q) === 0) return 80;
+    var al = game.aliases || [];
+    for (var i = 0; i < al.length; i++) {
+      var a = al[i].toLowerCase();
+      if (a === q) return 95;
+      if (q.length >= 3 && a.indexOf(q) === 0) return 70;
+      if (a.length >= 4 && q.indexOf(a) !== -1) return 65;
+      if (q.length >= 3 && a.indexOf(q) !== -1) return 50;
+    }
     if (t.indexOf(q) !== -1) return 60;
     if ((game.tagline || '').toLowerCase().indexOf(q) !== -1) return 40;
     if (game.category.toLowerCase().indexOf(q) !== -1) return 30;
@@ -161,12 +217,56 @@
     return b;
   }
 
+  // With a four-digit catalogue, big listings render in pages: the first
+  // screenful immediately, the rest as the sentinel at the bottom scrolls
+  // into view (with a button fallback when IntersectionObserver is missing).
+  var PAGE = 72;
+
   function gridOf(games, opts) {
-    var grid = el('div', 'grid' + (opts && opts.big ? ' big' : ''));
-    games.forEach(function (gm, i) {
-      grid.appendChild(card(gm, { wide: opts && opts.wideFirst && i === 0 }));
-    });
-    return grid;
+    opts = opts || {};
+    var grid = el('div', 'grid' + (opts.big ? ' big' : ''));
+
+    if (games.length <= PAGE + 24) {
+      games.forEach(function (gm, i) {
+        grid.appendChild(card(gm, { wide: opts.wideFirst && i === 0 }));
+      });
+      return grid;
+    }
+
+    var idx = 0;
+    var wrap = el('div');
+    var foot = el('div', 'grid-foot');
+    var count = el('div', 'grid-count');
+    var more = el('button', 'btn btn-ghost', 'Show more');
+    more.type = 'button';
+    foot.appendChild(count);
+    foot.appendChild(more);
+    wrap.appendChild(grid);
+    wrap.appendChild(foot);
+
+    function append() {
+      var end = Math.min(games.length, idx + PAGE);
+      var frag = document.createDocumentFragment();
+      for (; idx < end; idx++) frag.appendChild(card(games[idx]));
+      grid.appendChild(frag);
+      count.textContent = 'Showing ' + U.fmt(idx) + ' of ' + U.fmt(games.length) + ' games';
+      if (idx >= games.length) {
+        more.style.display = 'none';
+        if (io) { io.disconnect(); io = null; }
+      }
+    }
+
+    var io = null;
+    if (window.IntersectionObserver) {
+      io = new IntersectionObserver(function (entries) {
+        if (entries.some(function (e) { return e.isIntersecting; })) append();
+      }, { rootMargin: '900px 0px' });
+      io.observe(foot);
+    }
+    more.addEventListener('click', append);
+
+    append();
+    return wrap;
   }
 
   function section(title, emo, games, opts) {
@@ -231,8 +331,9 @@
       '<div class="hero-inner">' +
       '<span class="eyebrow">✨ ' + Milo.games.length + ' free games · no downloads · no sign-up</span>' +
       '<h1>Play something <span>brilliant</span> right now.</h1>' +
-      '<p>Voxel worlds, arena shooters, puzzles and arcade classics — all built to run ' +
-      'instantly in your browser, on any device. Nothing to install, nothing to pay.</p>' +
+      '<p>Voxel worlds, low-poly racers, arena shooters, quizzes, puzzles and arcade ' +
+      'classics — a thousand games built to run instantly in your browser, on any device. ' +
+      'Nothing to install, nothing to pay.</p>' +
       '<div class="hero-cta">' +
       '<button class="btn btn-primary" data-play="' + esc((featured[0] || Milo.games[0]).id) + '">' +
       Milo.ICON.play + ' Play ' + esc((featured[0] || Milo.games[0]).title) + '</button>' +
@@ -252,14 +353,17 @@
     if ((s = section('Your favourites', '❤️', favGames, { moreHash: '#/favorites' }))) wrap.appendChild(s);
 
     // Most-played across this browser, falling back to catalogue order.
-    var popular = Milo.games.slice().sort(function (a, b) {
-      return (state.plays[b.id] || 0) - (state.plays[a.id] || 0) ||
-        (b.featured ? 1 : 0) - (a.featured ? 1 : 0);
-    }).slice(0, 12);
+    // Home rows stick to original games; remixes live in browse and on the
+    // base game's own page.
+    var popular = Milo.games.filter(function (gm) { return !gm.variantOf; })
+      .sort(function (a, b) {
+        return (state.plays[b.id] || 0) - (state.plays[a.id] || 0) ||
+          (b.featured ? 1 : 0) - (a.featured ? 1 : 0);
+      }).slice(0, 12);
     if ((s = section('Popular now', '🔥', popular, { moreHash: '#/browse' }))) wrap.appendChild(s);
 
     CATEGORIES.forEach(function (c) {
-      var games = Milo.games.filter(function (gm) { return gm.category === c.id; });
+      var games = Milo.games.filter(function (gm) { return gm.category === c.id && !gm.variantOf; });
       if (games.length < 2) return;
       var sec = section(c.id, c.icon, games.slice(0, 12), { moreHash: '#/c/' + encodeURIComponent(c.id) });
       if (sec) wrap.appendChild(sec);
@@ -323,7 +427,9 @@
     wrap.appendChild(chips);
 
     games.sort(function (a, b) {
-      return (b.featured ? 1 : 0) - (a.featured ? 1 : 0) || a.title.localeCompare(b.title);
+      return (b.featured ? 1 : 0) - (a.featured ? 1 : 0) ||
+        (a.variantOf ? 1 : 0) - (b.variantOf ? 1 : 0) ||
+        a.title.localeCompare(b.title);
     });
     wrap.appendChild(gridOf(games, { big: !!cat }));
     return wrap;
@@ -477,12 +583,16 @@
 
     var stats = el('div', 'info-card');
     var best = store.best(game.id);
+    var baseGame = game.variantOf ? Milo.byId[game.variantOf] : null;
     stats.innerHTML = '<h3>Stats</h3>' +
       '<div class="kv"><span class="k">Your best</span><span class="v">' +
       (best ? U.fmt(best) + (game.scoreLabel ? ' ' + esc(game.scoreLabel) : '') : '—') + '</span></div>' +
       '<div class="kv"><span class="k">Times played</span><span class="v">' +
       (state.plays[game.id] || 0) + '</span></div>' +
-      '<div class="kv"><span class="k">Category</span><span class="v">' + esc(game.category) + '</span></div>';
+      '<div class="kv"><span class="k">Category</span><span class="v">' + esc(game.category) + '</span></div>' +
+      (baseGame
+        ? '<div class="kv"><span class="k">Remix of</span><span class="v">' + esc(baseGame.title) + '</span></div>'
+        : '');
     side.appendChild(stats);
 
     if (game.tags.length) {
@@ -504,14 +614,22 @@
     layout.appendChild(side);
     wrap.appendChild(layout);
 
-    /* related */
+    /* the game's own family of remixes, then related games */
+    var familyId = game.variantOf || game.id;
+    var family = Milo.games.filter(function (x) {
+      return x.id !== game.id && (x.variantOf || x.id) === familyId;
+    });
+    var fs = section('More versions of this game', '🎛️', family);
+    if (fs) { fs.style.marginTop = '30px'; wrap.appendChild(fs); }
+
     var related = Milo.games.filter(function (x) {
-      return x.id !== game.id && (x.category === game.category ||
-        x.tags.some(function (t) { return game.tags.indexOf(t) !== -1; }));
+      return x.id !== game.id && (x.variantOf || x.id) !== familyId && !x.variantOf &&
+        (x.category === game.category ||
+          x.tags.some(function (t) { return game.tags.indexOf(t) !== -1; }));
     }).slice(0, 8);
     if (!related.length) related = Milo.games.filter(function (x) { return x.id !== game.id; }).slice(0, 8);
     var rs = section('More like this', '🎯', related);
-    if (rs) { rs.style.marginTop = '30px'; wrap.appendChild(rs); }
+    if (rs) { rs.style.marginTop = family.length ? '14px' : '30px'; wrap.appendChild(rs); }
 
     // Mount after the node is in the document so the stage has a real size.
     requestAnimationFrame(function () {
@@ -737,6 +855,9 @@
       document.body.classList.add('touch');
       window.removeEventListener('touchstart', onFirstTouch);
     }, { passive: true });
+    applyAliases();
+    var q = $('#q');
+    if (q) q.placeholder = 'Search ' + U.fmt(Milo.games.length) + ' games…  (press /)';
     setupTheme();
     setupSearch();
     $('#menu').addEventListener('click', openSidebar);
