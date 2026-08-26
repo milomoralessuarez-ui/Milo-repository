@@ -1,6 +1,6 @@
 # MiloPlay 🎮
 
-A free browser game portal with **30 original games** — voxel sandboxes, arena
+A free browser game portal with **130 original games** — voxel sandboxes, arena
 shooters, puzzles, racers and arcade classics. Everything runs client-side, so
 there is no backend, no build step, no account and no tracking.
 
@@ -32,21 +32,23 @@ worker (offline play) and for high scores to persist reliably.
 
 | Category | Games |
 |---|---|
-| **Sandbox** | Blockcraft (3D voxel world), Terra Dig (2D mining) |
-| **Action** | Blast Arena, Snake Royale, Astro Blaster, Ball Blast |
-| **Arcade** | Neon Snake, Brick Breaker, Flap Rocket, Sky Hopper, Dash Runner, Colour Rush |
-| **Puzzle** | Block Stacker, 2048, Minesweeper, Slide Puzzle, Lights Out, Maze Runner |
-| **Racing** | Turbo Drift, Highway Rush |
-| **Sports** | Pong Duel, Hoop Shot |
-| **Strategy** | Connect Four, Tic Tac Toe, Reversi |
-| **Casual** | Tower Stack, Memory Match, Whack-a-Mole, Aim Trainer, Coin Tycoon |
+| **Sandbox** (2) | Blockcraft, Terra Dig |
+| **Arcade** (19) | Asteroid Field, Brick Breaker, Bug Blaster, Burrow Blast, Cave Flyer, Colour Rush, Dash Runner, Flap Rocket, Galaxy Raid, Ghost Escape, Gravity Swap, Lunar Lander, Maze Muncher, Missile Defense, Neon Snake, Pinball, Road Hopper, Sky Hopper, Space Defender |
+| **Action** (13) | Astro Blaster, Ball Blast, Barrel Climb, Blast Arena, Blob Eater, Hole Eater, Jump Quest, Key Quest, Lava Run, Ninja Climb, Paper Claim, Snake Royale, Tank Arena |
+| **Puzzle** (28) | 2048, Binary Puzzle, Block Stacker, Box Push, Bubble Pop, Dot Connect, Futoshiki, Gem Swap, Ice Slide, Laser Maze, Lights Out, Make 24, Mastermind, Math Blitz, Maze Runner, Merge Drop, Minesweeper, Nonogram, One Line, Peg Solitaire, Quick Math, Roll Block, Slide Puzzle, Sudoku, Sweet Match, Tile Match, Tower of Hanoi, Water Sort |
+| **Racing** (2) | Highway Rush, Turbo Drift |
+| **Sports** (9) | Air Hockey, Archery, Bowling, Darts, Fling Fortress, Hoop Shot, Mini Golf, Penalty Shootout, Pong Duel |
+| **Cards** (9) | Blackjack, Crazy Eights, FreeCell, Golf Solitaire, Klondike Solitaire, Pyramid Solitaire, Spider Solitaire, Video Poker, War |
+| **Word** (8) | Anagram Hunt, Hangman, Letter Drop, Typing Test, Word Grid, Word Ladder, Word Search, Word Sleuth |
+| **Casual** (23) | Aim Trainer, Balloon Pop, Coin Tycoon, Farm Idle, Fruit Slice, Helix Drop, Knife Throw, Laser Dodge, Memory Match, Memory Sequence, Perfect Circle, Piano Tap, Plinko, Reaction Time, Rhythm Tap, Rise Up, Rolling Ball, Simon Says, Spot the Difference, Stack Ball, Tower Stack, Whack-a-Mole, Zig Zag |
+| **Strategy** (17) | Battleship, Cannon Siege, Checkers, Chess Blitz, City Idle, Connect Four, Dots & Boxes, Gomoku, Hex, Mancala, Nim, Nine Men’s Morris, Reversi, Space Trader, Tic Tac Toe, Tower Defence, Ultimate Tic Tac Toe |
 
 **Blockcraft** is the headline: a first-person voxel sandbox rendered with
 WebGL, with procedurally generated terrain, chunked meshing, block breaking and
 placing, swimming, flight, and edits that persist in `localStorage` — so your
 build is still standing when you come back.
 
-All 30 games were written for this project. Nothing is embedded from another
+All 130 games were written for this project. Nothing is embedded from another
 site; the "Games elsewhere" page simply links out to other sites' own
 official pages.
 
@@ -136,7 +138,7 @@ Two things worth knowing:
 
 ### One-file build
 
-`dist/miloplay.html` is the entire site — CSS, engine, all 30 games — inlined
+`dist/miloplay.html` is the entire site — CSS, engine, all 130 games — inlined
 into a single 375 KB file with no external references. Open it straight from
 disk, email it, or drop it on a USB stick and it works. Rebuild it after
 changing anything:
