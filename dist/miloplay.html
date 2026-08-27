@@ -995,6 +995,105 @@ body.touch .tp-btns { display: flex; }
   .bc-hotbar button { width: 29px; height: 29px; border-radius: 7px; font-size: 8px; }
 }
 
+/* Turbo Drift garage — car, tuning and track menus over the 3D stage. */
+.td-menu {
+  position: absolute;
+  inset: 0;
+  z-index: 8;
+  display: flex;
+  flex-direction: column;
+  padding: 52px 14px 14px;
+  gap: 10px;
+  background: rgba(6, 8, 20, .82);
+  backdrop-filter: blur(10px);
+  pointer-events: auto;
+  overflow: hidden;
+}
+.td-top { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.td-top h3 { margin: 0; font: 800 1.15rem/1 var(--font); color: var(--text); }
+.td-credits {
+  margin-left: auto;
+  font: 800 .95rem/1 var(--font);
+  color: #ffd257;
+  background: rgba(255, 210, 87, .12);
+  border: 1px solid rgba(255, 210, 87, .3);
+  border-radius: 999px;
+  padding: 7px 13px;
+}
+.td-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+.td-tabs button {
+  border-radius: 999px;
+  padding: 7px 15px;
+  font: 700 .82rem/1 var(--font);
+  color: var(--text-2);
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  cursor: pointer;
+}
+.td-tabs button.on { background: var(--brand); border-color: var(--brand); color: #fff; }
+.td-body { flex: 1; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; }
+.td-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(215px, 1fr));
+  gap: 9px;
+  padding-bottom: 8px;
+}
+.td-card {
+  text-align: left;
+  border-radius: 12px;
+  padding: 11px 12px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: var(--text);
+  font: 500 .8rem/1.35 var(--font);
+}
+.td-card:hover { border-color: var(--brand); }
+.td-card.on { border-color: var(--brand); box-shadow: 0 0 0 1px var(--brand) inset; }
+.td-card.locked { opacity: .55; cursor: not-allowed; }
+.td-card h4 { margin: 0; font: 800 .93rem/1.2 var(--font); display: flex; align-items: center; gap: 7px; }
+.td-swatch { width: 13px; height: 13px; border-radius: 4px; flex: 0 0 auto; }
+.td-note { color: var(--text-3); font-size: .74rem; }
+.td-bars { display: grid; gap: 3px; }
+.td-bar { display: grid; grid-template-columns: 46px 1fr; gap: 7px; align-items: center; }
+.td-bar span { font: 700 .65rem/1 var(--font); color: var(--text-3); text-transform: uppercase; }
+.td-bar i { height: 5px; border-radius: 3px; background: var(--surface-3); display: block; }
+.td-bar i b { display: block; height: 100%; border-radius: 3px; background: var(--brand); }
+.td-bar i b.up { background: #4ade80; }
+.td-pips { display: flex; gap: 3px; }
+.td-pips u { width: 100%; height: 6px; border-radius: 2px; background: var(--surface-3); }
+.td-pips u.on { background: #4ade80; }
+.td-medal { font-size: .74rem; font-weight: 800; }
+.td-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* In-race overlay: nitro bar, split messages and the wrong-way warning. */
+.td-hud {
+  position: absolute;
+  left: 50%;
+  bottom: 14px;
+  transform: translateX(-50%);
+  z-index: 6;
+  width: min(360px, calc(100% - 28px));
+  display: grid;
+  gap: 5px;
+  pointer-events: none;
+  text-align: center;
+}
+.td-nitro {
+  height: 9px;
+  border-radius: 5px;
+  background: rgba(8, 10, 26, .6);
+  border: 1px solid rgba(255, 255, 255, .16);
+  overflow: hidden;
+}
+.td-nitro b { display: block; height: 100%; background: linear-gradient(90deg, #22d3ee, #a78bfa); }
+.td-msg { font: 800 .95rem/1.3 var(--font); color: #fff; text-shadow: 0 2px 8px #000; min-height: 1.3em; }
+.td-msg.warn { color: #fb7185; }
+@media (pointer: coarse) { .td-hud { bottom: 148px; } }
+
 /* ==========================================================================
    Misc
    ========================================================================== */
@@ -2340,6 +2439,522 @@ body.touch .tp-btns { display: flex; }
     }
   };
 })();
+
+</script>
+<script>
+/* ---- assets/js/lib/racing.js ---- */
+/**
+ * Shared racing kit: 4x4 matrix maths, a tiny WebGL mesh builder, a seeded
+ * track generator and the car / tuning tables.
+ *
+ * Tracks are generated rather than hand-drawn. Fifty hand-authored circuits
+ * would be fifty chances to ship one that self-intersects or has a corner
+ * tighter than the car can turn; a generator plus a validator gives fifty that
+ * are all provably drivable. Every track is a closed star-shaped loop around
+ * the origin — radius varies with angle but never doubles back — which is what
+ * makes "no self-intersection" true by construction rather than by inspection.
+ */
+(function (global) {
+  'use strict';
+  var Milo = global.Milo = global.Milo || {};
+
+  /* ============================================================== mat4 */
+
+  var M = {};
+
+  M.identity = function () {
+    var o = new Float32Array(16);
+    o[0] = o[5] = o[10] = o[15] = 1;
+    return o;
+  };
+
+  M.mul = function (a, b) {
+    var o = new Float32Array(16);
+    for (var i = 0; i < 4; i++) {
+      for (var j = 0; j < 4; j++) {
+        var s = 0;
+        for (var k = 0; k < 4; k++) s += a[k * 4 + j] * b[i * 4 + k];
+        o[i * 4 + j] = s;
+      }
+    }
+    return o;
+  };
+
+  M.perspective = function (fovy, aspect, near, far) {
+    var f = 1 / Math.tan(fovy / 2), o = new Float32Array(16);
+    o[0] = f / aspect; o[5] = f;
+    o[10] = (far + near) / (near - far); o[11] = -1;
+    o[14] = 2 * far * near / (near - far);
+    return o;
+  };
+
+  M.lookAt = function (ex, ey, ez, cx, cy, cz, ux, uy, uz) {
+    var zx = ex - cx, zy = ey - cy, zz = ez - cz;
+    var zl = Math.hypot(zx, zy, zz) || 1;
+    zx /= zl; zy /= zl; zz /= zl;
+    var xx = uy * zz - uz * zy, xy = uz * zx - ux * zz, xz = ux * zy - uy * zx;
+    var xl = Math.hypot(xx, xy, xz) || 1;
+    xx /= xl; xy /= xl; xz /= xl;
+    var yx = zy * xz - zz * xy, yy = zz * xx - zx * xz, yz = zx * xy - zy * xx;
+    var o = new Float32Array(16);
+    o[0] = xx; o[1] = yx; o[2] = zx;
+    o[4] = xy; o[5] = yy; o[6] = zy;
+    o[8] = xz; o[9] = yz; o[10] = zz;
+    o[12] = -(xx * ex + xy * ey + xz * ez);
+    o[13] = -(yx * ex + yy * ey + yz * ez);
+    o[14] = -(zx * ex + zy * ey + zz * ez);
+    o[15] = 1;
+    return o;
+  };
+
+  /** Translate * rotateY * rotateZ(roll) * rotateX(pitch) * scale, in one pass. */
+  M.model = function (x, y, z, yaw, pitch, roll, sx, sy, sz) {
+    var cy = Math.cos(yaw), sy2 = Math.sin(yaw);
+    var cp = Math.cos(pitch || 0), sp = Math.sin(pitch || 0);
+    var cr = Math.cos(roll || 0), sr = Math.sin(roll || 0);
+    sx = sx == null ? 1 : sx; sy = sy == null ? 1 : sy; sz = sz == null ? 1 : sz;
+    // R = Ry * Rz * Rx, written out so the hot path does no matrix products.
+    var m00 = cy * cr, m01 = -cy * sr * cp + sy2 * sp, m02 = cy * sr * sp + sy2 * cp;
+    var m10 = sr, m11 = cr * cp, m12 = -cr * sp;
+    var m20 = -sy2 * cr, m21 = sy2 * sr * cp + cy * sp, m22 = -sy2 * sr * sp + cy * cp;
+    var o = new Float32Array(16);
+    o[0] = m00 * sx; o[1] = m10 * sx; o[2] = m20 * sx;
+    o[4] = m01 * sy; o[5] = m11 * sy; o[6] = m21 * sy;
+    o[8] = m02 * sz; o[9] = m12 * sz; o[10] = m22 * sz;
+    o[12] = x; o[13] = y; o[14] = z; o[15] = 1;
+    return o;
+  };
+
+  Milo.mat4 = M;
+
+  /* ====================================================== mesh builder */
+
+  /**
+   * Vertices are pos(3) + colour(3) + shade(1) + tint(1). `tint` blends the
+   * vertex colour toward a per-draw uniform, so one car mesh serves every
+   * paint job without rebuilding a buffer.
+   */
+  function Mesh() { this.v = []; }
+
+  Mesh.prototype.vert = function (x, y, z, col, shade, tint) {
+    this.v.push(x, y, z, col[0], col[1], col[2], shade, tint || 0);
+  };
+
+  Mesh.prototype.tri = function (a, b, c, col, shade, tint) {
+    this.vert(a[0], a[1], a[2], col, shade, tint);
+    this.vert(b[0], b[1], b[2], col, shade, tint);
+    this.vert(c[0], c[1], c[2], col, shade, tint);
+  };
+
+  Mesh.prototype.quad = function (a, b, c, d, col, shade, tint) {
+    this.tri(a, b, c, col, shade, tint);
+    this.tri(a, c, d, col, shade, tint);
+  };
+
+  /** Axis-aligned box from centre + half-extents, with per-face shading. */
+  Mesh.prototype.box = function (cx, cy, cz, hx, hy, hz, col, tint, shadeScale) {
+    var s = shadeScale == null ? 1 : shadeScale;
+    var x0 = cx - hx, x1 = cx + hx, y0 = cy - hy, y1 = cy + hy, z0 = cz - hz, z1 = cz + hz;
+    var t = this;
+    t.quad([x0, y1, z0], [x0, y1, z1], [x1, y1, z1], [x1, y1, z0], col, 1.00 * s, tint);
+    t.quad([x0, y0, z1], [x0, y0, z0], [x1, y0, z0], [x1, y0, z1], col, 0.45 * s, tint);
+    t.quad([x0, y0, z1], [x1, y0, z1], [x1, y1, z1], [x0, y1, z1], col, 0.80 * s, tint);
+    t.quad([x1, y0, z0], [x0, y0, z0], [x0, y1, z0], [x1, y1, z0], col, 0.66 * s, tint);
+    t.quad([x1, y0, z1], [x1, y0, z0], [x1, y1, z0], [x1, y1, z1], col, 0.90 * s, tint);
+    t.quad([x0, y0, z0], [x0, y0, z1], [x0, y1, z1], [x0, y1, z0], col, 0.58 * s, tint);
+  };
+
+  Mesh.prototype.count = function () { return this.v.length / 8; };
+  Mesh.prototype.data = function () { return new Float32Array(this.v); };
+
+  Milo.Mesh = Mesh;
+
+  /* =================================================== seeded PRNG */
+
+  /** mulberry32 — small, fast, and identical in every browser for a given seed. */
+  function rng(seed) {
+    var a = seed >>> 0;
+    return function () {
+      a = (a + 0x6D2B79F5) >>> 0;
+      var t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  /* ================================================ track generation */
+
+  var TAU = Math.PI * 2;
+
+  /**
+   * A periodic wobble built from whole-numbered harmonics, so it closes on
+   * itself exactly at t = 1 and the loop has no seam.
+   */
+  function harmonics(rand, count, minFreq, maxFreq) {
+    var terms = [];
+    for (var i = 0; i < count; i++) {
+      terms.push({
+        f: Math.round(minFreq + rand() * (maxFreq - minFreq)),
+        p: rand() * TAU,
+        a: 1 / (i + 1)
+      });
+    }
+    // Normalise so the sum peaks at roughly 1 regardless of how many terms.
+    var norm = 0;
+    terms.forEach(function (t) { norm += Math.abs(t.a); });
+    terms.forEach(function (t) { t.a /= norm || 1; });
+    return function (t) {
+      var s = 0;
+      for (var i = 0; i < terms.length; i++) s += terms[i].a * Math.sin(terms[i].f * TAU * t + terms[i].p);
+      return s;
+    };
+  }
+
+  var SEG = 4.2;            // metres between road cross-sections
+  var MIN_TURN_RADIUS = 26; // tighter than this and the car simply cannot make it
+
+  /**
+   * Builds a full track from a spec. Returns cross-sections sampled at even
+   * arc length, plus the feature ranges (jumps, boost pads, tunnels) and the
+   * checkpoint indices.
+   */
+  function buildTrack(spec) {
+    var rand = rng(spec.seed);
+    var radial = harmonics(rand, 3, 1, Math.max(2, spec.lobes));
+    var chicane = harmonics(rand, 2, spec.lobes + 2, spec.lobes + 6);
+    var hilly = harmonics(rand, 2, 1, Math.max(2, spec.hillFreq || 3));
+
+    var base = spec.radius || 190;
+    var amp = spec.amp || .22;
+    var chic = spec.chic || 0;
+    var hill = spec.hill || 0;
+
+    function point(t) {
+      var r = base * (1 + amp * radial(t) + chic * chicane(t));
+      var a = t * TAU;
+      return {
+        x: Math.cos(a) * r,
+        y: hill * hilly(t),
+        z: Math.sin(a) * r
+      };
+    }
+
+    // Dense sample first, then resample by arc length so segments are even.
+    var FINE = 4000;
+    var fine = [], i;
+    for (i = 0; i <= FINE; i++) fine.push(point(i / FINE));
+    var cum = [0];
+    for (i = 1; i <= FINE; i++) {
+      var p = fine[i - 1], q = fine[i];
+      cum.push(cum[i - 1] + Math.hypot(q.x - p.x, q.y - p.y, q.z - p.z));
+    }
+    var total = cum[FINE];
+    var n = Math.max(64, Math.round(total / SEG));
+    var step = total / n;
+
+    var pts = [], fi = 0;
+    for (i = 0; i < n; i++) {
+      var target = i * step;
+      while (fi < FINE && cum[fi + 1] < target) fi++;
+      var span = cum[fi + 1] - cum[fi] || 1;
+      var f = (target - cum[fi]) / span;
+      var a2 = fine[fi], b2 = fine[fi + 1];
+      pts.push({
+        x: a2.x + (b2.x - a2.x) * f,
+        y: a2.y + (b2.y - a2.y) * f,
+        z: a2.z + (b2.z - a2.z) * f
+      });
+    }
+
+    // Tangents, left normals and signed curvature from neighbouring samples.
+    var samples = [];
+    for (i = 0; i < n; i++) {
+      var prev = pts[(i - 1 + n) % n], cur = pts[i], next = pts[(i + 1) % n];
+      var tx = next.x - prev.x, ty = next.y - prev.y, tz = next.z - prev.z;
+      var tl = Math.hypot(tx, ty, tz) || 1;
+      tx /= tl; ty /= tl; tz /= tl;
+      // Left is up x tangent, flattened: the road banks, it never rolls over.
+      var lx = -tz, lz = tx;
+      var ll = Math.hypot(lx, lz) || 1;
+      lx /= ll; lz /= ll;
+      // Signed turn rate in the ground plane, in radians per metre.
+      var a1 = Math.atan2(cur.z - prev.z, cur.x - prev.x);
+      var a3 = Math.atan2(next.z - cur.z, next.x - cur.x);
+      var da = ((a3 - a1 + Math.PI * 3) % TAU) - Math.PI;
+      var curv = da / step;
+      samples.push({
+        x: cur.x, y: cur.y, z: cur.z,
+        tx: tx, ty: ty, tz: tz,
+        lx: lx, lz: lz,
+        curv: curv, s: i * step,
+        w: spec.width * .5, bank: 0, kind: 0
+      });
+    }
+
+    // Smooth the curvature before it drives banking, or the road twitches.
+    var smooth = new Float32Array(n);
+    for (i = 0; i < n; i++) {
+      var acc = 0, w = 0;
+      for (var k = -6; k <= 6; k++) {
+        var wt = 7 - Math.abs(k);
+        acc += samples[(i + k + n) % n].curv * wt;
+        w += wt;
+      }
+      smooth[i] = acc / w;
+    }
+    for (i = 0; i < n; i++) {
+      samples[i].curvS = smooth[i];
+      // Bank into the corner, capped so nothing becomes a wall.
+      samples[i].bank = Math.max(-.42, Math.min(.42, -smooth[i] * (spec.bank || 26)));
+    }
+
+    // Width variation: a track that pinches in places reads far less uniform.
+    if (spec.narrow) {
+      var wob = harmonics(rand, 2, 2, 5);
+      for (i = 0; i < n; i++) {
+        samples[i].w = spec.width * .5 * (1 - spec.narrow * .5 * (1 + wob(i / n)) * .5);
+      }
+    }
+
+    var feats = { gaps: [], boosts: [], tunnels: [] };
+
+    /** Reserves a stretch of track, keeping features off the start line. */
+    function reserve(list, len, taken) {
+      for (var attempt = 0; attempt < 40; attempt++) {
+        var start = Math.floor(30 + rand() * (n - len - 60));
+        var clash = taken.some(function (r) { return start < r[1] + 26 && start + len > r[0] - 26; });
+        if (clash) continue;
+        taken.push([start, start + len]);
+        list.push([start, start + len]);
+        return true;
+      }
+      return false;
+    }
+
+    var taken = [];
+    var j;
+    for (j = 0; j < (spec.jumps || 0); j++) {
+      // A jump is a ramp, a hole, and a landing ramp; the hole is the middle.
+      reserve(feats.gaps, 3 + Math.floor(rand() * 3), taken);
+    }
+    for (j = 0; j < (spec.boosts || 0); j++) reserve(feats.boosts, 7, taken);
+    for (j = 0; j < (spec.tunnels || 0); j++) reserve(feats.tunnels, 22 + Math.floor(rand() * 18), taken);
+
+    // Ramp the road up into each hole. The climb is *imposed* on the terrain
+    // rather than added to it: adding left a downhill lip on hilly tracks with
+    // no upward gradient at all, and therefore no launch. The landing is set a
+    // full ramp-height below the lip, and that drop buys most of the air time
+    // needed to clear the gap.
+    feats.gaps.forEach(function (gap) {
+      var lead = 8, out = 12, rise = 6.2, q;
+      var startIdx = (gap[0] - lead + n) % n;
+      var base = samples[startIdx].y;
+      for (q = 0; q <= lead; q++) {
+        samples[(startIdx + q) % n].y = base + (q / lead) * rise;
+      }
+      // Blend the far side back to the natural terrain over a longer run, so
+      // the recovery never turns into a gradient the validator would reject.
+      var afterBase = samples[(gap[1] + out) % n].y;
+      for (q = 0; q <= out; q++) {
+        var f = q / out;
+        samples[(gap[1] + q) % n].y = base * (1 - f) + afterBase * f;
+      }
+      for (q = gap[0]; q < gap[1]; q++) samples[q % n].kind = 1;   // hole
+    });
+    feats.boosts.forEach(function (b) {
+      for (var q = b[0]; q < b[1]; q++) samples[q % n].kind = 2;
+    });
+    feats.tunnels.forEach(function (t) {
+      for (var q = t[0]; q < t[1]; q++) samples[q % n].tunnel = true;
+    });
+
+    // The feature pass moved the road up and down, so the tangents computed
+    // from the original centreline are now stale. Rebuilding them is what
+    // gives a ramp lip its upward gradient — and therefore its launch.
+    for (i = 0; i < n; i++) {
+      var pv = samples[(i - 1 + n) % n], nb = samples[(i + 1) % n];
+      var dx2 = nb.x - pv.x, dy2 = nb.y - pv.y, dz2 = nb.z - pv.z;
+      var l2 = Math.hypot(dx2, dy2, dz2) || 1;
+      samples[i].tx = dx2 / l2; samples[i].ty = dy2 / l2; samples[i].tz = dz2 / l2;
+    }
+
+    // Checkpoints: evenly spaced, and never inside a hole.
+    var cpCount = Math.max(4, Math.min(12, Math.round(total / 260)));
+    var checkpoints = [];
+    for (i = 0; i < cpCount; i++) {
+      var idx = Math.round(i * n / cpCount);
+      var guard = 0;
+      while (samples[idx % n].kind === 1 && guard++ < n) idx++;
+      checkpoints.push(idx % n);
+    }
+
+    return {
+      spec: spec, samples: samples, n: n, step: step, total: total,
+      feats: feats, checkpoints: checkpoints
+    };
+  }
+
+  /**
+   * Confirms a generated track is actually raceable: closed, evenly sampled,
+   * never doubling back on itself, and with no corner tighter than a car can
+   * physically take. Returns a list of problems — empty means good.
+   */
+  function validateTrack(track) {
+    var problems = [];
+    var s = track.samples, n = track.n, i;
+
+    if (n < 64) problems.push('too short (' + n + ' segments)');
+
+    // 1. Curvature: the tightest corner must clear the minimum turn radius,
+    //    with room for the road's own half-width on the inside of the bend.
+    var worst = 0, worstAt = -1;
+    for (i = 0; i < n; i++) {
+      var r = Math.abs(s[i].curvS) > 1e-6 ? 1 / Math.abs(s[i].curvS) : 1e9;
+      if (r - s[i].w < MIN_TURN_RADIUS && r < 1e8) {
+        if (worstAt < 0 || r < worst) { worst = r; worstAt = i; }
+      }
+    }
+    if (worstAt >= 0) {
+      problems.push('corner radius ' + worst.toFixed(1) + 'm at segment ' + worstAt +
+        ' (needs ' + (MIN_TURN_RADIUS + s[worstAt].w).toFixed(1) + 'm)');
+    }
+
+    // 2. Self-clearance: any two non-adjacent cross-sections must stay more
+    //    than a road-width apart, or two bits of track overlap in space.
+    //    A uniform grid keeps this linear instead of comparing every pair.
+    var maxW = 0;
+    for (i = 0; i < n; i++) maxW = Math.max(maxW, s[i].w);
+    var cellSize = maxW * 2 + 8;
+    var grid = Object.create(null);
+    function key(cx, cz) { return cx + ',' + cz; }
+    for (i = 0; i < n; i++) {
+      var gx = Math.floor(s[i].x / cellSize), gz = Math.floor(s[i].z / cellSize);
+      var kk = key(gx, gz);
+      (grid[kk] || (grid[kk] = [])).push(i);
+    }
+    var minGap = 1e9, gapAt = -1;
+    for (i = 0; i < n; i++) {
+      var a = s[i];
+      var cx = Math.floor(a.x / cellSize), cz = Math.floor(a.z / cellSize);
+      for (var ox = -1; ox <= 1; ox++) {
+        for (var oz = -1; oz <= 1; oz++) {
+          var bucket = grid[key(cx + ox, cz + oz)];
+          if (!bucket) continue;
+          for (var bi = 0; bi < bucket.length; bi++) {
+            var j = bucket[bi];
+            if (j <= i) continue;
+            // Samples within eight steps along the track are meant to be close.
+            var along = Math.min(j - i, n - (j - i));
+            if (along < 8) continue;
+            var b = s[j];
+            var d = Math.hypot(a.x - b.x, a.z - b.z);
+            // Two levels of track can share ground plan if they clear vertically.
+            if (Math.abs(a.y - b.y) > 7) continue;
+            var need = a.w + b.w + 4;
+            if (d < need && d < minGap) { minGap = d; gapAt = i; }
+          }
+        }
+      }
+    }
+    if (gapAt >= 0) {
+      problems.push('track passes within ' + minGap.toFixed(1) + 'm of itself near segment ' + gapAt);
+    }
+
+    // 3. Gradient: a ramp steeper than this launches the car uncontrollably.
+    for (i = 0; i < n; i++) {
+      var nx = s[(i + 1) % n];
+      var slope = Math.abs(nx.y - s[i].y) / track.step;
+      if (slope > .55 && s[i].kind !== 1) {
+        problems.push('gradient ' + (slope * 100).toFixed(0) + '% at segment ' + i);
+        break;
+      }
+    }
+
+    // 4. Every checkpoint must sit on solid road.
+    track.checkpoints.forEach(function (c, k) {
+      if (s[c].kind === 1) problems.push('checkpoint ' + k + ' is over a hole');
+    });
+
+    return problems;
+  }
+
+  /* ============================================================ themes */
+
+  var THEMES = {
+    dawn: { sky: [.99, .71, .45], fog: [.99, .78, .58], ground: [.42, .30, .26], road: [.28, .27, .34], kerbA: [.94, .35, .29], kerbB: [.97, .95, .92], wall: [.98, .84, .40], accent: [1, .55, .25], scen: 'rock' },
+    grass: { sky: [.42, .72, .95], fog: [.68, .84, .96], ground: [.36, .63, .32], road: [.30, .30, .36], kerbA: [.90, .24, .24], kerbB: [.97, .97, .97], wall: [.95, .95, .97], accent: [.20, .80, .55], scen: 'tree' },
+    night: { sky: [.05, .05, .12], fog: [.08, .07, .18], ground: [.10, .10, .18], road: [.16, .16, .22], kerbA: [.20, .90, .95], kerbB: [.65, .30, .95], wall: [.30, .85, .95], accent: [.25, .95, .85], scen: 'neon' },
+    snow: { sky: [.75, .85, .95], fog: [.88, .93, .98], ground: [.90, .93, .97], road: [.34, .36, .44], kerbA: [.85, .30, .35], kerbB: [.98, .98, 1], wall: [.70, .82, .92], accent: [.45, .75, .95], scen: 'pine' },
+    desert: { sky: [.62, .80, .93], fog: [.90, .82, .64], ground: [.82, .70, .45], road: [.36, .33, .32], kerbA: [.92, .55, .20], kerbB: [.98, .95, .88], wall: [.85, .72, .48], accent: [.95, .70, .25], scen: 'cactus' },
+    volcano: { sky: [.20, .07, .08], fog: [.36, .12, .10], ground: [.18, .10, .10], road: [.20, .18, .20], kerbA: [.98, .42, .12], kerbB: [.30, .26, .28], wall: [.55, .18, .12], accent: [1, .45, .12], scen: 'rock' },
+    ocean: { sky: [.48, .80, .90], fog: [.62, .87, .93], ground: [.16, .48, .62], road: [.28, .32, .40], kerbA: [.98, .82, .30], kerbB: [.96, .98, 1], wall: [.30, .70, .82], accent: [.20, .85, .80], scen: 'palm' },
+    space: { sky: [.03, .02, .08], fog: [.08, .05, .16], ground: [.09, .07, .16], road: [.18, .17, .26], kerbA: [.75, .30, .95], kerbB: [.35, .80, 1], wall: [.55, .35, .90], accent: [.80, .40, 1], scen: 'crystal' }
+  };
+
+  /* ============================================================= cars */
+
+  /**
+   * Stats are 0..1 and get scaled into physics units by the game. `air` is how
+   * much steering authority you keep off the ground, which matters a lot on
+   * the jump-heavy tracks.
+   */
+  var CARS = [
+    { id: 'cadet', name: 'Cadet', price: 0, top: .52, accel: .55, grip: .62, brake: .55, mass: .45, air: .50, col: [.20, .78, .92], desc: 'Forgiving and free. A good place to learn the lines.' },
+    { id: 'dart', name: 'Dart', price: 900, top: .58, accel: .68, grip: .70, brake: .58, mass: .34, air: .62, col: [.98, .78, .22], desc: 'Light and eager. Turns in fast, punished by big jumps.' },
+    { id: 'hauler', name: 'Hauler', price: 1400, top: .66, accel: .44, grip: .52, brake: .70, mass: .82, air: .34, col: [.55, .60, .68], desc: 'Heavy. Shrugs off walls and rivals, hates tight corners.' },
+    { id: 'vulpine', name: 'Vulpine', price: 2200, top: .63, accel: .72, grip: .80, brake: .66, mass: .40, air: .70, col: [.95, .40, .30], desc: 'The cornering specialist. Rewards a clean, committed line.' },
+    { id: 'comet', name: 'Comet', price: 3200, top: .78, accel: .62, grip: .58, brake: .52, mass: .52, air: .48, col: [.40, .95, .60], desc: 'Enormous top end. Needs long straights to pay off.' },
+    { id: 'onyx', name: 'Onyx', price: 4400, top: .72, accel: .76, grip: .72, brake: .74, mass: .50, air: .60, col: [.32, .30, .40], desc: 'No weakness worth naming. Expensive for exactly that reason.' },
+    { id: 'wasp', name: 'Wasp', price: 5600, top: .70, accel: .88, grip: .74, brake: .62, mass: .28, air: .82, col: [.98, .86, .16], desc: 'Explosive off the line and superb in the air.' },
+    { id: 'monolith', name: 'Monolith', price: 7000, top: .86, accel: .58, grip: .64, brake: .80, mass: .90, air: .30, col: [.72, .24, .24], desc: 'A missile. Terrifying to place, unbeatable down a straight.' },
+    { id: 'phantom', name: 'Phantom', price: 9000, top: .82, accel: .82, grip: .86, brake: .78, mass: .42, air: .76, col: [.62, .38, .96], desc: 'Near-perfect balance. The car the leaderboards are set in.' },
+    { id: 'apex', name: 'Apex R', price: 13000, top: .95, accel: .94, grip: .90, brake: .86, mass: .38, air: .84, col: [.20, .95, .95], desc: 'Prototype. Faster than the tracks were designed for.' }
+  ];
+
+  /* =========================================================== tuning */
+
+  var TUNES = [
+    { id: 'engine', name: 'Engine', icon: '⚙️', stat: 'top', desc: 'Raises top speed.' },
+    { id: 'gearbox', name: 'Gearbox', icon: '🔧', stat: 'accel', desc: 'Sharper acceleration out of corners.' },
+    { id: 'tyres', name: 'Tyres', icon: '🛞', stat: 'grip', desc: 'More grip before the car breaks away.' },
+    { id: 'brakes', name: 'Brakes', icon: '🛑', stat: 'brake', desc: 'Later braking into corners.' },
+    { id: 'nitro', name: 'Nitrous', icon: '🔥', stat: 'nitro', desc: 'A bigger, longer boost bottle.' },
+    { id: 'chassis', name: 'Chassis', icon: '🪶', stat: 'air', desc: 'Lighter body and better control in the air.' }
+  ];
+  var TUNE_MAX = 5;
+
+  /** Upgrades get steeper as they go, so a maxed car is a real investment. */
+  function tuneCost(level) { return Math.round(320 * Math.pow(1.85, level)); }
+
+  /** Applies a car's tuning levels to its base stats. */
+  function tunedStats(car, tune) {
+    tune = tune || {};
+    var out = { nitro: 0 };
+    TUNES.forEach(function (t) {
+      var lvl = Math.min(TUNE_MAX, tune[t.id] || 0);
+      var base = t.stat === 'nitro' ? 0 : car[t.stat];
+      // Each level closes a fifth of the gap to a perfect stat.
+      out[t.stat] = t.stat === 'nitro' ? lvl / TUNE_MAX : base + (1 - base) * (lvl / TUNE_MAX) * .7;
+    });
+    out.mass = car.mass * (1 - (Math.min(TUNE_MAX, tune.chassis || 0) / TUNE_MAX) * .18);
+    return out;
+  }
+
+  Milo.racing = {
+    rng: rng,
+    buildTrack: buildTrack,
+    validateTrack: validateTrack,
+    THEMES: THEMES,
+    CARS: CARS,
+    TUNES: TUNES,
+    TUNE_MAX: TUNE_MAX,
+    tuneCost: tuneCost,
+    tunedStats: tunedStats,
+    MIN_TURN_RADIUS: MIN_TURN_RADIUS,
+    SEG: SEG
+  };
+
+})(window);
 
 </script>
 
@@ -32042,310 +32657,1321 @@ body.touch .tp-btns { display: flex; }
 </script>
 <script>
 /* ---- assets/js/games/turbo-drift.js ---- */
-/* Turbo Drift — top-down circuit racing against three rivals, three laps. */
+/**
+ * Turbo Drift — low-poly 3D circuit racing across fifty generated tracks,
+ * with a garage of ten cars and six tuning branches to spend winnings on.
+ *
+ * Tracks come from Milo.racing's seeded generator; the seeds below are the
+ * ones that passed the drivability validator (closed loop, no self-overlap,
+ * every corner inside the car's turning circle), so all fifty are raceable.
+ */
 (function () {
   'use strict';
-  var W = 900, H = 600;
-  var ROAD = 96, LAPS = 3;
+  var Milo = window.Milo, R = Milo.racing, M = Milo.mat4;
 
-  // Closed circuit, in world coordinates.
-  var TRACK = [
-    [220, 200], [430, 140], [660, 170], [880, 260], [1030, 430], [1000, 640],
-    [820, 760], [600, 780], [420, 720], [330, 560], [200, 480], [130, 330]
+  /* ------------------------------------------------------------- tracks */
+
+  // name, theme, seed, difficulty, laps, radius, amp, chic, hill, hillFreq,
+  // lobes, width, bank, jumps, boosts, tunnels, narrow, walls
+  var TRACK_ROWS = [
+    ['Sunset Bay', 'dawn', 1000, 1, 2, 150, 0.12, 0, 0, 2, 2, 23, 22, 0, 1, 0, 0, 1],
+    ['Meadow Loop', 'desert', 8919, 1, 2, 156, 0.125, 0.002, 0.69, 3, 3, 22.8, 22, 0, 1, 0, 0, 1],
+    ['First Light', 'space', 16838, 1, 2, 162, 0.13, 0.004, 1.39, 4, 2, 22.7, 23, 0, 1, 0, 0, 1],
+    ['Harbour Mile', 'ocean', 24757, 1, 2, 168, 0.135, 0.005, 2.08, 5, 3, 22.5, 23, 0, 1, 0, 0, 1],
+    ['Green Circuit', 'night', 32676, 1, 2, 174, 0.14, 0.007, 2.78, 2, 2, 22.3, 23, 0, 1, 0, 0, 1],
+    ['Quiet Run', 'grass', 40595, 1, 2, 179, 0.145, 0.009, 3.47, 3, 4, 22.2, 24, 0, 1, 0, 0, 1],
+    ['Low Tide', 'snow', 48514, 1, 2, 185, 0.15, 0.011, 4.17, 4, 3, 22, 24, 0, 1, 0, 0, 1],
+    ['Foothill', 'volcano', 56433, 1, 2, 191, 0.155, 0.012, 4.86, 5, 4, 21.8, 24, 0, 1, 0, 0, 1],
+    ['Copper Flats', 'dawn', 64352, 1, 2, 197, 0.16, 0.014, 5.56, 2, 3, 21.7, 25, 0, 1, 0, 0, 1],
+    ['Morning Sprint', 'desert', 72271, 1, 2, 203, 0.165, 0.016, 6.25, 3, 4, 21.5, 25, 0, 1, 0, 0, 1],
+    ['Pine Ridge', 'grass', 80190, 2, 2, 176, 0.165, 0.016, 3.1, 2, 3, 21.5, 25, 0, 2, 0, 0, 1],
+    ['Amber Pass', 'snow', 88109, 2, 2, 182, 0.17, 0.018, 3.79, 3, 4, 21.3, 25, 0, 2, 0, 0, 1],
+    ['Dune Sweep', 'volcano', 96028, 2, 2, 188, 0.175, 0.02, 4.49, 4, 3, 21.2, 26, 0, 2, 0, 0, 1],
+    ['Glass Harbour', 'dawn', 103947, 2, 2, 194, 0.18, 0.021, 5.18, 5, 4, 21, 26, 0, 2, 0, 0, 1],
+    ['Cinder Track', 'desert', 111866, 2, 2, 200, 0.185, 0.023, 5.88, 2, 4, 20.8, 26, 0, 2, 0, 0, 1],
+    ['Frost Hollow', 'space', 119785, 2, 2, 205, 0.19, 0.025, 6.57, 3, 5, 20.7, 27, 1, 2, 0, 0, 1],
+    ['Long Shadow', 'ocean', 127704, 2, 2, 211, 0.195, 0.027, 7.27, 4, 4, 20.5, 27, 1, 2, 1, 0, 1],
+    ['Tidewater', 'night', 135623, 2, 2, 217, 0.2, 0.028, 7.96, 5, 5, 20.3, 27, 1, 2, 1, 0, 1],
+    ['Ember Curve', 'grass', 143542, 2, 2, 223, 0.205, 0.03, 8.66, 2, 4, 20.2, 28, 1, 2, 1, 0, 1],
+    ['Split Rock', 'snow', 151461, 2, 2, 229, 0.21, 0.032, 9.35, 3, 5, 20, 28, 1, 2, 1, 0, 1],
+    ['Neon Mile', 'space', 159380, 3, 2, 202, 0.21, 0.032, 6.2, 2, 4, 20, 28, 1, 2, 1, 0, 1],
+    ['Canyon Run', 'ocean', 167299, 3, 2, 208, 0.215, 0.034, 6.89, 3, 5, 19.8, 28, 1, 2, 1, 0, 1],
+    ['Ridgeback', 'night', 175218, 3, 2, 214, 0.22, 0.036, 7.59, 4, 4, 19.7, 29, 1, 2, 1, 0, 1],
+    ['Saltmarsh', 'grass', 183137, 3, 2, 220, 0.225, 0.037, 8.28, 5, 6, 19.5, 29, 1, 2, 1, 0, 1],
+    ['Ironworks', 'snow', 191056, 3, 2, 226, 0.23, 0.039, 8.98, 2, 5, 19.3, 29, 1, 2, 1, 0, 1],
+    ['Snowbreak', 'volcano', 198975, 3, 2, 231, 0.235, 0.041, 9.67, 3, 6, 19.2, 30, 1, 2, 1, 0, 1],
+    ['Nightfall', 'dawn', 206894, 3, 2, 237, 0.24, 0.043, 10.37, 4, 5, 19, 30, 2, 2, 1, 0, 1],
+    ['Deep Blue', 'desert', 319542, 3, 2, 243, 0.245, 0.044, 11.06, 5, 6, 18.8, 30, 2, 2, 1, 0, 1],
+    ['Ashfall', 'space', 222732, 3, 2, 249, 0.25, 0.046, 11.76, 2, 5, 18.7, 31, 2, 2, 1, 0, 1],
+    ['Crosswind', 'ocean', 440109, 3, 2, 255, 0.255, 0.048, 12.45, 3, 6, 18.5, 31, 2, 2, 1, 0, 1],
+    ['Vertigo', 'volcano', 238570, 4, 1, 228, 0.255, 0.048, 9.3, 2, 5, 18.5, 31, 2, 3, 1, 0.2, 1],
+    ['Serpentine', 'dawn', 246489, 4, 1, 234, 0.26, 0.05, 9.99, 3, 6, 18.3, 31, 2, 3, 1, 0.2, 1],
+    ['Blackout', 'desert', 778053, 4, 1, 240, 0.265, 0.052, 10.69, 4, 6, 18.2, 32, 2, 3, 1, 0.2, 1],
+    ['Highwater', 'space', 262327, 4, 1, 246, 0.27, 0.053, 11.38, 5, 7, 18, 32, 2, 3, 1, 0.2, 1],
+    ['Furnace', 'ocean', 270246, 4, 1, 252, 0.275, 0.055, 12.08, 2, 6, 17.8, 32, 2, 3, 1, 0.2, 1],
+    ['Whiteout', 'night', 382894, 4, 1, 257, 0.28, 0.057, 12.77, 3, 7, 17.7, 33, 2, 3, 1, 0.2, 1],
+    ['Skyline', 'grass', 914458, 4, 1, 263, 0.285, 0.059, 13.47, 4, 6, 17.5, 33, 2, 3, 1, 0.2, 1],
+    ['Undertow', 'snow', 398732, 4, 1, 269, 0.29, 0.06, 14.16, 5, 7, 17.3, 33, 2, 3, 1, 0.2, 1],
+    ['Scoria', 'volcano', 1139754, 4, 1, 275, 0.295, 0.062, 14.86, 2, 6, 17.2, 34, 2, 3, 1, 0.2, 1],
+    ['Razorback', 'dawn', 938215, 4, 1, 281, 0.3, 0.064, 15.55, 3, 7, 17, 34, 2, 3, 1, 0.2, 1],
+    ['Apex Summit', 'night', 736676, 5, 1, 254, 0.3, 0.064, 12.4, 2, 6, 17, 34, 2, 3, 1, 0.32, 1],
+    ['The Gauntlet', 'grass', 2629717, 5, 1, 260, 0.305, 0.066, 13.09, 3, 8, 16.8, 34, 2, 3, 1, 0.32, 1],
+    ['Terminal Velocity', 'snow', 438327, 5, 1, 266, 0.31, 0.068, 13.79, 4, 7, 16.7, 35, 2, 3, 1, 0.32, 1],
+    ['Maelstrom', 'volcano', 550975, 5, 1, 272, 0.315, 0.069, 14.48, 5, 8, 16.5, 35, 2, 3, 1, 0.32, 1],
+    ['Inferno', 'dawn', 768352, 5, 1, 278, 0.32, 0.071, 15.18, 2, 7, 16.3, 35, 2, 3, 1, 0.32, 1],
+    ['Absolute Zero', 'desert', 1509374, 5, 1, 283, 0.325, 0.073, 15.87, 3, 8, 16.2, 36, 3, 3, 1, 0.32, 1],
+    ['Event Horizon', 'space', 1098377, 5, 1, 289, 0.33, 0.075, 16.57, 4, 7, 16, 36, 3, 3, 1, 0.32, 1],
+    ['Abyssal', 'ocean', 1315754, 5, 1, 295, 0.335, 0.076, 17.26, 5, 8, 15.8, 36, 3, 3, 2, 0.32, 1],
+    ['Caldera', 'night', 1114215, 5, 1, 301, 0.34, 0.078, 17.96, 2, 7, 15.7, 37, 3, 3, 2, 0.32, 1],
+    ['Final Lap', 'grass', 389031, 5, 1, 307, 0.345, 0.08, 18.65, 3, 9, 15.5, 37, 3, 3, 2, 0.32, 1]
   ];
 
-  function mount(host) {
-    var Milo = window.Milo, U = Milo.util;
+  var TRACKS = TRACK_ROWS.map(function (r, i) {
+    return {
+      index: i, name: r[0], theme: r[1], seed: r[2], diff: r[3], laps: r[4],
+      radius: r[5], amp: r[6], chic: r[7], hill: r[8], hillFreq: r[9],
+      lobes: r[10], width: r[11], bank: r[12], jumps: r[13], boosts: r[14],
+      tunnels: r[15], narrow: r[16], walls: !!r[17]
+    };
+  });
 
-    function reset(g) {
-      var d = g.data;
-      d.cars = [];
-      for (var i = 0; i < 4; i++) {
-        var p = startPos(i);
-        d.cars.push({
-          x: p.x, y: p.y, a: p.a, v: 0,
-          ai: i > 0,
-          wp: 1, lap: 0, prog: 0,
-          col: ['#22d3ee', '#fb7185', '#ffd257', '#a78bfa'][i],
-          name: ['You', 'Rossi', 'Vega', 'Kade'][i],
-          skill: i === 0 ? 1 : U.rand(.88, .99),
-          drift: 0
-        });
+  /* ------------------------------------------------------------- saving */
+
+  var SAVE = 'turbo-drift:save';
+
+  function blankSave() {
+    return { credits: 600, sel: 'cadet', cars: { cadet: { owned: true, tune: {} } }, tracks: {} };
+  }
+
+  function loadSave() {
+    var s = Milo.store.get(SAVE, null);
+    if (!s || typeof s !== 'object') s = blankSave();
+    if (typeof s.credits !== 'number' || !isFinite(s.credits)) s.credits = 600;
+    if (!s.cars || typeof s.cars !== 'object') s.cars = {};
+    if (!s.tracks || typeof s.tracks !== 'object') s.tracks = {};
+    // The starter car is always owned, whatever the stored blob claims.
+    if (!s.cars.cadet) s.cars.cadet = { owned: true, tune: {} };
+    s.cars.cadet.owned = true;
+    if (!s.cars[s.sel] || !s.cars[s.sel].owned) s.sel = 'cadet';
+    return s;
+  }
+
+  function persist(save) { Milo.store.set(SAVE, save); }
+
+  function carEntry(save, id) {
+    if (!save.cars[id]) save.cars[id] = { owned: false, tune: {} };
+    if (!save.cars[id].tune) save.cars[id].tune = {};
+    return save.cars[id];
+  }
+
+  function trackEntry(save, i) {
+    if (!save.tracks[i]) save.tracks[i] = { best: 0, medal: 0 };
+    return save.tracks[i];
+  }
+
+  /** Track 0 is always open; after that you need the previous one finished. */
+  function trackUnlocked(save, i) {
+    if (i === 0) return true;
+    var prev = save.tracks[i - 1];
+    return !!(prev && prev.best);
+  }
+
+  /**
+   * Medal times scale with track length and difficulty. Derived rather than
+   * hand-set so all fifty stay consistent as tracks change.
+   */
+  function medalTimes(track, built) {
+    // Calibrated against measured lap pace in the starter car: a clean but
+    // unhurried lap lands around silver, so gold genuinely needs a better line
+    // or a better car. The earlier figures put bronze beyond that pace, which
+    // made every medal unobtainable on the easy tracks.
+    var pace = 30 - track.diff * .9;
+    var gold = built.total * track.laps / pace;
+    return { gold: gold, silver: gold * 1.15, bronze: gold * 1.32 };
+  }
+
+  var MEDAL_NAMES = ['—', '🥉 Bronze', '🥈 Silver', '🥇 Gold'];
+
+  function medalFor(times, ms) {
+    var t = ms / 1000;
+    if (t <= times.gold) return 3;
+    if (t <= times.silver) return 2;
+    if (t <= times.bronze) return 1;
+    return 0;
+  }
+
+  function fmtTime(ms) {
+    if (!ms) return '—';
+    var t = ms / 1000;
+    var m = Math.floor(t / 60);
+    var s = t - m * 60;
+    return m + ':' + (s < 10 ? '0' : '') + s.toFixed(2);
+  }
+
+  /* ------------------------------------------------------------ shaders */
+
+  var VS = [
+    'attribute vec3 aPos;',
+    'attribute vec3 aCol;',
+    'attribute float aShade;',
+    'attribute float aTint;',
+    'uniform mat4 uVP;',
+    'uniform mat4 uModel;',
+    'uniform vec3 uTint;',
+    'uniform vec3 uEye;',
+    'uniform vec2 uFog;',
+    'varying vec3 vCol;',
+    'varying float vFog;',
+    'void main(){',
+    '  vec4 world = uModel * vec4(aPos, 1.0);',
+    '  gl_Position = uVP * world;',
+    '  vCol = mix(aCol, uTint, aTint) * aShade;',
+    '  vFog = clamp((length(world.xyz - uEye) - uFog.x) / uFog.y, 0.0, 1.0);',
+    '}'
+  ].join('\n');
+
+  var FS = [
+    'precision mediump float;',
+    'uniform vec3 uFogColor;',
+    'uniform float uAlpha;',
+    'varying vec3 vCol;',
+    'varying float vFog;',
+    'void main(){',
+    '  gl_FragColor = vec4(mix(vCol, uFogColor, vFog), uAlpha);',
+    '}'
+  ].join('\n');
+
+  function compile(gl, type, src) {
+    var s = gl.createShader(type);
+    gl.shaderSource(s, src);
+    gl.compileShader(s);
+    if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error('Shader: ' + gl.getShaderInfoLog(s));
+    return s;
+  }
+
+  function program(gl, vs, fs) {
+    var p = gl.createProgram();
+    gl.attachShader(p, compile(gl, gl.VERTEX_SHADER, vs));
+    gl.attachShader(p, compile(gl, gl.FRAGMENT_SHADER, fs));
+    gl.linkProgram(p);
+    if (!gl.getProgramParameter(p, gl.LINK_STATUS)) throw new Error('Link: ' + gl.getProgramInfoLog(p));
+    return p;
+  }
+
+  /* ----------------------------------------------------------- geometry */
+
+  var GREY = [.5, .5, .5], DARK = [.12, .12, .15], GLASS = [.14, .17, .26];
+
+  /** Road edge points for one cross-section, with banking applied. */
+  function edge(s, side) {
+    var w = s.w * side;
+    var lift = Math.sin(s.bank) * w;
+    return [s.x + s.lx * w, s.y + lift, s.z + s.lz * w];
+  }
+
+  /**
+   * Builds every static piece of a track into one buffer: road, kerbs, walls,
+   * the slab underneath, tunnels, boost pads, checkpoints and the scenery.
+   */
+  function buildTrackMesh(built, track, theme) {
+    var mesh = new Milo.Mesh();
+    var s = built.samples, n = built.n;
+    var rand = R.rng(track.seed ^ 0x9e37);
+    var i;
+
+    for (i = 0; i < n; i++) {
+      var a = s[i], b = s[(i + 1) % n];
+      if (a.kind === 1) continue;                    // hole: no road here
+      var aL = edge(a, 1), aR = edge(a, -1);
+      var bL = edge(b, 1), bR = edge(b, -1);
+
+      // Road surface, with boost pads picked out in the theme accent.
+      var surface = a.kind === 2 ? theme.accent : theme.road;
+      var shade = a.kind === 2 ? 1.15 : (i % 8 < 4 ? 1 : .94);
+      mesh.quad(aR, aL, bL, bR, surface, shade);
+
+      // Kerbs: a bright strip either side, alternating every few segments.
+      var kerbCol = (i % 6 < 3) ? theme.kerbA : theme.kerbB;
+      var kw = 1.5;
+      var aLo = [aL[0] + a.lx * kw, aL[1], aL[2] + a.lz * kw];
+      var bLo = [bL[0] + b.lx * kw, bL[1], bL[2] + b.lz * kw];
+      var aRo = [aR[0] - a.lx * kw, aR[1], aR[2] - a.lz * kw];
+      var bRo = [bR[0] - b.lx * kw, bR[1], bR[2] - b.lz * kw];
+      mesh.quad(aL, aLo, bLo, bL, kerbCol, .95);
+      mesh.quad(aRo, aR, bR, bRo, kerbCol, .95);
+
+      // Slab: a dark underside so the ribbon reads as solid, not a decal.
+      var drop = 1.6;
+      mesh.quad([aLo[0], aLo[1] - drop, aLo[2]], [aLo[0], aLo[1], aLo[2]],
+        [bLo[0], bLo[1], bLo[2]], [bLo[0], bLo[1] - drop, bLo[2]], DARK, .62);
+      mesh.quad([aRo[0], aRo[1], aRo[2]], [aRo[0], aRo[1] - drop, aRo[2]],
+        [bRo[0], bRo[1] - drop, bRo[2]], [bRo[0], bRo[1], bRo[2]], DARK, .5);
+
+      // Walls, on the tracks that have them.
+      if (track.walls && i % 2 === 0) {
+        var wh = 1.5;
+        var wc = (i % 8 < 4) ? theme.wall : theme.kerbB;
+        mesh.box(aLo[0] + a.lx * .5, aLo[1] + wh * .5, aLo[2] + a.lz * .5, .5, wh * .5, built.step * .55, wc, 0);
+        mesh.box(aRo[0] - a.lx * .5, aRo[1] + wh * .5, aRo[2] - a.lz * .5, .5, wh * .5, built.step * .55, wc, 0);
       }
-      d.me = d.cars[0];
-      d.time = 0;
-      d.finished = false;
-      d.place = 1;
-      d.smoke = [];
-      d.countdown = 3;
-      g.set('Lap', '0/' + LAPS);
-      g.set('Place', '1st');
-      g.set('Speed', '0');
+
+      // Tunnel: side pillars and a roof, which also darkens the drive through.
+      if (a.tunnel && i % 2 === 0) {
+        var th = 6;
+        mesh.box(aLo[0] + a.lx * 1.2, aLo[1] + th * .5, aLo[2] + a.lz * 1.2, 1, th * .5, built.step, theme.wall, 0, .8);
+        mesh.box(aRo[0] - a.lx * 1.2, aRo[1] + th * .5, aRo[2] - a.lz * 1.2, 1, th * .5, built.step, theme.wall, 0, .8);
+        var mid = [(aL[0] + aR[0]) / 2, a.y + th, (aL[2] + aR[2]) / 2];
+        mesh.box(mid[0], mid[1], mid[2], a.w + 2, .6, built.step, theme.wall, 0, .55);
+      }
     }
 
-    function startPos(i) {
-      var a = Math.atan2(TRACK[1][1] - TRACK[0][1], TRACK[1][0] - TRACK[0][0]);
-      var nx = -Math.sin(a), ny = Math.cos(a);
-      var lane = (i % 2 ? 1 : -1) * 26;
-      var back = Math.floor(i / 2) * 46;
+    // Start/finish: a chequered strip plus a gantry you can see coming.
+    var st = s[0];
+    for (var c = 0; c < 8; c++) {
+      var f0 = -1 + c * .25, f1 = f0 + .25;
+      var w0 = st.w * f0, w1 = st.w * f1;
+      var q0 = [st.x + st.lx * w0, st.y + .06, st.z + st.lz * w0];
+      var q1 = [st.x + st.lx * w1, st.y + .06, st.z + st.lz * w1];
+      var back = [st.tx * 3, 0, st.tz * 3];
+      mesh.quad(q0, q1, [q1[0] + back[0], q1[1], q1[2] + back[2]], [q0[0] + back[0], q0[1], q0[2] + back[2]],
+        c % 2 ? [.97, .97, .97] : [.10, .10, .13], 1.1);
+    }
+    var gl0 = edge(st, 1), gr0 = edge(st, -1);
+    mesh.box(gl0[0] + st.lx * 1.6, st.y + 4, gl0[2] + st.lz * 1.6, .8, 4, .8, theme.accent, 0);
+    mesh.box(gr0[0] - st.lx * 1.6, st.y + 4, gr0[2] - st.lz * 1.6, .8, 4, .8, theme.accent, 0);
+    mesh.box(st.x, st.y + 8, st.z, st.w + 2, .9, .8, theme.accent, 0);
+
+    // Checkpoint gates, so the next one is always visible from the last.
+    built.checkpoints.forEach(function (ci, k) {
+      if (k === 0) return;                             // 0 is the start line
+      var cs = s[ci];
+      var cl = edge(cs, 1), cr = edge(cs, -1);
+      mesh.box(cl[0] + cs.lx * 1.2, cs.y + 2.6, cl[2] + cs.lz * 1.2, .5, 2.6, .5, theme.kerbA, 0);
+      mesh.box(cr[0] - cs.lx * 1.2, cs.y + 2.6, cr[2] - cs.lz * 1.2, .5, 2.6, .5, theme.kerbA, 0);
+    });
+
+    // Scenery: a few hundred simple shapes set back from the road edge.
+    var kinds = theme.scen;
+    for (i = 0; i < n; i += 5) {
+      if (rand() > .55) continue;
+      var sm = s[i];
+      var side = rand() < .5 ? 1 : -1;
+      var off = sm.w + 6 + rand() * 26;
+      var ox = sm.x + sm.lx * off * side, oz = sm.z + sm.lz * off * side;
+      var oy = sm.y - 1.5;
+      var scale = .7 + rand() * .9;
+      if (kinds === 'tree' || kinds === 'pine') {
+        mesh.box(ox, oy + 1.2 * scale, oz, .35, 1.2 * scale, .35, [.30, .22, .16], 0);
+        var leaf = kinds === 'pine' ? [.16, .40, .28] : [.22, .60, .30];
+        mesh.box(ox, oy + 3.4 * scale, oz, 1.5 * scale, 1.9 * scale, 1.5 * scale, leaf, 0);
+        mesh.box(ox, oy + 5.4 * scale, oz, .9 * scale, 1.1 * scale, .9 * scale, leaf, 0, 1.12);
+      } else if (kinds === 'rock') {
+        mesh.box(ox, oy + 1.3 * scale, oz, 1.7 * scale, 1.3 * scale, 1.5 * scale, [.34, .30, .28], 0);
+        mesh.box(ox + .6, oy + 2.6 * scale, oz - .4, .9 * scale, .9 * scale, .8 * scale, [.40, .35, .32], 0);
+      } else if (kinds === 'neon') {
+        mesh.box(ox, oy + 4 * scale, oz, .4, 4 * scale, .4, [.14, .14, .20], 0);
+        mesh.box(ox, oy + 8.2 * scale, oz, 1.1 * scale, .5, 1.1 * scale, theme.accent, 0, 1.3);
+      } else if (kinds === 'cactus') {
+        mesh.box(ox, oy + 2.2 * scale, oz, .6 * scale, 2.2 * scale, .6 * scale, [.26, .50, .30], 0);
+        mesh.box(ox + 1.1 * scale, oy + 2.8 * scale, oz, .5 * scale, .5, .5 * scale, [.26, .50, .30], 0);
+      } else if (kinds === 'palm') {
+        mesh.box(ox, oy + 2.6 * scale, oz, .3, 2.6 * scale, .3, [.42, .33, .22], 0);
+        mesh.box(ox, oy + 5.4 * scale, oz, 2.0 * scale, .3, 2.0 * scale, [.20, .62, .42], 0);
+      } else {
+        // crystal
+        mesh.box(ox, oy + 2.4 * scale, oz, .8 * scale, 2.4 * scale, .8 * scale, theme.accent, 0, .9);
+        mesh.box(ox, oy + 5.2 * scale, oz, .4 * scale, .9 * scale, .4 * scale, theme.accent, 0, 1.3);
+      }
+    }
+
+    return mesh;
+  }
+
+  /** A big flat ground plane plus a horizon ring, so the world has a floor. */
+  function buildGroundMesh(built, theme) {
+    var mesh = new Milo.Mesh();
+    var lo = 1e9, i;
+    for (i = 0; i < built.n; i++) lo = Math.min(lo, built.samples[i].y);
+    var y = lo - 9;
+    var far = 3000;
+    mesh.quad([-far, y, -far], [-far, y, far], [far, y, far], [far, y, -far], theme.ground, .9);
+    // A sparse grid of raised tiles keeps the floor from looking like a void.
+    var rand = R.rng(1234);
+    for (i = 0; i < 260; i++) {
+      var a = rand() * Math.PI * 2;
+      var r = built.spec.radius * (1.5 + rand() * 3.2);
+      mesh.box(Math.cos(a) * r, y + .4, Math.sin(a) * r, 12 + rand() * 26, .4, 12 + rand() * 26,
+        theme.ground, 0, .82 + rand() * .3);
+    }
+    return mesh;
+  }
+
+  /** One car body, built once and drawn per racer with a different tint. */
+  function buildCarMesh() {
+    var m = new Milo.Mesh();
+    m.box(0, .52, .1, .78, .26, 1.72, GREY, 1);              // main body
+    m.box(0, .86, -.15, .60, .26, .82, GLASS, 0);            // cabin
+    m.box(0, .30, 1.62, .74, .16, .22, GREY, 1, .9);         // nose
+    m.box(0, .95, -1.42, .70, .07, .18, GREY, 1, 1.1);       // wing blade
+    m.box(-.58, .74, -1.42, .09, .22, .16, DARK, 0);
+    m.box(.58, .74, -1.42, .09, .22, .16, DARK, 0);
+    m.box(-.52, .30, 1.60, .16, .10, .10, [1, .96, .8], 0, 1.4);   // headlights
+    m.box(.52, .30, 1.60, .16, .10, .10, [1, .96, .8], 0, 1.4);
+    m.box(-.50, .28, -1.60, .14, .08, .08, [1, .25, .2], 0, 1.4);  // tail lights
+    m.box(.50, .28, -1.60, .14, .08, .08, [1, .25, .2], 0, 1.4);
+    var wheels = [[-.80, 1.05], [.80, 1.05], [-.80, -1.05], [.80, -1.05]];
+    wheels.forEach(function (w) {
+      m.box(w[0], .34, w[1], .16, .34, .36, [.08, .08, .10], 0);
+    });
+    return m;
+  }
+
+  /** A flat quad used for the drift smoke and boost puffs. */
+  function buildPuffMesh() {
+    var m = new Milo.Mesh();
+    m.quad([-1, 0, -1], [-1, 0, 1], [1, 0, 1], [1, 0, -1], GREY, 1, 1);
+    return m;
+  }
+
+  /* --------------------------------------------------------- physics */
+
+  var GRAV = 34;
+
+  /** Turns 0..1 stat sliders into the numbers the simulation actually uses. */
+  function physicsFor(stats) {
+    return {
+      top: 27 + stats.top * 43,
+      accel: 11 + stats.accel * 17,
+      brakeF: 16 + stats.brake * 20,
+      grip: 3.4 + stats.grip * 7.2,
+      steer: 1.75 + stats.grip * .75,
+      air: .35 + stats.air * 1.35,
+      nitro: stats.nitro,
+      mass: stats.mass
+    };
+  }
+
+  var AI_NAMES = ['Rossi', 'Vega', 'Kade', 'Nyx', 'Orin', 'Sable'];
+  var AI_COLS = [[.98, .45, .55], [1, .82, .34], [.65, .55, .98], [.42, .90, .62], [.98, .60, .30], [.55, .85, .98]];
+
+  function mount(host) {
+    var U = Milo.util;
+    var save = loadSave();
+    var carMesh = buildCarMesh(), puffMesh = buildPuffMesh();
+
+    var gpu = null;     // lazily created once we have a GL context
+    var menuEl = null, hudEl = null, nitroEl = null, msgEl = null;
+
+    /* ------------------------------------------------------- track state */
+
+    var current = { index: 0, built: null, theme: null, times: null };
+
+    function ensureTrack(i) {
+      if (current.built && current.index === i) return current;
+      var t = TRACKS[i];
+      current.index = i;
+      current.track = t;
+      current.built = R.buildTrack(t);
+      current.theme = R.THEMES[t.theme] || R.THEMES.grass;
+      current.times = medalTimes(t, current.built);
+      current.dirty = true;
+      return current;
+    }
+
+    /* ------------------------------------------------------------- menu */
+
+    function el(tag, cls, html) {
+      var e = document.createElement(tag);
+      if (cls) e.className = cls;
+      if (html != null) e.innerHTML = html;
+      return e;
+    }
+
+    function closeMenu() {
+      if (menuEl) { menuEl.remove(); menuEl = null; }
+    }
+
+    function bar(label, value, boosted) {
+      var pct = Math.round(U.clamp(value, 0, 1) * 100);
+      return '<div class="td-bar"><span>' + label + '</span><i><b class="' +
+        (boosted ? 'up' : '') + '" style="width:' + pct + '%"></b></i></div>';
+    }
+
+    function rgbCss(c) {
+      return 'rgb(' + Math.round(c[0] * 255) + ',' + Math.round(c[1] * 255) + ',' + Math.round(c[2] * 255) + ')';
+    }
+
+    function openMenu(g, tab) {
+      closeMenu();
+      g.clearOverlay();
+      menuEl = el('div', 'td-menu');
+      var top = el('div', 'td-top');
+      top.appendChild(el('h3', null, 'Turbo Drift'));
+      var tabs = el('div', 'td-tabs');
+      top.appendChild(tabs);
+      top.appendChild(el('div', 'td-credits', '💰 ' + U.fmt(Math.round(save.credits))));
+      menuEl.appendChild(top);
+      var body = el('div', 'td-body');
+      menuEl.appendChild(body);
+
+      ['Race', 'Cars', 'Tuning'].forEach(function (name) {
+        var b = el('button', tab === name ? 'on' : '', name);
+        b.type = 'button';
+        b.addEventListener('click', function () { openMenu(g, name); });
+        tabs.appendChild(b);
+      });
+
+      if (tab === 'Race') renderTracks(g, body);
+      else if (tab === 'Cars') renderCars(g, body);
+      else renderTuning(g, body);
+
+      g.hud.appendChild(menuEl);
+    }
+
+    function renderTracks(g, body) {
+      var grid = el('div', 'td-grid');
+      TRACKS.forEach(function (t, i) {
+        var open = trackUnlocked(save, i);
+        var rec = save.tracks[i];
+        var card = el('button', 'td-card' + (open ? '' : ' locked') + (i === current.index ? ' on' : ''));
+        card.type = 'button';
+        var stars = '★'.repeat(t.diff) + '☆'.repeat(5 - t.diff);
+        card.innerHTML =
+          '<h4><span class="td-swatch" style="background:' + rgbCss((R.THEMES[t.theme] || R.THEMES.grass).accent) + '"></span>' +
+          (i + 1) + '. ' + (open ? t.name : 'Locked') + '</h4>' +
+          '<div class="td-note">' + stars + ' · ' + t.laps + ' laps · ' + t.theme + '</div>' +
+          (open
+            ? '<div class="td-note">Best ' + fmtTime(rec && rec.best) + '</div>' +
+            '<div class="td-medal">' + MEDAL_NAMES[(rec && rec.medal) || 0] + '</div>'
+            : '<div class="td-note">Finish track ' + i + ' to unlock</div>');
+        if (open) {
+          card.addEventListener('click', function () {
+            ensureTrack(i);
+            closeMenu();
+            g.restart();
+          });
+        }
+        grid.appendChild(card);
+      });
+      body.appendChild(grid);
+    }
+
+    function renderCars(g, body) {
+      var grid = el('div', 'td-grid');
+      R.CARS.forEach(function (car) {
+        var entry = carEntry(save, car.id);
+        var owned = entry.owned;
+        var afford = save.credits >= car.price;
+        var sel = save.sel === car.id;
+        var card = el('button', 'td-card' + (sel ? ' on' : '') + (!owned && !afford ? ' locked' : ''));
+        card.type = 'button';
+        var st = R.tunedStats(car, entry.tune);
+        card.innerHTML =
+          '<h4><span class="td-swatch" style="background:' + rgbCss(car.col) + '"></span>' + car.name + '</h4>' +
+          '<div class="td-note">' + car.desc + '</div>' +
+          '<div class="td-bars">' +
+          bar('Speed', st.top, st.top > car.top) +
+          bar('Accel', st.accel, st.accel > car.accel) +
+          bar('Grip', st.grip, st.grip > car.grip) +
+          bar('Brake', st.brake, st.brake > car.brake) +
+          '</div>' +
+          '<div class="td-note">' + (owned
+            ? (sel ? '✅ Selected' : 'Tap to select')
+            : '💰 ' + U.fmt(car.price) + (afford ? ' — tap to buy' : ' — not enough')) + '</div>';
+        card.addEventListener('click', function () {
+          if (!owned) {
+            if (save.credits < car.price) return;
+            save.credits -= car.price;
+            entry.owned = true;
+          }
+          save.sel = car.id;
+          persist(save);
+          openMenu(g, 'Cars');
+        });
+        grid.appendChild(card);
+      });
+      body.appendChild(grid);
+    }
+
+    function renderTuning(g, body) {
+      var car = R.CARS.filter(function (c) { return c.id === save.sel; })[0] || R.CARS[0];
+      var entry = carEntry(save, car.id);
+      body.appendChild(el('div', 'td-note',
+        'Tuning <b style="color:var(--text)">' + car.name + '</b> — upgrades stay with this car.'));
+      var grid = el('div', 'td-grid');
+      R.TUNES.forEach(function (t) {
+        var lvl = Math.min(R.TUNE_MAX, entry.tune[t.id] || 0);
+        var maxed = lvl >= R.TUNE_MAX;
+        var cost = R.tuneCost(lvl);
+        var afford = save.credits >= cost;
+        var card = el('button', 'td-card' + (maxed ? ' on' : (afford ? '' : ' locked')));
+        card.type = 'button';
+        var pips = '';
+        for (var i = 0; i < R.TUNE_MAX; i++) pips += '<u class="' + (i < lvl ? 'on' : '') + '"></u>';
+        card.innerHTML =
+          '<h4>' + t.icon + ' ' + t.name + '</h4>' +
+          '<div class="td-note">' + t.desc + '</div>' +
+          '<div class="td-pips">' + pips + '</div>' +
+          '<div class="td-note">' + (maxed ? 'Fully tuned' :
+            '💰 ' + U.fmt(cost) + (afford ? ' — tap to fit' : ' — not enough')) + '</div>';
+        card.addEventListener('click', function () {
+          if (maxed || save.credits < cost) return;
+          save.credits -= cost;
+          entry.tune[t.id] = lvl + 1;
+          persist(save);
+          Milo.sound.powerup();
+          openMenu(g, 'Tuning');
+        });
+        grid.appendChild(card);
+      });
+      body.appendChild(grid);
+    }
+
+    /* ------------------------------------------------------- race setup */
+
+    function makeCar(built, slot, isPlayer, stats, col, name) {
+      var s = built.samples[0];
+      var lane = (slot % 2 ? 1 : -1) * Math.min(3.2, s.w * .4);
+      var back = Math.floor(slot / 2) * 7 + 6;
+      var yaw = Math.atan2(s.tx, s.tz);
       return {
-        x: TRACK[0][0] + nx * lane - Math.cos(a) * back,
-        y: TRACK[0][1] + ny * lane - Math.sin(a) * back,
-        a: a
+        x: s.x + s.lx * lane - s.tx * back,
+        y: s.y + .4,
+        z: s.z + s.lz * lane - s.tz * back,
+        vx: 0, vy: 0, vz: 0,
+        yaw: yaw, roll: 0, pitch: 0,
+        si: 0, lap: 0, cp: 1, prog: 0, prevS: 0,
+        ground: true, drift: 0, boost: 0, nitro: stats.nitro,
+        respawnT: 0, finished: false, finishMs: 0,
+        player: isPlayer, name: name, col: col,
+        phys: physicsFor(stats), lane: (slot % 2 ? 1 : -1) * (1 + slot * .3),
+        skill: isPlayer ? 1 : 0
       };
     }
 
-    /** Distance from a point to the nearest point on the track centreline. */
-    function trackDist(x, y) {
-      var best = 1e9;
-      for (var i = 0; i < TRACK.length; i++) {
-        var a = TRACK[i], b = TRACK[(i + 1) % TRACK.length];
-        var vx = b[0] - a[0], vy = b[1] - a[1];
-        var t = U.clamp(((x - a[0]) * vx + (y - a[1]) * vy) / (vx * vx + vy * vy), 0, 1);
-        var dx = a[0] + vx * t - x, dy = a[1] + vy * t - y;
-        best = Math.min(best, Math.hypot(dx, dy));
+    function reset(g) {
+      var d = g.data;
+      var cur = ensureTrack(current.index);
+      var built = cur.built, track = cur.track;
+
+      var car = R.CARS.filter(function (c) { return c.id === save.sel; })[0] || R.CARS[0];
+      var entry = carEntry(save, car.id);
+      var stats = R.tunedStats(car, entry.tune);
+
+      d.built = built;
+      d.track = track;
+      d.theme = cur.theme;
+      d.times = cur.times;
+      d.cars = [makeCar(built, 0, true, stats, car.col, 'You')];
+
+      // Rivals scale with the track's difficulty rather than your car, so an
+      // upgraded car genuinely feels like an upgrade.
+      var rivals = 3;
+      for (var i = 0; i < rivals; i++) {
+        var lvl = .40 + track.diff * .085 + i * .035;
+        var rstats = {
+          top: U.clamp(lvl + .06, 0, .97), accel: U.clamp(lvl, 0, .95),
+          grip: U.clamp(lvl + .1, 0, .95), brake: U.clamp(lvl, 0, .95),
+          air: .5, nitro: .4, mass: .5
+        };
+        var ai = makeCar(built, i + 1, false, rstats, AI_COLS[i % AI_COLS.length], AI_NAMES[i % AI_NAMES.length]);
+        ai.skill = .84 + track.diff * .022 + i * .012;
+        d.cars.push(ai);
       }
-      return best;
+
+      d.me = d.cars[0];
+      d.ms = 0;
+      d.countdown = 3.2;
+      d.done = false;
+      d.puffs = [];
+      d.msg = '';
+      d.msgT = 0;
+      d.wrong = 0;
+      d.cam = null;
+      d.laps = track.laps;
+
+      g.set('Track', (current.index + 1) + '. ' + track.name);
+      g.set('Lap', '1/' + d.laps);
+      g.set('Time', '0:00.00');
+      g.set('Speed', '0');
+      var rec = save.tracks[current.index];
+      g.set('Best', fmtTime(rec && rec.best));
+      showHud(g);
+      if (cur.dirty) uploadTrack(g);
     }
 
-    function advanceWaypoints(g, car) {
-      var d = g.data;
-      var wp = TRACK[car.wp];
-      if (U.dist(car.x, car.y, wp[0], wp[1]) < 92) {
-        car.wp = (car.wp + 1) % TRACK.length;
-        car.prog++;
-        if (car.wp === 1) {
-          car.lap++;
-          if (!car.ai) {
-            g.set('Lap', Math.min(car.lap, LAPS) + '/' + LAPS);
-            if (car.lap <= LAPS) Milo.sound.powerup();
-          }
-          if (car.lap >= LAPS && !d.finished && !car.ai) finish(g);
-          else if (car.lap >= LAPS && car.ai) car.done = true;
+    /* ------------------------------------------------------------- GPU */
+
+    function initGpu(g) {
+      var gl = g.gl;
+      var prog = program(gl, VS, FS);
+      gpu = {
+        gl: gl, prog: prog,
+        loc: {
+          pos: gl.getAttribLocation(prog, 'aPos'),
+          col: gl.getAttribLocation(prog, 'aCol'),
+          shade: gl.getAttribLocation(prog, 'aShade'),
+          tint: gl.getAttribLocation(prog, 'aTint'),
+          vp: gl.getUniformLocation(prog, 'uVP'),
+          model: gl.getUniformLocation(prog, 'uModel'),
+          uTint: gl.getUniformLocation(prog, 'uTint'),
+          eye: gl.getUniformLocation(prog, 'uEye'),
+          fog: gl.getUniformLocation(prog, 'uFog'),
+          fogColor: gl.getUniformLocation(prog, 'uFogColor'),
+          alpha: gl.getUniformLocation(prog, 'uAlpha')
+        },
+        track: gl.createBuffer(), trackN: 0,
+        ground: gl.createBuffer(), groundN: 0,
+        car: gl.createBuffer(), carN: 0,
+        puff: gl.createBuffer(), puffN: 0
+      };
+      upload(gpu.car, carMesh);
+      gpu.carN = carMesh.count();
+      upload(gpu.puff, puffMesh);
+      gpu.puffN = puffMesh.count();
+      gl.enable(gl.DEPTH_TEST);
+      gl.depthFunc(gl.LEQUAL);
+    }
+
+    function upload(buf, mesh) {
+      var gl = gpu.gl;
+      gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+      gl.bufferData(gl.ARRAY_BUFFER, mesh.data(), gl.STATIC_DRAW);
+    }
+
+    function uploadTrack(g) {
+      if (!gpu) return;
+      var cur = current;
+      var tm = buildTrackMesh(cur.built, cur.track, cur.theme);
+      upload(gpu.track, tm);
+      gpu.trackN = tm.count();
+      var gm = buildGroundMesh(cur.built, cur.theme);
+      upload(gpu.ground, gm);
+      gpu.groundN = gm.count();
+      cur.dirty = false;
+    }
+
+    function bindMesh(buf) {
+      var gl = gpu.gl, L = gpu.loc, stride = 32;
+      gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+      gl.enableVertexAttribArray(L.pos);
+      gl.vertexAttribPointer(L.pos, 3, gl.FLOAT, false, stride, 0);
+      gl.enableVertexAttribArray(L.col);
+      gl.vertexAttribPointer(L.col, 3, gl.FLOAT, false, stride, 12);
+      gl.enableVertexAttribArray(L.shade);
+      gl.vertexAttribPointer(L.shade, 1, gl.FLOAT, false, stride, 24);
+      gl.enableVertexAttribArray(L.tint);
+      gl.vertexAttribPointer(L.tint, 1, gl.FLOAT, false, stride, 28);
+    }
+
+    /* ------------------------------------------------------------- HUD */
+
+    function showHud(g) {
+      if (hudEl) return;
+      hudEl = el('div', 'td-hud');
+      msgEl = el('div', 'td-msg');
+      nitroEl = el('div', 'td-nitro', '<b style="width:0%"></b>');
+      hudEl.appendChild(msgEl);
+      hudEl.appendChild(nitroEl);
+      g.hud.appendChild(hudEl);
+    }
+
+    function hideHud() { if (hudEl) { hudEl.remove(); hudEl = null; } }
+
+    /* --------------------------------------------------------- geometry */
+
+    /**
+     * Finds the car's place on the track and reads the road under it.
+     *
+     * The surface is interpolated between neighbouring cross-sections rather
+     * than taken from the nearest one. Sampling a single section makes the road
+     * a staircase with a step every few metres, and on a hilly circuit the car
+     * drops off the edge of each one and spends most of the lap airborne.
+     */
+    function locate(built, car) {
+      var s = built.samples, n = built.n, step = built.step;
+      var best = car.si, bestD = 1e18;
+      for (var k = -34; k <= 34; k++) {
+        var i = (car.si + k + n * 2) % n;
+        var dx = car.x - s[i].x, dz = car.z - s[i].z;
+        var dd = dx * dx + dz * dz;
+        if (dd < bestD) { bestD = dd; best = i; }
+      }
+      car.si = best;
+      var sm = s[best];
+      var ox = car.x - sm.x, oz = car.z - sm.z;
+      car.off = ox * sm.lx + oz * sm.lz;
+      // How far past this cross-section the car sits, as a fraction of a segment.
+      var along = ox * sm.tx + oz * sm.tz;
+      var nb = s[(best + (along >= 0 ? 1 : n - 1)) % n];
+      var f = Math.min(1, Math.abs(along) / step);
+      car.roadBase = sm.y + (nb.y - sm.y) * f;
+      car.roadBank = sm.bank + (nb.bank - sm.bank) * f;
+      car.roadW = sm.w + (nb.w - sm.w) * f;
+      car.roadY = car.roadBase + Math.sin(car.roadBank) * car.off;
+      // Gradient of that interpolated surface in the direction of travel. The
+      // car follows this, not the cross-section's own tangent — mixing the two
+      // leaves it chattering a few centimetres above the road.
+      var seg = (nb.y - sm.y) / step;
+      car.roadSlope = along >= 0 ? seg : -seg;
+      car.sm = sm;
+      return sm;
+    }
+
+    /** True when the given point is over solid road rather than a hole or void. */
+    function supported(car, sm) {
+      if (sm.kind === 1) return false;
+      return Math.abs(car.off) <= car.roadW + 1.2;
+    }
+
+    function passed(prevSi, si, target, n) {
+      var d = (si - prevSi + n) % n;
+      if (d === 0 || d > n / 2) return false;
+      var t = (target - prevSi + n) % n;
+      return t > 0 && t <= d;
+    }
+
+    function respawn(car, built) {
+      var s = built.samples[car.lastCp || 0];
+      car.x = s.x; car.y = s.y + .6; car.z = s.z;
+      car.vx = 0; car.vy = 0; car.vz = 0;
+      car.yaw = Math.atan2(s.tx, s.tz);
+      car.roll = 0; car.pitch = 0;
+      car.si = built.samples.indexOf(s);
+      if (car.si < 0) car.si = car.lastCp || 0;
+      car.respawnT = .7;
+      car.boost = 0;
+    }
+
+    /* --------------------------------------------------------- driving */
+
+    var RIDE = .42;
+
+    /** Picks a throttle, brake and steering input for one rival. */
+    function aiDrive(car, built) {
+      var s = built.samples, n = built.n;
+      var speed = Math.hypot(car.vx, car.vz);
+      var look = Math.round(5 + speed * .30);
+      var t = s[(car.si + look) % n];
+      var lane = car.lane * Math.min(2.6, t.w * .28);
+      var tx = t.x + t.lx * lane, tz = t.z + t.lz * lane;
+      var want = Math.atan2(tx - car.x, tz - car.z);
+      var diff = ((want - car.yaw + Math.PI * 3) % (Math.PI * 2)) - Math.PI;
+      car.steerIn = U.clamp(diff * 2.3, -1, 1);
+
+      // Slow to whatever the tightest corner in view actually allows. The
+      // lateral-grip figure here is deliberately conservative: a rival that
+      // understeers into the outside barrier is slower than one that lifts.
+      var limit = car.phys.top;
+      for (var k = 3; k < look + 34; k += 3) {
+        var sm = s[(car.si + k) % n];
+        var c = Math.abs(sm.curvS);
+        if (c > 1e-5) limit = Math.min(limit, Math.sqrt((8.5 * car.skill) / c) + k * .30);
+      }
+      // Running wide is the warning sign; back off before the wall arrives.
+      var wide = Math.abs(car.off) / Math.max(1, s[car.si].w);
+      if (wide > .62) limit *= 1 - Math.min(.45, (wide - .62) * 1.2);
+      car.throttleIn = speed < limit ? 1 : 0;
+      car.brakeIn = speed > limit * 1.06 ? 1 : 0;
+      car.nitroIn = car.nitro > .05 && Math.abs(s[car.si].curvS) < .0035 && speed > limit * .85;
+    }
+
+    function step(g, dt) {
+      var d = g.data, built = d.built, n = built.n, track = d.track;
+      var cps = built.checkpoints;
+
+      d.cars.forEach(function (car) {
+        var sm = locate(built, car);
+        var startSi = car.si;
+        var P = car.phys;
+
+        if (car.respawnT > 0) { car.respawnT -= dt; return; }
+
+        var thr = 0, brk = 0, steer = 0, nos = false;
+        if (car.player) {
+          var inp = g.input;
+          thr = inp.down('up') ? 1 : 0;
+          brk = inp.down('down') ? 1 : 0;
+          steer = (inp.down('right') ? 1 : 0) - (inp.down('left') ? 1 : 0);
+          nos = inp.down('action') || inp.down('a');
+          if (inp.pdown) { thr = 1; steer = inp.px < g.W / 2 ? -1 : 1; }
+        } else {
+          aiDrive(car, built);
+          thr = car.throttleIn; brk = car.brakeIn; steer = car.steerIn; nos = car.nitroIn;
         }
-      }
-    }
+        if (d.countdown > 0) { thr = 0; brk = 0; nos = false; }
+        if (car.finished) { thr = 0; brk = 1; steer = 0; nos = false; }
 
-    function finish(g) {
-      var d = g.data;
-      d.finished = true;
-      var ahead = d.cars.filter(function (c) {
-        return c.ai && (c.lap * TRACK.length + c.prog) > (d.me.lap * TRACK.length + d.me.prog);
-      }).length;
-      var place = ahead + 1;
-      var bonus = [3000, 1800, 900, 400][place - 1] || 200;
-      var score = Math.max(100, bonus + Math.round(Math.max(0, 180 - d.time) * 20));
-      var suffix = ['st', 'nd', 'rd', 'th'][place - 1] || 'th';
-      g.win({
-        emo: place === 1 ? '🏆' : '🏁',
-        title: place === 1 ? 'You won!' : 'Finished ' + place + suffix,
-        text: LAPS + ' laps in ' + d.time.toFixed(1) + 's.',
-        score: score
-      });
-    }
+        // --- nitrous and boost pads -------------------------------------
+        if (nos && car.nitro > .02 && car.ground) {
+          car.nitro = Math.max(0, car.nitro - dt * .30);
+          car.boost = Math.max(car.boost, .30);
+          if (car.player && Math.random() < .5) puff(d, car, true);
+        }
+        if (sm.kind === 2 && car.ground) {
+          car.boost = Math.max(car.boost, 1.0);
+          car.nitro = Math.min(1, car.nitro + dt * .9);
+          if (Math.random() < .4) puff(d, car, true);
+        }
+        if (car.boost > 0) car.boost -= dt;
+        var boosting = car.boost > 0;
 
-    return Milo.arcade(host, {
-      id: 'turbo-drift',
-      w: W, h: H, bg: '#0d1226',
-      stats: ['Lap', 'Place', 'Speed'],
-      touch: 'dpad',
-      emo: '🏎️',
-      start: {
-        title: 'Turbo Drift',
-        text: 'Three laps against three rivals. Stay on the tarmac — the grass ' +
-          'will scrub your speed off in a hurry.',
-        keys: ['↑ accelerate', '↓ brake', '← → steer']
-      },
-      init: reset,
+        // --- steering ----------------------------------------------------
+        var speed = Math.hypot(car.vx, car.vz);
+        var auth = car.ground
+          ? P.steer * (1 - .50 * Math.min(1, speed / P.top)) * Math.min(1, speed / 4.5)
+          : P.air * .55;
+        var vfSign = (car.vx * Math.sin(car.yaw) + car.vz * Math.cos(car.yaw)) < -.5 ? -1 : 1;
+        car.yaw += steer * auth * dt * vfSign;
 
-      update: function (g, dt) {
-        var d = g.data, i = g.input;
+        // --- longitudinal + lateral --------------------------------------
+        var sinY = Math.sin(car.yaw), cosY = Math.cos(car.yaw);
+        var vf = car.vx * sinY + car.vz * cosY;
+        var vr = car.vx * cosY - car.vz * sinY;
 
-        if (d.countdown > 0) {
-          d.countdown -= dt;
-          if (d.countdown <= 0) Milo.sound.win();
+        if (car.ground) {
+          var topV = P.top * (boosting ? 1.30 : 1);
+          var accelF = P.accel * (boosting ? 1.75 : 1);
+          if (thr > 0 && vf < topV) vf += accelF * dt;
+          if (brk > 0) {
+            if (vf > .5) vf -= P.brakeF * dt;
+            else vf = Math.max(-14, vf - P.accel * .45 * dt);
+          }
+          // Coasting drag, plus a hard cap so boost bleeds off rather than sticks.
+          vf -= vf * (thr > 0 ? .02 : .55) * dt;
+          if (vf > topV) vf = topV;
+
+          // Riding the kerb costs grip, which is what makes the edges risky.
+          var edgy = Math.abs(car.off) > car.roadW * .84;
+          var gripRate = P.grip * (edgy ? .62 : 1);
+          vr *= Math.exp(-gripRate * dt);
+          car.drift = Math.abs(vr);
+          if (car.drift > 3.4 && speed > 12 && Math.random() < .6) puff(d, car, false);
+        } else {
+          // In the air there is nothing to push against: only drag.
+          vf -= vf * .06 * dt;
+          vr -= vr * .35 * dt;
+          car.drift = 0;
+        }
+
+        car.vx = sinY * vf + cosY * vr;
+        car.vz = cosY * vf - sinY * vr;
+
+        // --- move, then resolve against the surface at the NEW position ----
+        car.x += car.vx * dt;
+        car.z += car.vz * dt;
+        // Re-read the road under the car. Resolving height against the section
+        // it occupied at the top of the frame leaves it floating on any climb,
+        // because the road has risen underneath it since.
+        sm = locate(built, car);
+        var off = car.off;
+
+        if (track.walls) {
+          var lim = car.roadW - .95;
+          if (Math.abs(off) > lim) {
+            var sgn = off < 0 ? -1 : 1;
+            var over = Math.abs(off) - lim;
+            car.x -= sm.lx * over * sgn;
+            car.z -= sm.lz * over * sgn;
+            var into = car.vx * sm.lx + car.vz * sm.lz;
+            if (into * sgn > 0) {
+              // Kill the component driving into the barrier, keep a little bounce.
+              car.vx -= sm.lx * into * 1.25;
+              car.vz -= sm.lz * into * 1.25;
+              // Only the moment of impact costs speed. Scrubbing every frame of
+              // contact instead would pin a car against the wall at walking pace.
+              if (!car.touching) {
+                var hit = Math.abs(into);
+                var keep = U.clamp(1 - hit * .022, .74, 1);
+                car.vx *= keep; car.vz *= keep;
+                if (car.player && hit > 5) Milo.sound.hit();
+              }
+            }
+            // A light scrape while still in contact, rate-based so it does not
+            // depend on the frame rate.
+            var scrape = Math.exp(-.25 * dt);
+            car.vx *= scrape; car.vz *= scrape;
+            // A car nosed straight into a barrier has all its thrust absorbed and
+            // can never recover. Easing its heading toward the wall's own
+            // direction lets it slide along and drive out of the mistake.
+            var along = Math.atan2(sm.tx, sm.tz);
+            var delta = ((along - car.yaw + Math.PI * 3) % (Math.PI * 2)) - Math.PI;
+            car.yaw += U.clamp(delta, -1.8 * dt, 1.8 * dt);
+            car.touching = true;
+            off = sgn * lim;
+          } else {
+            car.touching = false;
+          }
+        }
+        car.off = off;
+        car.roadY = car.roadBase + Math.sin(car.roadBank) * off;
+
+        // --- vertical ----------------------------------------------------
+        var support = supported(car, sm);
+        var targetY = car.roadY + RIDE;
+        car.vy -= GRAV * dt;
+        car.y += car.vy * dt;
+        // Vertical speed relative to the road, so a car climbing a ramp at the
+        // road's own rate still counts as being on it.
+        var follow = vf * car.roadSlope;
+        var relV = car.vy - follow;
+        if (support && car.y <= targetY + .30 && relV <= .5) {
+          if (!car.ground && car.vy < -9 && car.player) Milo.sound.hit();
+          car.y = targetY;
+          // Carry the road's gradient as vertical speed: this is what launches
+          // the car when a ramp's tarmac runs out at the lip of a gap.
+          car.vy = follow;
+          car.ground = true;
+        } else {
+          car.ground = false;
+        }
+
+        // Anti-beaching for rivals: a car that has made no progress for a few
+        // seconds is stuck on something and will never free itself.
+        if (!car.player && !car.finished && d.countdown <= 0) {
+          var moved = (car.si - (car.stuckSi == null ? car.si : car.stuckSi) + n) % n;
+          if (moved > 2 && moved < n / 2) { car.stuckSi = car.si; car.stuckT = 0; }
+          else {
+            car.stuckT = (car.stuckT || 0) + dt;
+            if (car.stuckT > 3.5) { respawn(car, built); car.stuckT = 0; car.stuckSi = car.si; return; }
+          }
+        }
+
+        if (car.y < sm.y - 26) {
+          respawn(car, built);
+          if (car.player) {
+            say(d, 'Back to the last checkpoint');
+            Milo.sound.lose();
+          }
           return;
         }
 
-        d.time += dt;
+        // --- body attitude, purely cosmetic -------------------------------
+        var wantRoll = car.roadBank + U.clamp(-vr * .022, -.28, .28);
+        car.roll += (wantRoll - car.roll) * Math.min(1, 8 * dt);
+        var wantPitch = car.ground ? U.clamp(-sm.ty * 1.2, -.3, .3) : U.clamp(-car.vy * .012, -.35, .35);
+        car.pitch += (wantPitch - car.pitch) * Math.min(1, 6 * dt);
 
-        d.cars.forEach(function (car) {
-          if (car.done) return;
-          var throttle = 0, steer = 0;
-
-          if (car.ai) {
-            var wp = TRACK[car.wp];
-            var want = Math.atan2(wp[1] - car.y, wp[0] - car.x);
-            var diff = ((want - car.a + Math.PI * 3) % (Math.PI * 2)) - Math.PI;
-            steer = U.clamp(diff * 2.4, -1, 1);
-            throttle = 1 - Math.min(.55, Math.abs(diff) * .7);
-          } else {
-            throttle = (i.down('up') ? 1 : 0) - (i.down('down') ? 1 : 0);
-            steer = (i.down('right') ? 1 : 0) - (i.down('left') ? 1 : 0);
-            if (i.pdown) {
-              // Pointer steering: left/right half of the screen.
-              throttle = 1;
-              steer = i.px < W / 2 ? -1 : 1;
-            }
-          }
-
-          var onRoad = trackDist(car.x, car.y) < ROAD / 2;
-          var maxV = (onRoad ? 330 : 145) * car.skill;
-          var accel = throttle > 0 ? 260 : (throttle < 0 ? -320 : -70);
-          car.v += accel * dt;
-          car.v = U.clamp(car.v, -80, maxV);
-          if (!onRoad) car.v = Math.min(car.v, maxV);
-
-          // Steering authority scales with speed, so you can't spin on the spot.
-          var grip = U.clamp(car.v / 140, 0, 1);
-          car.a += steer * 2.5 * grip * dt * (car.v < 0 ? -1 : 1);
-          car.drift = Math.abs(steer) * grip * (car.v / maxV);
-
-          car.x += Math.cos(car.a) * car.v * dt;
-          car.y += Math.sin(car.a) * car.v * dt;
-
-          if (car.drift > .55 && Math.random() < .5) {
-            d.smoke.push({ x: car.x, y: car.y, life: .5, max: .5 });
-          }
-
-          advanceWaypoints(g, car);
-        });
-
-        // Nudge cars apart so they don't stack on top of each other.
-        for (var a = 0; a < d.cars.length; a++) {
-          for (var b = a + 1; b < d.cars.length; b++) {
-            var c1 = d.cars[a], c2 = d.cars[b];
-            var dist = U.dist(c1.x, c1.y, c2.x, c2.y);
-            if (dist < 34 && dist > 0.01) {
-              var push = (34 - dist) / 2;
-              var nx = (c2.x - c1.x) / dist, ny = (c2.y - c1.y) / dist;
-              c1.x -= nx * push; c1.y -= ny * push;
-              c2.x += nx * push; c2.y += ny * push;
-              c1.v *= .93; c2.v *= .93;
-              if (!c1.ai || !c2.ai) Milo.sound.hit();
+        // --- checkpoints and laps ------------------------------------------
+        if (!car.finished && d.countdown <= 0) {
+          var target = car.cp < cps.length ? cps[car.cp] : 0;
+          if (passed(startSi, car.si, target, n)) {
+            car.lastCp = target;
+            if (car.cp < cps.length) {
+              car.cp++;
+              if (car.player) Milo.sound.blip();
+            } else {
+              car.cp = 1;
+              car.lap++;
+              if (car.lap >= d.laps) {
+                car.finished = true;
+                car.finishMs = d.ms;
+                if (car.player) finishRace(g);
+              } else if (car.player) {
+                g.set('Lap', Math.min(car.lap + 1, d.laps) + '/' + d.laps);
+                say(d, 'Lap ' + (car.lap + 1) + ' of ' + d.laps);
+                Milo.sound.powerup();
+              }
             }
           }
         }
+        car.prog = car.lap * n + car.si;
+      });
 
-        d.smoke = d.smoke.filter(function (s) { s.life -= dt; return s.life > 0; });
-
-        var ahead = d.cars.filter(function (c) {
-          return c.ai && (c.lap * TRACK.length + c.prog) > (d.me.lap * TRACK.length + d.me.prog);
-        }).length;
-        d.place = ahead + 1;
-        g.set('Place', d.place + (['st', 'nd', 'rd', 'th'][d.place - 1] || 'th'));
-        g.set('Speed', Math.round(Math.abs(d.me.v) * 0.6));
-      },
-
-      draw: function (g) {
-        var c = g.ctx, d = g.data, me = d.me;
-        c.fillStyle = '#12331f'; c.fillRect(0, 0, W, H);
-
-        var camX = U.clamp(me.x - W / 2, -120, 1160 - W + 120);
-        var camY = U.clamp(me.y - H / 2, -120, 900 - H + 120);
-        c.save();
-        c.translate(-camX, -camY);
-
-        // grass texture
-        c.strokeStyle = 'rgba(255,255,255,.03)';
-        c.lineWidth = 1;
-        c.beginPath();
-        for (var gx = -100; gx < 1200; gx += 40) { c.moveTo(gx, -100); c.lineTo(gx, 900); }
-        for (var gy = -100; gy < 900; gy += 40) { c.moveTo(-100, gy); c.lineTo(1200, gy); }
-        c.stroke();
-
-        function path() {
-          c.beginPath();
-          c.moveTo(TRACK[0][0], TRACK[0][1]);
-          for (var i = 1; i < TRACK.length; i++) c.lineTo(TRACK[i][0], TRACK[i][1]);
-          c.closePath();
+      // Keep cars from occupying the same patch of tarmac.
+      for (var a = 0; a < d.cars.length; a++) {
+        for (var b = a + 1; b < d.cars.length; b++) {
+          var c1 = d.cars[a], c2 = d.cars[b];
+          var dx = c2.x - c1.x, dz = c2.z - c1.z;
+          var dist = Math.hypot(dx, dz);
+          if (dist > 3.4 || dist < .001) continue;
+          if (Math.abs(c1.y - c2.y) > 2.5) continue;
+          var push = (3.4 - dist) / 2;
+          var nx = dx / dist, nz = dz / dist;
+          // The heavier car gives less ground.
+          var m1 = c1.phys.mass + .2, m2 = c2.phys.mass + .2, mt = m1 + m2;
+          c1.x -= nx * push * (m2 / mt) * 2; c1.z -= nz * push * (m2 / mt) * 2;
+          c2.x += nx * push * (m1 / mt) * 2; c2.z += nz * push * (m1 / mt) * 2;
+          c1.vx *= .94; c1.vz *= .94; c2.vx *= .94; c2.vz *= .94;
+          if ((c1.player || c2.player)) Milo.sound.hit();
         }
+      }
+    }
 
-        c.lineJoin = 'round'; c.lineCap = 'round';
-        c.strokeStyle = '#e2e8f0'; c.lineWidth = ROAD + 10; path(); c.stroke();
-        c.strokeStyle = '#26293f'; c.lineWidth = ROAD; path(); c.stroke();
-        c.strokeStyle = 'rgba(255,255,255,.30)';
-        c.lineWidth = 3; c.setLineDash([16, 22]); path(); c.stroke();
-        c.setLineDash([]);
+    function puff(d, car, hot) {
+      if (d.puffs.length > 90) return;
+      d.puffs.push({
+        x: car.x - Math.sin(car.yaw) * 1.6 + U.rand(-.5, .5),
+        y: car.y - .3,
+        z: car.z - Math.cos(car.yaw) * 1.6 + U.rand(-.5, .5),
+        life: hot ? .35 : .55, max: hot ? .35 : .55, hot: hot
+      });
+    }
 
-        // start/finish line
-        var sa = Math.atan2(TRACK[1][1] - TRACK[0][1], TRACK[1][0] - TRACK[0][0]);
-        c.save();
-        c.translate(TRACK[0][0], TRACK[0][1]);
-        c.rotate(sa);
-        for (var r = 0; r < 6; r++) {
-          for (var col = 0; col < 2; col++) {
-            c.fillStyle = (r + col) % 2 ? '#fff' : '#1a1c2e';
-            c.fillRect(col * 9 - 9, -ROAD / 2 + r * (ROAD / 6), 9, ROAD / 6);
-          }
-        }
-        c.restore();
+    function say(d, text) { d.msg = text; d.msgT = 2.2; }
 
-        d.smoke.forEach(function (s) {
-          c.globalAlpha = s.life / s.max * .32;
-          c.fillStyle = '#dfe6ff';
-          c.beginPath(); c.arc(s.x, s.y, 9 * (1.6 - s.life / s.max), 0, 7); c.fill();
-        });
-        c.globalAlpha = 1;
+    /* -------------------------------------------------------- finishing */
 
-        d.cars.forEach(function (car) {
-          c.save();
-          c.translate(car.x, car.y);
-          c.rotate(car.a);
-          c.fillStyle = 'rgba(0,0,0,.35)';
-          U.roundRect(c, -15, -9, 32, 18, 4); c.fill();
-          c.fillStyle = car.col;
-          if (!car.ai) { c.shadowColor = car.col; c.shadowBlur = 14; }
-          U.roundRect(c, -16, -10, 32, 20, 5); c.fill();
-          c.shadowBlur = 0;
-          c.fillStyle = 'rgba(10,14,32,.75)';
-          U.roundRect(c, -4, -7, 11, 14, 3); c.fill();
-          c.fillStyle = '#0b0e1a';
-          c.fillRect(-13, -12, 7, 4); c.fillRect(-13, 8, 7, 4);
-          c.fillRect(8, -12, 7, 4); c.fillRect(8, 8, 7, 4);
-          c.restore();
-        });
-        c.restore();
+    function finishRace(g) {
+      var d = g.data;
+      if (d.done) return;
+      d.done = true;
+      var i = current.index;
+      var rec = trackEntry(save, i);
+      var ms = d.ms;
 
-        if (d.countdown > 0) {
-          c.fillStyle = 'rgba(4,6,18,.55)';
-          c.fillRect(0, 0, W, H);
-          c.fillStyle = '#fff';
-          c.font = '800 96px Outfit, sans-serif';
-          c.textAlign = 'center';
-          var n = Math.ceil(d.countdown);
-          c.fillText(n > 0 ? n : 'GO!', W / 2, H / 2 + 30);
-        }
+      var ahead = d.cars.filter(function (c) {
+        return !c.player && (c.finished ? c.finishMs < ms : false);
+      }).length;
+      var place = ahead + 1;
 
-        // mini leaderboard
-        c.font = '700 12px Outfit, sans-serif';
-        c.textAlign = 'left';
-        var order = d.cars.slice().sort(function (a, b) {
-          return (b.lap * TRACK.length + b.prog) - (a.lap * TRACK.length + a.prog);
-        });
-        order.forEach(function (car, i) {
-          c.fillStyle = 'rgba(8,10,26,.6)';
-          U.roundRect(c, 12, H - 96 + i * 21, 118, 18, 5); c.fill();
-          c.fillStyle = car.col;
-          c.fillRect(17, H - 92 + i * 21, 8, 10);
-          c.fillStyle = car.ai ? '#c7cff0' : '#fff';
-          c.fillText((i + 1) + '. ' + car.name + '  L' + Math.min(LAPS, car.lap + 1),
-            31, H - 83 + i * 21);
+      var medal = medalFor(d.times, ms);
+      var first = !rec.best;
+      var improved = !rec.best || ms < rec.best;
+      if (improved) rec.best = ms;
+      if (medal > (rec.medal || 0)) rec.medal = medal;
+
+      // Winnings: finishing position, medal earned, and a one-off unlock bonus.
+      var prize = [900, 550, 320, 180][place - 1] || 140;
+      prize += medal * 260;
+      prize += first ? 400 + d.track.diff * 180 : 0;
+      if (improved && !first) prize += 150;
+      save.credits += prize;
+      persist(save);
+
+      g.score = Math.round(prize + medal * 500 + Math.max(0, 260 - ms / 1000) * 12);
+      var suffix = ['st', 'nd', 'rd', 'th'][place - 1] || 'th';
+      var nextIdx = i + 1;
+      var actions = [];
+      if (nextIdx < TRACKS.length && trackUnlocked(save, nextIdx)) {
+        actions.push({
+          label: '▶  Next: ' + TRACKS[nextIdx].name, primary: true,
+          onClick: function () { ensureTrack(nextIdx); g.restart(); }
         });
       }
+      actions.push({ label: '↻  Retry', primary: !actions.length, onClick: function () { g.restart(); } });
+      actions.push({ label: '🔧  Garage', onClick: function () { openMenu(g, 'Race'); } });
+
+      Milo.store.setBest(g.id, g.score);
+      g.best = Milo.store.best(g.id);
+      g.state = 'over';
+      hideHud();
+      Milo.sound.win();
+      g.overlay({
+        emo: place === 1 ? '🏆' : (medal === 3 ? '🥇' : '🏁'),
+        title: place === 1 ? 'Race won!' : 'Finished ' + place + suffix,
+        text: fmtTime(ms) + ' · ' + MEDAL_NAMES[medal] +
+          (improved ? ' · new personal best' : ' · best ' + fmtTime(rec.best)) +
+          ' · earned ' + U.fmt(prize) + ' credits',
+        actions: actions,
+        hint: 'Gold under ' + fmtTime(d.times.gold * 1000) + ' · Silver under ' + fmtTime(d.times.silver * 1000)
+      });
+    }
+
+    /* ---------------------------------------------------------- drawing */
+
+    function render(g, wall) {
+      if (!gpu) return;
+      var gl = gpu.gl, L = gpu.loc, d = g.data;
+      var theme = d && d.theme ? d.theme : current.theme;
+      var built = d && d.built ? d.built : current.built;
+      if (!built) return;
+
+      var me = d && d.me;
+      var eye, look;
+      if (me && g.state !== 'start') {
+        var speed = Math.hypot(me.vx, me.vz);
+        var k = U.clamp(speed / me.phys.top, 0, 1);
+        var fwdX = Math.sin(me.yaw), fwdZ = Math.cos(me.yaw);
+        var want = [
+          me.x - fwdX * (9.6 + k * 3.4), me.y + 4.0 + k * .9, me.z - fwdZ * (9.6 + k * 3.4)
+        ];
+        if (!d.cam) d.cam = want.slice();
+        // A lagging camera reads as speed; snapping to the car reads as a diagram.
+        var f = 1 - Math.exp(-7 * Math.max(wall, .0001));
+        d.cam[0] += (want[0] - d.cam[0]) * f;
+        d.cam[1] += (want[1] - d.cam[1]) * f;
+        d.cam[2] += (want[2] - d.cam[2]) * f;
+        eye = d.cam;
+        look = [me.x + fwdX * 7, me.y + 1.3, me.z + fwdZ * 7];
+        g.data.camK = k;
+      } else {
+        // Menu: a slow orbit of the circuit, so the garage has the track behind it.
+        var a = wallClock * .12;
+        var rad = built.spec.radius * 1.5;
+        eye = [Math.cos(a) * rad, built.spec.radius * .42 + 40, Math.sin(a) * rad];
+        look = [0, 0, 0];
+        g.data.camK = 0;
+      }
+
+      var aspect = Math.max(.35, g.W / Math.max(1, g.H));
+      var fov = (60 + (g.data.camK || 0) * 13) * Math.PI / 180;
+      var proj = M.perspective(fov, aspect, .6, 3600);
+      var view = M.lookAt(eye[0], eye[1], eye[2], look[0], look[1], look[2], 0, 1, 0);
+      var vp = M.mul(proj, view);
+
+      gl.clearColor(theme.sky[0], theme.sky[1], theme.sky[2], 1);
+      gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+      gl.enable(gl.DEPTH_TEST);
+      gl.depthMask(true);
+      gl.disable(gl.BLEND);
+
+      gl.useProgram(gpu.prog);
+      gl.uniformMatrix4fv(L.vp, false, vp);
+      gl.uniform3f(L.eye, eye[0], eye[1], eye[2]);
+      gl.uniform2f(L.fog, 150, 620);
+      gl.uniform3f(L.fogColor, theme.fog[0], theme.fog[1], theme.fog[2]);
+      gl.uniform1f(L.alpha, 1);
+
+      var ident = M.identity();
+      gl.uniformMatrix4fv(L.model, false, ident);
+      gl.uniform3f(L.uTint, 1, 1, 1);
+
+      if (gpu.groundN) { bindMesh(gpu.ground); gl.drawArrays(gl.TRIANGLES, 0, gpu.groundN); }
+      if (gpu.trackN) { bindMesh(gpu.track); gl.drawArrays(gl.TRIANGLES, 0, gpu.trackN); }
+
+      if (d && d.cars) {
+        bindMesh(gpu.car);
+        d.cars.forEach(function (car) {
+          if (car.respawnT > 0 && Math.floor(car.respawnT * 12) % 2) return;   // blink
+          var model = M.model(car.x, car.y, car.z, car.yaw, car.pitch, car.roll, 1, 1, 1);
+          gl.uniformMatrix4fv(L.model, false, model);
+          gl.uniform3f(L.uTint, car.col[0], car.col[1], car.col[2]);
+          gl.drawArrays(gl.TRIANGLES, 0, gpu.carN);
+        });
+
+        if (d.puffs.length) {
+          gl.enable(gl.BLEND);
+          gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+          gl.depthMask(false);
+          bindMesh(gpu.puff);
+          d.puffs.forEach(function (p) {
+            var f = p.life / p.max;
+            var sc = (1.6 - f) * (p.hot ? 1.5 : 2.1);
+            gl.uniformMatrix4fv(L.model, false, M.model(p.x, p.y + (1 - f) * 1.2, p.z, 0, 0, 0, sc, 1, sc));
+            if (p.hot) gl.uniform3f(L.uTint, 1, .62, .25);
+            else gl.uniform3f(L.uTint, .88, .90, .96);
+            gl.uniform1f(L.alpha, f * (p.hot ? .55 : .35));
+            gl.drawArrays(gl.TRIANGLES, 0, gpu.puffN);
+          });
+          gl.uniform1f(L.alpha, 1);
+          gl.depthMask(true);
+          gl.disable(gl.BLEND);
+        }
+      }
+    }
+
+    /* ------------------------------------------------------------ frame */
+
+    var wallClock = 0, lastWall = 0;
+
+    function frame(g, dt) {
+      var now = performance.now();
+      var wall = lastWall ? Math.min((now - lastWall) / 1000, .05) : .016;
+      lastWall = now;
+      wallClock += wall;
+
+      var d = g.data;
+      if (g.state === 'play' && d.built) {
+        if (d.countdown > 0) {
+          var before = Math.ceil(d.countdown);
+          d.countdown -= dt;
+          var after = Math.ceil(d.countdown);
+          if (after !== before) Milo.sound.blip();
+          if (d.countdown <= 0) { say(d, 'GO!'); Milo.sound.win(); }
+        } else if (!d.done) {
+          d.ms += dt * 1000;
+        }
+        step(g, dt);
+
+        for (var i = d.puffs.length - 1; i >= 0; i--) {
+          d.puffs[i].life -= dt;
+          if (d.puffs[i].life <= 0) d.puffs.splice(i, 1);
+        }
+        if (d.msgT > 0) d.msgT -= dt;
+
+        var me = d.me;
+        var speed = Math.hypot(me.vx, me.vz);
+        g.set('Speed', Math.round(speed * 3.6));
+        g.set('Time', fmtTime(d.ms));
+
+        // Wrong-way warning: are we actually pointing along the track?
+        var sm = me.sm || d.built.samples[0];
+        var dot = Math.sin(me.yaw) * sm.tx + Math.cos(me.yaw) * sm.tz;
+        d.wrong = (dot < -.25 && speed > 5) ? d.wrong + dt : 0;
+
+        if (msgEl) {
+          var text = d.countdown > 0
+            ? (Math.ceil(d.countdown) > 0 ? String(Math.ceil(d.countdown)) : 'GO!')
+            : (d.wrong > .5 ? 'WRONG WAY' : (d.msgT > 0 ? d.msg : ''));
+          if (msgEl.textContent !== text) msgEl.textContent = text;
+          var warn = d.wrong > .5;
+          if (msgEl.classList.contains('warn') !== warn) msgEl.classList.toggle('warn', warn);
+        }
+        if (nitroEl) nitroEl.firstChild.style.width = Math.round(me.nitro * 100) + '%';
+      }
+
+      render(g, wall);
+    }
+
+    /* ------------------------------------------------------------ mount */
+
+    var api = Milo.glGame(host, {
+      id: 'turbo-drift',
+      stats: ['Track', 'Lap', 'Time', 'Speed', 'Best'],
+      emo: '🏎️',
+      touch: 'dpad+a',
+      pointerLock: false,
+      touchLook: false,
+      trackBest: true,
+      maxDpr: 1.5,
+
+      preload: function (g) {
+        initGpu(g);
+        ensureTrack(current.index);
+        // Own start screen: the garage is the front door, not an afterthought.
+        g.showStart = function () {
+          g.state = 'start';
+          hideHud();
+          openMenu(g, 'Race');
+        };
+      },
+
+      init: function (g) {
+        closeMenu();
+        reset(g);
+      },
+
+      onPause: function () { hideHud(); },
+      onResume: function (g) { showHud(g); },
+
+      onKey: function (g, e) {
+        if (e.code === 'KeyG') { g.state = 'start'; hideHud(); openMenu(g, 'Race'); }
+      },
+
+      frame: frame,
+
+      destroy: function () { closeMenu(); hideHud(); }
     });
+
+    return api;
   }
 
-  window.Milo.register({
+  Milo.register({
     id: 'turbo-drift', title: 'Turbo Drift', emo: '🏎️', category: 'Racing',
-    tagline: 'Three laps, three rivals, one line',
-    description: 'A top-down circuit race. Your car steers better the faster it goes, ' +
-      'but leave the tarmac and the grass will drag you down to a crawl. Three rivals ' +
-      'race the same line — finishing first is worth far more than finishing fast.',
-    controls: ['↑ accelerate', '↓ brake', '← → steer'],
+    tagline: 'Fifty circuits, ten cars, one racing line',
+    description: 'A low-poly 3D racer built around fifty generated circuits, from gentle ' +
+      'seaside loops to narrow mountain runs with jumps over open air. Every track is a real ' +
+      'ribbon in 3D — it climbs, drops, banks into its corners and occasionally stops existing ' +
+      'for a few metres so you have to carry enough speed to clear the gap. Miss and you restart ' +
+      'from the last checkpoint with the clock still running. Ten cars trade top speed against ' +
+      'grip, weight and control in the air, and six tuning branches let you spend your winnings ' +
+      'on the weaknesses that are actually costing you time. Beat the medal times for the biggest ' +
+      'payouts.',
+    controls: ['↑ accelerate', '↓ brake and reverse', '← → steer', 'Space for nitrous', 'G opens the garage'],
     colors: ['#22d3ee', '#ef4444'],
     featured: true,
-    tags: ['racing', 'cars', 'laps', 'ai opponents'],
+    tags: ['racing', '3d', 'cars', 'tuning', 'time trial'],
     mount: mount
   });
 })();

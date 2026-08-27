@@ -37,6 +37,7 @@ const ASSETS = [
   './assets/js/engine.js',
   './assets/js/lib/cards.js',
   './assets/js/lib/words.js',
+  './assets/js/lib/racing.js',
   './assets/js/app.js',
   ...GAMES.map((g) => `./assets/js/games/${g}.js`)
 ];

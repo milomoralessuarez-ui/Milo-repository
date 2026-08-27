@@ -48,6 +48,17 @@ WebGL, with procedurally generated terrain, chunked meshing, block breaking and
 placing, swimming, flight, and edits that persist in `localStorage` — so your
 build is still standing when you come back.
 
+**Turbo Drift** is the other big one: a low-poly 3D racer over **50 circuits**,
+with 10 cars and 6 tuning branches bought with race winnings. The tracks are
+generated from seeds rather than hand-drawn, so `tools/verify-tracks.mjs` checks
+every one is actually raceable — closed loop, no stretch of track overlapping
+another, no corner tighter than the car's turning circle, no jump without a ramp
+steep enough to clear it. Run it before changing any seed:
+
+```bash
+node tools/verify-tracks.mjs
+```
+
 All 130 games were written for this project. Nothing is embedded from another
 site; the "Games elsewhere" page simply links out to other sites' own
 official pages.

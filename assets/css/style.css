@@ -975,6 +975,105 @@ body.touch .tp-btns { display: flex; }
   .bc-hotbar button { width: 29px; height: 29px; border-radius: 7px; font-size: 8px; }
 }
 
+/* Turbo Drift garage — car, tuning and track menus over the 3D stage. */
+.td-menu {
+  position: absolute;
+  inset: 0;
+  z-index: 8;
+  display: flex;
+  flex-direction: column;
+  padding: 52px 14px 14px;
+  gap: 10px;
+  background: rgba(6, 8, 20, .82);
+  backdrop-filter: blur(10px);
+  pointer-events: auto;
+  overflow: hidden;
+}
+.td-top { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.td-top h3 { margin: 0; font: 800 1.15rem/1 var(--font); color: var(--text); }
+.td-credits {
+  margin-left: auto;
+  font: 800 .95rem/1 var(--font);
+  color: #ffd257;
+  background: rgba(255, 210, 87, .12);
+  border: 1px solid rgba(255, 210, 87, .3);
+  border-radius: 999px;
+  padding: 7px 13px;
+}
+.td-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+.td-tabs button {
+  border-radius: 999px;
+  padding: 7px 15px;
+  font: 700 .82rem/1 var(--font);
+  color: var(--text-2);
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  cursor: pointer;
+}
+.td-tabs button.on { background: var(--brand); border-color: var(--brand); color: #fff; }
+.td-body { flex: 1; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; }
+.td-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(215px, 1fr));
+  gap: 9px;
+  padding-bottom: 8px;
+}
+.td-card {
+  text-align: left;
+  border-radius: 12px;
+  padding: 11px 12px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: var(--text);
+  font: 500 .8rem/1.35 var(--font);
+}
+.td-card:hover { border-color: var(--brand); }
+.td-card.on { border-color: var(--brand); box-shadow: 0 0 0 1px var(--brand) inset; }
+.td-card.locked { opacity: .55; cursor: not-allowed; }
+.td-card h4 { margin: 0; font: 800 .93rem/1.2 var(--font); display: flex; align-items: center; gap: 7px; }
+.td-swatch { width: 13px; height: 13px; border-radius: 4px; flex: 0 0 auto; }
+.td-note { color: var(--text-3); font-size: .74rem; }
+.td-bars { display: grid; gap: 3px; }
+.td-bar { display: grid; grid-template-columns: 46px 1fr; gap: 7px; align-items: center; }
+.td-bar span { font: 700 .65rem/1 var(--font); color: var(--text-3); text-transform: uppercase; }
+.td-bar i { height: 5px; border-radius: 3px; background: var(--surface-3); display: block; }
+.td-bar i b { display: block; height: 100%; border-radius: 3px; background: var(--brand); }
+.td-bar i b.up { background: #4ade80; }
+.td-pips { display: flex; gap: 3px; }
+.td-pips u { width: 100%; height: 6px; border-radius: 2px; background: var(--surface-3); }
+.td-pips u.on { background: #4ade80; }
+.td-medal { font-size: .74rem; font-weight: 800; }
+.td-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* In-race overlay: nitro bar, split messages and the wrong-way warning. */
+.td-hud {
+  position: absolute;
+  left: 50%;
+  bottom: 14px;
+  transform: translateX(-50%);
+  z-index: 6;
+  width: min(360px, calc(100% - 28px));
+  display: grid;
+  gap: 5px;
+  pointer-events: none;
+  text-align: center;
+}
+.td-nitro {
+  height: 9px;
+  border-radius: 5px;
+  background: rgba(8, 10, 26, .6);
+  border: 1px solid rgba(255, 255, 255, .16);
+  overflow: hidden;
+}
+.td-nitro b { display: block; height: 100%; background: linear-gradient(90deg, #22d3ee, #a78bfa); }
+.td-msg { font: 800 .95rem/1.3 var(--font); color: #fff; text-shadow: 0 2px 8px #000; min-height: 1.3em; }
+.td-msg.warn { color: #fb7185; }
+@media (pointer: coarse) { .td-hud { bottom: 148px; } }
+
 /* ==========================================================================
    Misc
    ========================================================================== */
