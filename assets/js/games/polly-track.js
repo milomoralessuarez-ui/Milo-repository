@@ -651,6 +651,7 @@
       var g = runner.g;
       if (!g) return runner;      // WebGL unavailable — glGame showed a notice
       g.hud.appendChild(msgEl);
+      if (window.__POLLY_HOOK) window.__POLLY_HOOK({ T: T, D: D, car: car, race: race, cam: cam, g: g, placeAt: placeAt, finishRace: finishRace });
 
       /* --- GL setup (once) --- */
       function setup(g) {
