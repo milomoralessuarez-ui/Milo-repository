@@ -684,7 +684,10 @@
 
   function pointer(g, type, x, y) {
     var d = g.data;
-    if (g.state !== 'play' || d.done) return;
+    if (g.state !== 'play' || d.done) {
+      if (type === 'up') d.drag = null;   // don't leave a piece glued to the pointer
+      return;
+    }
     if (type === 'down') {
       for (var i = d.order.length - 1; i >= 0; i--) {
         var p = d.order[i];
