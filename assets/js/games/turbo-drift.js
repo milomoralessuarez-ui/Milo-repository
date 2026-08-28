@@ -15,56 +15,56 @@
   // name, theme, seed, difficulty, laps, radius, amp, chic, hill, hillFreq,
   // lobes, width, bank, jumps, boosts, tunnels, narrow, walls
   var TRACK_ROWS = [
-    ['Sunset Bay', 'dawn', 1000, 1, 2, 150, 0.12, 0, 0, 2, 2, 23, 22, 0, 1, 0, 0, 1],
-    ['Meadow Loop', 'desert', 8919, 1, 2, 156, 0.125, 0.002, 0.69, 3, 3, 22.8, 22, 0, 1, 0, 0, 1],
-    ['First Light', 'space', 16838, 1, 2, 162, 0.13, 0.004, 1.39, 4, 2, 22.7, 23, 0, 1, 0, 0, 1],
-    ['Harbour Mile', 'ocean', 24757, 1, 2, 168, 0.135, 0.005, 2.08, 5, 3, 22.5, 23, 0, 1, 0, 0, 1],
-    ['Green Circuit', 'night', 32676, 1, 2, 174, 0.14, 0.007, 2.78, 2, 2, 22.3, 23, 0, 1, 0, 0, 1],
-    ['Quiet Run', 'grass', 40595, 1, 2, 179, 0.145, 0.009, 3.47, 3, 4, 22.2, 24, 0, 1, 0, 0, 1],
-    ['Low Tide', 'snow', 48514, 1, 2, 185, 0.15, 0.011, 4.17, 4, 3, 22, 24, 0, 1, 0, 0, 1],
-    ['Foothill', 'volcano', 56433, 1, 2, 191, 0.155, 0.012, 4.86, 5, 4, 21.8, 24, 0, 1, 0, 0, 1],
-    ['Copper Flats', 'dawn', 64352, 1, 2, 197, 0.16, 0.014, 5.56, 2, 3, 21.7, 25, 0, 1, 0, 0, 1],
-    ['Morning Sprint', 'desert', 72271, 1, 2, 203, 0.165, 0.016, 6.25, 3, 4, 21.5, 25, 0, 1, 0, 0, 1],
-    ['Pine Ridge', 'grass', 80190, 2, 2, 176, 0.165, 0.016, 3.1, 2, 3, 21.5, 25, 0, 2, 0, 0, 1],
-    ['Amber Pass', 'snow', 88109, 2, 2, 182, 0.17, 0.018, 3.79, 3, 4, 21.3, 25, 0, 2, 0, 0, 1],
-    ['Dune Sweep', 'volcano', 96028, 2, 2, 188, 0.175, 0.02, 4.49, 4, 3, 21.2, 26, 0, 2, 0, 0, 1],
-    ['Glass Harbour', 'dawn', 103947, 2, 2, 194, 0.18, 0.021, 5.18, 5, 4, 21, 26, 0, 2, 0, 0, 1],
-    ['Cinder Track', 'desert', 111866, 2, 2, 200, 0.185, 0.023, 5.88, 2, 4, 20.8, 26, 0, 2, 0, 0, 1],
-    ['Frost Hollow', 'space', 119785, 2, 2, 205, 0.19, 0.025, 6.57, 3, 5, 20.7, 27, 1, 2, 0, 0, 1],
-    ['Long Shadow', 'ocean', 127704, 2, 2, 211, 0.195, 0.027, 7.27, 4, 4, 20.5, 27, 1, 2, 1, 0, 1],
-    ['Tidewater', 'night', 135623, 2, 2, 217, 0.2, 0.028, 7.96, 5, 5, 20.3, 27, 1, 2, 1, 0, 1],
-    ['Ember Curve', 'grass', 143542, 2, 2, 223, 0.205, 0.03, 8.66, 2, 4, 20.2, 28, 1, 2, 1, 0, 1],
-    ['Split Rock', 'snow', 151461, 2, 2, 229, 0.21, 0.032, 9.35, 3, 5, 20, 28, 1, 2, 1, 0, 1],
-    ['Neon Mile', 'space', 159380, 3, 2, 202, 0.21, 0.032, 6.2, 2, 4, 20, 28, 1, 2, 1, 0, 1],
-    ['Canyon Run', 'ocean', 167299, 3, 2, 208, 0.215, 0.034, 6.89, 3, 5, 19.8, 28, 1, 2, 1, 0, 1],
-    ['Ridgeback', 'night', 175218, 3, 2, 214, 0.22, 0.036, 7.59, 4, 4, 19.7, 29, 1, 2, 1, 0, 1],
-    ['Saltmarsh', 'grass', 183137, 3, 2, 220, 0.225, 0.037, 8.28, 5, 6, 19.5, 29, 1, 2, 1, 0, 1],
-    ['Ironworks', 'snow', 191056, 3, 2, 226, 0.23, 0.039, 8.98, 2, 5, 19.3, 29, 1, 2, 1, 0, 1],
-    ['Snowbreak', 'volcano', 198975, 3, 2, 231, 0.235, 0.041, 9.67, 3, 6, 19.2, 30, 1, 2, 1, 0, 1],
-    ['Nightfall', 'dawn', 206894, 3, 2, 237, 0.24, 0.043, 10.37, 4, 5, 19, 30, 2, 2, 1, 0, 1],
-    ['Deep Blue', 'desert', 319542, 3, 2, 243, 0.245, 0.044, 11.06, 5, 6, 18.8, 30, 2, 2, 1, 0, 1],
-    ['Ashfall', 'space', 222732, 3, 2, 249, 0.25, 0.046, 11.76, 2, 5, 18.7, 31, 2, 2, 1, 0, 1],
-    ['Crosswind', 'ocean', 440109, 3, 2, 255, 0.255, 0.048, 12.45, 3, 6, 18.5, 31, 2, 2, 1, 0, 1],
-    ['Vertigo', 'volcano', 238570, 4, 1, 228, 0.255, 0.048, 9.3, 2, 5, 18.5, 31, 2, 3, 1, 0.2, 1],
-    ['Serpentine', 'dawn', 246489, 4, 1, 234, 0.26, 0.05, 9.99, 3, 6, 18.3, 31, 2, 3, 1, 0.2, 1],
-    ['Blackout', 'desert', 778053, 4, 1, 240, 0.265, 0.052, 10.69, 4, 6, 18.2, 32, 2, 3, 1, 0.2, 1],
-    ['Highwater', 'space', 262327, 4, 1, 246, 0.27, 0.053, 11.38, 5, 7, 18, 32, 2, 3, 1, 0.2, 1],
-    ['Furnace', 'ocean', 270246, 4, 1, 252, 0.275, 0.055, 12.08, 2, 6, 17.8, 32, 2, 3, 1, 0.2, 1],
-    ['Whiteout', 'night', 382894, 4, 1, 257, 0.28, 0.057, 12.77, 3, 7, 17.7, 33, 2, 3, 1, 0.2, 1],
-    ['Skyline', 'grass', 914458, 4, 1, 263, 0.285, 0.059, 13.47, 4, 6, 17.5, 33, 2, 3, 1, 0.2, 1],
-    ['Undertow', 'snow', 398732, 4, 1, 269, 0.29, 0.06, 14.16, 5, 7, 17.3, 33, 2, 3, 1, 0.2, 1],
-    ['Scoria', 'volcano', 1139754, 4, 1, 275, 0.295, 0.062, 14.86, 2, 6, 17.2, 34, 2, 3, 1, 0.2, 1],
-    ['Razorback', 'dawn', 938215, 4, 1, 281, 0.3, 0.064, 15.55, 3, 7, 17, 34, 2, 3, 1, 0.2, 1],
-    ['Apex Summit', 'night', 736676, 5, 1, 254, 0.3, 0.064, 12.4, 2, 6, 17, 34, 2, 3, 1, 0.32, 1],
-    ['The Gauntlet', 'grass', 2629717, 5, 1, 260, 0.305, 0.066, 13.09, 3, 8, 16.8, 34, 2, 3, 1, 0.32, 1],
-    ['Terminal Velocity', 'snow', 438327, 5, 1, 266, 0.31, 0.068, 13.79, 4, 7, 16.7, 35, 2, 3, 1, 0.32, 1],
-    ['Maelstrom', 'volcano', 550975, 5, 1, 272, 0.315, 0.069, 14.48, 5, 8, 16.5, 35, 2, 3, 1, 0.32, 1],
-    ['Inferno', 'dawn', 768352, 5, 1, 278, 0.32, 0.071, 15.18, 2, 7, 16.3, 35, 2, 3, 1, 0.32, 1],
-    ['Absolute Zero', 'desert', 1509374, 5, 1, 283, 0.325, 0.073, 15.87, 3, 8, 16.2, 36, 3, 3, 1, 0.32, 1],
-    ['Event Horizon', 'space', 1098377, 5, 1, 289, 0.33, 0.075, 16.57, 4, 7, 16, 36, 3, 3, 1, 0.32, 1],
-    ['Abyssal', 'ocean', 1315754, 5, 1, 295, 0.335, 0.076, 17.26, 5, 8, 15.8, 36, 3, 3, 2, 0.32, 1],
-    ['Caldera', 'night', 1114215, 5, 1, 301, 0.34, 0.078, 17.96, 2, 7, 15.7, 37, 3, 3, 2, 0.32, 1],
-    ['Final Lap', 'grass', 389031, 5, 1, 307, 0.345, 0.08, 18.65, 3, 9, 15.5, 37, 3, 3, 2, 0.32, 1]
+    ['Sunset Bay', 'dawn', 20000, 1, 2, 208, 0.188, 0.004, 1.4, 5, 2, 23.3, 22, 1, 1, 0, 0, 1],
+    ['Meadow Loop', 'desert', 28117, 1, 2, 195, 0.121, 0.001, 1.06, 4, 2, 22.2, 24, 2, 1, 0, 0, 1],
+    ['First Light', 'space', 36234, 1, 2, 211, 0.218, 0.005, 2.63, 5, 2, 23.6, 26, 1, 2, 0, 0, 1],
+    ['Harbour Mile', 'ocean', 44351, 1, 2, 208, 0.22, 0, 1.22, 5, 3, 22.5, 28, 1, 2, 0, 0, 1],
+    ['Green Circuit', 'night', 52468, 1, 2, 196, 0.189, 0, 1.63, 3, 5, 21.9, 29, 2, 1, 0, 0, 1],
+    ['Quiet Run', 'grass', 60585, 1, 2, 198, 0.148, 0.005, 3.64, 4, 4, 22.5, 24, 2, 1, 0, 0, 1],
+    ['Low Tide', 'snow', 68702, 1, 2, 200, 0.243, 0.009, 3.8, 3, 5, 21.4, 27, 2, 1, 0, 0, 1],
+    ['Foothill', 'volcano', 76819, 1, 2, 195, 0.211, 0.014, 2.3, 3, 4, 22.2, 28, 2, 2, 0, 0, 1],
+    ['Copper Flats', 'dawn', 84936, 1, 2, 212, 0.176, 0.006, 3.4, 2, 4, 22.7, 22, 1, 1, 0, 0, 1],
+    ['Morning Sprint', 'desert', 93053, 1, 2, 212, 0.124, 0.01, 4.92, 2, 2, 20.9, 26, 1, 1, 0, 0, 1],
+    ['Pine Ridge', 'grass', 101170, 2, 2, 200, 0.18, 0.01, 4.46, 3, 5, 20.7, 22, 1, 1, 1, 0, 1],
+    ['Amber Pass', 'snow', 109287, 2, 2, 205, 0.146, 0.013, 4.87, 2, 5, 21.4, 31, 2, 2, 0, 0, 1],
+    ['Dune Sweep', 'volcano', 117404, 2, 2, 205, 0.208, 0.015, 5.57, 3, 4, 20.5, 22, 2, 1, 1, 0, 1],
+    ['Glass Harbour', 'dawn', 125521, 2, 2, 198, 0.247, 0.012, 3.83, 3, 5, 21.1, 32, 2, 2, 0, 0, 1],
+    ['Cinder Track', 'desert', 133638, 2, 2, 212, 0.182, 0.01, 5.36, 5, 3, 20.8, 26, 2, 1, 1, 0, 1],
+    ['Frost Hollow', 'space', 141755, 2, 2, 223, 0.222, 0.01, 6.35, 2, 6, 21.8, 28, 2, 1, 0, 0, 1],
+    ['Long Shadow', 'ocean', 149872, 2, 2, 203, 0.142, 0, 6.55, 4, 6, 20.8, 27, 1, 2, 0, 0, 1],
+    ['Tidewater', 'night', 157989, 2, 2, 214, 0.258, 0.014, 6.6, 3, 3, 21, 26, 2, 2, 1, 0, 1],
+    ['Ember Curve', 'grass', 166106, 2, 2, 207, 0.264, 0.016, 6.6, 5, 6, 21.1, 33, 2, 2, 0, 0, 1],
+    ['Split Rock', 'snow', 174223, 2, 2, 200, 0.17, 0.023, 7.56, 2, 6, 19.8, 28, 1, 2, 0, 0, 1],
+    ['Neon Mile', 'space', 182340, 3, 2, 228, 0.143, 0.018, 7.39, 5, 5, 20.7, 32, 1, 3, 1, 0, 1],
+    ['Canyon Run', 'ocean', 190457, 3, 2, 235, 0.159, 0.013, 7.19, 4, 4, 20.5, 26, 1, 2, 1, 0, 1],
+    ['Ridgeback', 'night', 198574, 3, 2, 209, 0.224, 0.024, 6.41, 5, 6, 19.5, 33, 1, 3, 1, 0, 1],
+    ['Saltmarsh', 'grass', 206691, 3, 2, 207, 0.18, 0.024, 8.45, 4, 4, 19.1, 34, 1, 2, 1, 0, 1],
+    ['Ironworks', 'snow', 214808, 3, 2, 220, 0.218, 0, 7.2, 5, 4, 20.4, 25, 2, 2, 0, 0, 1],
+    ['Snowbreak', 'volcano', 222925, 3, 2, 228, 0.235, 0, 9.11, 4, 4, 18.9, 26, 1, 3, 1, 0, 1],
+    ['Nightfall', 'dawn', 231042, 3, 2, 218, 0.28, 0.025, 7.63, 2, 6, 19.7, 27, 2, 2, 0, 0, 1],
+    ['Deep Blue', 'desert', 239159, 3, 2, 210, 0.221, 0.019, 8.65, 3, 6, 18.4, 33, 1, 3, 0, 0, 1],
+    ['Ashfall', 'space', 247276, 3, 2, 204, 0.218, 0.023, 9.78, 3, 5, 19.4, 28, 2, 3, 0, 0, 1],
+    ['Crosswind', 'ocean', 255393, 3, 2, 227, 0.195, 0, 9.5, 2, 3, 18.6, 33, 2, 3, 1, 0, 1],
+    ['Vertigo', 'volcano', 263510, 4, 1, 486, 0.184, 0.02, 8.98, 2, 3, 19.3, 32, 3, 2, 1, 0.22, 1],
+    ['Serpentine', 'dawn', 271627, 4, 1, 446, 0.173, 0.022, 10.15, 3, 6, 18, 36, 2, 3, 0, 0.18, 1],
+    ['Blackout', 'desert', 279744, 4, 1, 482, 0.236, 0.031, 9.42, 4, 4, 18.5, 35, 2, 2, 1, 0.29, 1],
+    ['Highwater', 'space', 287861, 4, 1, 461, 0.292, 0.026, 11.82, 4, 2, 17.8, 28, 2, 2, 1, 0.17, 1],
+    ['Furnace', 'ocean', 295978, 4, 1, 479, 0.183, 0.023, 10.12, 5, 8, 17.6, 26, 2, 2, 1, 0.15, 1],
+    ['Whiteout', 'night', 304095, 4, 1, 477, 0.24, 0, 10.41, 3, 3, 18.9, 33, 3, 2, 0, 0.19, 1],
+    ['Skyline', 'grass', 312212, 4, 1, 478, 0.301, 0.022, 10.76, 3, 4, 17.7, 27, 2, 2, 0, 0.12, 1],
+    ['Undertow', 'snow', 320329, 4, 1, 431, 0.285, 0.026, 11.35, 4, 7, 16.8, 32, 3, 3, 0, 0.14, 1],
+    ['Scoria', 'volcano', 328446, 4, 1, 458, 0.251, 0.034, 13.29, 5, 7, 17.1, 28, 2, 3, 0, 0.14, 1],
+    ['Razorback', 'dawn', 336563, 4, 1, 482, 0.215, 0.028, 12.68, 4, 4, 18.3, 29, 2, 2, 0, 0.16, 1],
+    ['Apex Summit', 'night', 554138, 5, 1, 463, 0.279, 0.026, 13.66, 5, 8, 17, 30, 3, 2, 2, 0.12, 1],
+    ['The Gauntlet', 'grass', 352797, 5, 1, 501, 0.309, 0.025, 13.36, 3, 2, 17.6, 36, 3, 2, 2, 0.13, 1],
+    ['Terminal Velocity', 'snow', 360914, 5, 1, 422, 0.311, 0.032, 13.25, 5, 8, 17.2, 36, 2, 3, 0, 0.29, 1],
+    ['Maelstrom', 'volcano', 369031, 5, 1, 486, 0.316, 0.031, 12.36, 5, 2, 16.4, 33, 3, 3, 0, 0.19, 1],
+    ['Inferno', 'dawn', 377148, 5, 1, 413, 0.247, 0.029, 14.88, 3, 8, 16.3, 29, 2, 3, 0, 0.19, 1],
+    ['Absolute Zero', 'desert', 385265, 5, 1, 469, 0.24, 0, 12.85, 4, 9, 15.9, 36, 2, 3, 2, 0.12, 1],
+    ['Event Horizon', 'space', 393382, 5, 1, 441, 0.217, 0.031, 14.89, 4, 8, 17, 35, 2, 2, 2, 0.22, 1],
+    ['Abyssal', 'ocean', 401499, 5, 1, 484, 0.285, 0.033, 14.96, 3, 2, 15.5, 33, 3, 3, 1, 0.23, 1],
+    ['Caldera', 'night', 409616, 5, 1, 456, 0.224, 0.037, 14.75, 5, 6, 15.9, 38, 3, 2, 2, 0.19, 1],
+    ['Final Lap', 'grass', 417733, 5, 1, 489, 0.32, 0.031, 14.52, 4, 4, 16.7, 31, 3, 2, 1, 0.23, 1]
   ];
 
   var TRACKS = TRACK_ROWS.map(function (r, i) {
@@ -297,7 +297,7 @@
       if (rand() > .55) continue;
       var sm = s[i];
       var side = rand() < .5 ? 1 : -1;
-      var off = sm.w + 6 + rand() * 26;
+      var off = sm.w + 17 + rand() * 22;
       var ox = sm.x + sm.lx * off * side, oz = sm.z + sm.lz * off * side;
       var oy = sm.y - 1.5;
       var scale = .7 + rand() * .9;
@@ -322,6 +322,58 @@
         // crystal
         mesh.box(ox, oy + 2.4 * scale, oz, .8 * scale, 2.4 * scale, .8 * scale, theme.accent, 0, .9);
         mesh.box(ox, oy + 5.2 * scale, oz, .4 * scale, .9 * scale, .4 * scale, theme.accent, 0, 1.3);
+      }
+    }
+
+    // --- F1-style grandstands ---------------------------------------------
+    // Stands go where a crowd could actually watch: stretches where the road
+    // runs straight for a dozen segments, spaced around the lap. Each one is
+    // a tiered concrete wedge packed with coloured fans under an accent roof,
+    // and the scatter of empty seats keeps the crowd from looking stamped.
+    var FAN_COLS = [
+      [.94, .30, .30], [.30, .55, .95], [.98, .85, .30], [.40, .85, .50],
+      [.95, .55, .25], [.85, .40, .90], [.95, .95, .95], [.25, .80, .80]
+    ];
+    var lastStand = -1e9, standCount = 0;
+    var standGap = Math.max(24, Math.floor(n / 14));
+    for (i = 0; i < n && standCount < 12; i++) {
+      if (i - lastStand < standGap) continue;
+      var straight = true;
+      for (var q = -2; q <= 7 && straight; q++) {
+        var ss = s[(i + q + n) % n];
+        if (Math.abs(ss.curvS) > .006 || ss.kind === 1 || ss.tunnel) straight = false;
+      }
+      if (!straight) continue;
+      lastStand = i;
+      standCount++;
+      var sm2 = s[(i + 2) % n];
+      var sSide = rand() < .5 ? 1 : -1;
+      var sYaw = Math.atan2(sm2.tx, sm2.tz);
+      var half = 10.5, tiers = 4;
+      var baseY = sm2.y - .5;
+      for (var tr = 0; tr < tiers; tr++) {
+        var away = sm2.w + 8.5 + tr * 1.7;
+        var ty = baseY + 1.1 + tr * 1.05;
+        var tx2 = sm2.x + sm2.lx * away * sSide;
+        var tz2 = sm2.z + sm2.lz * away * sSide;
+        mesh.boxR(tx2, ty - .38, tz2, 1.0, .38, half, sYaw, [.44, .46, .54], 0);
+        for (var seat = -7; seat <= 7; seat++) {
+          if (rand() < .18) continue;
+          mesh.boxR(tx2 + sm2.tx * seat * 1.38, ty + .42, tz2 + sm2.tz * seat * 1.38,
+            .36, .42, .30, sYaw, FAN_COLS[(seat * 5 + tr * 3 + i) & 7], 0, 1.05);
+        }
+      }
+      var backAway = sm2.w + 8.5 + tiers * 1.7;
+      mesh.boxR(sm2.x + sm2.lx * backAway * sSide, baseY + 2.9, sm2.z + sm2.lz * backAway * sSide,
+        .35, 2.9, half + .8, sYaw, [.38, .40, .48], 0);
+      var roofAway = sm2.w + 8.2 + tiers * .85;
+      mesh.boxR(sm2.x + sm2.lx * roofAway * sSide, baseY + 6.3, sm2.z + sm2.lz * roofAway * sSide,
+        4.4, .22, half + 1.2, sYaw, theme.accent, 0, .9);
+      var pilAway = sm2.w + 8.0;
+      for (var pe = -1; pe <= 1; pe += 2) {
+        mesh.boxR(sm2.x + sm2.lx * pilAway * sSide + sm2.tx * pe * (half + .6), baseY + 3.1,
+          sm2.z + sm2.lz * pilAway * sSide + sm2.tz * pe * (half + .6),
+          .3, 3.1, .3, sYaw, [.38, .40, .48], 0);
       }
     }
 
@@ -392,8 +444,26 @@
     };
   }
 
-  var AI_NAMES = ['Rossi', 'Vega', 'Kade', 'Nyx', 'Orin', 'Sable'];
-  var AI_COLS = [[.98, .45, .55], [1, .82, .34], [.65, .55, .98], [.42, .90, .62], [.98, .60, .30], [.55, .85, .98]];
+  var AI_NAMES = ['Rossi', 'Vega', 'Kade', 'Nyx', 'Orin', 'Sable', 'Juno', 'Ezra', 'Mika',
+    'Dax', 'Lyra', 'Cole', 'Vesper', 'Remy', 'Indigo', 'Sora', 'Blitz', 'Moss'];
+  // Eighteen liveries spread around the hue wheel, so no two rivals match.
+  var AI_COLS = (function () {
+    var cols = [];
+    for (var i = 0; i < 18; i++) {
+      var h = (i * 20 + 8) % 360, sat = .68, v = .92;
+      var c = v * sat, x = c * (1 - Math.abs((h / 60) % 2 - 1)), m = v - c;
+      var k = Math.floor(h / 60);
+      cols.push([[c, x, 0, 0, x, c][k] + m, [x, c, c, x, 0, 0][k] + m, [0, 0, x, c, c, x][k] + m]);
+    }
+    return cols;
+  })();
+  var RIVALS = 18;
+
+  function ordinal(p) {
+    var t = p % 10, h = p % 100;
+    if (h >= 11 && h <= 13) return p + 'th';
+    return p + (t === 1 ? 'st' : t === 2 ? 'nd' : t === 3 ? 'rd' : 'th');
+  }
 
   function mount(host) {
     var U = Milo.util;
@@ -571,23 +641,48 @@
     /* ------------------------------------------------------- race setup */
 
     function makeCar(built, slot, isPlayer, stats, col, name) {
-      var s = built.samples[0];
-      var lane = (slot % 2 ? 1 : -1) * Math.min(3.2, s.w * .4);
-      var back = Math.floor(slot / 2) * 7 + 6;
-      var yaw = Math.atan2(s.tx, s.tz);
+      // The grid is laid along the track's own samples, two abreast, so a
+      // curved start straight still lines the field up on the tarmac.
+      var n = built.n;
+      var back = 6 + Math.floor(slot / 2) * 6.5;
+      var idx = (n - Math.max(1, Math.round(back / built.step))) % n;
+      var s = built.samples[idx];
+      var lane = (slot % 2 ? 1 : -1) * Math.min(2.8, s.w * .35);
       return {
-        x: s.x + s.lx * lane - s.tx * back,
+        x: s.x + s.lx * lane,
         y: s.y + .4,
-        z: s.z + s.lz * lane - s.tz * back,
+        z: s.z + s.lz * lane,
         vx: 0, vy: 0, vz: 0,
-        yaw: yaw, roll: 0, pitch: 0,
-        si: 0, lap: 0, cp: 1, prog: 0, prevS: 0,
+        yaw: Math.atan2(s.tx, s.tz), roll: 0, pitch: 0,
+        si: idx, lap: 0, cp: 1, prog: 0,
         ground: true, drift: 0, boost: 0, nitro: stats.nitro,
         respawnT: 0, finished: false, finishMs: 0,
         player: isPlayer, name: name, col: col,
-        phys: physicsFor(stats), lane: (slot % 2 ? 1 : -1) * (1 + slot * .3),
+        phys: physicsFor(stats),
+        lane: ((slot * 37) % 5 - 2) * .35,
         skill: isPlayer ? 1 : 0
       };
+    }
+
+    /**
+     * Race progress that stays honest on the grid: cars start a little behind
+     * the line, so positions just before index 0 count as slightly negative
+     * rather than as a whole lap ahead.
+     */
+    function progOf(car, n) {
+      return car.lap * n + (((car.si + 30) % n) - 30);
+    }
+
+    function rankOf(d, me) {
+      var n = d.built.n;
+      var myKey = me.finished ? 1e12 - me.finishMs : progOf(me, n);
+      var r = 1;
+      d.cars.forEach(function (c) {
+        if (c === me) return;
+        var k = c.finished ? 1e12 - c.finishMs : progOf(c, n);
+        if (k > myKey) r++;
+      });
+      return r;
     }
 
     function reset(g) {
@@ -603,20 +698,24 @@
       d.track = track;
       d.theme = cur.theme;
       d.times = cur.times;
-      d.cars = [makeCar(built, 0, true, stats, car.col, 'You')];
+      // F1-style grid: eighteen rivals ahead, you at the back. The fastest
+      // AI sit on the front rows, so the field sorts itself into a real race
+      // and every overtake moves you up a position that is shown live.
+      d.cars = [makeCar(built, RIVALS, true, stats, car.col, 'You')];
 
       // Rivals scale with the track's difficulty rather than your car, so an
       // upgraded car genuinely feels like an upgrade.
-      var rivals = 3;
-      for (var i = 0; i < rivals; i++) {
-        var lvl = .40 + track.diff * .085 + i * .035;
+      var high = U.clamp(.42 + track.diff * .075, 0, .9);
+      for (var i = 0; i < RIVALS; i++) {
+        var f = i / (RIVALS - 1);
+        var lvl = high - .30 * f;
         var rstats = {
-          top: U.clamp(lvl + .06, 0, .97), accel: U.clamp(lvl, 0, .95),
-          grip: U.clamp(lvl + .1, 0, .95), brake: U.clamp(lvl, 0, .95),
+          top: U.clamp(lvl + .06, .2, .97), accel: U.clamp(lvl, .2, .95),
+          grip: U.clamp(lvl + .1, .2, .95), brake: U.clamp(lvl, .2, .95),
           air: .5, nitro: .4, mass: .5
         };
-        var ai = makeCar(built, i + 1, false, rstats, AI_COLS[i % AI_COLS.length], AI_NAMES[i % AI_NAMES.length]);
-        ai.skill = .84 + track.diff * .022 + i * .012;
+        var ai = makeCar(built, i, false, rstats, AI_COLS[i % AI_COLS.length], AI_NAMES[i % AI_NAMES.length]);
+        ai.skill = U.clamp(.86 + track.diff * .018 - .06 * f, .6, .99);
         d.cars.push(ai);
       }
 
@@ -632,6 +731,7 @@
       d.laps = track.laps;
 
       g.set('Track', (current.index + 1) + '. ' + track.name);
+      g.set('Pos', d.cars.length + '/' + d.cars.length);
       g.set('Lap', '1/' + d.laps);
       g.set('Time', '0:00.00');
       g.set('Speed', '0');
@@ -974,7 +1074,7 @@
           if (moved > 2 && moved < n / 2) { car.stuckSi = car.si; car.stuckT = 0; }
           else {
             car.stuckT = (car.stuckT || 0) + dt;
-            if (car.stuckT > 3.5) { respawn(car, built); car.stuckT = 0; car.stuckSi = car.si; return; }
+            if (car.stuckT > 4.5) { respawn(car, built); car.stuckT = 0; car.stuckSi = car.si; return; }
           }
         }
 
@@ -1061,10 +1161,7 @@
       var rec = trackEntry(save, i);
       var ms = d.ms;
 
-      var ahead = d.cars.filter(function (c) {
-        return !c.player && (c.finished ? c.finishMs < ms : false);
-      }).length;
-      var place = ahead + 1;
+      var place = rankOf(d, d.me);
 
       var medal = medalFor(d.times, ms);
       var first = !rec.best;
@@ -1072,8 +1169,8 @@
       if (improved) rec.best = ms;
       if (medal > (rec.medal || 0)) rec.medal = medal;
 
-      // Winnings: finishing position, medal earned, and a one-off unlock bonus.
-      var prize = [900, 550, 320, 180][place - 1] || 140;
+      // Winnings taper down the 19-car field, plus medals and unlock bonuses.
+      var prize = Math.max(120, Math.round(1100 * Math.pow(.85, place - 1)));
       prize += medal * 260;
       prize += first ? 400 + d.track.diff * 180 : 0;
       if (improved && !first) prize += 150;
@@ -1081,7 +1178,6 @@
       persist(save);
 
       g.score = Math.round(prize + medal * 500 + Math.max(0, 260 - ms / 1000) * 12);
-      var suffix = ['st', 'nd', 'rd', 'th'][place - 1] || 'th';
       var nextIdx = i + 1;
       var actions = [];
       if (nextIdx < TRACKS.length && trackUnlocked(save, nextIdx)) {
@@ -1100,7 +1196,7 @@
       Milo.sound.win();
       g.overlay({
         emo: place === 1 ? '🏆' : (medal === 3 ? '🥇' : '🏁'),
-        title: place === 1 ? 'Race won!' : 'Finished ' + place + suffix,
+        title: place === 1 ? 'Race won!' : 'Finished ' + ordinal(place) + ' of ' + d.cars.length,
         text: fmtTime(ms) + ' · ' + MEDAL_NAMES[medal] +
           (improved ? ' · new personal best' : ' · best ' + fmtTime(rec.best)) +
           ' · earned ' + U.fmt(prize) + ' credits',
@@ -1235,6 +1331,7 @@
         var speed = Math.hypot(me.vx, me.vz);
         g.set('Speed', Math.round(speed * 3.6));
         g.set('Time', fmtTime(d.ms));
+        g.set('Pos', rankOf(d, me) + '/' + d.cars.length);
 
         // Wrong-way warning: are we actually pointing along the track?
         var sm = me.sm || d.built.samples[0];
@@ -1259,7 +1356,7 @@
 
     var api = Milo.glGame(host, {
       id: 'turbo-drift',
-      stats: ['Track', 'Lap', 'Time', 'Speed', 'Best'],
+      stats: ['Track', 'Lap', 'Pos', 'Time', 'Speed', 'Best'],
       emo: '🏎️',
       touch: 'dpad+a',
       pointerLock: false,
@@ -1300,14 +1397,16 @@
 
   Milo.register({
     id: 'turbo-drift', title: 'Turbo Drift', emo: '🏎️', category: 'Racing',
-    tagline: 'Fifty circuits, ten cars, one racing line',
+    tagline: 'Fifty circuits, a 19-car grid, one racing line',
     description: 'A low-poly 3D racer built around fifty generated circuits, from gentle ' +
       'seaside loops to narrow mountain runs with jumps over open air. Every track is a real ' +
       'ribbon in 3D — it climbs, drops, banks into its corners and occasionally stops existing ' +
       'for a few metres so you have to carry enough speed to clear the gap. Miss and you restart ' +
       'from the last checkpoint with the clock still running. Ten cars trade top speed against ' +
       'grip, weight and control in the air, and six tuning branches let you spend your winnings ' +
-      'on the weaknesses that are actually costing you time. Beat the medal times for the biggest ' +
+      'on the weaknesses that are actually costing you time. You start every race from the back ' +
+      'of a 19-car grid with the quickest rivals on pole, grandstands full of fans line the ' +
+      'straights, and no circuit is over in under a minute. Beat the medal times for the biggest ' +
       'payouts.',
     controls: ['↑ accelerate', '↓ brake and reverse', '← → steer', 'Space for nitrous', 'G opens the garage'],
     colors: ['#22d3ee', '#ef4444'],

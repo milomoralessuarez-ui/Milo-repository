@@ -33,7 +33,17 @@ for (const m of rows) {
     if (lip.ty < 0.10) problems.push(`jump lip gradient only ${(lip.ty * 100).toFixed(0)}%`);
     gapTotal++;
   }
+  // Every track must carry at least one jump, and the race must not be over
+  // in under a minute even in the fastest car (~35 m/s average).
+  if (spec.jumps < 1 || t.feats.gaps.length < 1) problems.push('no jump on this track');
+  const dist = t.total * spec.laps;
+  if (dist < 2100) problems.push(`race only ${Math.round(dist)}m — under a minute flat out`);
+  // The 19-car grid stretches ~16 segments behind the line; that stretch must
+  // be solid road, or half the field spawns over a hole.
+  for (let g2 = 1; g2 <= 18; g2++) {
+    if (t.samples[(t.n - g2) % t.n].kind === 1) { problems.push('start grid overlaps a hole'); break; }
+  }
   if (problems.length) { console.log(`FAIL ${spec.name}: ${problems.join('; ')}`); bad++; }
 }
-console.log(`${50 - bad}/50 circuits verified raceable; ${walled}/50 have barriers; ${gapTotal} jumps total`);
+console.log(`${50 - bad}/50 circuits verified raceable; ${walled}/50 have barriers; ${gapTotal} jumps total; every race 2100m+`);
 process.exit(bad ? 1 : 0);

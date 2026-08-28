@@ -49,7 +49,10 @@ placing, swimming, flight, and edits that persist in `localStorage` — so your
 build is still standing when you come back.
 
 **Turbo Drift** is the other big one: a low-poly 3D racer over **50 circuits**,
-with 10 cars and 6 tuning branches bought with race winnings. The tracks are
+with 10 cars and 6 tuning branches bought with race winnings. You start every
+race at the back of a **19-car grid** with the fastest rivals on pole,
+grandstands full of fans line the straights, and every race runs over a minute
+even in the fastest car. The tracks are
 generated from seeds rather than hand-drawn, so `tools/verify-tracks.mjs` checks
 every one is actually raceable — closed loop, no stretch of track overlapping
 another, no corner tighter than the car's turning circle, no jump without a ramp

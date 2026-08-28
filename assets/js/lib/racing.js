@@ -119,6 +119,24 @@
     t.quad([x0, y0, z0], [x0, y0, z1], [x0, y1, z1], [x0, y1, z0], col, 0.58 * s, tint);
   };
 
+  /**
+   * Box rotated about Y. Local +z runs along the given yaw, +x to its right,
+   * which is what track-side buildings need to face the road.
+   */
+  Mesh.prototype.boxR = function (cx, cy, cz, hx, hy, hz, yaw, col, tint, shadeScale) {
+    var sc = shadeScale == null ? 1 : shadeScale;
+    var c = Math.cos(yaw), s = Math.sin(yaw);
+    function P(x, y, z) { return [cx + x * c + z * s, cy + y, cz - x * s + z * c]; }
+    var p000 = P(-hx, -hy, -hz), p100 = P(hx, -hy, -hz), p010 = P(-hx, hy, -hz), p110 = P(hx, hy, -hz);
+    var p001 = P(-hx, -hy, hz), p101 = P(hx, -hy, hz), p011 = P(-hx, hy, hz), p111 = P(hx, hy, hz);
+    this.quad(p010, p011, p111, p110, col, 1.00 * sc, tint);
+    this.quad(p001, p000, p100, p101, col, .45 * sc, tint);
+    this.quad(p001, p101, p111, p011, col, .80 * sc, tint);
+    this.quad(p100, p000, p010, p110, col, .66 * sc, tint);
+    this.quad(p101, p100, p110, p111, col, .90 * sc, tint);
+    this.quad(p000, p001, p011, p010, col, .58 * sc, tint);
+  };
+
   Mesh.prototype.count = function () { return this.v.length / 8; };
   Mesh.prototype.data = function () { return new Float32Array(this.v); };
 
@@ -290,7 +308,7 @@
     var j;
     for (j = 0; j < (spec.jumps || 0); j++) {
       // A jump is a ramp, a hole, and a landing ramp; the hole is the middle.
-      reserve(feats.gaps, 3 + Math.floor(rand() * 3), taken);
+      reserve(feats.gaps, 3 + Math.floor(rand() * 2), taken);
     }
     for (j = 0; j < (spec.boosts || 0); j++) reserve(feats.boosts, 7, taken);
     for (j = 0; j < (spec.tunnels || 0); j++) reserve(feats.tunnels, 22 + Math.floor(rand() * 18), taken);
