@@ -202,8 +202,26 @@
     var chic = spec.chic || 0;
     var hill = spec.hill || 0;
 
+    // Formula-circuit shaping: blend the radius toward a soft-cornered
+    // polygon. The flat edges become genuine straights and the vertices
+    // become distinct braking corners — the harmonics on top keep any two
+    // circuits from sharing a silhouette. Exponent < 1 rounds the vertices
+    // so no corner collapses below the car's turning circle.
+    var sides = spec.sides || 0;
+    var polyMix = spec.poly || 0;
+    var polyPhase = rand() * TAU;
+    var POLY_K = .55;
+
     function point(t) {
       var r = base * (1 + amp * radial(t) + chic * chicane(t));
+      if (sides >= 3 && polyMix > 0) {
+        var pa = t * TAU + polyPhase;
+        var local = pa * sides / TAU;
+        local -= Math.floor(local);
+        var ang = (local - .5) * (TAU / sides);
+        var pf = Math.pow(Math.cos(Math.PI / sides) / Math.cos(ang), POLY_K);
+        r *= (1 - polyMix) + polyMix * pf;
+      }
       var a = t * TAU;
       return {
         x: Math.cos(a) * r,

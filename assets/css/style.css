@@ -1074,6 +1074,31 @@ body.touch .tp-btns { display: flex; }
 .td-msg.warn { color: #fb7185; }
 @media (pointer: coarse) { .td-hud { bottom: 148px; } }
 
+/* F1 start lights: five reds on one by one, all out means go. */
+.td-lights { display: flex; gap: 9px; justify-content: center; margin-bottom: 5px; }
+.td-lights i {
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  background: #241f30;
+  border: 1px solid rgba(255, 255, 255, .22);
+}
+.td-lights i.on { background: #e8232f; box-shadow: 0 0 12px rgba(232, 35, 47, .9); }
+
+/* Broadcast-style circuit map with live car dots. */
+.td-map {
+  position: absolute;
+  top: 56px;
+  right: 12px;
+  z-index: 6;
+  pointer-events: none;
+  border-radius: 12px;
+  background: rgba(8, 10, 26, .5);
+  border: 1px solid rgba(255, 255, 255, .14);
+  backdrop-filter: blur(6px);
+}
+@media (max-width: 560px) { .td-map { display: none; } }
+
 /* ==========================================================================
    Misc
    ========================================================================== */
