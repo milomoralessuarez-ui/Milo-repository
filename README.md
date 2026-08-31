@@ -51,8 +51,8 @@ build is still standing when you come back.
 **Turbo Drift** is the other big one: a low-poly 3D racer over **50 grand-prix
 style circuits** — long straights into braking corners, chicanes, banked
 sweepers, tunnels, and ramps that jump gaps in the road. Five red lights start
-every race F1-style, each lap splits into three timed sectors against your
-personal bests, and a broadcast-style minimap tracks all **19 cars** live. You
+every race F1-style, and each lap splits into three timed sectors against
+your personal bests. You
 start at the back of the grid with the fastest rivals on pole, grandstands full
 of fans line the straights, and every race runs past **two minutes** even in
 the fastest fully-tuned car. The tracks are

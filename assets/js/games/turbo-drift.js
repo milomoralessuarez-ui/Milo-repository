@@ -471,7 +471,7 @@
     var carMesh = buildCarMesh(), puffMesh = buildPuffMesh();
 
     var gpu = null;     // lazily created once we have a GL context
-    var menuEl = null, hudEl = null, nitroEl = null, msgEl = null, lightsEl = null, mapEl = null;
+    var menuEl = null, hudEl = null, nitroEl = null, msgEl = null, lightsEl = null;
 
     /* ------------------------------------------------------- track state */
 
@@ -729,7 +729,6 @@
       d.wrong = 0;
       d.sectorT = 0;
       d.lastLit = 0;
-      d.mapBox = null;
       d.cam = null;
       d.laps = track.laps;
 
@@ -820,15 +819,10 @@
       hudEl.appendChild(msgEl);
       hudEl.appendChild(nitroEl);
       g.hud.appendChild(hudEl);
-      mapEl = el('canvas', 'td-map');
-      mapEl.width = 132;
-      mapEl.height = 132;
-      g.hud.appendChild(mapEl);
     }
 
     function hideHud() {
       if (hudEl) { hudEl.remove(); hudEl = null; }
-      if (mapEl) { mapEl.remove(); mapEl = null; }
       lightsEl = null;
     }
 
@@ -1395,58 +1389,9 @@
           if (msgEl.classList.contains('warn') !== warn) msgEl.classList.toggle('warn', warn);
         }
         if (nitroEl) nitroEl.firstChild.style.width = Math.round(me.nitro * 100) + '%';
-        drawMap(g);
       }
 
       render(g, wall);
-    }
-
-    /** Broadcast-style circuit map: the track outline with live car dots. */
-    function drawMap(g) {
-      if (!mapEl) return;
-      var d = g.data;
-      if (!d.built) return;
-      var c = mapEl.getContext('2d');
-      var Wm = mapEl.width, Hm = mapEl.height;
-      c.clearRect(0, 0, Wm, Hm);
-      var smp = d.built.samples;
-      if (!d.mapBox) {
-        var minX = 1e18, maxX = -1e18, minZ = 1e18, maxZ = -1e18;
-        smp.forEach(function (p) {
-          if (p.x < minX) minX = p.x; if (p.x > maxX) maxX = p.x;
-          if (p.z < minZ) minZ = p.z; if (p.z > maxZ) maxZ = p.z;
-        });
-        var span = Math.max(maxX - minX, maxZ - minZ) || 1;
-        d.mapBox = {
-          scale: (Math.min(Wm, Hm) - 18) / span,
-          cx: (minX + maxX) / 2, cz: (minZ + maxZ) / 2
-        };
-      }
-      var B = d.mapBox;
-      function mx(p) { return Wm / 2 + (p.x - B.cx) * B.scale; }
-      function mz(p) { return Hm / 2 + (p.z - B.cz) * B.scale; }
-      c.strokeStyle = 'rgba(255,255,255,.8)';
-      c.lineWidth = 2.5;
-      c.lineJoin = 'round';
-      c.beginPath();
-      for (var i = 0; i < smp.length; i += 4) {
-        if (i) c.lineTo(mx(smp[i]), mz(smp[i])); else c.moveTo(mx(smp[i]), mz(smp[i]));
-      }
-      c.closePath();
-      c.stroke();
-      d.cars.forEach(function (car) {
-        var px = Wm / 2 + (car.x - B.cx) * B.scale, pz = Hm / 2 + (car.z - B.cz) * B.scale;
-        c.fillStyle = 'rgb(' + Math.round(car.col[0] * 255) + ',' +
-          Math.round(car.col[1] * 255) + ',' + Math.round(car.col[2] * 255) + ')';
-        c.beginPath();
-        c.arc(px, pz, car.player ? 4 : 2.6, 0, Math.PI * 2);
-        c.fill();
-        if (car.player) {
-          c.strokeStyle = '#fff';
-          c.lineWidth = 1.6;
-          c.stroke();
-        }
-      });
     }
 
     /* ------------------------------------------------------------ mount */
@@ -1498,8 +1443,8 @@
     description: 'A low-poly 3D racer across fifty grand-prix style circuits: long straights ' +
       'that funnel into braking corners, chicane complexes, banked sweepers, tunnels — and, ' +
       'because this is not quite Formula One, ramps that launch you over gaps in the road. ' +
-      'Five red lights start every race, a broadcast-style map tracks all nineteen cars live, ' +
-      'and each lap splits into three timed sectors against your personal bests. You start at ' +
+      'Five red lights start every race F1-style, and each lap splits into three timed ' +
+      'sectors against your personal bests. You start at ' +
       'the back of the grid with the fastest rivals on pole, grandstands full of fans line the ' +
       'straights, and every race runs past the two-minute mark even flat out. Ten cars and six ' +
       'tuning branches turn your winnings into lap time.',
