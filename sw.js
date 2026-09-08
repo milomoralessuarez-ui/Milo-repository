@@ -16,10 +16,10 @@ const GAMES = [
   'helix-drop', 'hex-game', 'highway-rush', 'hole-eater', 'hoop-shot', 'hover-bike',
   'ice-slide', 'jigsaw-pack', 'jump-quest', 'kart-sprint', 'key-quest', 'klondike',
   'knife-throw', 'laser-dodge', 'laser-duel', 'laser-maze', 'lava-run', 'letter-drop',
-  'lights-out', 'lunar-lander', 'make-24', 'mancala', 'mastermind', 'math-blitz',
-  'maze-muncher', 'maze-runner', 'mech-storm', 'memory-match', 'memory-sequence', 'merge-drop',
-  'meteor-surf', 'minesweeper', 'mini-golf', 'missile-defense', 'moto-hill', 'neon-snake',
-  'night-rider', 'nim', 'nine-mens-morris', 'ninja-climb', 'nonogram', 'one-line',
+  'lights-out', 'lunar-lander', 'make-24', 'mancala', 'mastermind', 'math-blitz', 'math-pack',
+  'maze-muncher', 'maze-runner', 'mech-storm', 'memory-match', 'memory-pack', 'memory-sequence',
+  'merge-drop', 'meteor-surf', 'minesweeper', 'mini-golf', 'missile-defense', 'moto-hill',
+  'neon-snake', 'night-rider', 'nim', 'nine-mens-morris', 'ninja-climb', 'nonogram', 'one-line',
   'orbital-defense', 'paint-wars', 'paper-claim', 'peg-solitaire', 'penalty-shootout',
   'perfect-circle', 'piano-tap', 'pinball', 'plinko', 'polly-track', 'pong-duel',
   'pyramid-solitaire', 'quick-math', 'quiz-pack-1', 'quiz-pack-2', 'quiz-pack-3',
@@ -27,12 +27,12 @@ const GAMES = [
   'roll-block', 'rolling-ball', 'rooftop-run', 'shadow-leap', 'simon-says', 'skate-park',
   'ski-slalom', 'sky-ace', 'sky-hopper', 'slide-puzzle', 'snake-royale', 'solitaire-pack',
   'space-defender', 'space-trader', 'spider-solitaire', 'spike-dash', 'spot-difference',
-  'stack-ball', 'submarine-strike', 'sudoku', 'sweet-match', 'table-tennis', 'tank-arena',
-  'terra-dig', 'tic-tac-toe', 'tile-match', 'tower-defence', 'tower-of-hanoi', 'tower-stack',
-  'tunnel-rush', 'turbo-drift', 'turret-tower', 'typing-pack', 'typing-test', 'ultimate-ttt',
-  'velodrome-dash', 'video-poker', 'volleyball-blobs', 'wall-jumper', 'war-cards', 'water-sort',
-  'whack-a-mole', 'wind-glider', 'word-grid', 'word-ladder', 'word-search', 'word-search-pack',
-  'word-sleuth', 'zig-zag', 'zombie-siege'
+  'stack-ball', 'submarine-strike', 'sudoku', 'sudoku-mines-pack', 'sweet-match',
+  'table-tennis', 'tank-arena', 'terra-dig', 'tic-tac-toe', 'tile-match', 'tower-defence',
+  'tower-of-hanoi', 'tower-stack', 'tunnel-rush', 'turbo-drift', 'turret-tower', 'typing-pack',
+  'typing-test', 'ultimate-ttt', 'velodrome-dash', 'video-poker', 'volleyball-blobs',
+  'wall-jumper', 'war-cards', 'water-sort', 'whack-a-mole', 'wind-glider', 'word-grid',
+  'word-ladder', 'word-search', 'word-search-pack', 'word-sleuth', 'zig-zag', 'zombie-siege'
 // GAMES:END
 ];
 
