@@ -4,7 +4,7 @@
   var W = 560, H = 740, TAU = Math.PI * 2;
   var BY = H - 170;               // the boat's fixed screen row
   var GATES = 26, GATE_GAP = 420, FIRST_GATE = 620;
-  var TIME_LIMIT = 80, MISS_COST = 4;
+  var TIME_LIMIT = 60, MISS_COST = 4;
 
   function mount(host) {
     var Milo = window.Milo, U = Milo.util;
@@ -395,7 +395,7 @@
     id: 'boat-race', title: 'Boat Race', emo: '🚤', category: 'Racing',
     tagline: 'Buoy gates against the clock',
     description: 'Race a speedboat down a winding river and thread all 26 red-and-green ' +
-      'buoy gates before an 80-second clock runs out. The hull slides on its wake, so ' +
+      'buoy gates before a 60-second clock runs out. The hull slides on its wake, so ' +
       'start turning before the gate, not at it — every miss costs 4 seconds and the ' +
       'river narrows as the gates drift further off the racing line. Scraping a bank ' +
       'kills nearly all your speed, which is usually worse than a miss.',

@@ -18,7 +18,7 @@
       var d = g.data;
       d.p = { x: W / 2, y: H - 120, r: 13, hp: 100, inv: 0, cool: 0 };
       d.aim = { x: W / 2, y: 0 };
-      d.ammo = 60;
+      d.ammo = 80;
       d.boards = 2;
       d.houseHp = 100;
       d.wins = WINDOWS.map(function (w) { return { x: w.x, y: w.y, boards: 3, max: 4, chewT: 0 }; });
@@ -42,7 +42,7 @@
       g.set('Score', 0);
       g.set('Wave', 1);
       g.set('HP', 100);
-      g.set('Ammo', 60);
+      g.set('Ammo', 80);
     }
 
     function edgeSpawn() {
@@ -139,8 +139,8 @@
       g.set('Score', U.fmt(g.score));
       d.shake = Math.max(d.shake, .25);
       Milo.sound.tone({ f: 160, f2: 50, d: .2, v: .12, type: 'sawtooth' });
-      if (Math.random() < .28 || d.ammo < 8) {
-        d.drops.push({ x: z.x, y: z.y, kind: Math.random() < .25 ? 'med' : 'ammo', t: 12 });
+      if (Math.random() < .34 || d.ammo < 10) {
+        d.drops.push({ x: z.x, y: z.y, kind: Math.random() < .25 && d.ammo >= 10 ? 'med' : 'ammo', t: 12 });
       }
     }
 
@@ -188,9 +188,9 @@
         d.shake = Math.max(0, d.shake - dt * 3);
 
         if (i.down('action')) {
+          // keyboard / touch fire auto-aims, and holds fire when nothing is in sight
           var nz = nearestZombie(d, p.x, p.y);
-          if (nz) { d.aim.x = nz.x; d.aim.y = nz.y; }
-          fire(g);
+          if (nz) { d.aim.x = nz.x; d.aim.y = nz.y; fire(g); }
         } else if (d.firing) fire(g);
 
         /* ---- phases ---- */
@@ -253,7 +253,7 @@
               // chew through the boards, then the house itself
               z.chewing = true;
               bw.chewT += dt;
-              if (bw.chewT > 1.1) {
+              if (bw.chewT > 1.3) {
                 bw.chewT = 0;
                 if (bw.boards > 0) {
                   bw.boards--;
@@ -304,7 +304,7 @@
           dr.t -= dt;
           if (dr.t <= 0) return false;
           if (U.dist(p.x, p.y, dr.x, dr.y) < 24) {
-            if (dr.kind === 'ammo') { d.ammo += 24; g.set('Ammo', d.ammo); }
+            if (dr.kind === 'ammo') { d.ammo += 30; g.set('Ammo', d.ammo); }
             else { p.hp = Math.min(100, p.hp + 25); g.set('HP', p.hp); }
             Milo.sound.powerup();
             return false;

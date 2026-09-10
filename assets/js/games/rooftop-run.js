@@ -46,7 +46,7 @@
       h = h || U.clamp(d.lastH + U.rand(-90, 60), 130, 330);
       var b = { x: x, w: w, h: h, items: [] };
       if (!bare) {
-        var ix = 130;
+        var ix = 200; // landing zone stays clear so a gap jump never dumps you onto a duct
         while (ix < w - 110) {
           var r = Math.random();
           if (r < .3) b.items.push({ t: 'pipe', dx: ix, hit: false, done: false });
@@ -136,14 +136,13 @@
       },
       init: reset,
       onPointer: function (g, type) { if (type === 'down') jump(g.data); },
-      onKey: function (g, e) {
-        if (e.code === 'Space' || e.code === 'ArrowUp' || e.code === 'KeyW') jump(g.data);
-      },
 
       update: function (g, dt) {
         var d = g.data, i = g.input, k, m;
         d.shake = Math.max(0, d.shake - dt * 40);
         d.flash = Math.max(0, d.flash - dt * 2.4);
+        // Space / Enter / ↑ / W and the on-screen JUMP button all land here.
+        if (i.pressed('action') || i.pressed('up')) jump(d);
 
         if (d.dead) {
           d.vy += 1600 * dt;
@@ -235,8 +234,10 @@
             var it = b.items[m];
             var ix = b.x + it.dx;
             if (it.t === 'pipe') {
-              var barBot = roof - 30;
-              if (!it.hit && Math.abs(d.px - ix) < 40 && d.onRoof && d.y - curH < barBot) {
+              // A fat duct from 30 to 72 above the roof: sliding fits under it,
+              // and a jump only clears it if the feet are already past the top.
+              var barTop = roof - 72, barBot = roof - 30;
+              if (!it.hit && Math.abs(d.px - ix) < 40 && d.y > barTop && d.y - curH < barBot) {
                 it.hit = true;
                 stumble(g, 'CLANG!');
               }
@@ -349,14 +350,17 @@
             if (ix < -80 || ix > W + 80) continue;
             if (it.t === 'pipe') {
               c.fillStyle = '#155e75';
-              c.fillRect(ix - 42, ry - 44, 6, 44);
-              c.fillRect(ix + 36, ry - 44, 6, 44);
-              c.shadowColor = '#22d3ee'; c.shadowBlur = 6;
+              c.fillRect(ix - 42, ry - 32, 6, 32);
+              c.fillRect(ix + 36, ry - 32, 6, 32);
+              c.shadowColor = '#22d3ee'; c.shadowBlur = 8;
               c.fillStyle = '#0e7490';
-              U.roundRect(c, ix - 46, ry - 44, 92, 13, 6); c.fill();
+              U.roundRect(c, ix - 46, ry - 72, 92, 42, 9); c.fill();
               c.shadowBlur = 0;
-              c.fillStyle = 'rgba(255,255,255,.25)';
-              c.fillRect(ix - 42, ry - 42, 84, 3);
+              c.fillStyle = 'rgba(255,255,255,.22)';
+              c.fillRect(ix - 42, ry - 69, 84, 3);
+              c.fillStyle = 'rgba(0,0,0,.28)';
+              c.fillRect(ix - 30, ry - 72, 3, 42);
+              c.fillRect(ix + 27, ry - 72, 3, 42);
             } else if (it.t === 'ac') {
               c.fillStyle = '#475569';
               U.roundRect(c, ix - 18, ry - 27, 36, 27, 3); c.fill();

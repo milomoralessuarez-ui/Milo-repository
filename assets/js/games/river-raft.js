@@ -21,7 +21,7 @@
         var f = d.forks[i];
         if (wy > f.y0 && wy < f.y0 + f.len) {
           var t = (wy - f.y0) / f.len;
-          var iw = Math.sin(Math.PI * t) * 72;
+          var iw = Math.sin(Math.PI * t) * 56;
           ch.il = cx - iw; ch.ir = cx + iw;
         }
       }
@@ -62,8 +62,9 @@
         if (canFork && Math.random() < .45) {
           var f = { y0: wy, len: 640, safe: Math.random() < .5 ? -1 : 1, cleared: false };
           d.forks.push(f);
-          // the dead-end branch is blocked partway down by a log jam
-          d.obs.push({ type: 'jam', y: f.y0 + f.len * .55, f: f });
+          // the dead-end branch is blocked high up the island by a log jam, so
+          // the ✕ scrolls into view before the split does
+          d.obs.push({ type: 'jam', y: f.y0 + f.len * .3, f: f });
           d.lastForkEnd = f.y0 + f.len;
           d.nextY += f.len + 240;
         } else {

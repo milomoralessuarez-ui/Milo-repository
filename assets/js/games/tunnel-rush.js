@@ -19,8 +19,11 @@
       d.perfects = 0;
       d.i = 0;
       d.rings = [];
-      var z = 2.1;
+      // First gate is a long way off and its gap sits right under the ship, so
+      // the opening second teaches what a gap looks like before it can kill you.
+      var z = 3.4;
       for (var k = 0; k < 15; k++) { pushRing(g.data, z); z += .62; }
+      d.rings[0].gap = d.a;
       d.parts = [];
       d.texts = [];
       d.streaks = [];

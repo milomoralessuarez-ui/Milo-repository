@@ -17,6 +17,9 @@
       d.p = { x: 200, y: GY, vx: 0, vy: 0, sq: 1 };
       d.a = { x: 600, y: GY, vx: 0, vy: 0, sq: 1 };
       d.aiJumpT = 0;
+      d.aiErr = 0;
+      d.skill = .55;
+      d.touchUp = false;
       d.ball = { x: 200, y: 140, vx: 0, vy: 0, held: 1.1 };
       d.server = 'you';
       d.pointT = 0;
@@ -89,9 +92,10 @@
       if (dot < 0) { b.vx -= 2 * dot * nx; b.vy -= 2 * dot * ny; }
       b.vx = b.vx * .55 + nx * 260 + blob.vx * .55;
       b.vy = b.vy * .55 + ny * 260 + blob.vy * .5;
+      if (!isYou) aiShot(d);
       // Always leave with some lift and pace; pace grows with the score.
-      var pace = 430 + (d.you + d.cpu) * 9;
-      if (b.vy > -180) b.vy = -180 - Math.abs(b.vx) * .1;
+      var pace = (520 + (d.you + d.cpu) * 8) * (isYou ? 1 : 1.2);
+      if (isYou && b.vy > -150) b.vy = -150 - Math.abs(b.vx) * .1;
       var sp = Math.hypot(b.vx, b.vy);
       if (sp > pace) { b.vx *= pace / sp; b.vy *= pace / sp; }
       if (sp < 300) { b.vx *= 300 / (sp || 1); b.vy *= 300 / (sp || 1); }
@@ -104,6 +108,31 @@
 
     var gref = null;
     function g_set_rally(d) { if (gref) gref.set('Rally', d.rally); }
+
+    /**
+     * The purple blob doesn't trust the bounce: it picks a landing spot away
+     * from where you're standing and shapes a lob (or, mid-jump, a flat drive)
+     * to get there. Low skill means a wild aim and the odd ball into the net.
+     */
+    function aiShot(d) {
+      var b = d.ball, sk = d.skill;
+      var aimX = d.p.x < NETX * .5 ? U.rand(NETX - 170, NETX - 60) : U.rand(50, 180);
+      if (Math.random() > sk * .7) aimX = U.rand(60, NETX - 60);
+      aimX = U.clamp(aimX + U.rand(-1, 1) * (150 - sk * 100), 40, NETX - 50);
+      var airborne = d.a.y < GY - 30;
+      var vy;
+      if (airborne) {
+        // Hammer it flat; only go downward when close enough to clear the net.
+        vy = (b.x - NETX < 130 && b.y < NETTOP - 30) ? 40 : -140;
+      } else {
+        var apexY = NETTOP - 22 - U.rand(0, 50) + (sk < .75 ? U.rand(-34, 10) : 0);
+        vy = -Math.sqrt(2 * 820 * Math.max(14, b.y - apexY));
+      }
+      var drop = Math.max(10, GY - BALLR - b.y);
+      var tFly = (-vy + Math.sqrt(vy * vy + 2 * 820 * drop)) / 820;
+      b.vx = (aimX - b.x) / Math.max(.25, tFly);
+      b.vy = vy;
+    }
 
     return Milo.arcade(host, {
       id: 'volleyball-blobs',
@@ -147,10 +176,13 @@
 
         // ---- your blob ----
         var mx = (inp.down('right') ? 1 : 0) - (inp.down('left') ? 1 : 0);
-        if (inp.pdown) {
-          if (inp.py < H * .45 && d.p.y >= GY) { inp.set('up', true); }
-          mx = inp.px < d.p.x - 20 ? -1 : inp.px > d.p.x + 20 ? 1 : 0;
-        }
+        // Touch: a press in the upper part of the screen is one jump, and the
+        // virtual key is released again when the finger lifts.
+        var touchUp = inp.pdown && inp.py < H * .45;
+        if (touchUp && !d.touchUp) inp.set('up', true);
+        if (!touchUp && d.touchUp) inp.held.up = false;
+        d.touchUp = touchUp;
+        if (inp.pdown) mx = inp.px < d.p.x - 20 ? -1 : inp.px > d.p.x + 20 ? 1 : 0;
         d.p.vx = mx * 330;
         d.p.x = U.clamp(d.p.x + d.p.vx * dt, BR, NETX - NETW / 2 - BR + 6);
         if ((inp.pressed('up') || inp.pressed('action')) && d.p.y >= GY) {
@@ -169,14 +201,19 @@
         // ---- AI blob ----
         var b = d.ball;
         var skill = U.clamp(.55 + d.you * .05 + (d.you + d.cpu) * .012, .55, 1.15);
+        d.skill = skill;
+        // One fresh misjudgement per ball that comes over the net.
+        var coming = !b.held && b.vx > 0 && b.x > NETX - 40;
+        if (coming && !d.aiSeen) d.aiErr = U.rand(-1, 1) * (90 - skill * 70);
+        d.aiSeen = coming;
         var targetX = 600;
         if (b.held) {
           targetX = d.server === 'ai' ? b.x : 600;
         } else if (b.x > NETX - 60 || b.vx > 0) {
           // Predict the landing spot with a skill-sized error.
           var tHit = (b.vy + Math.sqrt(Math.max(0, b.vy * b.vy + 2 * 820 * (GY - 40 - b.y)))) / 820;
-          var lx = b.x + b.vx * tHit * U.clamp(skill, 0, 1);
-          targetX = U.clamp(lx + Math.sin(g.t * 3) * (46 - skill * 34), NETX + NETW / 2 + BR - 6, W - BR);
+          var lx = b.x + b.vx * tHit * U.clamp(skill, 0, 1) + d.aiErr;
+          targetX = U.clamp(lx + Math.sin(g.t * 3) * (30 - skill * 22), NETX + NETW / 2 + BR - 6, W - BR);
         } else targetX = 620;
         var adx = targetX - d.a.x;
         d.a.vx = U.clamp(adx * 8, -1, 1) * (250 + skill * 130);

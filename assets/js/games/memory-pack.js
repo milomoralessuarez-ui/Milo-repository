@@ -542,11 +542,10 @@
             text: 'You reached level ' + d.level + ' — ' + d.pattern.length + ' cells in one glance.'
           });
         } else {
-          d.phase = 'show';
-          d.t = .9 + d.pattern.length * .14;
-          d.hits = [];
-          msg.textContent = 'Watch again…';
-          paint(g);
+          // Hold the red cell for a beat so the miss is visible, then re-show.
+          d.phase = 'miss';
+          d.t = .45;
+          msg.textContent = 'Not that one…';
         }
       }
     }
@@ -580,6 +579,15 @@
           if (d.t <= 0) {
             d.phase = 'input';
             msg.textContent = 'Tap every lit cell (any order)';
+            paint(g);
+          }
+        } else if (d.phase === 'miss') {
+          d.t -= dt;
+          if (d.t <= 0) {
+            d.phase = 'show';
+            d.t = .9 + d.pattern.length * .14;
+            d.hits = [];
+            msg.textContent = 'Watch again…';
             paint(g);
           }
         } else if (d.phase === 'gap') {

@@ -169,7 +169,7 @@
         while (d.nextMine < d.dist + W + 200) {
           d.nextMine += U.rand(mineGap * .7, mineGap * 1.4);
           d.mines.push({
-            wx: d.nextMine, y: U.rand(SURF + 70, 470),
+            wx: d.nextMine, y: U.rand(SURF + 44, 470),
             r: 11, seen: 0, ph: Math.random() * 6.28
           });
         }
@@ -191,12 +191,17 @@
             if (sh.sunkT > 2.5) d.ships.splice(k, 1);
             continue;
           }
+          // running shallow under a hull gets you rammed
+          if (s.inv <= 0 && s.y < SURF + 46 && Math.abs(sx - s.x) < 56) {
+            damage(g, s.x, s.y - 14);
+            if (g.state === 'over') return;
+          }
           sh.cool -= dt;
           if (sh.cool <= 0 && Math.abs(sx - s.x) < 150 && sx > 0 && sx < W) {
             sh.cool = Math.max(1.1, 2.6 - d.zone * .25);
             d.charges.push({
               x: sx + U.rand(-14, 14), y: SURF + 6, vy: 30,
-              fuse: s.y + U.rand(-24, 24), t: 0
+              fuse: Math.max(SURF + 64, s.y + U.rand(-24, 24)), t: 0
             });
             bubble(d, sx, SURF + 8, 4, 8);
             Milo.sound.tone({ f: 180, f2: 120, d: .1, v: .06, type: 'square' });

@@ -49,6 +49,15 @@
       d.trail = [];
     }
 
+    // Shortest flight time from (y0, z0) to a landing at zl that still clears
+    // the net by `need` — a high ball can be hit hard, a low one has to loop.
+    function clearT(y0, z0, zl, need) {
+      var f = (0.5 - z0) / Math.max(.05, Math.abs(zl - z0));
+      var r = need - y0 * (1 - f);
+      if (r <= 0) return .4;
+      return Math.sqrt(r / (GRAV / 2 * f * (1 - f)));
+    }
+
     function pointTo(g, who, msg) {
       var d = g.data;
       if (who === 'you') { d.you++; d.total++; Milo.sound.coin(); }
@@ -202,8 +211,9 @@
             var side = d.px > 0 ? -1 : 1;
             var err = U.rand(-1, 1) * Math.max(.12, .5 - d.lvl * .05);
             var landX = U.clamp(side * U.rand(.25, .8) + err, -.9, .9);
-            var T = Math.max(.4, .62 - d.lvl * .028) + U.rand(-.03, .03);
-            launch(d, b.x, Math.max(.08, b.y), b.z, landX, U.rand(.16, .3), T,
+            var aiZ = U.rand(.16, .3), aiY = Math.max(.08, b.y);
+            var T = Math.max(clearT(aiY, b.z, aiZ, .21), .62 - d.lvl * .028) + U.rand(-.02, .03);
+            launch(d, b.x, aiY, b.z, landX, aiZ, T,
               d.lvl >= 3 ? U.rand(-.3, .3) : 0, 'ai');
             Milo.sound.blip();
           } else if (b.z >= 1.02) {
@@ -383,11 +393,13 @@
         return;
       }
       var perfect = b.z > .01 && b.z < .16;
-      var T = perfect ? .44 : .6;
       var landZ = perfect ? U.rand(.8, .92) : U.rand(.68, .8);
+      var y0 = Math.max(.05, b.y), z0 = Math.max(0, b.z);
+      // A drive skims the net; a loop clears it with room. Low contact costs time.
+      var T = U.clamp(clearT(y0, z0, landZ, perfect ? .21 : .25), .42, .72) * (perfect ? .92 : 1.06);
       var landX = U.clamp(b.x + (b.x - d.px) * 2.4 + U.rand(-.08, .08), -.98, .98);
       var spin = U.clamp(d.pv * .16, -.55, .55);
-      launch(d, b.x, Math.max(.05, b.y), Math.max(0, b.z), landX, landZ, T, spin, 'you');
+      launch(d, b.x, y0, z0, landX, landZ, T, spin, 'you');
       Milo.sound.tone({ f: perfect ? 620 : 420, f2: 300, d: .07, v: .09, type: 'square' });
       if (perfect) {
         for (var i = 0; i < 5; i++) {

@@ -4,7 +4,7 @@
   var W = 560, H = 740, TAU = Math.PI * 2;
   var SY = 230;                       // skier's fixed screen row
   var GATES = 40, GATE_STEP = 300, FIRST = 500;
-  var PAR = 56;
+  var PAR = 45;
 
   function mount(host) {
     var Milo = window.Milo, U = Milo.util;

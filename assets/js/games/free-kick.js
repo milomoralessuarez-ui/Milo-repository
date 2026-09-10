@@ -43,12 +43,14 @@
       g.set('Round', 1);
     }
 
-    /** The shot's screen position at t in [0,1]: straight line bent by curve. */
+    /** The shot's screen position at t in [0,1]: straight line bent by curve, lifted by loft. */
     function shotPos(s, t) {
       var x = U.lerp(BALLX, s.tx, t) + s.curve * Math.sin(Math.PI * t) * 130;
-      var y = U.lerp(BALLY, s.ty, t) - s.loft * Math.sin(Math.PI * t * .92) * 90;
+      var y = U.lerp(BALLY, s.ty, t) - s.loft * Math.sin(Math.PI * t * .92) * 120;
       return { x: x, y: y };
     }
+    // The wall stands about two thirds of the way up the screen path.
+    var WALL_T = .66;
 
     function fire(g) {
       var d = g.data, dr = d.drag;
@@ -64,7 +66,7 @@
       var side = ((mid.x - p0.x) * dy - (mid.y - p0.y) * dx) / chordLen;
       var curve = U.clamp(-side / 60, -1.4, 1.4);
       var tx = U.clamp(BALLX + dx * 1.55, GOAL.x - 90, GOAL.x + GOAL.w + 90);
-      var ty = U.clamp(BALLY + dy * 1.45, GOAL.y - 60, WALLY);
+      var ty = U.clamp(BALLY + dy, GOAL.y - 60, WALLY);
       d.shot = {
         t: 0, dur: U.clamp(1.05 - power * .35, .62, .95),
         tx: tx, ty: ty, curve: curve,
@@ -76,8 +78,8 @@
       d.kick++;
       g.set('Kick', Math.min(d.kick, KICKS) + '/' + KICKS);
 
-      // The wall jumps a beat after the strike.
-      d.jump = -.22;
+      // The wall jumps a beat after the strike, peaking as a hard shot reaches it.
+      d.jump = -.4;
 
       // Keeper commits: straight shots get read, big benders don't.
       var read = U.clamp(d.keeperSkill * (1 - Math.abs(curve) * .55), .06, .95);
@@ -143,11 +145,11 @@
       emo: '🥅',
       start: {
         title: 'Free Kick',
-        text: 'Ten set pieces a round. Drag through the ball and let the shape of your ' +
-          'drag bend the shot — a curved pull whips the ball around the wall, and the ' +
+        text: 'Ten set pieces a round. Drag up through the ball: a long hard pull dips ' +
+          'the shot over the wall, a bowed drag whips it around the side — and the ' +
           'keeper only reads shots that fly straight. Score ' + NEED + ' of ' + KICKS +
           ' and the wall grows.',
-        keys: ['Drag to shoot', 'Bend the drag path to curve it']
+        keys: ['Drag to shoot', 'Longer drag = harder + higher', 'Bend the drag to curve it']
       },
       init: reset,
 
@@ -170,7 +172,7 @@
 
         // Wall jump timing: charges after the strike, hangs, lands.
         if (d.phase === 'shot' || d.jump > 0) {
-          d.jump += dt * 2.6;
+          d.jump += dt * 2.0;
           if (d.jump > 1.2) d.jump = 1.2;
         }
 
@@ -187,8 +189,7 @@
           d.keeper.x += (d.keeper.dx - d.keeper.x) * Math.min(1, dt * 4.2);
           d.keeper.y += (d.keeper.dy - d.keeper.y) * Math.min(1, dt * 4.2);
 
-          // The wall plane sits ~42% of the flight.
-          if (!s.pastWall && s.t >= .42) {
+          if (!s.pastWall && s.t >= WALL_T) {
             s.pastWall = true;
             var jumpH = Math.sin(Math.min(1, Math.max(0, d.jump)) * Math.PI) * 34;
             var span = d.wallN * 40;
@@ -435,10 +436,11 @@
     id: 'free-kick', title: 'Free Kick', emo: '🥅', category: 'Sports',
     tagline: 'Bend it around a growing wall',
     description: 'Set-piece football where the shape of your drag is the shape of the ' +
-      'shot: a straight pull flies true, a bowed one whips the ball around the wall. ' +
-      'The keeper reads straight shots almost perfectly but guesses against real bend, ' +
-      'and every bit of curve pays a bonus on top of the goal. Score 6 of 10 and the ' +
-      'wall grows a body — by round four you are threading seven jumping defenders.',
+      'shot: a long straight pull dips over the jumping wall into the top of the net, a ' +
+      'bowed one whips the ball around the side of it. The keeper reads straight shots ' +
+      'almost perfectly but guesses against real bend, and every bit of curve pays a ' +
+      'bonus on top of the goal. Score 6 of 10 and the wall grows a body — by round ' +
+      'four you are threading seven jumping defenders.',
     controls: ['Drag to shoot', 'Curve the drag to bend it'],
     colors: ['#3b1f5e', '#2dd4bf'],
     tags: ['football', 'curve', 'set piece', 'aiming', 'soccer'],

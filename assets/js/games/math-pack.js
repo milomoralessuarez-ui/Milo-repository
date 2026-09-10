@@ -390,9 +390,14 @@
         case 'sq': s = RI(1, 8);
           terms = [s * s, (s + 1) * (s + 1), (s + 2) * (s + 2), (s + 3) * (s + 3)];
           a = (s + 4) * (s + 4); break;
-        case 'fib': s = RI(1, 5); k = RI(s + 1, 9);
+        case 'fib': s = RI(1, 5);
+          // 3s = 2k (2,3,5,8 · 4,6,10,16) also fits a constant second
+          // difference, which predicts a different fifth term — skip those.
+          do { k = RI(s + 1, 9); } while (3 * s === 2 * k);
           terms = [s, k, s + k, s + 2 * k]; a = 2 * s + 3 * k; break;
         case 'grow': s = RI(1, 10); k = RI(2, 6); var e = RI(1, 4);
+          // k = e with s = 2e (4,6,10,16) also reads as Fibonacci — nudge s.
+          if (k === e && s === 2 * e) s += 1;
           terms = [s, s + k, s + 2 * k + e, s + 3 * k + 3 * e];
           a = s + 4 * k + 6 * e;
           return { q: terms.join(', ') + ', ?', a: a, t: t, terms: terms, e: e };
@@ -429,10 +434,18 @@
         els.ans.style.color = g.data.typed ? spec.accent : 'rgba(255,255,255,.28)';
       }
 
+      /* The hint line above the question doubles as the feedback line: it
+         flashes "+24 (×2)" or "✗ 42 · −5s" for a beat, then the hint returns. */
+      function setNote(g) {
+        var d = g.data;
+        els.note.textContent = (d.q && d.q.note) || spec.noteDefault || '';
+        els.note.style.color = '#9aa3d0';
+      }
+
       function flash(g, text, good) {
-        els.fb.textContent = text;
-        els.fb.style.color = good ? '#34d399' : '#fb7185';
-        g.data.fbT = 1.2;
+        els.note.textContent = text;
+        els.note.style.color = good ? '#34d399' : '#fb7185';
+        g.data.fbT = 1.3;
       }
 
       function ansText(q) { return q.choices ? q.choices[q.ci] : String(q.a); }
@@ -442,7 +455,7 @@
         d.lv = Math.min(3, Math.floor(d.right / 6));
         d.q = spec.gen(d.lv);
         d.typed = '';
-        els.note.textContent = d.q.note || spec.noteDefault || '';
+        if (!(d.fbT > 0)) setNote(g);
         els.q.textContent = d.q.q;
         if (spec.mode === 'choice') {
           els.choices.innerHTML = '';
@@ -450,11 +463,11 @@
             var b = document.createElement('button');
             b.type = 'button';
             b.textContent = txt;
-            b.style.cssText = 'min-height:54px;border:0;border-radius:12px;' +
+            b.style.cssText = 'min-height:52px;border:0;border-radius:12px;' +
               'background:rgba(255,255,255,.10);color:#eef1ff;' +
               'font:800 19px Outfit,sans-serif;cursor:pointer;' +
               'touch-action:manipulation;user-select:none;padding:8px';
-            b.addEventListener('click', function () { choose(g, i); });
+            b.addEventListener('click', function () { b.blur(); choose(g, i); });
             els.choices.appendChild(b);
           });
         } else {
@@ -523,16 +536,20 @@
 
       function build(g) {
         els = {};
+        // margin:auto (not just the root's align-items) so that on a short
+        // stage the column scrolls from the top instead of clipping the question.
         var wrap = mkEl('div',
-          'display:flex;flex-direction:column;align-items:center;gap:10px;width:min(94vw,440px)');
+          'display:flex;flex-direction:column;align-items:center;gap:8px;' +
+          'width:min(94vw,440px);margin:auto');
 
         var card = mkEl('div', 'width:100%;box-sizing:border-box;' +
           'background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.10);' +
-          'border-radius:16px;padding:14px 14px 12px;text-align:center');
-        els.note = mkEl('div', 'color:#9aa3d0;font:700 .72rem Outfit,sans-serif;' +
-          'letter-spacing:.08em;text-transform:uppercase;min-height:14px');
+          'border-radius:16px;padding:12px 14px 10px;text-align:center');
+        els.note = mkEl('div', 'color:#9aa3d0;font:700 .76rem Outfit,sans-serif;' +
+          'letter-spacing:.08em;text-transform:uppercase;min-height:16px;white-space:nowrap;' +
+          'overflow:hidden;text-overflow:ellipsis');
         els.q = mkEl('div', 'color:#fff;font:800 clamp(22px,6vw,38px)/1.2 Outfit,sans-serif;' +
-          'min-height:52px;display:flex;align-items:center;justify-content:center;padding:6px 0');
+          'min-height:48px;display:flex;align-items:center;justify-content:center;padding:4px 0');
         card.appendChild(els.note);
         card.appendChild(els.q);
 
@@ -550,42 +567,42 @@
         card.appendChild(tw);
         wrap.appendChild(card);
 
-        els.fb = mkEl('div', 'min-height:22px;font:800 .98rem Outfit,sans-serif;color:transparent', '·');
-        wrap.appendChild(els.fb);
-
         if (spec.mode === 'choice') {
-          els.choices = mkEl('div', 'display:grid;grid-template-columns:1fr 1fr;gap:9px;width:100%');
+          els.choices = mkEl('div', 'display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%');
           wrap.appendChild(els.choices);
         } else {
           els.ans = mkEl('div', 'width:100%;box-sizing:border-box;background:rgba(0,0,0,.25);' +
-            'border:1px solid rgba(255,255,255,.12);border-radius:12px;height:48px;' +
+            'border:1px solid rgba(255,255,255,.12);border-radius:12px;height:44px;' +
             'display:flex;align-items:center;justify-content:center;' +
             'font:800 26px Outfit,sans-serif;color:rgba(255,255,255,.28)', '·');
           wrap.appendChild(els.ans);
 
-          var pad = mkEl('div', 'display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:100%');
-          var keys = ['7', '8', '9', '4', '5', '6', '1', '2', '3', spec.neg ? '±' : 'C', '0', '⌫'];
+          // Four columns: digits + ⌫ / C (or ± for the negatives drill), a
+          // tall OK on the right, and a wide 0 — the whole pad fits under the
+          // question on a phone without scrolling.
+          var pad = mkEl('div', 'display:grid;grid-template-columns:repeat(4,1fr);' +
+            'grid-auto-rows:46px;gap:7px;width:100%');
+          var keys = ['7', '8', '9', '⌫', '4', '5', '6', spec.neg ? '±' : 'C', '1', '2', '3', 'OK', '0'];
           keys.forEach(function (k) {
             var b = document.createElement('button');
             b.type = 'button';
             b.textContent = k;
-            b.style.cssText = 'height:50px;border:0;border-radius:12px;' +
-              'background:rgba(255,255,255,.10);color:#eef1ff;' +
-              'font:700 20px Outfit,sans-serif;cursor:pointer;' +
-              'touch-action:manipulation;user-select:none';
-            b.addEventListener('click', function () { padKey(g, k); });
+            var isOk = k === 'OK', digit = /^\d$/.test(k);
+            b.style.cssText = 'border:0;border-radius:12px;cursor:pointer;' +
+              'touch-action:manipulation;user-select:none;' +
+              (isOk ? 'grid-row:span 2;background:' + spec.accent + ';color:#0a1020;' +
+                'font:800 20px Outfit,sans-serif' :
+                'background:rgba(255,255,255,' + (digit ? '.12' : '.07') + ');color:#eef1ff;' +
+                'font:700 21px Outfit,sans-serif') +
+              (k === '0' ? ';grid-column:span 3' : '');
+            // blur so a focused key cannot re-fire on the next Enter keypress
+            b.addEventListener('click', function () {
+              b.blur();
+              if (isOk) submit(g); else padKey(g, k);
+            });
             pad.appendChild(b);
           });
           wrap.appendChild(pad);
-
-          var ok = document.createElement('button');
-          ok.type = 'button';
-          ok.textContent = 'OK';
-          ok.style.cssText = 'width:100%;height:50px;border:0;border-radius:12px;' +
-            'background:' + spec.accent + ';color:#0a1020;' +
-            'font:800 20px Outfit,sans-serif;cursor:pointer;touch-action:manipulation';
-          ok.addEventListener('click', function () { submit(g); });
-          wrap.appendChild(ok);
         }
 
         g.root.innerHTML = '';
@@ -642,7 +659,7 @@
           var d = g.data;
           if (d.fbT > 0) {
             d.fbT -= dt;
-            if (d.fbT <= 0) { els.fb.style.color = 'transparent'; els.fb.textContent = '·'; }
+            if (d.fbT <= 0) setNote(g);
           }
           d.time -= dt;
           if (d.time < 0) d.time = 0;
@@ -848,7 +865,7 @@
     tags: ['maths', 'fractions', 'timed', 'brain', 'school'],
     mount: mathMount({
       id: 'math-fractions', emo: '🍕', bg: '#1f1208', accent: '#fb923c',
-      mode: 'choice', gen: GENS['math-fractions'],
+      mode: 'choice', gen: GENS['math-fractions'], noteDefault: 'tap the right fraction',
       start: {
         title: 'Fraction Frenzy',
         text: 'Ninety seconds of fractions, answered by tapping. Compare two ' +
@@ -997,7 +1014,7 @@
     tags: ['maths', 'primes', 'factors', 'timed', 'brain'],
     mount: mathMount({
       id: 'math-primes', emo: '🔎', bg: '#101230', accent: '#818cf8',
-      mode: 'choice', gen: GENS['math-primes'],
+      mode: 'choice', gen: GENS['math-primes'], noteDefault: 'primes & factors',
       start: {
         title: 'Prime Hunter',
         text: 'Ninety seconds of prime spotting and factor finding. Early numbers ' +

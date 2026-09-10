@@ -481,7 +481,7 @@
 
     return function mount(host) {
       var Milo = window.Milo, U = Milo.util;
-      var cellEls = [];
+      var cellEls = [], hudRo = null;
 
       function bestTime() { return Milo.store.get('best:' + opt.id + '-time', 0) || 0; }
 
@@ -506,30 +506,44 @@
 
       function build(g) {
         var wrap = document.createElement('div');
-        // margin:auto (not flex centering) so an oversized board can scroll
-        // to its left edge instead of clipping it.
-        wrap.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:10px;margin:auto';
+        // The wrapper fills the stage and acts as a size container, so the
+        // board is measured against the real stage (100cqw/100cqh) rather
+        // than the viewport. Browsers without container units keep the
+        // vw/vh fallback declared first.
+        wrap.style.cssText = 'display:flex;flex-direction:column;gap:8px;' +
+          'width:100%;height:100%;box-sizing:border-box;container-type:size';
         var grid = document.createElement('div');
-        var maxPx = Math.min(940, COLS * 40);
-        var minPx = COLS * (COLS > 20 ? 19 : 22);
+        var ratio = (COLS / ROWS).toFixed(4);
+        var maxPx = Math.min(1000, COLS * 40 + 12);
+        // Cells never shrink below classic Windows size (~18px); past that
+        // the board keeps its size and the stage scrolls instead.
+        var minPx = COLS * (COLS > 20 ? 17 : 18) + 2 * (COLS - 1) + 12;
+        // Auto side margins (not flex centering): an oversized board then
+        // starts at the left edge and scrolls, instead of clipping its left.
         grid.style.cssText = 'display:grid;grid-template-columns:repeat(' + COLS + ',1fr);' +
           'gap:2px;background:#1b2046;padding:6px;border-radius:10px;' +
-          'width:min(94vw,min(72vh*' + (COLS / ROWS) + ',' + maxPx + 'px));' +
+          'box-sizing:border-box;flex:none;margin:0 auto;container-type:inline-size;' +
+          'width:min(94vw,calc(72vh*' + ratio + '),' + maxPx + 'px);' +
+          'width:min(100cqw,calc((100cqh - 44px)*' + ratio + '),' + maxPx + 'px);' +
           'min-width:' + minPx + 'px';
         cellEls = [];
+        // Digit size follows the cell (the grid is its own inline container),
+        // with a viewport-based fallback for browsers without cq units.
+        var fontCss = 'font:800 clamp(8px,' + (28 / COLS).toFixed(2) + 'vw,16px)/1 Outfit,sans-serif;' +
+          'font-size:clamp(8px,calc(100cqw/' + COLS + '*.62),17px);';
         for (var i = 0; i < COLS * ROWS; i++) {
           var b = document.createElement('button');
           b.type = 'button';
           b.dataset.i = i;
           b.style.cssText = 'aspect-ratio:1;border:0;border-radius:4px;cursor:pointer;' +
-            'background:#2b3167;color:#fff;' +
-            'font:800 clamp(8px,' + (28 / COLS).toFixed(2) + 'vw,16px)/1 Outfit,sans-serif;' +
+            'background:#2b3167;color:#fff;' + fontCss +
             'display:grid;place-items:center;padding:0;user-select:none;-webkit-user-select:none';
           grid.appendChild(b);
           cellEls.push(b);
         }
         var hint = document.createElement('div');
-        hint.style.cssText = 'color:#a8b0d8;font-size:.84rem;text-align:center;max-width:min(92vw,600px)';
+        hint.style.cssText = 'color:#a8b0d8;font-size:.84rem;line-height:1.3;text-align:center;' +
+          'max-width:min(100%,600px);margin:0 auto;flex:none';
         hint.innerHTML = FLAGS
           ? 'Click to reveal · Right-click (or long-press) to flag · ' +
             'Click a number with its flags placed to clear around it'
@@ -539,6 +553,22 @@
         wrap.appendChild(hint);
         g.root.innerHTML = '';
         g.root.appendChild(wrap);
+
+        // The engine's stat boxes wrap to a second row on narrow screens and
+        // would cover the top of the board; pad the wrapper by the overlap.
+        if (hudRo) { hudRo.disconnect(); hudRo = null; }
+        function fitUnderHud() {
+          var stats = g.hud ? g.hud.querySelectorAll('.hud-stat') : null;
+          if (!stats || !stats.length) return;
+          var top = g.root.getBoundingClientRect().top;
+          var bottom = stats[stats.length - 1].getBoundingClientRect().bottom - top;
+          wrap.style.paddingTop = Math.max(0, Math.round(bottom - 58 + 8)) + 'px';
+        }
+        fitUnderHud();
+        if (window.ResizeObserver && g.hud) {
+          hudRo = new ResizeObserver(fitUnderHud);
+          hudRo.observe(g.hud.querySelector('.hud-top') || g.hud);
+        }
 
         grid.addEventListener('contextmenu', function (e) { e.preventDefault(); });
         grid.addEventListener('mousedown', function (e) {
@@ -728,7 +758,8 @@
           if (d.done || !d.placed) return;
           d.time += dt;
           g.set('Time', U.time(d.time));
-        }
+        },
+        destroy: function () { if (hudRo) { hudRo.disconnect(); hudRo = null; } }
       });
     };
   }
@@ -819,18 +850,19 @@
 
   window.Milo.register({
     id: 'sudoku-expert', title: 'Sudoku Expert', emo: '💎', category: 'Puzzle',
-    tagline: '23-ish clues, one provable solution',
-    description: 'The deep end: digging continues to around 23 clues, stopping only when ' +
-      'removing anything more would allow a second solution. Every grid is still provably ' +
-      'unique, so pure logic gets there — but expect long candidate lists, X-wing-shaped ' +
-      'eliminations and stretches where one note removal is the whole move. Work one digit ' +
-      'across all nine boxes before switching digits; it keeps the scan systematic.',
+    tagline: 'Dug to the uniqueness limit — about 24 clues',
+    description: 'The deep end: the digger tries every cell and keeps removing until ' +
+      'taking out anything more would allow a second solution, which lands most grids at ' +
+      '23 to 25 clues. Every grid is still provably unique, so pure logic gets there — but ' +
+      'expect long candidate lists, X-wing-shaped eliminations and stretches where one ' +
+      'note removal is the whole move. Work one digit across all nine boxes before ' +
+      'switching digits; it keeps the scan systematic.',
     controls: ['Click a cell', '1–9', 'N for notes', 'Backspace'],
     colors: ['#312e81', '#818cf8'],
     tags: ['sudoku', 'logic', 'numbers', 'expert', 'brain'],
     mount: makeSudoku({
       id: 'sudoku-expert', title: 'Sudoku Expert', emo: '💎',
-      n: 9, bw: 3, bh: 3, dig: 58, singles: false, base: 10000, perSec: 8,
+      n: 9, bw: 3, bh: 3, dig: 64, singles: false, base: 10000, perSec: 8,
       startText: 'As few clues as the uniqueness checker allows — every removal is ' +
         'tested so exactly one solution survives. Slow, heavy logic. Notes are not ' +
         'optional here.'
@@ -919,9 +951,9 @@
   window.Milo.register({
     id: 'mines-huge', title: 'Mines Huge', emo: '🗺️', category: 'Puzzle',
     tagline: 'A sprawling 24×24, 130-mine campaign',
-    description: 'A giant square field: 24×24 with 130 mines. The density sits between ' +
-      'intermediate and expert, but the sheer area turns each game into a campaign across ' +
-      'provinces — clear one region, bank its certainty, and push the frontier outward. ' +
+    description: 'A giant square field: 24×24 with 130 mines. At close to 23% density it ' +
+      'is a shade hotter than expert, and the sheer area turns each game into a campaign ' +
+      'across provinces — clear one region, bank its certainty, and push the frontier outward. ' +
       'The first click is always safe and flags plus chording are essential over a board ' +
       'this size. Do not tour the map randomly; finish territories, or stray 50/50 borders ' +
       'will pile up.',

@@ -7,10 +7,10 @@
     var Milo = window.Milo, U = Milo.util;
 
     var KINDS = {
-      foot: { hp: 1, sp: 44, w: 16, h: 34, pts: 10, dmg: 4 },
-      shield: { hp: 1, sp: 32, w: 18, h: 34, pts: 20, dmg: 4 },
-      knight: { hp: 2, sp: 78, w: 16, h: 38, pts: 25, dmg: 6 },
-      ram: { hp: 7, sp: 20, w: 64, h: 40, pts: 70, dmg: 16 }
+      foot: { hp: 1, sp: 40, w: 16, h: 34, pts: 10, dmg: 3 },
+      shield: { hp: 1, sp: 30, w: 18, h: 34, pts: 20, dmg: 3 },
+      knight: { hp: 2, sp: 64, w: 16, h: 38, pts: 25, dmg: 5 },
+      ram: { hp: 7, sp: 20, w: 64, h: 40, pts: 70, dmg: 14 }
     };
 
     function reset(g) {
@@ -47,7 +47,7 @@
       var d = g.data;
       d.wave++;
       g.set('Wave', d.wave);
-      d.spawnLeft = 4 + d.wave * 3;
+      d.spawnLeft = 4 + d.wave * 2;
       d.spawnT = .8;
       d.banner = 'WAVE ' + d.wave;
       d.bannerT = 1.6;
@@ -78,6 +78,13 @@
       Milo.sound.tone({ f: 200 + d.power * 500, f2: 90, d: .12, v: .1, type: 'triangle' });
       d.drawing = false;
       d.power = 0;
+    }
+
+    // distance from point (px,py) to segment (x1,y1)-(x2,y2)
+    function segDist(x1, y1, x2, y2, px, py) {
+      var dx = x2 - x1, dy = y2 - y1, l2 = dx * dx + dy * dy;
+      var t = l2 ? U.clamp(((px - x1) * dx + (py - y1) * dy) / l2, 0, 1) : 0;
+      return U.dist(px, py, x1 + dx * t, y1 + dy * t);
     }
 
     function popText(d, x, y, str, col) {
@@ -168,7 +175,7 @@
               var bonus = 50 + d.wave * 10;
               g.score += bonus;
               g.set('Score', U.fmt(g.score));
-              d.wall = Math.min(100, d.wall + 20);
+              d.wall = Math.min(100, d.wall + 25);
               g.set('Wall', Math.round(d.wall) + '%');
               d.banner = 'WALL REPAIRED +' + bonus;
               d.bannerT = 1.6;
@@ -210,14 +217,16 @@
         for (var a = d.arrows.length - 1; a >= 0; a--) {
           var ar = d.arrows[a];
           ar.vy += GRAV * dt;
+          var ox = ar.x, oy = ar.y;
           ar.x += ar.vx * dt; ar.y += ar.vy * dt;
           var gone = false;
 
           for (var j = 0; j < d.foes.length; j++) {
             var fo = d.foes[j], fk = KINDS[fo.kind];
             var headY = GROUND - fk.h - 4;
-            // head first (rams have no head to speak of)
-            if (fo.kind !== 'ram' && U.dist(ar.x, ar.y, fo.x, headY) < 8.5) {
+            // head first (rams have no head to speak of) — swept along this
+            // frame's travel so a fast arrow cannot skip through the helmet
+            if (fo.kind !== 'ram' && segDist(ox, oy, ar.x, ar.y, fo.x, headY) < 8.5) {
               kill(g, fo, true);
               gone = true;
               break;

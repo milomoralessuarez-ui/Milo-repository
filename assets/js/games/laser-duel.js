@@ -235,15 +235,16 @@
             Milo.sound.tone({ f: 340 + b.bounces * 120, f2: 220, d: .06, v: .05, type: 'square' });
           }
 
-          // hits — the shooter is only safe from an unbounced bolt of their own
-          if ((b.owner !== 'you' || b.bounces > 0) && U.dist(b.x, b.y, p.x, p.y) < p.r + b.r) {
+          // hits — the shooter is only safe from an unbounced bolt of their own,
+          // plus a short grace so a point-blank pillar rebound is not an instant loss
+          if ((b.owner !== 'you' || (b.bounces > 0 && b.age > .55)) && U.dist(b.x, b.y, p.x, p.y) < p.r + b.r) {
             ringBurst(d, p.x, p.y, '#22d3ee');
             d.bolts.splice(k, 1);
             Milo.sound.explode();
             endRound(g, 'ai', false);
             return;
           }
-          if ((b.owner !== 'ai' || b.bounces > 0) && U.dist(b.x, b.y, ai.x, ai.y) < ai.r + b.r) {
+          if ((b.owner !== 'ai' || (b.bounces > 0 && b.age > .55)) && U.dist(b.x, b.y, ai.x, ai.y) < ai.r + b.r) {
             var banked = b.owner === 'you' && b.bounces > 0;
             ringBurst(d, ai.x, ai.y, '#ff9d3c');
             d.bolts.splice(k, 1);

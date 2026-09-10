@@ -27,9 +27,9 @@
       d.result = null;
       d.parts = [];
       d.floats = [];
-      var s = 1 + (d.sprint - 1) * .06 + d.wins.you * .05;
-      d.aiPace = 12.2 * s;           // cruising speed m/s
-      d.aiKick = 16.2 * s;           // finishing speed
+      var s = 1 + (d.sprint - 1) * .04 + d.wins.you * .04;
+      d.aiPace = 12.4 * s;           // cruising speed m/s
+      d.aiKick = 16.4 * s;           // finishing speed
       g.set('Sprint', d.sprint + '/3');
       g.set('Speed', 0);
       g.set('Gap', '—');
@@ -90,10 +90,11 @@
       d.lastKey = which;
       d.tapT.push(g.t);
       if (d.tapT.length > 6) d.tapT.shift();
-      // Push: bigger at low speed, and cheaper in the draft.
-      var boost = 1.35 * (1 - d.you.v / 21);
-      d.you.v += Math.max(.25, boost);
-      var cost = (d.drafting ? .95 : 1.55) + d.you.v * .028;
+      // Push: a big shove off the line, a steady half-metre-per-second after that.
+      var boost = .5 + 1.3 * Math.max(0, 1 - d.you.v / 8);
+      d.you.v = Math.min(24, d.you.v + boost);
+      // Cheaper in the draft, dearer at speed, and half as much again in the red zone.
+      var cost = ((d.drafting ? .6 : .9) + d.you.v * .03) * (d.stam < 22 ? 1.5 : 1);
       d.stam -= cost;
       Milo.sound.tone({ f: 240 + d.you.v * 14, d: .03, v: .05, type: 'triangle' });
       if (d.stam <= 0) {
@@ -174,8 +175,8 @@
         if (d.drafting && !wasDraft) addFloat(d, W * .42, AIY - 90, 'DRAFT', '#4ade80');
 
         // Drag: the wind bites v²; the draft takes most of it away.
-        var drag = (d.drafting ? .0065 : .016) * d.you.v * d.you.v;
-        d.you.v = Math.max(0, d.you.v - (drag + (d.blown > 0 ? 2.6 : .32)) * dt);
+        var drag = (d.drafting ? .006 : .0125) * d.you.v * d.you.v;
+        d.you.v = Math.max(0, d.you.v - (drag + (d.blown > 0 ? 2.6 : .25)) * dt);
         d.you.dist += d.you.v * dt;
         d.you.leg += d.you.v * dt * 1.9;
 
@@ -190,7 +191,7 @@
         }
         if (a.tired > 5 && kick) target *= .93;
         var aiDrafting = d.you.dist - a.dist > .5 && d.you.dist - a.dist < 7;
-        a.v += (target - a.v) * Math.min(1, dt * (aiDrafting ? 1.4 : 1.0));
+        a.v += (target - a.v) * Math.min(1, dt * (aiDrafting ? .9 : .6));
         a.dist += a.v * dt;
         a.leg += a.v * dt * 1.9;
 

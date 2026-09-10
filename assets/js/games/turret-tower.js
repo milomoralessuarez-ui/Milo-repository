@@ -35,7 +35,7 @@
       var d = g.data;
       d.wave++;
       g.set('Wave', d.wave);
-      d.spawnLeft = 8 + d.wave * 4;
+      d.spawnLeft = 8 + d.wave * 3;
       d.spawnT = .4;
       d.banner = 'WAVE ' + d.wave;
       d.bannerT = 1.5;
@@ -70,7 +70,7 @@
       var d = g.data;
       if (d.locked > 0 || d.cool > 0) return;
       d.cool = .11;
-      d.heat += 8.5;
+      d.heat += 7.5;
       d.recoil = 1;
       // hot barrel throws shots wide
       var wobble = (d.heat / 100) * .22;
@@ -140,7 +140,7 @@
             });
           }
         } else {
-          d.heat = Math.max(0, d.heat - (d.firing || i.down('action') ? 20 : 34) * dt);
+          d.heat = Math.max(0, d.heat - (d.firing || i.down('action') ? 22 : 38) * dt);
         }
 
         if (i.down('action') || d.firing) fire(g);
@@ -160,6 +160,8 @@
               g.score += 30 + d.wave * 15;
               g.set('Score', U.fmt(g.score));
               d.heat = Math.max(0, d.heat - 40);
+              // crews patch one plate between waves
+              if (d.hp < 10) { d.hp++; g.set('Tower', d.hp); }
             }
             startWave(g);
             d.betweenT = 2.4;
@@ -222,7 +224,7 @@
           ob.x += Math.cos(a) * 130 * dt;
           ob.y += Math.sin(a) * 130 * dt;
           if (U.dist(ob.x, ob.y, CX, CY) < 52) {
-            if (ob.kind === 'coolant') { d.heat = Math.max(0, d.heat - 35); }
+            if (ob.kind === 'coolant') { d.heat = Math.max(0, d.heat - 40); }
             else { d.hp = Math.min(10, d.hp + 1); g.set('Tower', d.hp); }
             Milo.sound.powerup();
             return false;

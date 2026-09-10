@@ -31,6 +31,7 @@
       d.ball = null;
       d.fly = null;
       d.swingT = 0;
+      d.whiffT = 0;
       d.swung = false;
       d.batX = 0; d.batY = .45;
       d.msg = 'Round 1 — ' + PITCHES + ' pitches. 2 homers moves you on.';

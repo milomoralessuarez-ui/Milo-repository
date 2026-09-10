@@ -22,6 +22,7 @@
       d.betweenT = 1.5;
       d.hitsTaken = 0;
       d.escaped = 0;
+      d.waveKills = 0;
       d.banner = ''; d.bannerT = 0;
       d.scroll = 0;
       d.shake = 0;
@@ -48,6 +49,7 @@
       d.spawnT = .6;
       d.hitsTaken = 0;
       d.escaped = 0;
+      d.waveKills = 0;
       d.banner = 'WAVE ' + d.wave;
       d.bannerT = 1.5;
       Milo.sound.tone({ f: 392, f2: 523, d: .25, v: .08, type: 'triangle' });
@@ -229,6 +231,7 @@
               if (f.hp <= 0) {
                 wreck(g, f);
                 d.foes.splice(k, 1);
+                d.waveKills++;
                 g.score += f.kind === 'ace' ? 50 : f.kind === 'gunner' ? 40 : 20;
                 g.set('Score', U.fmt(g.score));
               } else Milo.sound.hit();
@@ -411,7 +414,14 @@
       var d = g.data, medal, bonus;
       if (d.hitsTaken === 0 && d.escaped === 0) { medal = '🥇'; bonus = 300; }
       else if (d.hitsTaken <= 1 && d.escaped <= 1) { medal = '🥈'; bonus = 150; }
-      else { medal = '🥉'; bonus = 50; }
+      else if (d.waveKills > d.escaped) { medal = '🥉'; bonus = 50; }
+      else {
+        // let most of the squadron through and there is no medal for that
+        d.banner = 'NO MEDAL — ' + d.escaped + ' got past';
+        d.bannerT = 2;
+        Milo.sound.tone({ f: 300, f2: 180, d: .25, v: .08, type: 'triangle' });
+        return;
+      }
       d.medals.push(medal);
       g.score += bonus;
       g.set('Score', U.fmt(g.score));

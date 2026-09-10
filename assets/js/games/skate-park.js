@@ -36,8 +36,9 @@
       var d = g.data;
       d.mode = 'ride';
       d.x = 300; d.y = ySurf(300);
-      d.v = 240;                       // signed speed along the surface
+      d.v = -260;                      // signed speed along the surface; rolls to the left wall first
       d.vx = 0; d.vy = 0;
+      d.lowAir = false;
       d.spin = 0; d.flip = 0; d.grab = 0;
       d.airPts = 0;
       d.mult = 1;
@@ -113,8 +114,8 @@
         title: 'Skate Park',
         text: 'A 75-second halfpipe session. Hold Space through the transitions to pump ' +
           'for speed, then hold tricks in the air — spin, flip, grab. Land straight to ' +
-          'bank the points and grow the combo; a bail resets it to x1. Ollie (Space) ' +
-          'onto the box on the flat to grind it.',
+          'bank the points and grow the combo; a bail resets it to x1. Tap Space on the ' +
+          'flat to ollie onto the box and grind it — roll into it and you clip it.',
         keys: ['Space pump / ollie', '← spin', '→ flip', '↓ grab']
       },
       init: reset,
@@ -143,7 +144,7 @@
           d.bailT -= dt;
           d.x += d.v * dt;
           d.x = U.clamp(d.x, PL + 10, PR - 10);
-          d.y = ySurf(d.x);
+          d.y = (d.x > BOXL && d.x < BOXR) ? BOXTOP : ySurf(d.x);
           d.v *= 1 - 2.4 * dt;
           if (d.bailT <= 0) d.mode = 'ride';
         } else if (d.mode === 'ride') {
@@ -154,6 +155,9 @@
           if (pump && Math.abs(th) > .3) {
             d.v += 300 * Math.sign(d.v || 1) * dt;
             if (Math.random() < .25) dust(d, d.x, d.y + 4, 1, '#e8e2d6');
+          } else if (pump && Math.abs(th) < .3 && Math.abs(d.v) < 220) {
+            // Pushing along the flat: slow, but it always gets you back to a wall.
+            d.v += 260 * (d.v < 0 ? -1 : 1) * dt;
           }
           d.v *= 1 - (Math.abs(th) < .1 ? .10 : .04) * dt;
           d.v = U.clamp(d.v, -980, 980);
@@ -175,10 +179,24 @@
           } else {
             d.x = U.clamp(d.x, PL + 6, PR - 6);
             d.y = ySurf(d.x);
-            // Ride into the grind box: that hurts.
+            // Rolling into the grind box without an ollie.
             if (Math.abs(th) < .1 && d.x > BOXL - 12 && d.x < BOXR + 12) {
-              if (Math.abs(d.v) > 110) { bail(g, 'BOX!'); }
-              else { d.v = -d.v * .4; d.x = d.v < 0 ? BOXL - 13 : BOXR + 13; }
+              var dir = d.v < 0 ? -1 : 1;
+              if (Math.abs(d.v) > 110) {
+                // Clipped it: a scrappy hop, most of the speed gone, combo gone.
+                d.mode = 'air'; d.lowAir = false;
+                d.vx = d.v * .62; d.vy = -330;
+                d.airPts = 0; d.mult = 1; d.combo = 0;
+                g.set('Combo', 'x1');
+                Milo.sound.hit();
+                dust(d, d.x, d.y, 8, '#fb7185');
+                addFloat(d, d.x, d.y - 60, 'CLIPPED THE BOX', '#fb7185');
+              } else {
+                // Slow enough to just roll up onto it.
+                d.mode = 'grind';
+                d.y = BOXTOP;
+                d.v = dir * Math.max(Math.abs(d.v), 60);
+              }
             }
           }
         } else if (d.mode === 'air') {
@@ -196,8 +214,8 @@
           if (inp.down('down')) { d.grab += dt; d.airPts += 34 * dt; doing.push('melon grab'); }
           d.trickName = doing.join(' + ');
 
-          // Grind catch over the box.
-          if (d.lowAir && d.vy > 0 && d.x > BOXL - 4 && d.x < BOXR + 4 && d.y >= BOXTOP - 10) {
+          // Grind catch over the box (from an ollie, or a low air that drops onto it).
+          if (d.vy > 0 && d.x > BOXL - 4 && d.x < BOXR + 4 && d.y >= BOXTOP - 4) {
             if (spinOk(d) && flipOk(d)) {
               d.mode = 'grind';
               d.y = BOXTOP;
@@ -466,8 +484,8 @@
       '←, kickflip with →, grab with ↓, and stack them in one air for bigger ' +
       'points. Landing mid-spin or mid-flip is a bail that resets your combo multiplier ' +
       'to x1, so let go early enough to straighten out. Pump the transitions with Space ' +
-      'for amplitude, and ollie onto the box on the flat — grinding it pays better per ' +
-      'second than any grab.',
+      'for amplitude, and tap it on the flat to ollie onto the box — grinding pays better ' +
+      'per second than any grab, while rolling into the box clips it and kills the combo.',
     controls: ['Space pump / ollie', '← spin', '→ flip', '↓ grab'],
     colors: ['#8ecdf2', '#e11d48'],
     tags: ['skateboarding', 'tricks', 'combo', 'halfpipe', 'timing'],
