@@ -12,6 +12,8 @@
   var LAPS = 3;
   var CPS = 7;              // checkpoint count per lap (index 0 = start/finish)
   var SHOULDER = 2.5;       // runoff strip beside the tarmac, in units
+  var RESCUE_D = 45;        // true distance from the road that triggers a rescue
+  var MAX_DS = 12;          // most progress a car can honestly make in one frame
   var LX = 0.45, LY = 0.85, LZ = 0.30;   // sun direction (normalised below)
   (function () { var l = Math.hypot(LX, LY, LZ); LX /= l; LY /= l; LZ /= l; })();
 
@@ -22,59 +24,67 @@
     return [((n >> 16) & 255) / 255, ((n >> 8) & 255) / 255, (n & 255) / 255];
   }
 
-  function m4mul(a, b) {
-    var o = new Float32Array(16);
+  /* Every matrix helper writes into a caller-supplied Float32Array(16) and
+     returns it, so the render loop allocates nothing: each mount owns a few
+     scratch matrices (see makeMount) and reuses them every frame. */
+  var M4TMP = new Float32Array(16);
+
+  function m4zero(o) { for (var i = 0; i < 16; i++) o[i] = 0; return o; }
+  function m4mul(o, a, b) {
     for (var i = 0; i < 4; i++) {
       for (var j = 0; j < 4; j++) {
         var s = 0;
         for (var k = 0; k < 4; k++) s += a[k * 4 + j] * b[i * 4 + k];
-        o[i * 4 + j] = s;
+        M4TMP[i * 4 + j] = s;
       }
     }
+    for (i = 0; i < 16; i++) o[i] = M4TMP[i];   // via the temp: o may alias a or b
     return o;
   }
-  function m4perspective(fovy, aspect, near, far) {
-    var f = 1 / Math.tan(fovy / 2), o = new Float32Array(16);
+  function m4perspective(o, fovy, aspect, near, far) {
+    var f = 1 / Math.tan(fovy / 2);
+    m4zero(o);
     o[0] = f / aspect; o[5] = f;
     o[10] = (far + near) / (near - far); o[11] = -1;
     o[14] = 2 * far * near / (near - far);
     return o;
   }
-  function m4rotX(a) {
-    var c = Math.cos(a), s = Math.sin(a), o = new Float32Array(16);
+  function m4rotX(o, a) {
+    var c = Math.cos(a), s = Math.sin(a);
+    m4zero(o);
     o[0] = 1; o[5] = c; o[6] = s; o[9] = -s; o[10] = c; o[15] = 1;
     return o;
   }
-  function m4rotY(a) {
-    var c = Math.cos(a), s = Math.sin(a), o = new Float32Array(16);
+  function m4rotY(o, a) {
+    var c = Math.cos(a), s = Math.sin(a);
+    m4zero(o);
     o[0] = c; o[2] = -s; o[5] = 1; o[8] = s; o[10] = c; o[15] = 1;
     return o;
   }
-  function m4rotZ(a) {
-    var c = Math.cos(a), s = Math.sin(a), o = new Float32Array(16);
+  function m4rotZ(o, a) {
+    var c = Math.cos(a), s = Math.sin(a);
+    m4zero(o);
     o[0] = c; o[1] = s; o[4] = -s; o[5] = c; o[10] = 1; o[15] = 1;
     return o;
   }
-  function m4translate(x, y, z) {
-    var o = new Float32Array(16);
+  function m4translate(o, x, y, z) {
+    m4zero(o);
     o[0] = o[5] = o[10] = o[15] = 1;
     o[12] = x; o[13] = y; o[14] = z;
     return o;
   }
-  var M4ID = (function () {
-    var o = new Float32Array(16);
-    o[0] = o[5] = o[10] = o[15] = 1;
-    return o;
-  })();
+  var M4ID = m4translate(new Float32Array(16), 0, 0, 0);
 
-  /** View matrix for an eye looking at a target (yaw/pitch form). */
-  function m4view(ex, ey, ez, tx, ty, tz) {
+  /** View matrix for an eye looking at a target (yaw/pitch form). The result
+      lands in `o`; `ta` and `tb` are scratch. */
+  function m4view(o, ta, tb, ex, ey, ez, tx, ty, tz) {
     var dx = tx - ex, dy = ty - ey, dz = tz - ez;
     var l = Math.hypot(dx, dy, dz) || 1;
     dx /= l; dy /= l; dz /= l;
     var yaw = Math.atan2(-dx, -dz);
     var pitch = Math.asin(Math.max(-1, Math.min(1, dy)));
-    return m4mul(m4mul(m4rotX(-pitch), m4rotY(-yaw)), m4translate(-ex, -ey, -ez));
+    m4mul(ta, m4rotX(ta, -pitch), m4rotY(tb, -yaw));
+    return m4mul(o, ta, m4translate(tb, -ex, -ey, -ez));
   }
 
   /** Deterministic per-track random stream so a circuit always looks the same. */
@@ -142,9 +152,13 @@
   }
   function program(gl, vs, fs) {
     var p = gl.createProgram();
-    gl.attachShader(p, compile(gl, gl.VERTEX_SHADER, vs));
-    gl.attachShader(p, compile(gl, gl.FRAGMENT_SHADER, fs));
+    var v = compile(gl, gl.VERTEX_SHADER, vs), f = compile(gl, gl.FRAGMENT_SHADER, fs);
+    gl.attachShader(p, v);
+    gl.attachShader(p, f);
     gl.linkProgram(p);
+    // Shaders are only needed to link; flag them so deleteProgram frees all.
+    gl.deleteShader(v);
+    gl.deleteShader(f);
     if (!gl.getProgramParameter(p, gl.LINK_STATUS)) {
       throw new Error('Polly Track link: ' + gl.getProgramInfoLog(p));
     }
@@ -594,6 +608,12 @@
       var beaconBuf = null, beaconCount = 0;
       var skyBuf = null;
 
+      // Per-frame scratch matrices: the render loop allocates nothing.
+      var mProj = new Float32Array(16), mView = new Float32Array(16), mPV = new Float32Array(16);
+      var mModel = new Float32Array(16), mA = new Float32Array(16), mB = new Float32Array(16);
+      // Last values pushed to the HUD, so g.set only touches the DOM on change.
+      var hudKmh = -1, hudLap = -1, hudTenths = -1;
+
       var zen = hex(T.sky[0]), hor = hex(T.sky[1]);
 
       // Car state
@@ -644,7 +664,7 @@
         preload: function (g) { setup(g); },
         init: function (g) { reset(g); },
         frame: function (g, dt) { frame(g, dt); },
-        destroy: function () { }
+        destroy: function (g) { teardown(g); }
       };
 
       var runner = Milo.glGame(host, cfg);
@@ -691,6 +711,22 @@
         gl.clearColor(hor[0], hor[1], hor[2], 1);
       }
 
+      /* --- GL teardown. The runner loses the context straight after this,
+             but releasing explicitly keeps the driver's object tables tidy
+             when a player hops between the three tracks. --- */
+      function teardown(g) {
+        var gl = g.gl;
+        if (worldBuf) gl.deleteBuffer(worldBuf);
+        if (carBuf) gl.deleteBuffer(carBuf);
+        if (beaconBuf) gl.deleteBuffer(beaconBuf);
+        if (skyBuf) gl.deleteBuffer(skyBuf);
+        worldBuf = carBuf = beaconBuf = skyBuf = null;
+        if (prog) gl.deleteProgram(prog);
+        if (skyProg) gl.deleteProgram(skyProg);
+        prog = skyProg = null;                 // render() is a no-op from here
+        if (msgEl.parentNode) msgEl.parentNode.removeChild(msgEl);
+      }
+
       /* --- race reset --- */
       function placeAt(idx) {
         car.x = D.sx[idx]; car.z = D.sz[idx]; car.y = D.sy[idx];
@@ -717,6 +753,7 @@
         g.set('Speed', '0 km/h');
         g.set('Lap', '1/' + LAPS);
         g.set('Time', '0:00.0');
+        hudKmh = 0; hudLap = 1; hudTenths = 0;
         // Show your best on the start overlay, formatted as a real time.
         var best = Milo.store.get('polly:best:' + T.id, 0);
         cfg.start.text = startText +
@@ -776,7 +813,6 @@
             else { msg('GO!', 1.0); Milo.sound.tone({ f: 660, f2: 990, d: .25, v: .12, type: 'square' }); }
           }
           if (race.cd > 0) {
-            g.set('Time', '0:00.0');
             fadeMsg(dt);
             return;
           }
@@ -799,8 +835,7 @@
         car.idx = k;
         var lat = (car.x - D.sx[k]) * D.nx[k] + (car.z - D.sz[k]) * D.nz[k];
         var off = Math.abs(lat) - T.roadHalf;
-        var onRoad = off <= 0.6;
-        if (onRoad !== !race.offRoad) { /* state flip handled below */ }
+        var onRoad = off <= 0.9;                 // the 0.8-wide kerb is fair game
         if (!onRoad && !race.offRoad && Math.abs(car.s) > 8) {
           Milo.sound.tone({ f: 150, f2: 90, d: .12, v: .07, type: 'sawtooth' });
         }
@@ -825,6 +860,8 @@
         var sp = Math.abs(car.s);
         var rate = T.steer * Math.min(1, sp / 11) * (1 - 0.38 * sp / max);
         car.h += steer * rate * (car.s < 0 ? -1 : 1) * dt;
+        if (car.h > Math.PI) car.h -= Math.PI * 2;
+        else if (car.h < -Math.PI) car.h += Math.PI * 2;
 
         // Velocity chases the heading — grip drops with speed for light drift.
         var fx = Math.sin(car.h), fz = Math.cos(car.h);
@@ -848,22 +885,35 @@
         car.pitch += (-Math.atan2(yA - yB, 3.4) - car.pitch) * Math.min(1, 8 * dt);
         car.roll += (slip * 0.5 - car.roll) * Math.min(1, 8 * dt);
 
-        // Rescue a car that has wandered far off the map.
-        if (Math.abs(lat) > 70) {
+        // Rescue a car that has wandered far off the map. Judged by the true
+        // distance to the nearest road sample — the lateral projection alone
+        // under-reads badly on bends (a car 90 units out can read as 16), so
+        // it could drive off the edge of the world and never be pulled back.
+        var rdx = car.x - D.sx[k], rdz = car.z - D.sz[k];
+        if (rdx * rdx + rdz * rdz > RESCUE_D * RESCUE_D) {
           placeAt(race.lastCpIdx);
           msg('Rescued — stay on the road!', 1.6);
           Milo.sound.hit();
+          updateHud(g);
+          fadeMsg(dt);
+          return;                    // the frame below would use the stale k/lat
         }
 
-        // Progress + ordered checkpoints
+        // Progress + ordered checkpoints. `s` is arc-length progress, wrapped
+        // into [0, L) so the start line is crossed cleanly from either side.
         var hl = Math.hypot(D.tx[k], D.tz[k]) || 1;
         var along = (car.x - D.sx[k]) * (D.tx[k] / hl) + (car.z - D.sz[k]) * (D.tz[k] / hl);
-        var s = D.ss[k] + along;
         var L = D.total;
+        var s = D.ss[k] + along;
+        s = ((s % L) + L) % L;
         var ds = s - race.prevS;
         if (ds > L / 2) ds -= L;
         if (ds < -L / 2) ds += L;
-        if (ds > 0.0001) {
+        // A gate counts only when driven through: forwards, on or beside the
+        // tarmac, and without progress jumping. A jump means the car cut
+        // across country and the nearest-sample tracker leapt to another
+        // stretch of road — that must not hand out the gates in between.
+        if (ds > 0.0001 && ds < MAX_DS) {
           var rel = D.cpS[race.nextCp] - race.prevS;
           rel = ((rel % L) + L) % L;
           if (rel <= ds && Math.abs(lat) < T.roadHalf + 2.2) {
@@ -893,6 +943,8 @@
         while (dy2 > Math.PI) dy2 -= Math.PI * 2;
         while (dy2 < -Math.PI) dy2 += Math.PI * 2;
         cam.yaw += dy2 * Math.min(1, 4.5 * dt);
+        if (cam.yaw > Math.PI) cam.yaw -= Math.PI * 2;
+        else if (cam.yaw < -Math.PI) cam.yaw += Math.PI * 2;
         var cfx = Math.sin(cam.yaw), cfz = Math.cos(cam.yaw);
         var back = 10.5 + sp * 0.05;
         var wx = car.x - cfx * back, wz = car.z - cfz * back;
@@ -903,13 +955,18 @@
         cam.z += (wz - cam.z) * Math.min(1, 7 * dt);
         cam.y += (wy - cam.y) * Math.min(1, 6 * dt);
 
-        // HUD
-        var kmh = Math.round(Math.hypot(car.vx, car.vz) * 2.9);
-        g.set('Speed', kmh + ' km/h');
-        g.set('Lap', Math.min(race.lap, LAPS) + '/' + LAPS);
-        g.set('Time', fmtHud(race.time));
-
+        updateHud(g);
         fadeMsg(dt);
+      }
+
+      /** Push the readouts to the DOM only when their text would change. */
+      function updateHud(g) {
+        var kmh = Math.round(Math.hypot(car.vx, car.vz) * 2.9);
+        if (kmh !== hudKmh) { hudKmh = kmh; g.set('Speed', kmh + ' km/h'); }
+        var lap = Math.min(race.lap, LAPS);
+        if (lap !== hudLap) { hudLap = lap; g.set('Lap', lap + '/' + LAPS); }
+        var tenths = Math.floor(race.time * 10);
+        if (tenths !== hudTenths) { hudTenths = tenths; g.set('Time', fmtHud(race.time)); }
       }
 
       function fadeMsg(dt) {
@@ -949,13 +1006,13 @@
 
         var sp = Math.hypot(car.vx, car.vz);
         var fov = 1.05 + 0.22 * Math.min(1, sp / T.maxSpeed);
-        var proj = m4perspective(fov, Math.max(0.2, g.W / g.H), 0.3, 900);
+        m4perspective(mProj, fov, Math.max(0.2, g.W / g.H), 0.3, 900);
         var lx = car.x + Math.sin(cam.yaw) * 5, lz = car.z + Math.cos(cam.yaw) * 5;
-        var view = m4view(cam.x, cam.y, cam.z, lx, car.y + 1.3, lz);
-        var pv = m4mul(proj, view);
+        m4view(mView, mA, mB, cam.x, cam.y, cam.z, lx, car.y + 1.3, lz);
+        m4mul(mPV, mProj, mView);
 
         gl.useProgram(prog);
-        gl.uniformMatrix4fv(loc.pv, false, pv);
+        gl.uniformMatrix4fv(loc.pv, false, mPV);
         gl.uniform3f(loc.eye, cam.x, cam.y, cam.z);
         gl.uniform2f(loc.fogRange, T.fogFar * 0.22, T.fogFar);
         gl.uniform3f(loc.fogCol, hor[0], hor[1], hor[2]);
@@ -964,20 +1021,17 @@
 
         drawMesh(gl, worldBuf, worldCount, M4ID);
 
-        var carModel = m4mul(
-          m4translate(car.x, car.y, car.z),
-          m4mul(m4rotY(car.h), m4mul(m4rotX(car.pitch), m4rotZ(car.roll)))
-        );
-        drawMesh(gl, carBuf, carCount, carModel);
+        // model = T(pos) · Ry(h) · Rx(pitch) · Rz(roll), built in scratch space
+        m4mul(mA, m4rotX(mA, car.pitch), m4rotZ(mB, car.roll));
+        m4mul(mA, m4rotY(mB, car.h), mA);
+        m4mul(mModel, m4translate(mB, car.x, car.y, car.z), mA);
+        drawMesh(gl, carBuf, carCount, mModel);
 
         if (!race.done) {
           var bi = D.cpIdx[race.nextCp];
           var bob = Math.sin(g.t * 2.4) * 0.4;
-          var beaconModel = m4mul(
-            m4translate(D.sx[bi], D.sy[bi] + 5.6 + bob, D.sz[bi]),
-            m4rotY(g.t * 2.2)
-          );
-          drawMesh(gl, beaconBuf, beaconCount, beaconModel);
+          m4mul(mModel, m4translate(mA, D.sx[bi], D.sy[bi] + 5.6 + bob, D.sz[bi]), m4rotY(mB, g.t * 2.2));
+          drawMesh(gl, beaconBuf, beaconCount, mModel);
         }
 
         gl.disableVertexAttribArray(loc.pos);
