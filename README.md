@@ -1,8 +1,9 @@
 # MiloPlay 🎮
 
-A free browser game portal with **130 original games** — voxel sandboxes, arena
-shooters, puzzles, racers and arcade classics. Everything runs client-side, so
-there is no backend, no build step, no account and no tracking.
+A free browser game portal with **1,000 games** — a Minecraft-style voxel
+sandbox, the Polly Track low-poly racer, shooters, platformers, puzzles,
+quizzes, solitaires, jigsaws, and hundreds of arcade games. Everything runs
+client-side: no backend, no build step, no account, no tracking.
 
 Open `index.html` and it works. That's the whole story.
 
@@ -30,40 +31,80 @@ worker (offline play) and for high scores to persist reliably.
 
 ## The games
 
-| Category | Games |
-|---|---|
-| **Sandbox** (2) | Blockcraft, Terra Dig |
-| **Arcade** (19) | Asteroid Field, Brick Breaker, Bug Blaster, Burrow Blast, Cave Flyer, Colour Rush, Dash Runner, Flap Rocket, Galaxy Raid, Ghost Escape, Gravity Swap, Lunar Lander, Maze Muncher, Missile Defense, Neon Snake, Pinball, Road Hopper, Sky Hopper, Space Defender |
-| **Action** (13) | Astro Blaster, Ball Blast, Barrel Climb, Blast Arena, Blob Eater, Hole Eater, Jump Quest, Key Quest, Lava Run, Ninja Climb, Paper Claim, Snake Royale, Tank Arena |
-| **Puzzle** (28) | 2048, Binary Puzzle, Block Stacker, Box Push, Bubble Pop, Dot Connect, Futoshiki, Gem Swap, Ice Slide, Laser Maze, Lights Out, Make 24, Mastermind, Math Blitz, Maze Runner, Merge Drop, Minesweeper, Nonogram, One Line, Peg Solitaire, Quick Math, Roll Block, Slide Puzzle, Sudoku, Sweet Match, Tile Match, Tower of Hanoi, Water Sort |
-| **Racing** (2) | Highway Rush, Turbo Drift |
-| **Sports** (9) | Air Hockey, Archery, Bowling, Darts, Fling Fortress, Hoop Shot, Mini Golf, Penalty Shootout, Pong Duel |
-| **Cards** (9) | Blackjack, Crazy Eights, FreeCell, Golf Solitaire, Klondike Solitaire, Pyramid Solitaire, Spider Solitaire, Video Poker, War |
-| **Word** (8) | Anagram Hunt, Hangman, Letter Drop, Typing Test, Word Grid, Word Ladder, Word Search, Word Sleuth |
-| **Casual** (23) | Aim Trainer, Balloon Pop, Coin Tycoon, Farm Idle, Fruit Slice, Helix Drop, Knife Throw, Laser Dodge, Memory Match, Memory Sequence, Perfect Circle, Piano Tap, Plinko, Reaction Time, Rhythm Tap, Rise Up, Rolling Ball, Simon Says, Spot the Difference, Stack Ball, Tower Stack, Whack-a-Mole, Zig Zag |
-| **Strategy** (17) | Battleship, Cannon Siege, Checkers, Chess Blitz, City Idle, Connect Four, Dots & Boxes, Gomoku, Hex, Mancala, Nim, Nine Men’s Morris, Reversi, Space Trader, Tic Tac Toe, Tower Defence, Ultimate Tic Tac Toe |
+**366 originals** written for this site, plus **634 remixes** of the arcade
+originals (see [Remixes](#remixes)). Every game has its own page with a
+description of how it actually plays, its controls, a high-score table, and
+its other versions.
 
-**Blockcraft** is the headline: a first-person voxel sandbox rendered with
-WebGL, with procedurally generated terrain, chunked meshing, block breaking and
-placing, swimming, flight, and edits that persist in `localStorage` — so your
-build is still standing when you come back.
+| Category | Originals | Remixes | Highlights |
+|---|---|---|---|
+| **Sandbox** | 2 | 3 | Blockcraft (first-person voxel world, WebGL), Terra Dig |
+| **Racing** | 9 | 22 | Polly Track — Sunrise Circuit, Canyon, Alpine — plus Kart Sprint, Moto Hill Climb, Turbo Drift, Highway Rush |
+| **Action** | 37 | 136 | Zombie Siege, Alien Swarm, Mech Storm, Dungeon Dash, Goblin Gates, Shark Escape, Storm Chaser, Magnet Boots |
+| **Arcade** | 31 | 115 | Tunnel Rush, Night Rider, Neon Snake, Maze Muncher, Space Defender, Pinball, Wall Jumper, Spike Dash |
+| **Puzzle** | 78 | 104 | 18 jigsaws, five sudoku tiers plus Sudoku X, six minesweeper boards, 16 math drills, 2048, Nonogram, Rope Cut, Domino Run |
+| **Casual** | 43 | 92 | 14 memory games, Ragdoll Launch, Balance Tower, Helix Drop, Zig Zag, Knife Throw |
+| **Sports** | 15 | 56 | Table Tennis, Blob Volleyball, Batting Cage, Free Kick, Ski Slalom, Skate Park, Boat Race |
+| **Cards** | 21 | 26 | Klondike, Spider, FreeCell, Yukon, Scorpion, Canfield, Forty Thieves, Tri Peaks, Blackjack, Video Poker |
+| **Word** | 38 | 27 | 20 themed word searches, 10 typing games, Hangman, Word Ladder, Anagram Hunt |
+| **Strategy** | 17 | 53 | Chess Blitz, Checkers, Reversi, Battleship, Tower Defence, Space Trader, City Idle |
+| **Trivia** | 75 | — | 75 quizzes: science, space, dinosaurs, world capitals, flags, rivers, Olympics, classical music, art history, logic riddles… |
 
-All 130 games were written for this project. Nothing is embedded from another
-site; the "Games elsewhere" page simply links out to other sites' own
-official pages.
+Some things worth calling out:
+
+- **Blockcraft** is a first-person voxel sandbox rendered with WebGL —
+  procedurally generated terrain, chunked meshing, block breaking and placing,
+  swimming, flight, and edits that persist in `localStorage`. Searching for
+  "minecraft" finds it.
+- **Polly Track** is a low-poly 3D time-trial racer in the spirit of PolyTrack:
+  three circuits built from Catmull-Rom splines, ordered checkpoints, three-lap
+  races against the clock, a light drift at speed, a chase camera, and best
+  times per track. Searching "polytrack" or "poly track" finds it.
+- **The quizzes** each draw twelve questions from a hand-written bank of
+  twenty or more, with a per-question timer, streak bonuses and three lives.
+- **The solitaires** implement the real rules of twelve variants on a shared
+  card library, with stuck detection where it is cheap to compute.
+- **The sudoku tiers** use a generator that digs a solved grid while a solver
+  confirms the puzzle keeps a unique solution.
+
+All originals were written for this project. Nothing is embedded from another
+site; the "Games elsewhere" page simply links out to other sites' own official
+pages.
+
+### Remixes
+
+Every arcade-runner original has Turbo, Zen and Hyper editions, and many have
+an Insane edition. A remix is a real catalogue entry — its own title,
+description, thumbnail and high-score table — with the base game's mechanics
+untouched and its **game clock retuned**: Zen runs at 72% speed, Turbo at 135%,
+Hyper at 170%, Insane at 200%. The canvas is hue-shifted so each edition looks
+like its own game. Home-page rows show originals only; remixes appear in
+browse, in search, and in the "More versions of this game" row on the base
+game's page.
+
+Remixes are data, not code: `assets/js/variants.js` is generated by
+`tools/build-variants.mjs` from a plan produced by `tools/plan-variants.mjs`
+(which picks eligible bases and allocates tiers so the catalogue lands on an
+exact size) and entries from `tools/gen-variant-entries.mjs`.
 
 ---
 
 ## How it fits together
 
 ```
-index.html                  page shell + one <script> tag per game
+index.html                  page shell + one <script> tag per game file
 assets/css/style.css        all styling, dark-first with a full light theme
-assets/js/engine.js         the shared game framework
+assets/js/engine.js         the shared game framework (incl. remix support)
 assets/js/app.js            the portal: routing, search, favourites, player
-assets/js/games/*.js        one file per game, each self-registering
+assets/js/games/*.js        one file per game — or one file per pack of games
+assets/js/variants.js       the generated remix catalogue
 sw.js                       service worker for offline play
-tools/smoke-test.mjs        headless test that plays every game
+tools/sync-manifest.mjs     regenerates the script-tag and cache lists
+tools/smoke-test.mjs        headless test that plays every game (sharded)
+tools/dump-registry.mjs     dumps the live catalogue as JSON
+tools/plan-variants.mjs     allocates remixes to reach an exact catalogue size
+tools/gen-variant-entries.mjs  writes remix titles, copy and colours
+tools/build-variants.mjs    assembles assets/js/variants.js
 tools/build-single.mjs      bundles the site into one self-contained file
 dist/miloplay.html          that bundle — open it directly, no server needed
 ```
@@ -82,7 +123,9 @@ game-over overlays:
 
 It also provides input handling (with automatic on-screen controls on touch
 devices), a small WebAudio synth for sound effects, `localStorage`-backed high
-scores, and utilities like value noise for terrain generation.
+scores, utilities like value noise for terrain generation, and
+`Milo.registerVariant` for remixes (a variant mounts the base game unchanged
+while the arcade runner scales game time and hue-shifts the canvas).
 
 ### Adding a game
 
@@ -121,9 +164,11 @@ Create `assets/js/games/my-game.js`:
 })();
 ```
 
-Then add a `<script>` tag for it in `index.html` and to the `GAMES` list in
-`sw.js`. The portal picks it up automatically — card, search, category page and
-all.
+Then run `node tools/sync-manifest.mjs` to add its script tag to `index.html`
+and its cache entry to `sw.js`. The portal picks it up automatically — card,
+search, category page and all. A file may register several games (the quiz,
+solitaire, jigsaw and word-search packs do), and a game may optionally carry
+`aliases` — extra search terms — and `featured: true`.
 
 Two things worth knowing:
 
@@ -138,8 +183,8 @@ Two things worth knowing:
 
 ### One-file build
 
-`dist/miloplay.html` is the entire site — CSS, engine, all 130 games — inlined
-into a single 375 KB file with no external references. Open it straight from
+`dist/miloplay.html` is the entire site — CSS, engine, all 1,000 games —
+inlined into a single file with no external references. Open it straight from
 disk, email it, or drop it on a USB stick and it works. Rebuild it after
 changing anything:
 
@@ -155,16 +200,22 @@ generated from it and is never edited by hand.
 ## Testing
 
 `tools/smoke-test.mjs` opens the site in headless Chromium, plays **every**
-registered game for a couple of seconds with simulated keyboard and mouse
-input, and fails on any console error, uncaught exception or empty stage. It
-then walks every portal route.
+registered game for a short burst with simulated keyboard and mouse input, and
+fails on any console error, uncaught exception or empty stage. It then walks
+every portal route.
 
 ```bash
 # one terminal
 python3 -m http.server 8099
 
-# another
-node tools/smoke-test.mjs http://127.0.0.1:8099
+# another — the whole catalogue, split across three processes
+node tools/smoke-test.mjs http://127.0.0.1:8099 --shard=1/3 &
+node tools/smoke-test.mjs http://127.0.0.1:8099 --shard=2/3 &
+node tools/smoke-test.mjs http://127.0.0.1:8099 --shard=3/3 &
+wait
+
+# or just a few games while iterating
+node tools/smoke-test.mjs http://127.0.0.1:8099 --only=polly-track,neon-snake
 ```
 
 It needs `playwright` resolvable from the repo root. In this environment
@@ -174,11 +225,6 @@ Playwright is installed globally, so a symlink is enough:
 mkdir -p node_modules
 ln -s "$(npm root -g)/playwright" node_modules/playwright
 ```
-
-The test earned its keep — it caught three real bugs during development: games
-drawing before `init` had run, a game that threw during startup leaking its
-global key listeners onto the *next* game, and Blockcraft holding pointer lock
-across navigation.
 
 ---
 

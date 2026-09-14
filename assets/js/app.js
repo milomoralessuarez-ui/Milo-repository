@@ -500,14 +500,20 @@
   function viewAbout() {
     var wrap = el('div');
     wrap.appendChild(el('div', 'page-head',
-      '<h1>ℹ️ About MiloPlay</h1><p>A free browser arcade with ' + Milo.games.length +
-      ' original games.</p>'));
+      '<h1>ℹ️ About MiloPlay</h1><p>A free browser arcade with ' + U.fmt(Milo.games.length) +
+      ' games.</p>'));
     var c = el('div', 'info-card');
     c.innerHTML =
       '<h3>What this is</h3>' +
       '<p>MiloPlay is a static website — one HTML page, some CSS and some JavaScript. ' +
       'Every game here was written from scratch for this site and runs entirely in your ' +
       'browser. There is no server, no account, no tracking and no ads.</p>' +
+      '<h3 style="margin-top:18px">Originals and remixes</h3>' +
+      '<p>' + U.fmt(Milo.games.filter(function (x) { return !x.variantOf; }).length) +
+      ' of the games are originals — from the Blockcraft voxel sandbox and the Polly Track ' +
+      'racer to quizzes, solitaires, jigsaws and arcade games. The rest are remixes: Turbo, Zen, ' +
+      'Hyper and Insane editions of the arcade originals, each retuned to a different speed, ' +
+      'restyled, and given its own high-score table. Every game page lists its other versions.</p>' +
       '<h3 style="margin-top:18px">Your data</h3>' +
       '<p>High scores, favourites and your recently-played list are saved in your browser’s ' +
       'own storage. They never leave your device, and clearing your browser data resets them.</p>' +
