@@ -337,9 +337,10 @@
           b.vx -= (1 + .28) * vn * nx; b.vy -= (1 + .28) * vn * ny;
           // tangential friction
           var tx = -ny, ty = nx, vt = b.vx * tx + b.vy * ty;
+          var vn2 = b.vx * nx + b.vy * ny;
           vt *= .96;
-          b.vx = (b.vx * nx + b.vy * ny) * nx + vt * tx;
-          b.vy = (b.vx * nx + b.vy * ny) * ny + vt * ty;
+          b.vx = vn2 * nx + vt * tx;
+          b.vy = vn2 * ny + vt * ty;
         }
       }
     }

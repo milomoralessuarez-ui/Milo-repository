@@ -627,7 +627,7 @@
         lap: 1, nextCp: 1, time: 0, lapStart: 0, cd: 3.2,
         prevS: 0, lastCpIdx: 0, wrong: 0, done: false, offRoad: false
       };
-      var msgT = 0;
+      var msgT = 0, msgText = '', msgOn = false;
 
       // HUD message element — built detached (glGame primes during mount),
       // attached to g.hud afterwards, same trick Blockcraft uses.
@@ -637,10 +637,16 @@
         'text-shadow:0 2px 10px rgba(0,0,0,.55);opacity:0;transition:opacity .15s;' +
         'font-family:inherit;letter-spacing:.04em';
 
+      /* Only touch the DOM when the text or visibility actually changes —
+         the wrong-way nag calls this every frame. */
       function msg(text, dur) {
-        msgEl.textContent = text;
+        if (text !== msgText) { msgText = text; msgEl.textContent = text; }
         msgT = dur || 1.4;
-        msgEl.style.opacity = '1';
+        if (!msgOn) { msgOn = true; msgEl.style.opacity = '1'; }
+      }
+      function hideMsg() {
+        msgT = 0;
+        if (msgOn) { msgOn = false; msgEl.style.opacity = '0'; }
       }
 
       var startText = T.blurb + ' Three timed laps — hit every checkpoint gate in ' +
@@ -749,7 +755,7 @@
         race.lap = 1; race.nextCp = 1; race.time = 0; race.lapStart = 0;
         race.cd = 3.2; race.lastCpIdx = spawn; race.wrong = 0;
         race.done = false; race.offRoad = false;
-        msgT = 0; msgEl.style.opacity = '0';
+        hideMsg();
         g.set('Speed', '0 km/h');
         g.set('Lap', '1/' + LAPS);
         g.set('Time', '0:00.0');
@@ -783,6 +789,7 @@
 
       function finishRace(g) {
         race.done = true;
+        updateHud(g);                  // final clock, so the HUD matches the overlay
         var totalMs = Math.round(race.time * 1000);
         var key = 'polly:best:' + T.id;
         var prev = Milo.store.get(key, 0);
@@ -913,28 +920,44 @@
         // tarmac, and without progress jumping. A jump means the car cut
         // across country and the nearest-sample tracker leapt to another
         // stretch of road — that must not hand out the gates in between.
-        if (ds > 0.0001 && ds < MAX_DS) {
+        // Real travel direction along the road. The arc-length tracker
+        // jitters by up to a unit whenever the nearest sample switches on a
+        // bend (the projection tangent turns), so a car reversing past a
+        // gate can read a frame of forward "progress" — enough to be handed
+        // the gate backwards. Gates and the wrong-way nag go by velocity.
+        var fwdV = car.vx * D.tx[k] + car.vz * D.tz[k];
+        if (ds > 0.0001 && fwdV > 0) {
           var rel = D.cpS[race.nextCp] - race.prevS;
           rel = ((rel % L) + L) % L;
-          if (rel <= ds && Math.abs(lat) < T.roadHalf + 2.2) {
-            race.lastCpIdx = D.cpIdx[race.nextCp];
-            if (race.nextCp === 0) {
-              var lapT = race.time - race.lapStart;
-              race.lapStart = race.time;
-              race.lap++;
-              if (race.lap > LAPS) { finishRace(g); return; }
-              msg('Lap ' + race.lap + '/' + LAPS + '  ·  ' + fmtRace(lapT), 2.0);
-              Milo.sound.powerup();
-              race.nextCp = 1;
+          if (rel <= ds) {
+            if (ds < MAX_DS && Math.abs(lat) < T.roadHalf + 2.2) {
+              race.lastCpIdx = D.cpIdx[race.nextCp];
+              if (race.nextCp === 0) {
+                var lapT = race.time - race.lapStart;
+                race.lapStart = race.time;
+                race.lap++;
+                if (race.lap > LAPS) { finishRace(g); return; }
+                msg('Lap ' + race.lap + '/' + LAPS + '  ·  ' + fmtRace(lapT), 2.0);
+                Milo.sound.powerup();
+                race.nextCp = 1;
+              } else {
+                msg('Checkpoint ' + race.nextCp + '/' + (CPS - 1), 0.9);
+                Milo.sound.coin();
+                race.nextCp = (race.nextCp + 1) % CPS;
+              }
             } else {
-              msg('Checkpoint ' + race.nextCp + '/' + (CPS - 1), 0.9);
-              Milo.sound.coin();
-              race.nextCp = (race.nextCp + 1) % CPS;
+              // Went past the gate wide of its posts, or cut across country
+              // and the tracker leapt past it. Say so: with no feedback the
+              // lap silently never completes and it reads as a softlock.
+              msg(race.nextCp === 0 ? 'Missed the line — press R' :
+                'Missed gate ' + race.nextCp + ' — press R', 1.8);
+              Milo.sound.hit();
             }
           }
         }
-        // Wrong-way nag
-        if (ds < -0.02 && sp > 5) race.wrong += dt; else race.wrong = 0;
+        // Wrong-way nag — only when driving forwards; reversing on purpose
+        // (S held) is not a wrong way.
+        if (fwdV < -5 && car.s > 0) race.wrong += dt; else race.wrong = 0;
         if (race.wrong > 1.1) msg('WRONG WAY!', 0.3);
         race.prevS = s;
 
@@ -972,7 +995,7 @@
       function fadeMsg(dt) {
         if (msgT > 0) {
           msgT -= dt;
-          if (msgT <= 0) msgEl.style.opacity = '0';
+          if (msgT <= 0) hideMsg();
         }
       }
 
