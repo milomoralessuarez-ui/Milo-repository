@@ -52,9 +52,13 @@ const TIERS = [
   { key: 'insane', speed: 2.0, hue: 20, sat: 1.3, label: 'Insane', feel: 'double speed — the original played at a pace only muscle memory survives' },
 ];
 
-const already = new Set(registry.filter((g) => g.variantOf).map((g) => g.variantOf + '|' + g.id));
+// The plan is computed from originals only: the remix catalogue is
+// regenerated wholesale each time, and build-variants always re-adds the two
+// seed remixes, so they are the only existing remixes that count.
+const SEEDS = 2;
 const existingVariants = registry.filter((g) => g.variantOf);
-const need = TARGET - registry.length;
+const originals = registry.length - existingVariants.length;
+const need = TARGET - originals - SEEDS;
 
 const plan = [];
 let tierIdx = 0;
@@ -64,7 +68,7 @@ outer: while (plan.length < need) {
   for (const g of eligible) {
     if (plan.length >= need) break outer;
     const id = `${g.id}-${tier.key}`;
-    if (byId.has(id)) continue;                 // seed remix already registered
+    if (id === 'neon-snake-turbo' || id === 'brick-breaker-zen') continue;   // seed remixes
     plan.push({
       base: g.id, baseTitle: g.title, id, tier: tier.key, speed: tier.speed, hue: tier.hue, sat: tier.sat,
       tierLabel: tier.label, feel: tier.feel,
@@ -75,6 +79,6 @@ outer: while (plan.length < need) {
   tierIdx++;
 }
 
-console.error(`registry ${registry.length} (${existingVariants.length} remixes) · eligible bases ${eligible.length} · need ${need} · planned ${plan.length}`);
+console.error(`registry ${registry.length} (${originals} originals, ${existingVariants.length} remixes) · eligible bases ${eligible.length} · need ${need} · planned ${plan.length}`);
 if (plan.length < need) console.error(`WARNING: short by ${need - plan.length} — add more tiers or bases`);
 console.log(JSON.stringify(plan, null, 1));
