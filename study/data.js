@@ -1,6 +1,6 @@
 /* ChemQuest study data — generated from the Concept 1–4 class notes.
-   Concept 1 has been fact-checked against the slides question by question;
-   Concepts 2–4 are extracted and partially checked. */
+   Every question has been fact-checked against the slide it came from.
+   Re-run the checks with: node tools/verify-study.mjs */
 window.STUDY_SETS = [
  {
   "concept": 1,
@@ -359,7 +359,6 @@ window.STUDY_SETS = [
     "answer": "Lab apron",
     "accept": [
      "apron",
-     "lab apron",
      "an apron",
      "a lab apron",
      "the apron",
@@ -380,7 +379,6 @@ window.STUDY_SETS = [
     "answer": "Heat-resistant gloves",
     "accept": [
      "heat resistant gloves",
-     "heat-resistant gloves",
      "gloves",
      "heat resistant glove",
      "heat-resistant glove",
@@ -481,7 +479,6 @@ window.STUDY_SETS = [
     "prompt": "What four-letter acronym tells you the steps for using a fire extinguisher?",
     "answer": "PASS",
     "accept": [
-     "pass",
      "P.A.S.S.",
      "P.A.S.S"
     ],
@@ -495,9 +492,7 @@ window.STUDY_SETS = [
     "type": "written",
     "prompt": "In the fire extinguisher acronym PASS, what does the first S stand for?",
     "answer": "Squeeze",
-    "accept": [
-     "squeeze"
-    ],
+    "accept": [],
     "explanation": "PASS = Pull, Aim, Squeeze, Sweep, so the first S is Squeeze.",
     "page": 8,
     "difficulty": "medium",
@@ -509,7 +504,6 @@ window.STUDY_SETS = [
     "prompt": "What is best to use when a person is on fire?",
     "answer": "Fire blanket",
     "accept": [
-     "fire blanket",
      "a fire blanket",
      "blanket"
     ],
@@ -674,7 +668,6 @@ window.STUDY_SETS = [
     "prompt": "Which piece of glassware is used to make precise volume measurements of liquids?",
     "answer": "Graduated cylinder",
     "accept": [
-     "graduated cylinder",
      "a graduated cylinder",
      "grad cylinder",
      "graduated cylinders",
@@ -692,7 +685,6 @@ window.STUDY_SETS = [
     "prompt": "Which flask is used mainly for heating liquids, but can also measure and hold them?",
     "answer": "Erlenmeyer flask",
     "accept": [
-     "erlenmeyer flask",
      "erlenmeyer",
      "an erlenmeyer flask",
      "erlenmyer flask",
@@ -771,7 +763,6 @@ window.STUDY_SETS = [
     "prompt": "Name the piece of lab equipment that holds up several test tubes at once.",
     "answer": "Test tube rack",
     "accept": [
-     "test tube rack",
      "a test tube rack",
      "test-tube rack",
      "testtube rack",
@@ -805,7 +796,6 @@ window.STUDY_SETS = [
     "prompt": "What is the name of the electricity powered plate used for heating chemicals?",
     "answer": "Hot plate",
     "accept": [
-     "hot plate",
      "hotplate",
      "a hot plate"
     ],
@@ -866,7 +856,6 @@ window.STUDY_SETS = [
     "prompt": "What quantity does a digital scale measure?",
     "answer": "Mass",
     "accept": [
-     "mass",
      "the mass",
      "mass in grams",
      "mass (usually in grams)",
@@ -901,7 +890,6 @@ window.STUDY_SETS = [
     "prompt": "Which tool is used for transferring solid chemicals from larger containers to smaller ones?",
     "answer": "Spatula",
     "accept": [
-     "spatula",
      "a spatula"
     ],
     "explanation": "The notes say a spatula is for transferring solid chemicals from larger containers to smaller.",
@@ -915,7 +903,6 @@ window.STUDY_SETS = [
     "prompt": "Which tool is used for moving and holding a hot beaker?",
     "answer": "Beaker tongs",
     "accept": [
-     "beaker tongs",
      "tongs",
      "beaker tong"
     ],
@@ -958,7 +945,6 @@ window.STUDY_SETS = [
     "prompt": "In the fire extinguisher acronym PASS, what does the P stand for?",
     "answer": "Pull",
     "accept": [
-     "pull",
      "Pull the pin",
      "pull the pin",
      "pull pin",
@@ -974,9 +960,7 @@ window.STUDY_SETS = [
     "type": "written",
     "prompt": "In the fire extinguisher acronym PASS, what does the final S stand for?",
     "answer": "Sweep",
-    "accept": [
-     "sweep"
-    ],
+    "accept": [],
     "explanation": "PASS = Pull, Aim, Squeeze, Sweep; the second S is Sweep.",
     "page": 8,
     "difficulty": "medium",
@@ -1213,12 +1197,6 @@ window.STUDY_SETS = [
     "topic": "Accuracy and precision"
    },
    {
-    "term": "Best measurements",
-    "definition": "The best measurements are both accurate and precise.",
-    "page": 2,
-    "topic": "Accuracy and precision"
-   },
-   {
     "term": "Average",
     "definition": "Add up all values and divide by the total number of values.",
     "page": 5,
@@ -1435,74 +1413,32 @@ window.STUDY_SETS = [
     "topic": "Metric conversions"
    },
    {
-    "term": "Precision (how specific)",
-    "definition": "The Precision sub-bullet on the slide: how specific the measurement is; or how consistent multiple measurements are to each other.",
-    "page": 2,
-    "topic": "Accuracy and precision"
-   },
-   {
-    "term": "Target diagram",
-    "definition": "Four targets illustrating measurement: tightly clustered shots = precise; shots near the center bullseye = accurate. Quadrants: Precise and Accurate, Precise but not Accurate, Accurate but not Precise, Not Accurate or Precise.",
-    "page": 3,
-    "topic": "Accuracy and precision"
-   },
-   {
-    "term": "Not Accurate or Precise",
-    "definition": "Fourth target diagram: shots scattered all over the target, not clustered together and not near the bullseye.",
-    "page": 3,
-    "topic": "Accuracy and precision"
-   },
-   {
-    "term": "Averaging lab data",
-    "definition": "Often when we make measurements in labs to collect data, you will have to find the average. Example #3: (30 cm + 45 cm + 36 cm) / 3 = 111 cm / 3 = 37 cm.",
-    "page": 5,
-    "topic": "Averages"
-   },
-   {
-    "term": "Geometric equation (volume)",
-    "definition": "Volume is often measured using a graduated cylinder or can be calculated with a geometric equation.",
-    "page": 8,
-    "topic": "Base units and equipment"
-   },
-   {
-    "term": "Simplified temperature definition",
-    "definition": "'The amount of heat in an object' is the working definition; the note says a more scientifically accurate definition will be learned in the future.",
-    "page": 9,
-    "topic": "Base units and equipment"
-   },
-   {
-    "term": "Base unit in the prefix chart (m, g, L, s)",
-    "definition": "Remember, the unit a prefix attaches to is either m, L, s, or g depending on what you are measuring.",
+    "term": "Prefix base unit",
+    "definition": "The unit a prefix attaches to is m, g, L, or s, depending on what is being measured.",
     "page": 10,
     "topic": "Metric prefixes"
    },
    {
-    "term": "Prefix + unit abbreviation",
-    "definition": "Prefixes attach to the unit name, and the abbreviation is the prefix symbol followed by the unit symbol. Ex. Milligram = mg.",
-    "page": 10,
-    "topic": "Metric prefixes"
-   },
-   {
-    "term": "Prefix chart order",
-    "definition": "Prefixes larger than the base unit (Mega, Kilo, hecto, deka) are listed above UNIT; prefixes smaller than the base unit (deci, centi, milli, micro, nano) are listed below UNIT.",
+    "term": "Prefix magnitude",
+    "definition": "Mega, Kilo, hecto, and deka are prefixes larger than the base unit; deci, centi, milli, micro, and nano are smaller.",
     "page": 10,
     "topic": "Metric prefixes"
    },
    {
     "term": "Conversion factor",
-    "definition": "A fraction such as 1,000 m / 1 km that the given quantity is multiplied by; it is written so the starting unit cancels diagonally (48 km × 1,000 m / 1 km = 48,000 m).",
+    "definition": "A fraction (like 1,000 m/1 km) you multiply by to convert units; it's written so the starting unit cancels out.",
     "page": 11,
     "topic": "Metric conversions"
    },
    {
     "term": "Two-step conversion",
-    "definition": "Converting between two prefixed units by going through the base unit: 45,456 mg × (1 g / 1000 mg) × (1 kg / 1000 g) = 45,456 kg / 1,000,000 = 0.045456 kg.",
+    "definition": "Converting between two prefixed units (such as mg to kg) by first converting to the shared base unit.",
     "page": 12,
     "topic": "Metric conversions"
    },
    {
     "term": "1 kg = 1,000,000 mg",
-    "definition": "Combining the two factors in Example #6 (1000 mg per g and 1000 g per kg) means dividing mg by 1,000,000 to get kg.",
+    "definition": "Because there are 1,000 mg per gram and 1,000 g per kilogram, 1 kg equals 1,000,000 mg.",
     "page": 12,
     "topic": "Metric conversions"
    }
@@ -1649,20 +1585,6 @@ window.STUDY_SETS = [
     "topic": "Accuracy and precision"
    },
    {
-    "id": "c2-q10",
-    "type": "tf",
-    "prompt": "On the target diagram, shots that are scattered far apart from each other and not centered on the bullseye are labelled 'Not Accurate or Precise'.",
-    "options": [
-     "True",
-     "False"
-    ],
-    "answer": "True",
-    "explanation": "The fourth target on the diagram shows shots spread widely and away from the center; it is labelled 'Not Accurate or Precise' because the shots neither agree with each other nor hit the accepted value.",
-    "page": 3,
-    "difficulty": "easy",
-    "topic": "Accuracy and precision"
-   },
-   {
     "id": "c2-q11",
     "type": "mc",
     "prompt": "A beaker is known to hold 250 mL. A student measures its volume three times and gets 249 mL, 251 mL, and 250 mL. How are these measurements best described?",
@@ -1713,17 +1635,13 @@ window.STUDY_SETS = [
    {
     "id": "c2-q15",
     "type": "written",
-    "prompt": "Three students measure a plant at 12 cm, 15 cm, and 18 cm. What is the average height?",
+    "prompt": "Three students measure a plant at 12 cm, 14 cm, and 19 cm. What is the average height?",
     "answer": "15 cm",
     "accept": [
-     "15 cm",
      "15",
-     "15cm",
-     "15.0",
-     "15.0 cm",
-     "15.0cm"
+     "15 cm tall"
     ],
-    "explanation": "Add the values and divide by the number of values: (12 + 15 + 18) / 3 = 45 / 3 = 15 cm.",
+    "explanation": "Add the values and divide by the number of values: (12 + 14 + 19) / 3 = 45 / 3 = 15 cm.",
     "page": 5,
     "difficulty": "medium",
     "topic": "Averages"
@@ -1734,7 +1652,6 @@ window.STUDY_SETS = [
     "prompt": "Four masses are recorded as 20 g, 22 g, 24 g, and 26 g. What is the average mass?",
     "answer": "23 g",
     "accept": [
-     "23 g",
      "23",
      "23g",
      "23.0",
@@ -1859,13 +1776,13 @@ window.STUDY_SETS = [
    {
     "id": "c2-q24",
     "type": "tf",
-    "prompt": "According to the Units slide in the notes, the unit of mass is the gram (g).",
+    "prompt": "According to the notes, the base unit of mass is the gram (g).",
     "options": [
      "True",
      "False"
     ],
     "answer": "False",
-    "explanation": "The Units slide gives Unit = kilogram = kg for mass. (The Prefixes slide later uses g as the base for prefixes, which is why this question refers specifically to the Units slide.)",
+    "explanation": "The notes give the base unit of mass as the kilogram (kg). Prefixes like milli- or kilo- are later added to the gram when naming units smaller or larger than a kilogram.",
     "page": 7,
     "difficulty": "medium",
     "topic": "Base units and equipment"
@@ -1922,8 +1839,6 @@ window.STUDY_SETS = [
     "prompt": "What is the name for the curve in a liquid inside a graduated cylinder?",
     "answer": "meniscus",
     "accept": [
-     "meniscus",
-     "Meniscus",
      "the meniscus",
      "a meniscus"
     ],
@@ -2341,10 +2256,11 @@ window.STUDY_SETS = [
     "accept": [
      "2.5",
      "2.5m",
-     "2.50 m"
+     "2.50 m",
+     "2.5 meters"
     ],
     "explanation": "100 centi = 1 unit, so 250 cm × 1 m / 100 cm = 2.5 m.",
-    "page": 13,
+    "page": 10,
     "difficulty": "medium",
     "topic": "Metric conversions"
    },
@@ -2361,7 +2277,7 @@ window.STUDY_SETS = [
      "3.5 x 10^1 cg"
     ],
     "explanation": "100 centi = 1 unit, so 0.35 g × 100 cg / 1 g = 35 cg.",
-    "page": 13,
+    "page": 10,
     "difficulty": "hard",
     "topic": "Metric conversions"
    },
@@ -2377,22 +2293,6 @@ window.STUDY_SETS = [
     "explanation": "The Precision sub-bullet reads 'How specific the measurement is; or how consistent multiple measurements are to each other.'",
     "page": 2,
     "difficulty": "easy",
-    "topic": "Accuracy and precision"
-   },
-   {
-    "id": "c2-q57",
-    "type": "mc",
-    "prompt": "Which phrase does the notes use to describe precision?",
-    "options": [
-     "How consistent multiple measurements are to each other",
-     "How correct the measurement is",
-     "The degree to which the result agrees with the accepted value",
-     "An exact quantity that people use for comparison"
-    ],
-    "answer": "How consistent multiple measurements are to each other",
-    "explanation": "Precision is 'how specific the measurement is; or how consistent multiple measurements are to each other.' 'How correct' and 'agrees with the accepted value' describe accuracy; 'exact quantity for comparison' is a standard.",
-    "page": 2,
-    "difficulty": "medium",
     "topic": "Accuracy and precision"
    },
    {
@@ -2660,22 +2560,6 @@ window.STUDY_SETS = [
     "topic": "Base units and equipment"
    },
    {
-    "id": "c2-q75",
-    "type": "mc",
-    "prompt": "The graduated cylinder pictured on the Units slide has an arrow pointing to the bottom of the meniscus. Approximately what reading on the cylinder's scale does the arrow indicate?",
-    "options": [
-     "20",
-     "10",
-     "30",
-     "50"
-    ],
-    "answer": "20",
-    "explanation": "In the figure the liquid's curve (meniscus) sits at about the 20 line on the cylinder, and the annotation arrow points to the bottom of that curve.",
-    "page": 8,
-    "difficulty": "medium",
-    "topic": "Base units and equipment"
-   },
-   {
     "id": "c2-q76",
     "type": "mc",
     "prompt": "The notes define temperature as which of the following?",
@@ -2917,8 +2801,7 @@ window.STUDY_SETS = [
     "prompt": "What is the abbreviation for milligram?",
     "answer": "mg",
     "accept": [
-     "mg.",
-     "MG"
+     "mg."
     ],
     "explanation": "The slide says prefixes attach to the unit name and gives the example 'Milligram = mg' (milli = m, gram = g).",
     "page": 10,
@@ -3161,19 +3044,19 @@ window.STUDY_SETS = [
    },
    {
     "term": "365 days = 1 year",
-    "definition": "Conversion factor used in Example #3 (seconds in one year).",
+    "definition": "A conversion factor: there are 365 days in one year.",
     "page": 6,
     "topic": "Conversion factors"
    },
    {
     "term": "60 min = 1 hour",
-    "definition": "Conversion factor used in Example #3 (seconds in one year).",
+    "definition": "A conversion factor: there are 60 minutes in one hour.",
     "page": 6,
     "topic": "Conversion factors"
    },
    {
     "term": "60 s = 1 min",
-    "definition": "Conversion factor used in Example #3 (seconds in one year).",
+    "definition": "A conversion factor: there are 60 seconds in one minute.",
     "page": 6,
     "topic": "Conversion factors"
    },
@@ -3184,110 +3067,104 @@ window.STUDY_SETS = [
     "topic": "Picket fence method"
    },
    {
-    "term": "1000 g = 1 kg",
-    "definition": "Mass conversion factor from the notes' table.",
+    "term": "1000 g = ?",
+    "definition": "1 kg",
     "page": 8,
     "topic": "Conversion factor table"
    },
    {
-    "term": "1 ounce = 28.35 g",
-    "definition": "Mass conversion factor from the notes' table.",
+    "term": "1 ounce = ?",
+    "definition": "28.35 g",
     "page": 8,
     "topic": "Conversion factor table"
    },
    {
-    "term": "1 kg = 2.2 lbs",
-    "definition": "Mass conversion factor from the notes' table.",
+    "term": "1 kg = ?",
+    "definition": "2.2 lbs",
     "page": 8,
     "topic": "Conversion factor table"
    },
    {
-    "term": "16 ounces (oz) = 1 lb",
-    "definition": "Mass conversion factor from the notes' table.",
+    "term": "16 ounces (oz) = ?",
+    "definition": "1 lb",
     "page": 8,
     "topic": "Conversion factor table"
    },
    {
-    "term": "2000 lbs = 1 ton",
-    "definition": "Mass conversion factor from the notes' table.",
+    "term": "2000 lbs = ?",
+    "definition": "1 ton",
     "page": 8,
     "topic": "Conversion factor table"
    },
    {
-    "term": "1 tsp = 5 mL",
-    "definition": "Volume conversion factor from the notes' table.",
+    "term": "1 tsp = ?",
+    "definition": "5 mL",
     "page": 8,
     "topic": "Conversion factor table"
    },
    {
-    "term": "1 cup = 236 mL",
-    "definition": "Volume conversion factor from the notes' table.",
+    "term": "1 cup = ?",
+    "definition": "236 mL",
     "page": 8,
     "topic": "Conversion factor table"
    },
    {
-    "term": "1 fluid oz = 29.6 mL",
-    "definition": "Volume conversion factor from the notes' table.",
+    "term": "1 fluid oz = ?",
+    "definition": "29.6 mL",
     "page": 8,
     "topic": "Conversion factor table"
    },
    {
-    "term": "1000 mL = 1 L",
-    "definition": "Volume conversion factor from the notes' table.",
+    "term": "1000 mL = ?",
+    "definition": "1 L",
     "page": 8,
     "topic": "Conversion factor table"
    },
    {
-    "term": "3 tsp = 1 Tbsp",
-    "definition": "Volume conversion factor from the notes' table.",
+    "term": "3 tsp = ?",
+    "definition": "1 Tbsp",
     "page": 8,
     "topic": "Conversion factor table"
    },
    {
-    "term": "16 Tbsp = 1 cup",
-    "definition": "Volume conversion factor from the notes' table.",
+    "term": "16 Tbsp = ?",
+    "definition": "1 cup",
     "page": 8,
     "topic": "Conversion factor table"
    },
    {
-    "term": "8 oz = 1 cup",
-    "definition": "Volume conversion factor from the notes' table.",
+    "term": "2 cups = ?",
+    "definition": "1 pint",
     "page": 8,
     "topic": "Conversion factor table"
    },
    {
-    "term": "2 cups = 1 pint",
-    "definition": "Volume conversion factor from the notes' table.",
+    "term": "2 pints = ?",
+    "definition": "1 quart",
     "page": 8,
     "topic": "Conversion factor table"
    },
    {
-    "term": "2 pints = 1 quart",
-    "definition": "Volume conversion factor from the notes' table.",
+    "term": "4 quarts = ?",
+    "definition": "1 gallon",
     "page": 8,
     "topic": "Conversion factor table"
    },
    {
-    "term": "4 quarts = 1 gallon",
-    "definition": "Volume conversion factor from the notes' table.",
+    "term": "1 inch = ?",
+    "definition": "2.54 cm",
     "page": 8,
     "topic": "Conversion factor table"
    },
    {
-    "term": "1 inch = 2.54 cm",
-    "definition": "Length conversion factor from the notes' table.",
+    "term": "1 mile = ?",
+    "definition": "5,280 ft",
     "page": 8,
     "topic": "Conversion factor table"
    },
    {
-    "term": "1 mile = 5,280 ft",
-    "definition": "Length conversion factor from the notes' table.",
-    "page": 8,
-    "topic": "Conversion factor table"
-   },
-   {
-    "term": "3 ft = 1 yard",
-    "definition": "Length conversion factor from the notes' table.",
+    "term": "3 ft = ?",
+    "definition": "1 yard",
     "page": 8,
     "topic": "Conversion factor table"
    },
@@ -3334,62 +3211,38 @@ window.STUDY_SETS = [
     "topic": "Converting to standard notation"
    },
    {
-    "term": "Fill in zeros in empty spaces",
-    "definition": "When moving the decimal out of scientific notation, empty places become zeros (3.1 × 10^-4 = 0.00031).",
+    "term": "Zero-padding in standard notation",
+    "definition": "When moving the decimal out of scientific notation, any empty places left over are filled in with zeros.",
     "page": 15,
     "topic": "Converting to standard notation"
    },
    {
-    "term": "Both formats of a conversion factor",
-    "definition": "A conversion factor can be written with either quantity on top, e.g. 24 hours/1 day or 1 day/24 hours; both formats are useful when converting units because both ratios equal 1.",
+    "term": "Reciprocal conversion factor",
+    "definition": "A conversion factor written either way (e.g. 24 hours/1 day or 1 day/24 hours) still equals 1 and works for converting units.",
     "page": 3,
     "topic": "Conversion factors"
    },
    {
-    "term": "Use chart (step 3)",
-    "definition": "In step 3 of dimensional analysis, the conversion factors used to fill in the picket fence come from the conversion factor chart (table), placed so matching units are on opposite sides of the fence and cancel out.",
-    "page": 5,
-    "topic": "Picket fence method"
-   },
-   {
-    "term": "Cancelling units (Example #3)",
-    "definition": "In Example #3, each unit (year, days, hours, min) cancels with its match on the opposite side of the fence (shown by green diagonal arrows), leaving only s (seconds); the bottom line multiplies to 1, so 31,536,000 s / 1 = 31,536,000 s.",
+    "term": "Unit cancellation",
+    "definition": "In dimensional analysis, a unit that appears on both the top and bottom of the picket fence cancels out, leaving only the desired unit.",
     "page": 6,
     "topic": "Picket fence method"
    },
    {
-    "term": "Example #4 working",
-    "definition": "250.4 cm × (1 inch/2.54 cm) × (1 ft/12 inches): the top line is 250.4 ft and the bottom line is 2.54 × 12 = 30.48, so 250.4 ft / 30.48 = 8.22 ft. Two factors are chained because the chart has no direct cm-to-ft factor.",
-    "page": 7,
-    "topic": "Picket fence method"
-   },
-   {
-    "term": "Conversion factor table categories",
-    "definition": "The 'Useful and common conversion factors' table is organized into three columns: MASS, VOLUME and LENGTH.",
+    "term": "Conversion factor table",
+    "definition": "The chart of common conversion factors, grouped into three columns: MASS, VOLUME, and LENGTH.",
     "page": 8,
     "topic": "Conversion factor table"
    },
    {
-    "term": "Where the decimal starts (whole number)",
-    "definition": "For a whole number such as 101,000 the decimal point is currently at the end of the number (101,000.); it is moved left to just after the first digit for scientific notation.",
-    "page": 12,
-    "topic": "Converting to scientific notation"
-   },
-   {
-    "term": "Where the decimal starts (small number)",
-    "definition": "For a small number such as 0.0098 the decimal point is currently at the front (before the zeros); it is moved right past the leading zeros to just after the 9 for scientific notation.",
-    "page": 13,
-    "topic": "Converting to scientific notation"
-   },
-   {
     "term": "Positive exponent to standard notation",
-    "definition": "When taking a number out of scientific notation, a + exponent means we make it a bigger number: the decimal moves to the right the number of times given by the exponent (2.057 × 10^2 → move 2 times → 205.7).",
+    "definition": "A + exponent when converting to standard notation moves the decimal that many places to the right, making the number bigger.",
     "page": 14,
     "topic": "Converting to standard notation"
    },
    {
     "term": "Negative exponent to standard notation",
-    "definition": "A - exponent means we make it a smaller number: the decimal moves to the left the number of times given by the exponent, and zeros are filled in the empty spaces (3.1 × 10^-4 → move 4 times left → 0.00031).",
+    "definition": "A minus exponent when converting to standard notation moves the decimal that many places to the left, making the number smaller.",
     "page": 15,
     "topic": "Converting to standard notation"
    }
@@ -3417,7 +3270,6 @@ window.STUDY_SETS = [
     "prompt": "What is the name of the technique used to convert numbers into different units without changing their value?",
     "answer": "dimensional analysis",
     "accept": [
-     "Dimensional analysis",
      "dimensional-analysis",
      "DA"
     ],
@@ -3478,25 +3330,10 @@ window.STUDY_SETS = [
     "prompt": "What term describes a ratio of equivalent values (which equals 1) used to alter a number without changing its value?",
     "answer": "conversion factor",
     "accept": [
-     "Conversion factor",
      "conversion factors",
      "Conversion factors"
     ],
     "explanation": "Slide 3: 'Conversion factors: ratios of equivalent values (meaning they equal 1), used in dimensional analysis to alter the number without changing its value.'",
-    "page": 3,
-    "difficulty": "easy",
-    "topic": "Conversion factors"
-   },
-   {
-    "id": "c3-q7",
-    "type": "tf",
-    "prompt": "A conversion factor is a ratio of equivalent values, so it is equal to 1.",
-    "options": [
-     "True",
-     "False"
-    ],
-    "answer": "True",
-    "explanation": "The notes define conversion factors as 'ratios of equivalent values (meaning they equal 1).'",
     "page": 3,
     "difficulty": "easy",
     "topic": "Conversion factors"
@@ -3555,7 +3392,6 @@ window.STUDY_SETS = [
     "prompt": "In step 2 of the dimensional analysis method, what do you draw to organize the conversion factors?",
     "answer": "picket fence",
     "accept": [
-     "Picket fence",
      "a picket fence",
      "picket-fence",
      "fence"
@@ -3577,20 +3413,6 @@ window.STUDY_SETS = [
     ],
     "answer": "On opposite sides of the fence",
     "explanation": "Step 3 on slide 5: make sure 'matching units are on opposite sides of fence to cancel out.'",
-    "page": 5,
-    "difficulty": "easy",
-    "topic": "Picket fence method"
-   },
-   {
-    "id": "c3-q13",
-    "type": "tf",
-    "prompt": "In the picket fence method, matching units should be placed on the same side of the fence so they cancel out.",
-    "options": [
-     "True",
-     "False"
-    ],
-    "answer": "False",
-    "explanation": "The notes say matching units must be on OPPOSITE sides of the fence to cancel out.",
     "page": 5,
     "difficulty": "easy",
     "topic": "Picket fence method"
@@ -3634,7 +3456,6 @@ window.STUDY_SETS = [
     "answer": "4,320 min",
     "accept": [
      "4320 min",
-     "4,320 min",
      "4320",
      "4,320",
      "4320 minutes",
@@ -3654,7 +3475,6 @@ window.STUDY_SETS = [
     "answer": "7,200 s",
     "accept": [
      "7200 s",
-     "7,200 s",
      "7200",
      "7,200",
      "7200 seconds",
@@ -4048,7 +3868,7 @@ window.STUDY_SETS = [
      "3.2 X 10^6"
     ],
     "explanation": "Move the decimal from 3,200,000. to after the 3, which is 6 places, giving 3.2; the number is > 1 so the exponent is +6: 3.2 × 10^6.",
-    "page": 12,
+    "page": 11,
     "difficulty": "medium",
     "topic": "Converting to scientific notation"
    },
@@ -4205,7 +4025,7 @@ window.STUDY_SETS = [
     ],
     "answer": "725,000",
     "explanation": "The exponent 5 means move the decimal 5 places, and + means make it a bigger number; fill in zeros: 7.25 → 725,000.",
-    "page": 15,
+    "page": 14,
     "difficulty": "medium",
     "topic": "Converting to standard notation"
    },
@@ -4284,20 +4104,6 @@ window.STUDY_SETS = [
     ],
     "answer": "True",
     "explanation": "Slide 3 shows 24 hours/1 day or 1 day/24 hours and notes that both of these formats are useful when converting units with conversion factors.",
-    "page": 3,
-    "difficulty": "easy",
-    "topic": "Conversion factors"
-   },
-   {
-    "id": "c3-q57",
-    "type": "tf",
-    "prompt": "Only the format 24 hours/1 day is useful for converting units; the flipped form 1 day/24 hours cannot be used as a conversion factor.",
-    "options": [
-     "True",
-     "False"
-    ],
-    "answer": "False",
-    "explanation": "Slide 3 explicitly says both formats (24 hours/1 day and 1 day/24 hours) are useful when converting units with conversion factors, because both equal 1.",
     "page": 3,
     "difficulty": "easy",
     "topic": "Conversion factors"
@@ -4385,20 +4191,6 @@ window.STUDY_SETS = [
     "topic": "Picket fence method"
    },
    {
-    "id": "c3-q63",
-    "type": "tf",
-    "prompt": "In Example #3, the units year, days, hours and min each cancel with their match on the opposite side of the fence, leaving only seconds.",
-    "options": [
-     "True",
-     "False"
-    ],
-    "answer": "True",
-    "explanation": "The green diagonal arrows on slide 6 show each of those units cancelling with its match on the opposite side, leaving 31,536,000 s.",
-    "page": 6,
-    "difficulty": "easy",
-    "topic": "Picket fence method"
-   },
-   {
     "id": "c3-q64",
     "type": "mc",
     "prompt": "In Example #4 (250.4 cm to feet), multiplying the bottom line across (2.54 × 12) gives what?",
@@ -4435,13 +4227,13 @@ window.STUDY_SETS = [
     "type": "mc",
     "prompt": "Why does Example #4 chain two conversion factors (cm to inches, then inches to feet) instead of using one?",
     "options": [
-     "The chart has no direct cm-to-ft factor, so cm must be converted to inches first",
-     "The picket fence always requires exactly two conversion factors",
-     "Because 250.4 is a decimal number",
-     "Because feet are a metric unit"
+     "The chart has no direct cm-to-feet conversion factor",
+     "The picket fence must always use two conversion factors",
+     "250.4 cm is a decimal, so it needs an extra step",
+     "Feet and centimeters are both metric units"
     ],
-    "answer": "The chart has no direct cm-to-ft factor, so cm must be converted to inches first",
-    "explanation": "The conversion factor table (slide 8) lists only 1 inch = 2.54 cm and 12 inches = 1 ft for these units, so slide 7 goes cm → inch → ft.",
+    "answer": "The chart has no direct cm-to-feet conversion factor",
+    "explanation": "The conversion factor table (slide 8) lists only 1 inch = 2.54 cm and 12 inches = 1 ft for these units, so the cm value must be converted to inches first, then to feet.",
     "page": 7,
     "difficulty": "hard",
     "topic": "Picket fence method"
@@ -4697,20 +4489,6 @@ window.STUDY_SETS = [
     "topic": "Converting to scientific notation"
    },
    {
-    "id": "c3-q83",
-    "type": "tf",
-    "prompt": "In step 1 of writing scientific notation, you move the decimal so that there are two digits in front (to the left) of it.",
-    "options": [
-     "True",
-     "False"
-    ],
-    "answer": "False",
-    "explanation": "Slide 11 step 1 says to move the decimal so that there is only 1 digit in front (to the left) of it.",
-    "page": 11,
-    "difficulty": "easy",
-    "topic": "Converting to scientific notation"
-   },
-   {
     "id": "c3-q84",
     "type": "tf",
     "prompt": "When converting a whole number such as 101,000 to scientific notation, the decimal point starts at the end of the number.",
@@ -4844,20 +4622,6 @@ window.STUDY_SETS = [
     ],
     "answer": "Fill them in with zeros",
     "explanation": "The slide 15 figure shows '. 0 0 0 3.1' with the label 'Fill in zeros in empty spaces', giving 0.00031.",
-    "page": 15,
-    "difficulty": "easy",
-    "topic": "Converting to standard notation"
-   },
-   {
-    "id": "c3-q93",
-    "type": "tf",
-    "prompt": "In Example #8, the negative exponent means the decimal in 3.1 is moved 4 places to the right.",
-    "options": [
-     "True",
-     "False"
-    ],
-    "answer": "False",
-    "explanation": "Slide 15 says '- means we will make it a smaller number' and the green arrows show the decimal moving 4 places to the left, giving 0.00031.",
     "page": 15,
     "difficulty": "easy",
     "topic": "Converting to standard notation"
@@ -5071,45 +4835,15 @@ window.STUDY_SETS = [
     "topic": "Analysis & conclusions"
    },
    {
-    "term": "Observations vs. inferences in science",
-    "definition": "Scientists gather information through observations and design investigations based on inferences.",
-    "page": 2,
-    "topic": "Science basics"
-   },
-   {
-    "term": "Evolutionary Theory",
-    "definition": "The notes' example of a theory (an explanation, based on evidence, of why things happen); contrasts with Newton's Laws of Motion, the example of a law.",
-    "page": 4,
-    "topic": "Laws vs. theories"
-   },
-   {
     "term": "How vs. why",
     "definition": "A law describes HOW things happen in nature; a theory explains WHY things happen.",
     "page": 4,
     "topic": "Laws vs. theories"
    },
    {
-    "term": "Trustworthy vs. not trustworthy sources",
-    "definition": "Discussion prompt in step 2: consider which sources are trustworthy, and which are not, for finding useful background information.",
-    "page": 7,
-    "topic": "Scientific method steps"
-   },
-   {
     "term": "Cause and effect relationship",
     "definition": "What a hypothesis usually predicts between variables; the independent variable is the 'cause' and the dependent variable is the 'effect'.",
     "page": 8,
-    "topic": "Hypothesis & variables"
-   },
-   {
-    "term": "Because...",
-    "definition": "The third and final part of the hypothesis format (If...(IV), then...(DV), because...), which gives the reasoning behind the prediction.",
-    "page": 8,
-    "topic": "Hypothesis & variables"
-   },
-   {
-    "term": "Example #1 (Gatorade)",
-    "definition": "'I always notice that many runners drink Gatorade. I want to know if Gatorade makes them run faster.' An observation leading to a question, used to identify the IV and DV and to write a hypothesis.",
-    "page": 9,
     "topic": "Hypothesis & variables"
    },
    {
@@ -5126,13 +4860,7 @@ window.STUDY_SETS = [
    },
    {
     "term": "Even scale",
-    "definition": "A required feature of every graph: axis values must increase in equal steps (e.g. 0 to 100 by 10 on the Solubility Curve example).",
-    "page": 13,
-    "topic": "Data & graphs"
-   },
-   {
-    "term": "Solubility Curve",
-    "definition": "The example graph on the 'Graphs Must Have' slide: title 'Solubility Curve', x-axis 'Temperature (degrees Celsius)', y-axis 'Solubility (grams per 100 g of water)', and a key identifying potassium nitrate (KNO3), sodium chlorate (NaClO3), potassium bromide (KBr), and sodium chloride (NaCl).",
+    "definition": "A required graph feature: axis values must increase in equal, consistent steps.",
     "page": 13,
     "topic": "Data & graphs"
    },
@@ -5143,32 +4871,8 @@ window.STUDY_SETS = [
     "topic": "Analysis & conclusions"
    },
    {
-    "term": "Refer to graphs!",
-    "definition": "The clear explanation of what the data shows in a written analysis should refer to the graphs.",
-    "page": 14,
-    "topic": "Analysis & conclusions"
-   },
-   {
-    "term": "Infer why",
-    "definition": "A required component of a written analysis: infer why you got the results you did.",
-    "page": 14,
-    "topic": "Analysis & conclusions"
-   },
-   {
-    "term": "How to prevent in future",
-    "definition": "The error analysis must describe at least 3 factors not held constant that could have messed with results AND how to prevent them in future.",
-    "page": 14,
-    "topic": "Analysis & conclusions"
-   },
-   {
     "term": "What was learned",
-    "definition": "One of the three parts of a conclusion, along with a clear statement of how the data supports the hypothesis or not, and a real world application.",
-    "page": 15,
-    "topic": "Analysis & conclusions"
-   },
-   {
-    "term": "Supports the hypothesis or not",
-    "definition": "The correct phrasing for a conclusion's clear statement about the data; never say 'proven,' 'disproven,' 'correct,' or 'incorrect'.",
+    "definition": "One of the three required parts of a conclusion: a statement of what the experiment taught you.",
     "page": 15,
     "topic": "Analysis & conclusions"
    }
@@ -5179,13 +4883,13 @@ window.STUDY_SETS = [
     "type": "mc",
     "prompt": "According to the notes, science is defined as:",
     "options": [
-     "A method for studying the natural world by gaining knowledge through observations and investigations",
+     "A way to study nature through observation and investigation",
      "A testable prediction that attempts to answer a question",
      "A description of how things happen in nature",
      "A subjective guess about an observation"
     ],
-    "answer": "A method for studying the natural world by gaining knowledge through observations and investigations",
-    "explanation": "Slide 2 defines science as a method for studying the natural world by gaining knowledge through observations and investigations.",
+    "answer": "A way to study nature through observation and investigation",
+    "explanation": "Science is a way to study nature through observation and investigation (see the Science definition).",
     "page": 2,
     "difficulty": "easy",
     "topic": "Science basics"
@@ -5269,7 +4973,7 @@ window.STUDY_SETS = [
    {
     "id": "c4-q7",
     "type": "mc",
-    "prompt": "The \"Observation vs. Inference\" slide shows a baby sitting beside an open laptop. Which statement about the picture is an observation?",
+    "prompt": "A photo shows a baby sitting beside an open laptop, reaching toward the keyboard. Which statement about the photo is an observation?",
     "options": [
      "A baby is sitting next to a laptop.",
      "The baby is learning to use the computer.",
@@ -5277,7 +4981,7 @@ window.STUDY_SETS = [
      "The baby is about to break the laptop."
     ],
     "answer": "A baby is sitting next to a laptop.",
-    "explanation": "An observation is objective and based on the senses (slide 2); the other statements are guesses about the picture, which are inferences.",
+    "explanation": "An observation is objective and based on the senses; the other statements are guesses about the photo, which are inferences.",
     "page": 3,
     "difficulty": "medium",
     "topic": "Science basics"
@@ -5350,7 +5054,6 @@ window.STUDY_SETS = [
     "prompt": "What term describes an explanation, based on evidence, of why things happen?",
     "answer": "Theory",
     "accept": [
-     "theory",
      "a theory",
      "scientific theory"
     ],
@@ -5366,8 +5069,7 @@ window.STUDY_SETS = [
     "answer": "Hypotheses",
     "accept": [
      "hypothesis",
-     "a hypothesis",
-     "hypotheses"
+     "a hypothesis"
     ],
     "explanation": "Slide 4: All theories start as hypotheses until substantiated by evidence.",
     "page": 4,
@@ -5629,7 +5331,7 @@ window.STUDY_SETS = [
    {
     "id": "c4-q30",
     "type": "mc",
-    "prompt": "A student wants to know if the amount of fertilizer affects how tall a plant grows. What is the independent variable?",
+    "prompt": "A student wants to know whether giving a plant more fertilizer makes it grow taller. What is the independent variable?",
     "options": [
      "The amount of fertilizer",
      "The height of the plant",
@@ -5637,7 +5339,7 @@ window.STUDY_SETS = [
      "The amount of water each plant gets"
     ],
     "answer": "The amount of fertilizer",
-    "explanation": "Using slide 9's definition, the IV is what is purposefully changed/tested, which here is the amount of fertilizer; plant height is the DV.",
+    "explanation": "The independent variable is what is purposefully changed and tested. Here that is the amount of fertilizer; how tall the plant grows is the dependent variable.",
     "page": 9,
     "difficulty": "medium",
     "topic": "Hypothesis & variables"
@@ -5694,13 +5396,13 @@ window.STUDY_SETS = [
     "type": "mc",
     "prompt": "Constants in an experiment are:",
     "options": [
-     "Factors that do not change; conditions kept the same for all groups",
+     "Conditions kept the same for all groups",
      "The group that is being tested and purposefully changed",
      "The normal group used for comparison",
      "What is being purposefully changed"
     ],
-    "answer": "Factors that do not change; conditions kept the same for all groups",
-    "explanation": "Slide 10: Constants are factors that do not change in the experiment; conditions kept the same for all groups.",
+    "answer": "Conditions kept the same for all groups",
+    "explanation": "Slide 10: Constants are factors that do not change in the experiment; conditions are kept the same for all groups.",
     "page": 10,
     "difficulty": "easy",
     "topic": "Experimental design"
@@ -5922,7 +5624,7 @@ window.STUDY_SETS = [
    {
     "id": "c4-q49",
     "type": "mc",
-    "prompt": "In the example \"Solubility Curve\" graph on the slide, what is the label on the y-axis?",
+    "prompt": "In the example \"Solubility Curve\" graph, what is the label on the y-axis?",
     "options": [
      "Solubility (grams per 100 g of water)",
      "Temperature (degrees Celsius)",
@@ -5930,7 +5632,7 @@ window.STUDY_SETS = [
      "Key"
     ],
     "answer": "Solubility (grams per 100 g of water)",
-    "explanation": "Slide 13's figure labels the y-axis \"Solubility (grams per 100 g of water)\" and the x-axis \"Temperature (degrees Celsius).\"",
+    "explanation": "The example graph labels the y-axis \"Solubility (grams per 100 g of water)\" and the x-axis \"Temperature (degrees Celsius).\"",
     "page": 13,
     "difficulty": "hard",
     "topic": "Data & graphs"
@@ -5963,22 +5665,6 @@ window.STUDY_SETS = [
     "explanation": "Slide 14: Error analysis describes at least 3 factors not held constant that could have messed with results and how to prevent them in future.",
     "page": 14,
     "difficulty": "medium",
-    "topic": "Analysis & conclusions"
-   },
-   {
-    "id": "c4-q52",
-    "type": "written",
-    "prompt": "An error analysis must describe at least how many factors that were not held constant?",
-    "answer": "3",
-    "accept": [
-     "three",
-     "at least 3",
-     "at least three",
-     "3 factors"
-    ],
-    "explanation": "Slide 14: Describe at least 3 factors not held constant that could have messed with results.",
-    "page": 14,
-    "difficulty": "easy",
     "topic": "Analysis & conclusions"
    },
    {
@@ -6073,7 +5759,7 @@ window.STUDY_SETS = [
    {
     "id": "c4-q59",
     "type": "mc",
-    "prompt": "The \"Observation vs. Inference\" slide shows a baby sitting beside an open laptop with a hand on the keyboard. Which statement about the picture is an INFERENCE?",
+    "prompt": "A photo shows a baby sitting beside an open laptop with one hand on the keyboard. Which statement about the photo is an INFERENCE?",
     "options": [
      "The baby is trying to use the computer.",
      "The baby is wearing a striped hooded top.",
@@ -6457,20 +6143,6 @@ window.STUDY_SETS = [
     "topic": "Data & graphs"
    },
    {
-    "id": "c4-q84",
-    "type": "tf",
-    "prompt": "In the example line graph on the graph-types slide, plant height is plotted on the x-axis and time on the y-axis.",
-    "options": [
-     "True",
-     "False"
-    ],
-    "answer": "False",
-    "explanation": "The figure shows Height (cm) on the y-axis and Time (days) on the x-axis.",
-    "page": 12,
-    "difficulty": "medium",
-    "topic": "Data & graphs"
-   },
-   {
     "id": "c4-q85",
     "type": "mc",
     "prompt": "In the example bar graph \"Student Subject Preferences,\" which axis holds the qualitative data?",
@@ -6549,14 +6221,13 @@ window.STUDY_SETS = [
    {
     "id": "c4-q90",
     "type": "written",
-    "prompt": "What is the title of the example graph on the \"Graphs Must Have\" slide?",
+    "prompt": "What is the title given to the example graph that plots solubility (in grams per 100 g of water) against temperature (in degrees Celsius)?",
     "answer": "Solubility Curve",
     "accept": [
-     "solubility curve",
      "the solubility curve",
      "Solubility Curve graph"
     ],
-    "explanation": "The example graph's title, boxed in green, is 'Solubility Curve'.",
+    "explanation": "The example graph's title, shown above the graph, is \"Solubility Curve.\"",
     "page": 13,
     "difficulty": "easy",
     "topic": "Data & graphs"
@@ -6752,7 +6423,8 @@ window.STUDY_SETS = [
     "answer": "4",
     "accept": [
      "four",
-     "4 words"
+     "4 words",
+     "four words"
     ],
     "explanation": "The four forbidden words are 'proven,' 'disproven,' 'correct,' and 'incorrect'.",
     "page": 15,

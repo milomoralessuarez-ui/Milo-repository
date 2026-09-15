@@ -140,14 +140,14 @@ await check('match', async () => {
   await page.click('text=Start game');
   const tiles = await page.locator('.tile').count();
   if (tiles < 4) return fail(`dealt only ${tiles} tiles`);
-  const pairs = await page.evaluate(() => {
-    const sets = window.STUDY_SETS;
-    const all = sets.flatMap((s) => s.terms);
-    return all.map((t) => [t.term, t.definition]);
-  });
+  const pairs = await page.evaluate(() => window.STUDY_SETS.flatMap((s) => s.terms).map((t) => [t.term, t.definition]));
+  // Tile text must match exactly: one card's answer can be a prefix of another
+  // card's question ("1 kg" and "1 kg = ?"), which a player tells apart on
+  // sight but a substring match would not.
+  const exact = (text) => page.locator('.tile').filter({ hasText: new RegExp(`^${text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`) }).first();
   for (const [term, def] of pairs) {
-    const a = page.locator('.tile', { hasText: term }).first();
-    const b = page.locator('.tile', { hasText: def }).first();
+    const a = exact(term);
+    const b = exact(def);
     if ((await a.count()) && (await b.count()) && (await a.isVisible()) && (await b.isVisible())) {
       await a.click(); await b.click();
       await page.waitForTimeout(300);
