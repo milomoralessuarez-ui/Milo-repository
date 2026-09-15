@@ -91,6 +91,19 @@ method. Open `study/index.html` (or `/study/` on the deployed site).
 Progress, starred terms and best scores are saved in `localStorage`. All content
 lives in `study/data.js`; the app itself is `study/app.js` and `study/style.css`.
 
+The questions are extracted from the class notes rather than hand-written, so
+two checks guard them. Run both before changing `study/data.js`:
+
+```bash
+node tools/verify-study.mjs                          # the questions themselves
+node tools/smoke-study.mjs http://127.0.0.1:8000     # every mode, in a browser
+```
+
+`verify-study.mjs` fails on a question a student could not answer — a right
+answer missing from its options, two options that say the same thing, a prompt
+that gives the answer away, a set too small for Match to deal a round.
+`smoke-study.mjs` plays each mode through and fails on any console error.
+
 ---
 
 ## How it fits together
