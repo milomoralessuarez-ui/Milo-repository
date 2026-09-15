@@ -36,6 +36,7 @@ const ASSETS = [
   // ChemQuest — the study site is part of the offline promise too.
   './study/',
   './study/index.html',
+  './study/manifest.webmanifest',
   './study/style.css',
   './study/data.js',
   './study/app.js',
