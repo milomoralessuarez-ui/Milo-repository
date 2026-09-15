@@ -41,5 +41,15 @@
 
 <script src="data.js"></script>
 <script src="app.js"></script>
+
+<script>
+  // Register the portal's service worker so the study site works offline even
+  // for a student who opened /study/ directly and never visited the portal.
+  if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+    addEventListener('load', function () {
+      navigator.serviceWorker.register('../sw.js').catch(function () { /* offline support is optional */ });
+    });
+  }
+</script>
 </body>
 </html>

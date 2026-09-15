@@ -1,6 +1,6 @@
 /* MiloPlay service worker — makes the whole site playable offline.
    Bump CACHE when assets change; old caches are cleaned up on activate. */
-const CACHE = 'miloplay-v1';
+const CACHE = 'miloplay-v2';
 
 const GAMES = [
 // GAMES:BEGIN
@@ -33,6 +33,12 @@ const ASSETS = [
   './',
   './index.html',
   './manifest.webmanifest',
+  // ChemQuest — the study site is part of the offline promise too.
+  './study/',
+  './study/index.html',
+  './study/style.css',
+  './study/data.js',
+  './study/app.js',
   './assets/css/style.css',
   './assets/js/engine.js',
   './assets/js/lib/cards.js',
@@ -67,16 +73,20 @@ self.addEventListener('fetch', (e) => {
   if (url.origin !== self.location.origin) return;   // let fonts etc. go to the network
 
   // Navigations: try the network first so a redeploy is picked up immediately,
-  // and fall back to the cached shell when offline.
+  // and fall back to the cached shell when offline. The portal and the study
+  // site are separate pages, so each refreshes and falls back to its own shell
+  // — caching every navigation under one key would leave whichever was opened
+  // last standing in for both offline.
   if (req.mode === 'navigate') {
+    const shell = url.pathname.includes('/study/') ? './study/index.html' : './index.html';
     e.respondWith(
       fetch(req)
         .then((res) => {
           const copy = res.clone();
-          caches.open(CACHE).then((c) => c.put('./index.html', copy));
+          caches.open(CACHE).then((c) => c.put(shell, copy));
           return res;
         })
-        .catch(() => caches.match('./index.html').then((r) => r || caches.match('./')))
+        .catch(() => caches.match(shell).then((r) => r || caches.match('./index.html')))
     );
     return;
   }
