@@ -12,12 +12,12 @@
 
   V('aim-trainer', { id: 'aim-trainer-hyper', title: 'Aim Trainer Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'How fast is your click? at 170% speed',
-    description: 'Aim Trainer, seventy percent faster, in a hotter palette. One target at a time, thirty seconds on the clock. Hitting a target instantly spawns the next one — slightly smaller. Hyper strips out the breathing room the original gives you; what is left is pure pattern recognition and commitment. Practise in Zen or the original, then come here to see how far it holds.',
+    description: 'Hyper edition of Aim Trainer: same mechanics, 1.7× game speed, separate leaderboard. One target at a time, thirty seconds on the clock. Hitting a target instantly spawns the next one — slightly smaller. The best runs come from reading two hazards ahead rather than one — the original rewards that, this one demands it.',
     colors: ['#df4dff', '#11ff31'], tags: ['reflex', 'reaction time', 'accuracy', 'hyper', 'remix'] });
 
   V('aim-trainer', { id: 'aim-trainer-insane', title: 'Aim Trainer: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'How fast is your click? at double speed',
-    description: 'Aim Trainer at 2× — the version for people who found Hyper too polite. One target at a time, thirty seconds on the clock. Hitting a target instantly spawns the next one — slightly smaller. At double speed reaction is barely enough; runs are won by knowing what comes next before it appears. Separate leaderboard so the numbers stay honest.',
+    description: 'Aim Trainer: Insane Mode runs Aim Trainer at exactly double speed. One target at a time, thirty seconds on the clock. Hitting a target instantly spawns the next one — slightly smaller. Everything the original does, it does twice as fast — including the difficulty ramp — so this is less a game to beat than a game to survive, and a run that lasts thirty seconds is genuinely good. Own best score, warm palette.',
     colors: ['#ff684d', '#1190ff'], tags: ['reflex', 'reaction time', 'accuracy', 'insane', 'remix'] });
 
   V('aim-trainer', { id: 'aim-trainer-turbo', title: 'Aim Trainer Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -27,17 +27,17 @@
 
   V('aim-trainer', { id: 'aim-trainer-zen', title: 'Aim Trainer Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'How fast is your click?, at three-quarter pace',
-    description: 'Aim Trainer at a gentler pace. One target at a time, thirty seconds on the clock. Hitting a target instantly spawns the next one — slightly smaller. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Aim Trainer.',
+    description: 'Aim Trainer Zen slows Aim Trainer to about three-quarter speed and gives it a calmer palette. One target at a time, thirty seconds on the clock. Hitting a target instantly spawns the next one — slightly smaller. With more time between decisions it becomes a game about planning rather than twitch — good for learning the patterns, or for playing one-handed with a coffee. Zen has its own best score.',
     colors: ['#56b5f6', '#e4b02c'], tags: ['reflex', 'reaction time', 'accuracy', 'zen', 'remix'] });
 
   V('air-hockey', { id: 'air-hockey-hyper', title: 'Air Hockey Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'First to seven on the table at 170% speed',
-    description: 'Hyper edition of Air Hockey: same mechanics, 1.7× game speed, separate leaderboard. Drag your mallet around your half of the table. The puck picks up your mallet’s own speed on contact, so a moving strike is far more dangerous than a stationary block. The best runs come from reading two hazards ahead rather than one — the original rewards that, this one demands it.',
+    description: 'Air Hockey Hyper is Air Hockey with the clock running 70% faster. Drag your mallet around your half of the table. The puck picks up your mallet’s own speed on contact, so a moving strike is far more dangerous than a stationary block. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Air Hockey record.',
     colors: ['#086836', '#11ff31'], tags: ['vs cpu', 'physics', 'sports', 'hyper', 'remix'] });
 
   V('air-hockey', { id: 'air-hockey-insane', title: 'Air Hockey: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'First to seven on the table at double speed',
-    description: 'The double-speed edition of Air Hockey. Drag your mallet around your half of the table. The puck picks up your mallet’s own speed on contact, so a moving strike is far more dangerous than a stationary block. Insane keeps every rule intact and simply halves the time you get for each decision; it is brutally short, oddly relaxing once you accept that, and tracked on its own high-score table.',
+    description: 'Air Hockey at 2× — the version for people who found Hyper too polite. Drag your mallet around your half of the table. The puck picks up your mallet’s own speed on contact, so a moving strike is far more dangerous than a stationary block. At double speed reaction is barely enough; runs are won by knowing what comes next before it appears. Separate leaderboard so the numbers stay honest.',
     colors: ['#071a69', '#1190ff'], tags: ['vs cpu', 'physics', 'sports', 'insane', 'remix'] });
 
   V('air-hockey', { id: 'air-hockey-turbo', title: 'Air Hockey Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -47,17 +47,17 @@
 
   V('air-hockey', { id: 'air-hockey-zen', title: 'Air Hockey Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'First to seven on the table, at three-quarter pace',
-    description: 'A slow-motion cut of Air Hockey, tinted cool. Drag your mallet around your half of the table. The puck picks up your mallet’s own speed on contact, so a moving strike is far more dangerous than a stationary block. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
+    description: 'The relaxed version of Air Hockey. Drag your mallet around your half of the table. The puck picks up your mallet’s own speed on contact, so a moving strike is far more dangerous than a stationary block. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
     colors: ['#565a16', '#e4b02c'], tags: ['vs cpu', 'physics', 'sports', 'zen', 'remix'] });
 
   V('alien-swarm', { id: 'alien-swarm-hyper', title: 'Alien Swarm Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'You steer, the cannon does the killing at 170% speed',
-    description: 'The frantic edition of Alien Swarm. A twin-stick shooter where the second stick is automatic: your cannon always fires at the nearest alien, so the whole game is positioning. Chevron drones flock straight at you, green spitters hang back and lob globs, and rose hulks soak a dozen hits. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
+    description: 'Alien Swarm, seventy percent faster, in a hotter palette. A twin-stick shooter where the second stick is automatic: your cannon always fires at the nearest alien, so the whole game is positioning. Chevron drones flock straight at you, green spitters hang back and lob globs, and rose hulks soak a dozen hits. Hyper strips out the breathing room the original gives you; what is left is pure pattern recognition and commitment. Practise in Zen or the original, then come here to see how far it holds.',
     colors: ['#4da4ff', '#adf138'], tags: ['shooter', 'aliens', 'arena', 'hyper', 'remix'] });
 
   V('alien-swarm', { id: 'alien-swarm-insane', title: 'Alien Swarm: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'You steer, the cannon does the killing at double speed',
-    description: 'Alien Swarm: Insane Mode runs Alien Swarm at exactly double speed. A twin-stick shooter where the second stick is automatic: your cannon always fires at the nearest alien, so the whole game is positioning. Chevron drones flock straight at you, green spitters hang back and lob globs, and rose hulks soak a dozen hits. Everything the original does, it does twice as fast — including the difficulty ramp — so this is less a game to beat than a game to survive, and a run that lasts thirty seconds is genuinely good. Own best score, warm palette.',
+    description: 'Alien Swarm, twice as fast. A twin-stick shooter where the second stick is automatic: your cannon always fires at the nearest alien, so the whole game is positioning. Chevron drones flock straight at you, green spitters hang back and lob globs, and rose hulks soak a dozen hits. Insane is the top of the remix ladder: past this there is nothing, so a personal best here is the one to brag about. Scores are kept apart from the original and the other remixes.',
     colors: ['#e44dff', '#34f4ba'], tags: ['shooter', 'aliens', 'arena', 'insane', 'remix'] });
 
   V('alien-swarm', { id: 'alien-swarm-turbo', title: 'Alien Swarm Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -67,17 +67,17 @@
 
   V('alien-swarm', { id: 'alien-swarm-zen', title: 'Alien Swarm Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'You steer, the cannon does the killing, at three-quarter pace',
-    description: 'The relaxed version of Alien Swarm. A twin-stick shooter where the second stick is automatic: your cannon always fires at the nearest alien, so the whole game is positioning. Chevron drones flock straight at you, green spitters hang back and lob globs, and rose hulks soak a dozen hits. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
+    description: 'Zen edition of Alien Swarm: identical rules, 28% slower, separate high score. A twin-stick shooter where the second stick is automatic: your cannon always fires at the nearest alien, so the whole game is positioning. Chevron drones flock straight at you, green spitters hang back and lob globs, and rose hulks soak a dozen hits. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
     colors: ['#5def6b', '#d75158'], tags: ['shooter', 'aliens', 'arena', 'zen', 'remix'] });
 
   V('anagram-hunt', { id: 'anagram-hunt-hyper', title: 'Anagram Hunt Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Unscramble against the clock at 170% speed',
-    description: 'Anagram Hunt Hyper is Anagram Hunt with the clock running 70% faster. Ninety seconds, one scrambled word at a time. Type the answer and hit Enter. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Anagram Hunt record.',
+    description: 'Everything in Anagram Hunt at 1.7× speed. Ninety seconds, one scrambled word at a time. Type the answer and hit Enter. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
     colors: ['#12423e', '#11ff31'], tags: ['word', 'timed', 'typing', 'hyper', 'remix'] });
 
   V('anagram-hunt', { id: 'anagram-hunt-insane', title: 'Anagram Hunt: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Unscramble against the clock at double speed',
-    description: 'Insane mode for Anagram Hunt: identical mechanics, game time × 2, warm palette, separate best score. Ninety seconds, one scrambled word at a time. Type the answer and hit Enter. Treat the first few runs as reconnaissance — even the opening pattern feels new at this pace.',
+    description: 'The double-speed edition of Anagram Hunt. Ninety seconds, one scrambled word at a time. Type the answer and hit Enter. Insane keeps every rule intact and simply halves the time you get for each decision; it is brutally short, oddly relaxing once you accept that, and tracked on its own high-score table.',
     colors: ['#1e1143', '#1190ff'], tags: ['word', 'timed', 'typing', 'insane', 'remix'] });
 
   V('anagram-hunt', { id: 'anagram-hunt-turbo', title: 'Anagram Hunt Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -87,17 +87,17 @@
 
   V('anagram-hunt', { id: 'anagram-hunt-zen', title: 'Anagram Hunt Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Unscramble against the clock, at three-quarter pace',
-    description: 'Zen edition of Anagram Hunt: identical rules, 28% slower, separate high score. Ninety seconds, one scrambled word at a time. Type the answer and hit Enter. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
+    description: 'Anagram Hunt at a gentler pace. Ninety seconds, one scrambled word at a time. Type the answer and hit Enter. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Anagram Hunt.',
     colors: ['#2a3b19', '#e4b02c'], tags: ['word', 'timed', 'typing', 'zen', 'remix'] });
 
   V('archery', { id: 'archery-hyper', title: 'Archery Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Ten arrows, moving target, real wind at 170% speed',
-    description: 'The frantic edition of Archery. Drag back from the bow to set power and angle, and a dotted arc shows roughly where the arrow will land — accounting for both gravity and the crosswind, which is shown at the top. The target shrinks and starts drifting as the rounds go on. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
+    description: 'Archery, seventy percent faster, in a hotter palette. Drag back from the bow to set power and angle, and a dotted arc shows roughly where the arrow will land — accounting for both gravity and the crosswind, which is shown at the top. The target shrinks and starts drifting as the rounds go on. Hyper strips out the breathing room the original gives you; what is left is pure pattern recognition and commitment. Practise in Zen or the original, then come here to see how far it holds.',
     colors: ['#212b0f', '#ff1040'], tags: ['aiming', 'physics', 'sports', 'hyper', 'remix'] });
 
   V('archery', { id: 'archery-insane', title: 'Archery: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Ten arrows, moving target, real wind at double speed',
-    description: 'Archery: Insane Mode runs Archery at exactly double speed. Drag back from the bow to set power and angle, and a dotted arc shows roughly where the arrow will land — accounting for both gravity and the crosswind, which is shown at the top. The target shrinks and starts drifting as the rounds go on. Everything the original does, it does twice as fast — including the difficulty ramp — so this is less a game to beat than a game to survive, and a run that lasts thirty seconds is genuinely good. Own best score, warm palette.',
+    description: 'Archery, twice as fast. Drag back from the bow to set power and angle, and a dotted arc shows roughly where the arrow will land — accounting for both gravity and the crosswind, which is shown at the top. The target shrinks and starts drifting as the rounds go on. Insane is the top of the remix ladder: past this there is nothing, so a personal best here is the one to brag about. Scores are kept apart from the original and the other remixes.',
     colors: ['#0f2b23', '#dfff10'], tags: ['aiming', 'physics', 'sports', 'insane', 'remix'] });
 
   V('archery', { id: 'archery-turbo', title: 'Archery Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -107,17 +107,17 @@
 
   V('archery', { id: 'archery-zen', title: 'Archery Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Ten arrows, moving target, real wind, at three-quarter pace',
-    description: 'The relaxed version of Archery. Drag back from the bow to set power and angle, and a dotted arc shows roughly where the arrow will land — accounting for both gravity and the crosswind, which is shown at the top. The target shrinks and starts drifting as the rounds go on. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
+    description: 'Zen edition of Archery: identical rules, 28% slower, separate high score. Drag back from the bow to set power and angle, and a dotted arc shows roughly where the arrow will land — accounting for both gravity and the crosswind, which is shown at the top. The target shrinks and starts drifting as the rounds go on. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
     colors: ['#271314', '#6f20ef'], tags: ['aiming', 'physics', 'sports', 'zen', 'remix'] });
 
   V('arrow-storm', { id: 'arrow-storm-hyper', title: 'Arrow Storm Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Plunging fire beats the shield wall at 170% speed',
-    description: 'Arrow Storm, seventy percent faster, in a hotter palette. You are the last archer on a rain-lashed castle wall. Hold to draw — power grows for a second — and release to loose an arrow that flies a true gravity arc. Hyper strips out the breathing room the original gives you; what is left is pure pattern recognition and commitment. Practise in Zen or the original, then come here to see how far it holds.',
+    description: 'Hyper edition of Arrow Storm: same mechanics, 1.7× game speed, separate leaderboard. You are the last archer on a rain-lashed castle wall. Hold to draw — power grows for a second — and release to loose an arrow that flies a true gravity arc. The best runs come from reading two hazards ahead rather than one — the original rewards that, this one demands it.',
     colors: ['#3b5247', '#d83a6a'], tags: ['archery', 'castle', 'defense', 'hyper', 'remix'] });
 
   V('arrow-storm', { id: 'arrow-storm-insane', title: 'Arrow Storm: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Plunging fire beats the shield wall at double speed',
-    description: 'Arrow Storm at 2× — the version for people who found Hyper too polite. You are the last archer on a rain-lashed castle wall. Hold to draw — power grows for a second — and release to loose an arrow that flies a true gravity arc. At double speed reaction is barely enough; runs are won by knowing what comes next before it appears. Separate leaderboard so the numbers stay honest.',
+    description: 'Arrow Storm: Insane Mode runs Arrow Storm at exactly double speed. You are the last archer on a rain-lashed castle wall. Hold to draw — power grows for a second — and release to loose an arrow that flies a true gravity arc. Everything the original does, it does twice as fast — including the difficulty ramp — so this is less a game to beat than a game to survive, and a run that lasts thirty seconds is genuinely good. Own best score, warm palette.',
     colors: ['#3a3e53', '#d6db37'], tags: ['archery', 'castle', 'defense', 'insane', 'remix'] });
 
   V('arrow-storm', { id: 'arrow-storm-turbo', title: 'Arrow Storm Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -127,17 +127,17 @@
 
   V('arrow-storm', { id: 'arrow-storm-zen', title: 'Arrow Storm Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Plunging fire beats the shield wall, at three-quarter pace',
-    description: 'Arrow Storm at a gentler pace. You are the last archer on a rain-lashed castle wall. Hold to draw — power grows for a second — and release to loose an arrow that flies a true gravity arc. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Arrow Storm.',
+    description: 'Arrow Storm Zen slows Arrow Storm to about three-quarter speed and gives it a calmer palette. You are the last archer on a rain-lashed castle wall. Hold to draw — power grows for a second — and release to loose an arrow that flies a true gravity arc. With more time between decisions it becomes a game about planning rather than twitch — good for learning the patterns, or for playing one-handed with a coffee. Zen has its own best score.',
     colors: ['#4d4f3e', '#7050c2'], tags: ['archery', 'castle', 'defense', 'zen', 'remix'] });
 
   V('asteroid-field', { id: 'asteroid-field-hyper', title: 'Asteroid Field Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Shoot the rocks, mind the momentum at 170% speed',
-    description: 'Asteroid Field, seventy percent faster, in a hotter palette. Your ship has thrust and inertia but no brakes — pointing where you want to go is only half the problem. Shooting a big rock splits it into two mediums and each of those into two smalls, so a full wave gets much busier before it clears. Hyper strips out the breathing room the original gives you; what is left is pure pattern recognition and commitment. Practise in Zen or the original, then come here to see how far it holds.',
+    description: 'Hyper edition of Asteroid Field: same mechanics, 1.7× game speed, separate leaderboard. Your ship has thrust and inertia but no brakes — pointing where you want to go is only half the problem. Shooting a big rock splits it into two mediums and each of those into two smalls, so a full wave gets much busier before it clears. The best runs come from reading two hazards ahead rather than one — the original rewards that, this one demands it.',
     colors: ['#020d0d', '#c4f5ec'], tags: ['classic', 'shooter', 'space', 'hyper', 'remix'] });
 
   V('asteroid-field', { id: 'asteroid-field-insane', title: 'Asteroid Field: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Shoot the rocks, mind the momentum at double speed',
-    description: 'Asteroid Field at 2× — the version for people who found Hyper too polite. Your ship has thrust and inertia but no brakes — pointing where you want to go is only half the problem. Shooting a big rock splits it into two mediums and each of those into two smalls, so a full wave gets much busier before it clears. At double speed reaction is barely enough; runs are won by knowing what comes next before it appears. Separate leaderboard so the numbers stay honest.',
+    description: 'Asteroid Field: Insane Mode runs Asteroid Field at exactly double speed. Your ship has thrust and inertia but no brakes — pointing where you want to go is only half the problem. Shooting a big rock splits it into two mediums and each of those into two smalls, so a full wave gets much busier before it clears. Everything the original does, it does twice as fast — including the difficulty ramp — so this is less a game to beat than a game to survive, and a run that lasts thirty seconds is genuinely good. Own best score, warm palette.',
     colors: ['#06020d', '#cbc3f6'], tags: ['classic', 'shooter', 'space', 'insane', 'remix'] });
 
   V('asteroid-field', { id: 'asteroid-field-turbo', title: 'Asteroid Field Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -147,17 +147,17 @@
 
   V('asteroid-field', { id: 'asteroid-field-zen', title: 'Asteroid Field Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Shoot the rocks, mind the momentum, at three-quarter pace',
-    description: 'Asteroid Field at a gentler pace. Your ship has thrust and inertia but no brakes — pointing where you want to go is only half the problem. Shooting a big rock splits it into two mediums and each of those into two smalls, so a full wave gets much busier before it clears. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Asteroid Field.',
+    description: 'Asteroid Field Zen slows Asteroid Field to about three-quarter speed and gives it a calmer palette. Your ship has thrust and inertia but no brakes — pointing where you want to go is only half the problem. Shooting a big rock splits it into two mediums and each of those into two smalls, so a full wave gets much busier before it clears. With more time between decisions it becomes a game about planning rather than twitch — good for learning the patterns, or for playing one-handed with a coffee. Zen has its own best score.',
     colors: ['#070c03', '#e0eecb'], tags: ['classic', 'shooter', 'space', 'zen', 'remix'] });
 
   V('astro-blaster', { id: 'astro-blaster-hyper', title: 'Astro Blaster Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Endless waves of alien attackers at 170% speed',
-    description: 'Hyper edition of Astro Blaster: same mechanics, 1.7× game speed, separate leaderboard. Fly your ship, shoot down wave after wave of hostiles and dodge their return fire. Green power-ups upgrade your gun to spread and then to a four-way cannon; red ones give a spare life. The best runs come from reading two hazards ahead rather than one — the original rewards that, this one demands it.',
+    description: 'Astro Blaster Hyper is Astro Blaster with the clock running 70% faster. Fly your ship, shoot down wave after wave of hostiles and dodge their return fire. Green power-ups upgrade your gun to spread and then to a four-way cannon; red ones give a spare life. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Astro Blaster record.',
     colors: ['#5cdfff', '#9b35ff'], tags: ['shooter', 'space', 'waves', 'hyper', 'remix'] });
 
   V('astro-blaster', { id: 'astro-blaster-insane', title: 'Astro Blaster: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Endless waves of alien attackers at double speed',
-    description: 'The double-speed edition of Astro Blaster. Fly your ship, shoot down wave after wave of hostiles and dodge their return fire. Green power-ups upgrade your gun to spread and then to a four-way cannon; red ones give a spare life. Insane keeps every rule intact and simply halves the time you get for each decision; it is brutally short, oddly relaxing once you accept that, and tracked on its own high-score table.',
+    description: 'Astro Blaster at 2× — the version for people who found Hyper too polite. Fly your ship, shoot down wave after wave of hostiles and dodge their return fire. Green power-ups upgrade your gun to spread and then to a four-way cannon; red ones give a spare life. At double speed reaction is barely enough; runs are won by knowing what comes next before it appears. Separate leaderboard so the numbers stay honest.',
     colors: ['#b25cff', '#ff3555'], tags: ['shooter', 'space', 'waves', 'insane', 'remix'] });
 
   V('astro-blaster', { id: 'astro-blaster-turbo', title: 'Astro Blaster Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -167,17 +167,17 @@
 
   V('astro-blaster', { id: 'astro-blaster-zen', title: 'Astro Blaster Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Endless waves of alien attackers, at three-quarter pace',
-    description: 'A slow-motion cut of Astro Blaster, tinted cool. Fly your ship, shoot down wave after wave of hostiles and dodge their return fire. Green power-ups upgrade your gun to spread and then to a four-way cannon; red ones give a spare life. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
+    description: 'The relaxed version of Astro Blaster. Fly your ship, shoot down wave after wave of hostiles and dodge their return fire. Green power-ups upgrade your gun to spread and then to a four-way cannon; red ones give a spare life. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
     colors: ['#84f764', '#50d7e4'], tags: ['shooter', 'space', 'waves', 'zen', 'remix'] });
 
   V('balance-tower', { id: 'balance-tower-hyper', title: 'Balance Tower Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Stack on a see-saw and watch the red dot at 170% speed',
-    description: 'Everything in Balance Tower at 1.7× speed. A plank sits on a single pivot and every piece you drop shifts its centre of mass — the red dot shows exactly where that is. Land weight on one side and the plank tilts slowly towards it; past twenty degrees the whole tower slides off. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
+    description: 'The frantic edition of Balance Tower. A plank sits on a single pivot and every piece you drop shifts its centre of mass — the red dot shows exactly where that is. Land weight on one side and the plank tilts slowly towards it; past twenty degrees the whole tower slides off. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
     colors: ['#f8e1e9', '#ff34ff'], tags: ['stacking', 'balance', 'physics', 'hyper', 'remix'] });
 
   V('balance-tower', { id: 'balance-tower-insane', title: 'Balance Tower: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Stack on a see-saw and watch the red dot at double speed',
-    description: 'Balance Tower, twice as fast. A plank sits on a single pivot and every piece you drop shifts its centre of mass — the red dot shows exactly where that is. Land weight on one side and the plank tilts slowly towards it; past twenty degrees the whole tower slides off. Insane is the top of the remix ladder: past this there is nothing, so a personal best here is the one to brag about. Scores are kept apart from the original and the other remixes.',
+    description: 'Insane mode for Balance Tower: identical mechanics, game time × 2, warm palette, separate best score. A plank sits on a single pivot and every piece you drop shifts its centre of mass — the red dot shows exactly where that is. Land weight on one side and the plank tilts slowly towards it; past twenty degrees the whole tower slides off. Treat the first few runs as reconnaissance — even the opening pattern feels new at this pace.',
     colors: ['#f9f8e0', '#ff7834'], tags: ['stacking', 'balance', 'physics', 'insane', 'remix'] });
 
   V('balance-tower', { id: 'balance-tower-turbo', title: 'Balance Tower Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -187,17 +187,17 @@
 
   V('balance-tower', { id: 'balance-tower-zen', title: 'Balance Tower Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Stack on a see-saw and watch the red dot, at three-quarter pace',
-    description: 'Balance Tower Zen slows Balance Tower to about three-quarter speed and gives it a calmer palette. A plank sits on a single pivot and every piece you drop shifts its centre of mass — the red dot shows exactly where that is. Land weight on one side and the plank tilts slowly towards it; past twenty degrees the whole tower slides off. With more time between decisions it becomes a game about planning rather than twitch — good for learning the patterns, or for playing one-handed with a coffee. Zen has its own best score.',
+    description: 'A slow-motion cut of Balance Tower, tinted cool. A plank sits on a single pivot and every piece you drop shifts its centre of mass — the red dot shows exactly where that is. Land weight on one side and the plank tilts slowly towards it; past twenty degrees the whole tower slides off. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
     colors: ['#e8e4f5', '#4d8de6'], tags: ['stacking', 'balance', 'physics', 'zen', 'remix'] });
 
   V('ball-blast', { id: 'ball-blast-hyper', title: 'Ball Blast Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Shoot the bouncing balls before they split into more at 170% speed',
-    description: 'Ball Blast Hyper is Ball Blast with the clock running 70% faster. Your cannon fires by itself — all you do is move it. Each ball shows how much damage it can still take, and breaking one splits it into two smaller, faster ones. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Ball Blast record.',
+    description: 'Everything in Ball Blast at 1.7× speed. Your cannon fires by itself — all you do is move it. Each ball shows how much damage it can still take, and breaking one splits it into two smaller, faster ones. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
     colors: ['#ea6dff', '#ff5784'], tags: ['shooter', 'physics', 'upgrades', 'hyper', 'remix'] });
 
   V('ball-blast', { id: 'ball-blast-insane', title: 'Ball Blast: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Shoot the bouncing balls before they split into more at double speed',
-    description: 'Insane mode for Ball Blast: identical mechanics, game time × 2, warm palette, separate best score. Your cannon fires by itself — all you do is move it. Each ball shows how much damage it can still take, and breaking one splits it into two smaller, faster ones. Treat the first few runs as reconnaissance — even the opening pattern feels new at this pace.',
+    description: 'The double-speed edition of Ball Blast. Your cannon fires by itself — all you do is move it. Each ball shows how much damage it can still take, and breaking one splits it into two smaller, faster ones. Insane keeps every rule intact and simply halves the time you get for each decision; it is brutally short, oddly relaxing once you accept that, and tracked on its own high-score table.',
     colors: ['#ff896d', '#f4ff57'], tags: ['shooter', 'physics', 'upgrades', 'insane', 'remix'] });
 
   V('ball-blast', { id: 'ball-blast-turbo', title: 'Ball Blast Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -207,17 +207,17 @@
 
   V('ball-blast', { id: 'ball-blast-zen', title: 'Ball Blast Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Shoot the bouncing balls before they split into more, at three-quarter pace',
-    description: 'Zen edition of Ball Blast: identical rules, 28% slower, separate high score. Your cannon fires by itself — all you do is move it. Each ball shows how much damage it can still take, and breaking one splits it into two smaller, faster ones. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
+    description: 'Ball Blast at a gentler pace. Your cannon fires by itself — all you do is move it. Each ball shows how much damage it can still take, and breaking one splits it into two smaller, faster ones. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Ball Blast.',
     colors: ['#78bef4', '#8f5ff7'], tags: ['shooter', 'physics', 'upgrades', 'zen', 'remix'] });
 
   V('balloon-pop', { id: 'balloon-pop-hyper', title: 'Balloon Pop Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Pop only the colour that’s called at 170% speed',
-    description: 'Balloon Pop, seventy percent faster, in a hotter palette. Balloons drift up the screen in five colours, but only one colour counts at a time — and it changes every few pops, so you have to keep reading the banner rather than settling into a rhythm. Hyper strips out the breathing room the original gives you; what is left is pure pattern recognition and commitment. Practise in Zen or the original, then come here to see how far it holds.',
+    description: 'Hyper edition of Balloon Pop: same mechanics, 1.7× game speed, separate leaderboard. Balloons drift up the screen in five colours, but only one colour counts at a time — and it changes every few pops, so you have to keep reading the banner rather than settling into a rhythm. The best runs come from reading two hazards ahead rather than one — the original rewards that, this one demands it.',
     colors: ['#09392a', '#ff34ff'], tags: ['reflex', 'colour', 'timed', 'hyper', 'remix'] });
 
   V('balloon-pop', { id: 'balloon-pop-insane', title: 'Balloon Pop: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Pop only the colour that’s called at double speed',
-    description: 'Balloon Pop at 2× — the version for people who found Hyper too polite. Balloons drift up the screen in five colours, but only one colour counts at a time — and it changes every few pops, so you have to keep reading the banner rather than settling into a rhythm. At double speed reaction is barely enough; runs are won by knowing what comes next before it appears. Separate leaderboard so the numbers stay honest.',
+    description: 'Balloon Pop: Insane Mode runs Balloon Pop at exactly double speed. Balloons drift up the screen in five colours, but only one colour counts at a time — and it changes every few pops, so you have to keep reading the banner rather than settling into a rhythm. Everything the original does, it does twice as fast — including the difficulty ramp — so this is less a game to beat than a game to survive, and a run that lasts thirty seconds is genuinely good. Own best score, warm palette.',
     colors: ['#09083a', '#ff7834'], tags: ['reflex', 'colour', 'timed', 'insane', 'remix'] });
 
   V('balloon-pop', { id: 'balloon-pop-turbo', title: 'Balloon Pop Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -227,17 +227,17 @@
 
   V('balloon-pop', { id: 'balloon-pop-zen', title: 'Balloon Pop Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Pop only the colour that’s called, at three-quarter pace',
-    description: 'Balloon Pop at a gentler pace. Balloons drift up the screen in five colours, but only one colour counts at a time — and it changes every few pops, so you have to keep reading the banner rather than settling into a rhythm. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Balloon Pop.',
+    description: 'Balloon Pop Zen slows Balloon Pop to about three-quarter speed and gives it a calmer palette. Balloons drift up the screen in five colours, but only one colour counts at a time — and it changes every few pops, so you have to keep reading the banner rather than settling into a rhythm. With more time between decisions it becomes a game about planning rather than twitch — good for learning the patterns, or for playing one-handed with a coffee. Zen has its own best score.',
     colors: ['#293210', '#4d8de6'], tags: ['reflex', 'colour', 'timed', 'zen', 'remix'] });
 
   V('barrel-climb', { id: 'barrel-climb-hyper', title: 'Barrel Climb Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Up the girders, under the barrels at 170% speed',
-    description: 'Everything in Barrel Climb at 1.7× speed. Climb five sloping girders to the trophy at the top while barrels roll down from the ape. Girders tilt alternately, so barrels zig-zag down the level rather than falling straight. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
+    description: 'The frantic edition of Barrel Climb. Climb five sloping girders to the trophy at the top while barrels roll down from the ape. Girders tilt alternately, so barrels zig-zag down the level rather than falling straight. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
     colors: ['#06101c', '#f234f9'], tags: ['classic', 'platformer', 'climbing', 'hyper', 'remix'] });
 
   V('barrel-climb', { id: 'barrel-climb-insane', title: 'Barrel Climb: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Up the girders, under the barrels at double speed',
-    description: 'Barrel Climb, twice as fast. Climb five sloping girders to the trophy at the top while barrels roll down from the ape. Girders tilt alternately, so barrels zig-zag down the level rather than falling straight. Insane is the top of the remix ladder: past this there is nothing, so a personal best here is the one to brag about. Scores are kept apart from the original and the other remixes.',
+    description: 'Insane mode for Barrel Climb: identical mechanics, game time × 2, warm palette, separate best score. Climb five sloping girders to the trophy at the top while barrels roll down from the ape. Girders tilt alternately, so barrels zig-zag down the level rather than falling straight. Treat the first few runs as reconnaissance — even the opening pattern feels new at this pace.',
     colors: ['#1a051d', '#fd6e30'], tags: ['classic', 'platformer', 'climbing', 'insane', 'remix'] });
 
   V('barrel-climb', { id: 'barrel-climb-turbo', title: 'Barrel Climb Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -247,17 +247,17 @@
 
   V('barrel-climb', { id: 'barrel-climb-zen', title: 'Barrel Climb Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Up the girders, under the barrels, at three-quarter pace',
-    description: 'Barrel Climb Zen slows Barrel Climb to about three-quarter speed and gives it a calmer palette. Climb five sloping girders to the trophy at the top while barrels roll down from the ape. Girders tilt alternately, so barrels zig-zag down the level rather than falling straight. With more time between decisions it becomes a game about planning rather than twitch — good for learning the patterns, or for playing one-handed with a coffee. Zen has its own best score.',
+    description: 'A slow-motion cut of Barrel Climb, tinted cool. Climb five sloping girders to the trophy at the top while barrels roll down from the ape. Girders tilt alternately, so barrels zig-zag down the level rather than falling straight. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
     colors: ['#09190b', '#508fdd'], tags: ['classic', 'platformer', 'climbing', 'zen', 'remix'] });
 
   V('basket-fall', { id: 'basket-fall-hyper', title: 'Basket Fall Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Spin the maze, not the ball at 170% speed',
-    description: 'The frantic edition of Basket Fall. Gravity is fixed and the ball is dumb — you steer by rotating the entire maze with two keys. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
+    description: 'Basket Fall, seventy percent faster, in a hotter palette. Gravity is fixed and the ball is dumb — you steer by rotating the entire maze with two keys. Hyper strips out the breathing room the original gives you; what is left is pure pattern recognition and commitment. Practise in Zen or the original, then come here to see how far it holds.',
     colors: ['#185650', '#af67ff'], tags: ['maze', 'rotate', 'gravity', 'hyper', 'remix'] });
 
   V('basket-fall', { id: 'basket-fall-insane', title: 'Basket Fall: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Spin the maze, not the ball at double speed',
-    description: 'Basket Fall: Insane Mode runs Basket Fall at exactly double speed. Gravity is fixed and the ball is dumb — you steer by rotating the entire maze with two keys. Everything the original does, it does twice as fast — including the difficulty ramp — so this is less a game to beat than a game to survive, and a run that lasts thirty seconds is genuinely good. Own best score, warm palette.',
+    description: 'Basket Fall, twice as fast. Gravity is fixed and the ball is dumb — you steer by rotating the entire maze with two keys. Insane is the top of the remix ladder: past this there is nothing, so a personal best here is the one to brag about. Scores are kept apart from the original and the other remixes.',
     colors: ['#261758', '#ff6784'], tags: ['maze', 'rotate', 'gravity', 'insane', 'remix'] });
 
   V('basket-fall', { id: 'basket-fall-turbo', title: 'Basket Fall Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -267,17 +267,17 @@
 
   V('basket-fall', { id: 'basket-fall-zen', title: 'Basket Fall Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Spin the maze, not the ball, at three-quarter pace',
-    description: 'The relaxed version of Basket Fall. Gravity is fixed and the ball is dumb — you steer by rotating the entire maze with two keys. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
+    description: 'Zen edition of Basket Fall: identical rules, 28% slower, separate high score. Gravity is fixed and the ball is dumb — you steer by rotating the entire maze with two keys. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
     colors: ['#384e21', '#79e6ee'], tags: ['maze', 'rotate', 'gravity', 'zen', 'remix'] });
 
   V('batting-cage', { id: 'batting-cage-hyper', title: 'Batting Cage Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Read the windup, clear the fence at 170% speed',
-    description: 'Batting Cage Hyper is Batting Cage with the clock running 70% faster. Home-run derby under the floodlights, ten pitches a round. The windup telegraphs what is coming — a quick arm is a fastball, a long pause is a change-up, a high leg kick means the ball will break sideways. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Batting Cage record.',
+    description: 'Everything in Batting Cage at 1.7× speed. Home-run derby under the floodlights, ten pitches a round. The windup telegraphs what is coming — a quick arm is a fastball, a long pause is a change-up, a high leg kick means the ball will break sideways. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
     colors: ['#114131', '#ff5784'], tags: ['baseball', 'timing', 'home run', 'hyper', 'remix'] });
 
   V('batting-cage', { id: 'batting-cage-insane', title: 'Batting Cage: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Read the windup, clear the fence at double speed',
-    description: 'Insane mode for Batting Cage: identical mechanics, game time × 2, warm palette, separate best score. Home-run derby under the floodlights, ten pitches a round. The windup telegraphs what is coming — a quick arm is a fastball, a long pause is a change-up, a high leg kick means the ball will break sideways. Treat the first few runs as reconnaissance — even the opening pattern feels new at this pace.',
+    description: 'The double-speed edition of Batting Cage. Home-run derby under the floodlights, ten pitches a round. The windup telegraphs what is coming — a quick arm is a fastball, a long pause is a change-up, a high leg kick means the ball will break sideways. Insane keeps every rule intact and simply halves the time you get for each decision; it is brutally short, oddly relaxing once you accept that, and tracked on its own high-score table.',
     colors: ['#101142', '#f4ff57'], tags: ['baseball', 'timing', 'home run', 'insane', 'remix'] });
 
   V('batting-cage', { id: 'batting-cage-turbo', title: 'Batting Cage Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -287,17 +287,17 @@
 
   V('batting-cage', { id: 'batting-cage-zen', title: 'Batting Cage Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Read the windup, clear the fence, at three-quarter pace',
-    description: 'Zen edition of Batting Cage: identical rules, 28% slower, separate high score. Home-run derby under the floodlights, ten pitches a round. The windup telegraphs what is coming — a quick arm is a fastball, a long pause is a change-up, a high leg kick means the ball will break sideways. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
+    description: 'Batting Cage at a gentler pace. Home-run derby under the floodlights, ten pitches a round. The windup telegraphs what is coming — a quick arm is a fastball, a long pause is a change-up, a high leg kick means the ball will break sideways. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Batting Cage.',
     colors: ['#323a18', '#8f5ff7'], tags: ['baseball', 'timing', 'home run', 'zen', 'remix'] });
 
   V('battleship', { id: 'battleship-hyper', title: 'Battleship Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Place your fleet, then hunt theirs at 170% speed',
-    description: 'Battleship Hyper is Battleship with the clock running 70% faster. Lay out five ships — press R to rotate, or let the game place them — then trade shots. The computer searches in a checkerboard pattern until it lands a hit, then works outward from it, so a wounded ship rarely survives long. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Battleship record.',
+    description: 'Everything in Battleship at 1.7× speed. Lay out five ships — press R to rotate, or let the game place them — then trade shots. The computer searches in a checkerboard pattern until it lands a hit, then works outward from it, so a wounded ship rarely survives long. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
     colors: ['#053820', '#31ff70'], tags: ['board game', 'vs cpu', 'strategy', 'hyper', 'remix'] });
 
   V('battleship', { id: 'battleship-insane', title: 'Battleship: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Place your fleet, then hunt theirs at double speed',
-    description: 'Insane mode for Battleship: identical mechanics, game time × 2, warm palette, separate best score. Lay out five ships — press R to rotate, or let the game place them — then trade shots. The computer searches in a checkerboard pattern until it lands a hit, then works outward from it, so a wounded ship rarely survives long. Treat the first few runs as reconnaissance — even the opening pattern feels new at this pace.',
+    description: 'The double-speed edition of Battleship. Lay out five ships — press R to rotate, or let the game place them — then trade shots. The computer searches in a checkerboard pattern until it lands a hit, then works outward from it, so a wounded ship rarely survives long. Insane keeps every rule intact and simply halves the time you get for each decision; it is brutally short, oddly relaxing once you accept that, and tracked on its own high-score table.',
     colors: ['#040b39', '#317bff'], tags: ['board game', 'vs cpu', 'strategy', 'insane', 'remix'] });
 
   V('battleship', { id: 'battleship-turbo', title: 'Battleship Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -307,17 +307,17 @@
 
   V('battleship', { id: 'battleship-zen', title: 'Battleship Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Place your fleet, then hunt theirs, at three-quarter pace',
-    description: 'Zen edition of Battleship: identical rules, 28% slower, separate high score. Lay out five ships — press R to rotate, or let the game place them — then trade shots. The computer searches in a checkerboard pattern until it lands a hit, then works outward from it, so a wounded ship rarely survives long. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
+    description: 'Battleship at a gentler pace. Lay out five ships — press R to rotate, or let the game place them — then trade shots. The computer searches in a checkerboard pattern until it lands a hit, then works outward from it, so a wounded ship rarely survives long. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Battleship.',
     colors: ['#2d310c', '#eedc42'], tags: ['board game', 'vs cpu', 'strategy', 'zen', 'remix'] });
 
   V('binary-puzzle', { id: 'binary-puzzle-hyper', title: 'Binary Puzzle Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Suns and moons in perfect balance at 170% speed',
-    description: 'Binary Puzzle Hyper is Binary Puzzle with the clock running 70% faster. Every square takes a sun or a moon, under three rules that squeeze the grid from all sides: never three of the same symbol in a row, exactly four of each in every row and column, and no two rows or columns identical. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Binary Puzzle record.',
+    description: 'Everything in Binary Puzzle at 1.7× speed. Every square takes a sun or a moon, under three rules that squeeze the grid from all sides: never three of the same symbol in a row, exactly four of each in every row and column, and no two rows or columns identical. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
     colors: ['#1b3c40', '#ff2f7a'], tags: ['logic', 'binairo', 'brain', 'hyper', 'remix'] });
 
   V('binary-puzzle', { id: 'binary-puzzle-insane', title: 'Binary Puzzle: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Suns and moons in perfect balance at double speed',
-    description: 'Insane mode for Binary Puzzle: identical mechanics, game time × 2, warm palette, separate best score. Every square takes a sun or a moon, under three rules that squeeze the grid from all sides: never three of the same symbol in a row, exactly four of each in every row and column, and no two rows or columns identical. Treat the first few runs as reconnaissance — even the opening pattern feels new at this pace.',
+    description: 'The double-speed edition of Binary Puzzle. Every square takes a sun or a moon, under three rules that squeeze the grid from all sides: never three of the same symbol in a row, exactly four of each in every row and column, and no two rows or columns identical. Insane keeps every rule intact and simply halves the time you get for each decision; it is brutally short, oddly relaxing once you accept that, and tracked on its own high-score table.',
     colors: ['#2b1b40', '#fff92f'], tags: ['logic', 'binairo', 'brain', 'insane', 'remix'] });
 
   V('binary-puzzle', { id: 'binary-puzzle-turbo', title: 'Binary Puzzle Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -327,17 +327,17 @@
 
   V('binary-puzzle', { id: 'binary-puzzle-zen', title: 'Binary Puzzle Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Suns and moons in perfect balance, at three-quarter pace',
-    description: 'Zen edition of Binary Puzzle: identical rules, 28% slower, separate high score. Every square takes a sun or a moon, under three rules that squeeze the grid from all sides: never three of the same symbol in a row, exactly four of each in every row and column, and no two rows or columns identical. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
+    description: 'Binary Puzzle at a gentler pace. Every square takes a sun or a moon, under three rules that squeeze the grid from all sides: never three of the same symbol in a row, exactly four of each in every row and column, and no two rows or columns identical. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Binary Puzzle.',
     colors: ['#293b20', '#6945e9'], tags: ['logic', 'binairo', 'brain', 'zen', 'remix'] });
 
   V('blast-arena', { id: 'blast-arena-hyper', title: 'Blast Arena Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Last one standing in a bot arena at 170% speed',
-    description: 'Blast Arena Hyper is Blast Arena with the clock running 70% faster. A top-down arena that keeps sending bots at you, more of them and tougher every wave. Move with WASD, aim with the mouse, dash with Shift and put the cover blocks between you and their fire. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Blast Arena record.',
+    description: 'Everything in Blast Arena at 1.7× speed. A top-down arena that keeps sending bots at you, more of them and tougher every wave. Move with WASD, aim with the mouse, dash with Shift and put the cover blocks between you and their fire. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
     colors: ['#5cdfff', '#ea6dff'], tags: ['shooter', 'arena', 'io-style', 'hyper', 'remix'] });
 
   V('blast-arena', { id: 'blast-arena-insane', title: 'Blast Arena: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Last one standing in a bot arena at double speed',
-    description: 'Insane mode for Blast Arena: identical mechanics, game time × 2, warm palette, separate best score. A top-down arena that keeps sending bots at you, more of them and tougher every wave. Move with WASD, aim with the mouse, dash with Shift and put the cover blocks between you and their fire. Treat the first few runs as reconnaissance — even the opening pattern feels new at this pace.',
+    description: 'The double-speed edition of Blast Arena. A top-down arena that keeps sending bots at you, more of them and tougher every wave. Move with WASD, aim with the mouse, dash with Shift and put the cover blocks between you and their fire. Insane keeps every rule intact and simply halves the time you get for each decision; it is brutally short, oddly relaxing once you accept that, and tracked on its own high-score table.',
     colors: ['#b25cff', '#ff896d'], tags: ['shooter', 'arena', 'io-style', 'insane', 'remix'] });
 
   V('blast-arena', { id: 'blast-arena-turbo', title: 'Blast Arena Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -347,17 +347,17 @@
 
   V('blast-arena', { id: 'blast-arena-zen', title: 'Blast Arena Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Last one standing in a bot arena, at three-quarter pace',
-    description: 'Zen edition of Blast Arena: identical rules, 28% slower, separate high score. A top-down arena that keeps sending bots at you, more of them and tougher every wave. Move with WASD, aim with the mouse, dash with Shift and put the cover blocks between you and their fire. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
+    description: 'Blast Arena at a gentler pace. A top-down arena that keeps sending bots at you, more of them and tougher every wave. Move with WASD, aim with the mouse, dash with Shift and put the cover blocks between you and their fire. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Blast Arena.',
     colors: ['#84f764', '#78bef4'], tags: ['shooter', 'arena', 'io-style', 'zen', 'remix'] });
 
   V('blob-eater', { id: 'blob-eater-hyper', title: 'Blob Eater Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Eat smaller, flee bigger at 170% speed',
-    description: 'Everything in Blob Eater at 1.7× speed. An open arena shared with fourteen rival blobs. Pellets grow you slowly; swallowing another blob grows you fast — but you can only eat something meaningfully smaller than you, and anything meaningfully bigger can eat you. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
+    description: 'The frantic edition of Blob Eater. An open arena shared with fourteen rival blobs. Pellets grow you slowly; swallowing another blob grows you fast — but you can only eat something meaningfully smaller than you, and anything meaningfully bigger can eat you. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
     colors: ['#05231d', '#11ff31'], tags: ['io-style', 'arena', 'growth', 'hyper', 'remix'] });
 
   V('blob-eater', { id: 'blob-eater-insane', title: 'Blob Eater: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Eat smaller, flee bigger at double speed',
-    description: 'Blob Eater, twice as fast. An open arena shared with fourteen rival blobs. Pellets grow you slowly; swallowing another blob grows you fast — but you can only eat something meaningfully smaller than you, and anything meaningfully bigger can eat you. Insane is the top of the remix ladder: past this there is nothing, so a personal best here is the one to brag about. Scores are kept apart from the original and the other remixes.',
+    description: 'Insane mode for Blob Eater: identical mechanics, game time × 2, warm palette, separate best score. An open arena shared with fourteen rival blobs. Pellets grow you slowly; swallowing another blob grows you fast — but you can only eat something meaningfully smaller than you, and anything meaningfully bigger can eat you. Treat the first few runs as reconnaissance — even the opening pattern feels new at this pace.',
     colors: ['#080424', '#1190ff'], tags: ['io-style', 'arena', 'growth', 'insane', 'remix'] });
 
   V('blob-eater', { id: 'blob-eater-turbo', title: 'Blob Eater Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -367,17 +367,17 @@
 
   V('blob-eater', { id: 'blob-eater-zen', title: 'Blob Eater Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Eat smaller, flee bigger, at three-quarter pace',
-    description: 'Blob Eater Zen slows Blob Eater to about three-quarter speed and gives it a calmer palette. An open arena shared with fourteen rival blobs. Pellets grow you slowly; swallowing another blob grows you fast — but you can only eat something meaningfully smaller than you, and anything meaningfully bigger can eat you. With more time between decisions it becomes a game about planning rather than twitch — good for learning the patterns, or for playing one-handed with a coffee. Zen has its own best score.',
+    description: 'A slow-motion cut of Blob Eater, tinted cool. An open arena shared with fourteen rival blobs. Pellets grow you slowly; swallowing another blob grows you fast — but you can only eat something meaningfully smaller than you, and anything meaningfully bigger can eat you. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
     colors: ['#171f09', '#e4b02c'], tags: ['io-style', 'arena', 'growth', 'zen', 'remix'] });
 
   V('block-stacker', { id: 'block-stacker-hyper', title: 'Block Stacker Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Fit the falling shapes, clear the rows at 170% speed',
-    description: 'Everything in Block Stacker at 1.7× speed. Seven shapes fall one at a time — rotate and slide them to fill complete rows. A ghost shows exactly where the piece will land, you can hold a piece for later with C, and Space slams it straight down. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
+    description: 'The frantic edition of Block Stacker. Seven shapes fall one at a time — rotate and slide them to fill complete rows. A ghost shows exactly where the piece will land, you can hold a piece for later with C, and Space slams it straight down. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
     colors: ['#11ff31', '#86e0ff'], tags: ['tetris-like', 'classic', 'blocks', 'hyper', 'remix'] });
 
   V('block-stacker', { id: 'block-stacker-insane', title: 'Block Stacker: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Fit the falling shapes, clear the rows at double speed',
-    description: 'Block Stacker, twice as fast. Seven shapes fall one at a time — rotate and slide them to fill complete rows. A ghost shows exactly where the piece will land, you can hold a piece for later with C, and Space slams it straight down. Insane is the top of the remix ladder: past this there is nothing, so a personal best here is the one to brag about. Scores are kept apart from the original and the other remixes.',
+    description: 'Insane mode for Block Stacker: identical mechanics, game time × 2, warm palette, separate best score. Seven shapes fall one at a time — rotate and slide them to fill complete rows. A ghost shows exactly where the piece will land, you can hold a piece for later with C, and Space slams it straight down. Treat the first few runs as reconnaissance — even the opening pattern feels new at this pace.',
     colors: ['#1190ff', '#cd86ff'], tags: ['tetris-like', 'classic', 'blocks', 'insane', 'remix'] });
 
   V('block-stacker', { id: 'block-stacker-turbo', title: 'Block Stacker Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -387,17 +387,17 @@
 
   V('block-stacker', { id: 'block-stacker-zen', title: 'Block Stacker Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Fit the falling shapes, clear the rows, at three-quarter pace',
-    description: 'Block Stacker Zen slows Block Stacker to about three-quarter speed and gives it a calmer palette. Seven shapes fall one at a time — rotate and slide them to fill complete rows. A ghost shows exactly where the piece will land, you can hold a piece for later with C, and Space slams it straight down. With more time between decisions it becomes a game about planning rather than twitch — good for learning the patterns, or for playing one-handed with a coffee. Zen has its own best score.',
+    description: 'A slow-motion cut of Block Stacker, tinted cool. Seven shapes fall one at a time — rotate and slide them to fill complete rows. A ghost shows exactly where the piece will land, you can hold a piece for later with C, and Space slams it straight down. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
     colors: ['#e4b02c', '#a1f491'], tags: ['tetris-like', 'classic', 'blocks', 'zen', 'remix'] });
 
   V('boat-race', { id: 'boat-race-hyper', title: 'Boat Race Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Buoy gates against the clock at 170% speed',
-    description: 'Hyper edition of Boat Race: same mechanics, 1.7× game speed, separate leaderboard. Race a speedboat down a winding river and thread all 26 red-and-green buoy gates before a 60-second clock runs out. The best runs come from reading two hazards ahead rather than one — the original rewards that, this one demands it.',
+    description: 'Boat Race Hyper is Boat Race with the clock running 70% faster. Race a speedboat down a winding river and thread all 26 red-and-green buoy gates before a 60-second clock runs out. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Boat Race record.',
     colors: ['#009329', '#8ed90e'], tags: ['boat', 'slalom', 'time trial', 'hyper', 'remix'] });
 
   V('boat-race', { id: 'boat-race-insane', title: 'Boat Race: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Buoy gates against the clock at double speed',
-    description: 'The double-speed edition of Boat Race. Race a speedboat down a winding river and thread all 26 red-and-green buoy gates before a 60-second clock runs out. Insane keeps every rule intact and simply halves the time you get for each decision; it is brutally short, oddly relaxing once you accept that, and tracked on its own high-score table.',
+    description: 'Boat Race at 2× — the version for people who found Hyper too polite. Race a speedboat down a winding river and thread all 26 red-and-green buoy gates before a 60-second clock runs out. At double speed reaction is barely enough; runs are won by knowing what comes next before it appears. Separate leaderboard so the numbers stay honest.',
     colors: ['#003993', '#0add9e'], tags: ['boat', 'slalom', 'time trial', 'insane', 'remix'] });
 
   V('boat-race', { id: 'boat-race-turbo', title: 'Boat Race Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -407,17 +407,17 @@
 
   V('boat-race', { id: 'boat-race-zen', title: 'Boat Race Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Buoy gates against the clock, at three-quarter pace',
-    description: 'A slow-motion cut of Boat Race, tinted cool. Race a speedboat down a winding river and thread all 26 red-and-green buoy gates before a 60-second clock runs out. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
+    description: 'The relaxed version of Boat Race. Race a speedboat down a winding river and thread all 26 red-and-green buoy gates before a 60-second clock runs out. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
     colors: ['#807113', '#bd2a31'], tags: ['boat', 'slalom', 'time trial', 'zen', 'remix'] });
 
   V('bowling', { id: 'bowling-hyper', title: 'Bowling Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Ten frames with a proper scorecard at 170% speed',
-    description: 'Hyper edition of Bowling: same mechanics, 1.7× game speed, separate leaderboard. Three clicks per throw: the first locks your line as a marker slides across the lane, the second sets power, the third sets spin — and spin builds into a real hook as the ball travels. Pins knock each other over, so a good pocket hit can clear all ten. The best runs come from reading two hazards ahead rather than one — the original rewards that, this one demands it.',
+    description: 'Bowling Hyper is Bowling with the clock running 70% faster. Three clicks per throw: the first locks your line as a marker slides across the lane, the second sets power, the third sets spin — and spin builds into a real hook as the ball travels. Pins knock each other over, so a good pocket hit can clear all ten. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Bowling record.',
     colors: ['#d6518b', '#163a3e'], tags: ['bowling', 'timing', 'sports', 'hyper', 'remix'] });
 
   V('bowling', { id: 'bowling-insane', title: 'Bowling: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Ten frames with a proper scorecard at double speed',
-    description: 'The double-speed edition of Bowling. Three clicks per throw: the first locks your line as a marker slides across the lane, the second sets power, the third sets spin — and spin builds into a real hook as the ball travels. Pins knock each other over, so a good pocket hit can clear all ten. Insane keeps every rule intact and simply halves the time you get for each decision; it is brutally short, oddly relaxing once you accept that, and tracked on its own high-score table.',
+    description: 'Bowling at 2× — the version for people who found Hyper too polite. Three clicks per throw: the first locks your line as a marker slides across the lane, the second sets power, the third sets spin — and spin builds into a real hook as the ball travels. Pins knock each other over, so a good pocket hit can clear all ten. At double speed reaction is barely enough; runs are won by knowing what comes next before it appears. Separate leaderboard so the numbers stay honest.',
     colors: ['#d9ca4e', '#27153f'], tags: ['bowling', 'timing', 'sports', 'insane', 'remix'] });
 
   V('bowling', { id: 'bowling-turbo', title: 'Bowling Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -427,17 +427,17 @@
 
   V('bowling', { id: 'bowling-zen', title: 'Bowling Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Ten frames with a proper scorecard, at three-quarter pace',
-    description: 'A slow-motion cut of Bowling, tinted cool. Three clicks per throw: the first locks your line as a marker slides across the lane, the second sets power, the third sets spin — and spin builds into a real hook as the ball travels. Pins knock each other over, so a good pocket hit can clear all ten. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
+    description: 'The relaxed version of Bowling. Three clicks per throw: the first locks your line as a marker slides across the lane, the second sets power, the third sets spin — and spin builds into a real hook as the ball travels. Pins knock each other over, so a good pocket hit can clear all ten. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
     colors: ['#7163c4', '#25381c'], tags: ['bowling', 'timing', 'sports', 'zen', 'remix'] });
 
   V('box-fort', { id: 'box-fort-hyper', title: 'Box Fort Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Stack the raining boxes into stairs, reach the star at 170% speed',
-    description: 'The frantic edition of Box Fort. Cardboard boxes drift down from the sky one at a time, landing wherever the red marker points. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
+    description: 'Box Fort, seventy percent faster, in a hotter palette. Cardboard boxes drift down from the sky one at a time, landing wherever the red marker points. Hyper strips out the breathing room the original gives you; what is left is pure pattern recognition and commitment. Practise in Zen or the original, then come here to see how far it holds.',
     colors: ['#bfffdb', '#e94c90'], tags: ['building', 'levels', 'platformer', 'hyper', 'remix'] });
 
   V('box-fort', { id: 'box-fort-insane', title: 'Box Fort: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Stack the raining boxes into stairs, reach the star at double speed',
-    description: 'Box Fort: Insane Mode runs Box Fort at exactly double speed. Cardboard boxes drift down from the sky one at a time, landing wherever the red marker points. Everything the original does, it does twice as fast — including the difficulty ramp — so this is less a game to beat than a game to survive, and a run that lasts thirty seconds is genuinely good. Own best score, warm palette.',
+    description: 'Box Fort, twice as fast. Cardboard boxes drift down from the sky one at a time, landing wherever the red marker points. Insane is the top of the remix ladder: past this there is nothing, so a personal best here is the one to brag about. Scores are kept apart from the original and the other remixes.',
     colors: ['#bfceff', '#ecdc49'], tags: ['building', 'levels', 'platformer', 'insane', 'remix'] });
 
   V('box-fort', { id: 'box-fort-turbo', title: 'Box Fort Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -447,17 +447,17 @@
 
   V('box-fort', { id: 'box-fort-zen', title: 'Box Fort Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Stack the raining boxes into stairs, reach the star, at three-quarter pace',
-    description: 'The relaxed version of Box Fort. Cardboard boxes drift down from the sky one at a time, landing wherever the red marker points. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
+    description: 'Zen edition of Box Fort: identical rules, 28% slower, separate high score. Cardboard boxes drift down from the sky one at a time, landing wherever the red marker points. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
     colors: ['#fbfcc2', '#7362d3'], tags: ['building', 'levels', 'platformer', 'zen', 'remix'] });
 
   V('box-push', { id: 'box-push-hyper', title: 'Box Push Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Sokoban — push, never pull at 170% speed',
-    description: 'Hyper edition of Box Push: same mechanics, 1.7× game speed, separate leaderboard. Shove every crate onto a green marker. The catch is that you can only push: once a crate is in a corner or flat against a wall in the wrong place, that level is unwinnable and you will have to undo. The best runs come from reading two hazards ahead rather than one — the original rewards that, this one demands it.',
+    description: 'Box Push Hyper is Box Push with the clock running 70% faster. Shove every crate onto a green marker. The catch is that you can only push: once a crate is in a corner or flat against a wall in the wrong place, that level is unwinnable and you will have to undo. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Box Push record.',
     colors: ['#611c3d', '#69e720'], tags: ['sokoban', 'logic', 'brain', 'hyper', 'remix'] });
 
   V('box-push', { id: 'box-push-insane', title: 'Box Push: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Sokoban — push, never pull at double speed',
-    description: 'The double-speed edition of Box Push. Shove every crate onto a green marker. The catch is that you can only push: once a crate is in a corner or flat against a wall in the wrong place, that level is unwinnable and you will have to undo. Insane keeps every rule intact and simply halves the time you get for each decision; it is brutally short, oddly relaxing once you accept that, and tracked on its own high-score table.',
+    description: 'Box Push at 2× — the version for people who found Hyper too polite. Shove every crate onto a green marker. The catch is that you can only push: once a crate is in a corner or flat against a wall in the wrong place, that level is unwinnable and you will have to undo. At double speed reaction is barely enough; runs are won by knowing what comes next before it appears. Separate leaderboard so the numbers stay honest.',
     colors: ['#62581b', '#1cebe4'], tags: ['sokoban', 'logic', 'brain', 'insane', 'remix'] });
 
   V('box-push', { id: 'box-push-turbo', title: 'Box Push Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -467,17 +467,17 @@
 
   V('box-push', { id: 'box-push-zen', title: 'Box Push Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Sokoban — push, never pull, at three-quarter pace',
-    description: 'A slow-motion cut of Box Push, tinted cool. Shove every crate onto a green marker. The catch is that you can only push: once a crate is in a corner or flat against a wall in the wrong place, that level is unwinnable and you will have to undo. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
+    description: 'The relaxed version of Box Push. Shove every crate onto a green marker. The catch is that you can only push: once a crate is in a corner or flat against a wall in the wrong place, that level is unwinnable and you will have to undo. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
     colors: ['#2b2657', '#cb5b3c'], tags: ['sokoban', 'logic', 'brain', 'zen', 'remix'] });
 
   V('brick-breaker', { id: 'brick-breaker-hyper', title: 'Brick Breaker Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Smash every brick across 12 levels at 170% speed',
-    description: 'Everything in Brick Breaker at 1.7× speed. Bounce the ball off your paddle to clear the wall. Tougher bricks need two or three hits. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
+    description: 'The frantic edition of Brick Breaker. Bounce the ball off your paddle to clear the wall. Tougher bricks need two or three hits. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
     colors: ['#af67ff', '#5cdfff'], tags: ['classic', 'paddle', 'arkanoid', 'hyper', 'remix'] });
 
   V('brick-breaker', { id: 'brick-breaker-insane', title: 'Brick Breaker: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Smash every brick across 12 levels at double speed',
-    description: 'Brick Breaker, twice as fast. Bounce the ball off your paddle to clear the wall. Tougher bricks need two or three hits. Insane is the top of the remix ladder: past this there is nothing, so a personal best here is the one to brag about. Scores are kept apart from the original and the other remixes.',
+    description: 'Insane mode for Brick Breaker: identical mechanics, game time × 2, warm palette, separate best score. Bounce the ball off your paddle to clear the wall. Tougher bricks need two or three hits. Treat the first few runs as reconnaissance — even the opening pattern feels new at this pace.',
     colors: ['#ff6784', '#b25cff'], tags: ['classic', 'paddle', 'arkanoid', 'insane', 'remix'] });
 
   V('brick-breaker', { id: 'brick-breaker-turbo', title: 'Brick Breaker Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -492,12 +492,12 @@
 
   V('bubble-pop', { id: 'bubble-pop-hyper', title: 'Bubble Pop Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Match three, drop the rest at 170% speed',
-    description: 'Bubble Pop Hyper is Bubble Pop with the clock running 70% faster. Fire bubbles up into a hanging cluster. Three or more of the same colour touching each other pop — and crucially, anything left dangling with no path back to the ceiling falls as well, which is where the big scores come from. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Bubble Pop record.',
+    description: 'Everything in Bubble Pop at 1.7× speed. Fire bubbles up into a hanging cluster. Three or more of the same colour touching each other pop — and crucially, anything left dangling with no path back to the ceiling falls as well, which is where the big scores come from. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
     colors: ['#09342e', '#86e0ff'], tags: ['match 3', 'aiming', 'puzzle', 'hyper', 'remix'] });
 
   V('bubble-pop', { id: 'bubble-pop-insane', title: 'Bubble Pop: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Match three, drop the rest at double speed',
-    description: 'Insane mode for Bubble Pop: identical mechanics, game time × 2, warm palette, separate best score. Fire bubbles up into a hanging cluster. Three or more of the same colour touching each other pop — and crucially, anything left dangling with no path back to the ceiling falls as well, which is where the big scores come from. Treat the first few runs as reconnaissance — even the opening pattern feels new at this pace.',
+    description: 'The double-speed edition of Bubble Pop. Fire bubbles up into a hanging cluster. Three or more of the same colour touching each other pop — and crucially, anything left dangling with no path back to the ceiling falls as well, which is where the big scores come from. Insane keeps every rule intact and simply halves the time you get for each decision; it is brutally short, oddly relaxing once you accept that, and tracked on its own high-score table.',
     colors: ['#100835', '#cd86ff'], tags: ['match 3', 'aiming', 'puzzle', 'insane', 'remix'] });
 
   V('bubble-pop', { id: 'bubble-pop-turbo', title: 'Bubble Pop Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -507,17 +507,17 @@
 
   V('bubble-pop', { id: 'bubble-pop-zen', title: 'Bubble Pop Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Match three, drop the rest, at three-quarter pace',
-    description: 'Bubble Pop at a gentler pace. Fire bubbles up into a hanging cluster. Three or more of the same colour touching each other pop — and crucially, anything left dangling with no path back to the ceiling falls as well, which is where the big scores come from. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Bubble Pop.',
+    description: 'Bubble Pop Zen slows Bubble Pop to about three-quarter speed and gives it a calmer palette. Fire bubbles up into a hanging cluster. Three or more of the same colour touching each other pop — and crucially, anything left dangling with no path back to the ceiling falls as well, which is where the big scores come from. With more time between decisions it becomes a game about planning rather than twitch — good for learning the patterns, or for playing one-handed with a coffee. Zen has its own best score.',
     colors: ['#202e0f', '#a1f491'], tags: ['match 3', 'aiming', 'puzzle', 'zen', 'remix'] });
 
   V('bubble-trap', { id: 'bubble-trap-hyper', title: 'Bubble Trap Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Trap critters in bubbles, chain-pop them at 170% speed',
-    description: 'Bubble Trap, seventy percent faster, in a hotter palette. Blow a bubble and it shoots forward for half a second, trapping any critter it touches before it starts to float. Hyper strips out the breathing room the original gives you; what is left is pure pattern recognition and commitment. Practise in Zen or the original, then come here to see how far it holds.',
+    description: 'Hyper edition of Bubble Trap: same mechanics, 1.7× game speed, separate leaderboard. Blow a bubble and it shoots forward for half a second, trapping any critter it touches before it starts to float. The best runs come from reading two hazards ahead rather than one — the original rewards that, this one demands it.',
     colors: ['#0b512c', '#76f04e'], tags: ['bubble bobble', 'arcade', 'levels', 'hyper', 'remix'] });
 
   V('bubble-trap', { id: 'bubble-trap-insane', title: 'Bubble Trap: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Trap critters in bubbles, chain-pop them at double speed',
-    description: 'Bubble Trap at 2× — the version for people who found Hyper too polite. Blow a bubble and it shoots forward for half a second, trapping any critter it touches before it starts to float. At double speed reaction is barely enough; runs are won by knowing what comes next before it appears. Separate leaderboard so the numbers stay honest.',
+    description: 'Bubble Trap: Insane Mode runs Bubble Trap at exactly double speed. Blow a bubble and it shoots forward for half a second, trapping any critter it touches before it starts to float. Everything the original does, it does twice as fast — including the difficulty ramp — so this is less a game to beat than a game to survive, and a run that lasts thirty seconds is genuinely good. Own best score, warm palette.',
     colors: ['#0a1852', '#4be5f3'], tags: ['bubble bobble', 'arcade', 'levels', 'insane', 'remix'] });
 
   V('bubble-trap', { id: 'bubble-trap-turbo', title: 'Bubble Trap Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -527,17 +527,17 @@
 
   V('bubble-trap', { id: 'bubble-trap-zen', title: 'Bubble Trap Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Trap critters in bubbles, chain-pop them, at three-quarter pace',
-    description: 'Bubble Trap Zen slows Bubble Trap to about three-quarter speed and gives it a calmer palette. Blow a bubble and it shoots forward for half a second, trapping any critter it touches before it starts to float. With more time between decisions it becomes a game about planning rather than twitch — good for learning the patterns, or for playing one-handed with a coffee. Zen has its own best score.',
+    description: 'A slow-motion cut of Bubble Trap, tinted cool. Blow a bubble and it shoots forward for half a second, trapping any critter it touches before it starts to float. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
     colors: ['#454715', '#da8c64'], tags: ['bubble bobble', 'arcade', 'levels', 'zen', 'remix'] });
 
   V('bug-blaster', { id: 'bug-blaster-hyper', title: 'Bug Blaster Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Split the centipede, mind the spider at 170% speed',
-    description: 'Bug Blaster Hyper is Bug Blaster with the clock running 70% faster. A centipede snakes down the screen, turning and dropping a row every time it meets a mushroom. Shooting a middle segment splits the body into two independent halves and leaves a new mushroom where it died — so careless shooting makes the board worse. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Bug Blaster record.',
+    description: 'Everything in Bug Blaster at 1.7× speed. A centipede snakes down the screen, turning and dropping a row every time it meets a mushroom. Shooting a middle segment splits the body into two independent halves and leaves a new mushroom where it died — so careless shooting makes the board worse. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
     colors: ['#0c1402', '#e25900'], tags: ['classic', 'shooter', 'arcade', 'hyper', 'remix'] });
 
   V('bug-blaster', { id: 'bug-blaster-insane', title: 'Bug Blaster: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Split the centipede, mind the spider at double speed',
-    description: 'Insane mode for Bug Blaster: identical mechanics, game time × 2, warm palette, separate best score. A centipede snakes down the screen, turning and dropping a row every time it meets a mushroom. Shooting a middle segment splits the body into two independent halves and leaves a new mushroom where it died — so careless shooting makes the board worse. Treat the first few runs as reconnaissance — even the opening pattern feels new at this pace.',
+    description: 'The double-speed edition of Bug Blaster. A centipede snakes down the screen, turning and dropping a row every time it meets a mushroom. Shooting a middle segment splits the body into two independent halves and leaves a new mushroom where it died — so careless shooting makes the board worse. Insane keeps every rule intact and simply halves the time you get for each decision; it is brutally short, oddly relaxing once you accept that, and tracked on its own high-score table.',
     colors: ['#021410', '#3de200'], tags: ['classic', 'shooter', 'arcade', 'insane', 'remix'] });
 
   V('bug-blaster', { id: 'bug-blaster-turbo', title: 'Bug Blaster Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -547,17 +547,17 @@
 
   V('bug-blaster', { id: 'bug-blaster-zen', title: 'Bug Blaster Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Split the centipede, mind the spider, at three-quarter pace',
-    description: 'Bug Blaster at a gentler pace. A centipede snakes down the screen, turning and dropping a row every time it meets a mushroom. Shooting a middle segment splits the body into two independent halves and leaves a new mushroom where it died — so careless shooting makes the board worse. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Bug Blaster.',
+    description: 'Bug Blaster Zen slows Bug Blaster to about three-quarter speed and gives it a calmer palette. A centipede snakes down the screen, turning and dropping a row every time it meets a mushroom. Shooting a middle segment splits the body into two independent halves and leaves a new mushroom where it died — so careless shooting makes the board worse. With more time between decisions it becomes a game about planning rather than twitch — good for learning the patterns, or for playing one-handed with a coffee. Zen has its own best score.',
     colors: ['#110505', '#bf1fc3'], tags: ['classic', 'shooter', 'arcade', 'zen', 'remix'] });
 
   V('burrow-blast', { id: 'burrow-blast-hyper', title: 'Burrow Blast Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Dig, pump, and drop boulders at 170% speed',
-    description: 'Burrow Blast, seventy percent faster, in a hotter palette. You are a digger with an air pump and a whole hillside to tunnel through. Every tunnel you carve is one the crawlers can chase you down, so shaping the ground is half the fight. Hyper strips out the breathing room the original gives you; what is left is pure pattern recognition and commitment. Practise in Zen or the original, then come here to see how far it holds.',
+    description: 'Hyper edition of Burrow Blast: same mechanics, 1.7× game speed, separate leaderboard. You are a digger with an air pump and a whole hillside to tunnel through. Every tunnel you carve is one the crawlers can chase you down, so shaping the ground is half the fight. The best runs come from reading two hazards ahead rather than one — the original rewards that, this one demands it.',
     colors: ['#842258', '#ff6694'], tags: ['arcade', 'digging', 'retro', 'hyper', 'remix'] });
 
   V('burrow-blast', { id: 'burrow-blast-insane', title: 'Burrow Blast: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Dig, pump, and drop boulders at double speed',
-    description: 'Burrow Blast at 2× — the version for people who found Hyper too polite. You are a digger with an air pump and a whole hillside to tunnel through. Every tunnel you carve is one the crawlers can chase you down, so shaping the ground is half the fight. At double speed reaction is barely enough; runs are won by knowing what comes next before it appears. Separate leaderboard so the numbers stay honest.',
+    description: 'Burrow Blast: Insane Mode runs Burrow Blast at exactly double speed. You are a digger with an air pump and a whole hillside to tunnel through. Every tunnel you carve is one the crawlers can chase you down, so shaping the ground is half the fight. Everything the original does, it does twice as fast — including the difficulty ramp — so this is less a game to beat than a game to survive, and a run that lasts thirty seconds is genuinely good. Own best score, warm palette.',
     colors: ['#867020', '#faff66'], tags: ['arcade', 'digging', 'retro', 'insane', 'remix'] });
 
   V('burrow-blast', { id: 'burrow-blast-turbo', title: 'Burrow Blast Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -567,17 +567,17 @@
 
   V('burrow-blast', { id: 'burrow-blast-zen', title: 'Burrow Blast Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Dig, pump, and drop boulders, at three-quarter pace',
-    description: 'Burrow Blast Zen slows Burrow Blast to about three-quarter speed and gives it a calmer palette. You are a digger with an air pump and a whole hillside to tunnel through. Every tunnel you carve is one the crawlers can chase you down, so shaping the ground is half the fight. With more time between decisions it becomes a game about planning rather than twitch — good for learning the patterns, or for playing one-handed with a coffee. Zen has its own best score.',
+    description: 'A slow-motion cut of Burrow Blast, tinted cool. You are a digger with an air pump and a whole hillside to tunnel through. Every tunnel you carve is one the crawlers can chase you down, so shaping the ground is half the fight. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
     colors: ['#323076', '#956ef7'], tags: ['arcade', 'digging', 'retro', 'zen', 'remix'] });
 
   V('cannon-golf', { id: 'cannon-golf-hyper', title: 'Cannon Golf Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Golf, but the club is a cannon and the course is a cave at 170% speed',
-    description: 'Hyper edition of Cannon Golf: same mechanics, 1.7× game speed, separate leaderboard. Twelve cave holes played with a cannon that trundles along to wherever your ball stops. Drag from anywhere to set angle and power, watch the dotted preview bounce off the first wall, and fire. The best runs come from reading two hazards ahead rather than one — the original rewards that, this one demands it.',
+    description: 'Cannon Golf Hyper is Cannon Golf with the clock running 70% faster. Twelve cave holes played with a cannon that trundles along to wherever your ball stops. Drag from anywhere to set angle and power, watch the dotted preview bounce off the first wall, and fire. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Cannon Golf record.',
     colors: ['#1d161a', '#ff4563'], tags: ['golf', 'physics', 'aiming', 'hyper', 'remix'] });
 
   V('cannon-golf', { id: 'cannon-golf-insane', title: 'Cannon Golf: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Golf, but the club is a cannon and the course is a cave at double speed',
-    description: 'The double-speed edition of Cannon Golf. Twelve cave holes played with a cannon that trundles along to wherever your ball stops. Drag from anywhere to set angle and power, watch the dotted preview bounce off the first wall, and fire. Insane keeps every rule intact and simply halves the time you get for each decision; it is brutally short, oddly relaxing once you accept that, and tracked on its own high-score table.',
+    description: 'Cannon Golf at 2× — the version for people who found Hyper too polite. Twelve cave holes played with a cannon that trundles along to wherever your ball stops. Drag from anywhere to set angle and power, watch the dotted preview bounce off the first wall, and fire. At double speed reaction is barely enough; runs are won by knowing what comes next before it appears. Separate leaderboard so the numbers stay honest.',
     colors: ['#1d1b16', '#dfff45'], tags: ['golf', 'physics', 'aiming', 'insane', 'remix'] });
 
   V('cannon-golf', { id: 'cannon-golf-turbo', title: 'Cannon Golf Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -587,17 +587,17 @@
 
   V('cannon-golf', { id: 'cannon-golf-zen', title: 'Cannon Golf Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Golf, but the club is a cannon and the course is a cave, at three-quarter pace',
-    description: 'The relaxed version of Cannon Golf. Twelve cave holes played with a cannon that trundles along to wherever your ball stops. Drag from anywhere to set angle and power, watch the dotted preview bounce off the first wall, and fire. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
+    description: 'Zen edition of Cannon Golf: identical rules, 28% slower, separate high score. Twelve cave holes played with a cannon that trundles along to wherever your ball stops. Drag from anywhere to set angle and power, watch the dotted preview bounce off the first wall, and fire. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
     colors: ['#17171c', '#9650f4'], tags: ['golf', 'physics', 'aiming', 'zen', 'remix'] });
 
   V('cannon-siege', { id: 'cannon-siege-hyper', title: 'Cannon Siege Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Artillery duel across the hills at 170% speed',
-    description: 'The frantic edition of Cannon Siege. You and an enemy gun trade shots across broken ground. Set the angle and power of each shell and account for a crosswind that changes every round. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
+    description: 'Cannon Siege, seventy percent faster, in a hotter palette. You and an enemy gun trade shots across broken ground. Set the angle and power of each shell and account for a crosswind that changes every round. Hyper strips out the breathing room the original gives you; what is left is pure pattern recognition and commitment. Practise in Zen or the original, then come here to see how far it holds.',
     colors: ['#4e3c28', '#ff5784'], tags: ['artillery', 'physics', 'turn based', 'hyper', 'remix'] });
 
   V('cannon-siege', { id: 'cannon-siege-insane', title: 'Cannon Siege: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Artillery duel across the hills at double speed',
-    description: 'Cannon Siege: Insane Mode runs Cannon Siege at exactly double speed. You and an enemy gun trade shots across broken ground. Set the angle and power of each shell and account for a crosswind that changes every round. Everything the original does, it does twice as fast — including the difficulty ramp — so this is less a game to beat than a game to survive, and a run that lasts thirty seconds is genuinely good. Own best score, warm palette.',
+    description: 'Cannon Siege, twice as fast. You and an enemy gun trade shots across broken ground. Set the angle and power of each shell and account for a crosswind that changes every round. Insane is the top of the remix ladder: past this there is nothing, so a personal best here is the one to brag about. Scores are kept apart from the original and the other remixes.',
     colors: ['#2d4f28', '#f4ff57'], tags: ['artillery', 'physics', 'turn based', 'insane', 'remix'] });
 
   V('cannon-siege', { id: 'cannon-siege-turbo', title: 'Cannon Siege Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -607,17 +607,17 @@
 
   V('cannon-siege', { id: 'cannon-siege-zen', title: 'Cannon Siege Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Artillery duel across the hills, at three-quarter pace',
-    description: 'Zen edition of Cannon Siege: identical rules, 28% slower, separate high score. You and an enemy gun trade shots across broken ground. Set the angle and power of each shell and account for a crosswind that changes every round. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
+    description: 'Cannon Siege at a gentler pace. You and an enemy gun trade shots across broken ground. Set the angle and power of each shell and account for a crosswind that changes every round. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Cannon Siege.',
     colors: ['#492d45', '#8f5ff7'], tags: ['artillery', 'physics', 'turn based', 'zen', 'remix'] });
 
   V('castle-raid', { id: 'castle-raid-hyper', title: 'Castle Raid Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Time each drop; every survivor multiplies the loot at 170% speed',
-    description: 'Castle Raid, seventy percent faster, in a hotter palette. A side-view raid built on timing. Hyper strips out the breathing room the original gives you; what is left is pure pattern recognition and commitment. Practise in Zen or the original, then come here to see how far it holds.',
+    description: 'Hyper edition of Castle Raid: same mechanics, 1.7× game speed, separate leaderboard. A side-view raid built on timing. The best runs come from reading two hazards ahead rather than one — the original rewards that, this one demands it.',
     colors: ['#1e4f46', '#ff88a0'], tags: ['timing', 'castle', 'raid', 'hyper', 'remix'] });
 
   V('castle-raid', { id: 'castle-raid-insane', title: 'Castle Raid: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Time each drop; every survivor multiplies the loot at double speed',
-    description: 'Castle Raid at 2× — the version for people who found Hyper too polite. A side-view raid built on timing. At double speed reaction is barely enough; runs are won by knowing what comes next before it appears. Separate leaderboard so the numbers stay honest.',
+    description: 'Castle Raid: Insane Mode runs Castle Raid at exactly double speed. A side-view raid built on timing. Everything the original does, it does twice as fast — including the difficulty ramp — so this is less a game to beat than a game to survive, and a run that lasts thirty seconds is genuinely good. Own best score, warm palette.',
     colors: ['#251d50', '#efff88'], tags: ['timing', 'castle', 'raid', 'insane', 'remix'] });
 
   V('castle-raid', { id: 'castle-raid-turbo', title: 'Castle Raid Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -627,17 +627,17 @@
 
   V('castle-raid', { id: 'castle-raid-zen', title: 'Castle Raid Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Time each drop; every survivor multiplies the loot, at three-quarter pace',
-    description: 'Castle Raid Zen slows Castle Raid to about three-quarter speed and gives it a calmer palette. A side-view raid built on timing. With more time between decisions it becomes a game about planning rather than twitch — good for learning the patterns, or for playing one-handed with a coffee. Zen has its own best score.',
+    description: 'A slow-motion cut of Castle Raid, tinted cool. A side-view raid built on timing. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
     colors: ['#3a4825', '#b790f7'], tags: ['timing', 'castle', 'raid', 'zen', 'remix'] });
 
   V('cave-flyer', { id: 'cave-flyer-hyper', title: 'Cave Flyer Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Hold to climb, release to fall at 170% speed',
-    description: 'Hyper edition of Cave Flyer: same mechanics, 1.7× game speed, separate leaderboard. One control: hold to fire the thruster and climb, let go and gravity takes over. The cave winds unpredictably and — crucially — the gap keeps narrowing the further you fly, so a passage that felt generous at the start will not stay that way. The best runs come from reading two hazards ahead rather than one — the original rewards that, this one demands it.',
+    description: 'Cave Flyer Hyper is Cave Flyer with the clock running 70% faster. One control: hold to fire the thruster and climb, let go and gravity takes over. The cave winds unpredictably and — crucially — the gap keeps narrowing the further you fly, so a passage that felt generous at the start will not stay that way. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Cave Flyer record.',
     colors: ['#265a58', '#11ff31'], tags: ['one button', 'endless', 'reflex', 'hyper', 'remix'] });
 
   V('cave-flyer', { id: 'cave-flyer-insane', title: 'Cave Flyer: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Hold to climb, release to fall at double speed',
-    description: 'The double-speed edition of Cave Flyer. One control: hold to fire the thruster and climb, let go and gravity takes over. The cave winds unpredictably and — crucially — the gap keeps narrowing the further you fly, so a passage that felt generous at the start will not stay that way. Insane keeps every rule intact and simply halves the time you get for each decision; it is brutally short, oddly relaxing once you accept that, and tracked on its own high-score table.',
+    description: 'Cave Flyer at 2× — the version for people who found Hyper too polite. One control: hold to fire the thruster and climb, let go and gravity takes over. The cave winds unpredictably and — crucially — the gap keeps narrowing the further you fly, so a passage that felt generous at the start will not stay that way. At double speed reaction is barely enough; runs are won by knowing what comes next before it appears. Separate leaderboard so the numbers stay honest.',
     colors: ['#34255b', '#1190ff'], tags: ['one button', 'endless', 'reflex', 'insane', 'remix'] });
 
   V('cave-flyer', { id: 'cave-flyer-turbo', title: 'Cave Flyer Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -647,17 +647,17 @@
 
   V('cave-flyer', { id: 'cave-flyer-zen', title: 'Cave Flyer Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Hold to climb, release to fall, at three-quarter pace',
-    description: 'The relaxed version of Cave Flyer. One control: hold to fire the thruster and climb, let go and gravity takes over. The cave winds unpredictably and — crucially — the gap keeps narrowing the further you fly, so a passage that felt generous at the start will not stay that way. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
+    description: 'Zen edition of Cave Flyer: identical rules, 28% slower, separate high score. One control: hold to fire the thruster and climb, let go and gravity takes over. The cave winds unpredictably and — crucially — the gap keeps narrowing the further you fly, so a passage that felt generous at the start will not stay that way. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
     colors: ['#3f532d', '#e4b02c'], tags: ['one button', 'endless', 'reflex', 'zen', 'remix'] });
 
   V('checkers', { id: 'checkers-hyper', title: 'Checkers Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Draughts with forced captures and kings at 170% speed',
-    description: 'Hyper edition of Checkers: same mechanics, 1.7× game speed, separate leaderboard. Move diagonally forward one square, or jump an opposing piece to take it. Captures are compulsory and chain, so a single move can clear three pieces off the board. The best runs come from reading two hazards ahead rather than one — the original rewards that, this one demands it.',
+    description: 'Checkers Hyper is Checkers with the clock running 70% faster. Move diagonally forward one square, or jump an opposing piece to take it. Captures are compulsory and chain, so a single move can clear three pieces off the board. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Checkers record.',
     colors: ['#87225b', '#11ff31'], tags: ['board game', 'draughts', 'vs cpu', 'hyper', 'remix'] });
 
   V('checkers', { id: 'checkers-insane', title: 'Checkers: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Draughts with forced captures and kings at double speed',
-    description: 'The double-speed edition of Checkers. Move diagonally forward one square, or jump an opposing piece to take it. Captures are compulsory and chain, so a single move can clear three pieces off the board. Insane keeps every rule intact and simply halves the time you get for each decision; it is brutally short, oddly relaxing once you accept that, and tracked on its own high-score table.',
+    description: 'Checkers at 2× — the version for people who found Hyper too polite. Move diagonally forward one square, or jump an opposing piece to take it. Captures are compulsory and chain, so a single move can clear three pieces off the board. At double speed reaction is barely enough; runs are won by knowing what comes next before it appears. Separate leaderboard so the numbers stay honest.',
     colors: ['#897020', '#1190ff'], tags: ['board game', 'draughts', 'vs cpu', 'insane', 'remix'] });
 
   V('checkers', { id: 'checkers-turbo', title: 'Checkers Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -667,17 +667,17 @@
 
   V('checkers', { id: 'checkers-zen', title: 'Checkers Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Draughts with forced captures and kings, at three-quarter pace',
-    description: 'The relaxed version of Checkers. Move diagonally forward one square, or jump an opposing piece to take it. Captures are compulsory and chain, so a single move can clear three pieces off the board. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
+    description: 'Zen edition of Checkers: identical rules, 28% slower, separate high score. Move diagonally forward one square, or jump an opposing piece to take it. Captures are compulsory and chain, so a single move can clear three pieces off the board. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
     colors: ['#313079', '#e4b02c'], tags: ['board game', 'draughts', 'vs cpu', 'zen', 'remix'] });
 
   V('chess-blitz', { id: 'chess-blitz-hyper', title: 'Chess Blitz Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Real chess against a searching engine at 170% speed',
-    description: 'Hyper edition of Chess Blitz: same mechanics, 1.7× game speed, separate leaderboard. Full piece movement with check, checkmate and stalemate detection, and pawns that promote to queens. Legal moves are shown as dots when you pick up a piece — red rings mark captures. The best runs come from reading two hazards ahead rather than one — the original rewards that, this one demands it.',
+    description: 'Chess Blitz Hyper is Chess Blitz with the clock running 70% faster. Full piece movement with check, checkmate and stalemate detection, and pawns that promote to queens. Legal moves are shown as dots when you pick up a piece — red rings mark captures. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Chess Blitz record.',
     colors: ['#87225b', '#f0a5bf'], tags: ['chess', 'board game', 'vs cpu', 'hyper', 'remix'] });
 
   V('chess-blitz', { id: 'chess-blitz-insane', title: 'Chess Blitz: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Real chess against a searching engine at double speed',
-    description: 'The double-speed edition of Chess Blitz. Full piece movement with check, checkmate and stalemate detection, and pawns that promote to queens. Legal moves are shown as dots when you pick up a piece — red rings mark captures. Insane keeps every rule intact and simply halves the time you get for each decision; it is brutally short, oddly relaxing once you accept that, and tracked on its own high-score table.',
+    description: 'Chess Blitz at 2× — the version for people who found Hyper too polite. Full piece movement with check, checkmate and stalemate detection, and pawns that promote to queens. Legal moves are shown as dots when you pick up a piece — red rings mark captures. At double speed reaction is barely enough; runs are won by knowing what comes next before it appears. Separate leaderboard so the numbers stay honest.',
     colors: ['#897020', '#f1f0a3'], tags: ['chess', 'board game', 'vs cpu', 'insane', 'remix'] });
 
   V('chess-blitz', { id: 'chess-blitz-turbo', title: 'Chess Blitz Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -687,17 +687,17 @@
 
   V('chess-blitz', { id: 'chess-blitz-zen', title: 'Chess Blitz Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Real chess against a searching engine, at three-quarter pace',
-    description: 'The relaxed version of Chess Blitz. Full piece movement with check, checkmate and stalemate detection, and pawns that promote to queens. Legal moves are shown as dots when you pick up a piece — red rings mark captures. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
+    description: 'Zen edition of Chess Blitz: identical rules, 28% slower, separate high score. Full piece movement with check, checkmate and stalemate detection, and pawns that promote to queens. Legal moves are shown as dots when you pick up a piece — red rings mark captures. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
     colors: ['#313079', '#bcafe5'], tags: ['chess', 'board game', 'vs cpu', 'zen', 'remix'] });
 
   V('city-idle', { id: 'city-idle-hyper', title: 'City Idle Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Zone it, wire it, watch it grow at 170% speed',
-    description: 'Hyper edition of City Idle: same mechanics, 1.7× game speed, separate leaderboard. A small city on a small grid, where nothing works unless it touches a road. Housing brings residents, shops and factories give them jobs, and a power plant keeps the whole thing lit — run short of any of the three and happiness starts sliding. The best runs come from reading two hazards ahead rather than one — the original rewards that, this one demands it.',
+    description: 'City Idle Hyper is City Idle with the clock running 70% faster. A small city on a small grid, where nothing works unless it touches a road. Housing brings residents, shops and factories give them jobs, and a power plant keeps the whole thing lit — run short of any of the three and happiness starts sliding. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your City Idle record.',
     colors: ['#1a3e2d', '#aab855'], tags: ['idle', 'building', 'management', 'hyper', 'remix'] });
 
   V('city-idle', { id: 'city-idle-insane', title: 'City Idle: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Zone it, wire it, watch it grow at double speed',
-    description: 'The double-speed edition of City Idle. A small city on a small grid, where nothing works unless it touches a road. Housing brings residents, shops and factories give them jobs, and a power plant keeps the whole thing lit — run short of any of the three and happiness starts sliding. Insane keeps every rule intact and simply halves the time you get for each decision; it is brutally short, oddly relaxing once you accept that, and tracked on its own high-score table.',
+    description: 'City Idle at 2× — the version for people who found Hyper too polite. A small city on a small grid, where nothing works unless it touches a road. Housing brings residents, shops and factories give them jobs, and a power plant keeps the whole thing lit — run short of any of the three and happiness starts sliding. At double speed reaction is barely enough; runs are won by knowing what comes next before it appears. Separate leaderboard so the numbers stay honest.',
     colors: ['#1a1f3e', '#53ba84'], tags: ['idle', 'building', 'management', 'insane', 'remix'] });
 
   V('city-idle', { id: 'city-idle-turbo', title: 'City Idle Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -707,17 +707,17 @@
 
   V('city-idle', { id: 'city-idle-zen', title: 'City Idle Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Zone it, wire it, watch it grow, at three-quarter pace',
-    description: 'The relaxed version of City Idle. A small city on a small grid, where nothing works unless it touches a road. Housing brings residents, shops and factories give them jobs, and a power plant keeps the whole thing lit — run short of any of the three and happiness starts sliding. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
+    description: 'Zen edition of City Idle: identical rules, 28% slower, separate high score. A small city on a small grid, where nothing works unless it touches a road. Housing brings residents, shops and factories give them jobs, and a power plant keeps the whole thing lit — run short of any of the three and happiness starts sliding. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
     colors: ['#36391f', '#aa6377'], tags: ['idle', 'building', 'management', 'zen', 'remix'] });
 
   V('color-rush', { id: 'color-rush-hyper', title: 'Colour Rush Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Match your colour to the gate at 170% speed',
-    description: 'The frantic edition of Colour Rush. Rings made of four coloured quarters spin toward you. Swap your ball to the colour of the quarter you are about to pass through — get it wrong and you burst. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
+    description: 'Colour Rush, seventy percent faster, in a hotter palette. Rings made of four coloured quarters spin toward you. Swap your ball to the colour of the quarter you are about to pass through — get it wrong and you burst. Hyper strips out the breathing room the original gives you; what is left is pure pattern recognition and commitment. Practise in Zen or the original, then come here to see how far it holds.',
     colors: ['#df4dff', '#86e0ff'], tags: ['reflex', 'colour', 'timing', 'hyper', 'remix'] });
 
   V('color-rush', { id: 'color-rush-insane', title: 'Colour Rush: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Match your colour to the gate at double speed',
-    description: 'Colour Rush: Insane Mode runs Colour Rush at exactly double speed. Rings made of four coloured quarters spin toward you. Swap your ball to the colour of the quarter you are about to pass through — get it wrong and you burst. Everything the original does, it does twice as fast — including the difficulty ramp — so this is less a game to beat than a game to survive, and a run that lasts thirty seconds is genuinely good. Own best score, warm palette.',
+    description: 'Colour Rush, twice as fast. Rings made of four coloured quarters spin toward you. Swap your ball to the colour of the quarter you are about to pass through — get it wrong and you burst. Insane is the top of the remix ladder: past this there is nothing, so a personal best here is the one to brag about. Scores are kept apart from the original and the other remixes.',
     colors: ['#ff684d', '#cd86ff'], tags: ['reflex', 'colour', 'timing', 'insane', 'remix'] });
 
   V('color-rush', { id: 'color-rush-turbo', title: 'Colour Rush Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -727,17 +727,17 @@
 
   V('color-rush', { id: 'color-rush-zen', title: 'Colour Rush Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Match your colour to the gate, at three-quarter pace',
-    description: 'Zen edition of Colour Rush: identical rules, 28% slower, separate high score. Rings made of four coloured quarters spin toward you. Swap your ball to the colour of the quarter you are about to pass through — get it wrong and you burst. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
+    description: 'Colour Rush at a gentler pace. Rings made of four coloured quarters spin toward you. Swap your ball to the colour of the quarter you are about to pass through — get it wrong and you burst. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Colour Rush.',
     colors: ['#56b5f6', '#a1f491'], tags: ['reflex', 'colour', 'timing', 'zen', 'remix'] });
 
   V('crazy-eights', { id: 'crazy-eights-hyper', title: 'Crazy Eights Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Match the suit or rank, eights are wild at 170% speed',
-    description: 'Everything in Crazy Eights at 1.7× speed. Play a card that matches either the suit or the rank of the top card. Eights are wild: play one and name whatever suit you like. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
+    description: 'The frantic edition of Crazy Eights. Play a card that matches either the suit or the rank of the top card. Eights are wild: play one and name whatever suit you like. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
     colors: ['#145945', '#5bffb6'], tags: ['cards', 'vs cpu', 'classic', 'hyper', 'remix'] });
 
   V('crazy-eights', { id: 'crazy-eights-insane', title: 'Crazy Eights: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Match the suit or rank, eights are wild at double speed',
-    description: 'Crazy Eights, twice as fast. Play a card that matches either the suit or the rank of the top card. Eights are wild: play one and name whatever suit you like. Insane is the top of the remix ladder: past this there is nothing, so a personal best here is the one to brag about. Scores are kept apart from the original and the other remixes.',
+    description: 'Insane mode for Crazy Eights: identical mechanics, game time × 2, warm palette, separate best score. Play a card that matches either the suit or the rank of the top card. Eights are wild: play one and name whatever suit you like. Treat the first few runs as reconnaissance — even the opening pattern feels new at this pace.',
     colors: ['#16135a', '#5b6eff'], tags: ['cards', 'vs cpu', 'classic', 'insane', 'remix'] });
 
   V('crazy-eights', { id: 'crazy-eights-turbo', title: 'Crazy Eights Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -747,17 +747,17 @@
 
   V('crazy-eights', { id: 'crazy-eights-zen', title: 'Crazy Eights Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Match the suit or rank, eights are wild, at three-quarter pace',
-    description: 'A slow-motion cut of Crazy Eights, tinted cool. Play a card that matches either the suit or the rank of the top card. Eights are wild: play one and name whatever suit you like. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
+    description: 'The relaxed version of Crazy Eights. Play a card that matches either the suit or the rank of the top card. Eights are wild: play one and name whatever suit you like. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
     colors: ['#414f1e', '#e0f268'], tags: ['cards', 'vs cpu', 'classic', 'zen', 'remix'] });
 
   V('crystal-caverns', { id: 'crystal-caverns-hyper', title: 'Crystal Caverns Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Twelve cave rooms, every crystal, then the exit at 170% speed',
-    description: 'Everything in Crystal Caverns at 1.7× speed. Each cave is one screen: grab every glowing crystal and the exit arch lights up green. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
+    description: 'The frantic edition of Crystal Caverns. Each cave is one screen: grab every glowing crystal and the exit arch lights up green. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
     colors: ['#0e303b', '#946aff'], tags: ['platformer', 'levels', 'cave', 'hyper', 'remix'] });
 
   V('crystal-caverns', { id: 'crystal-caverns-insane', title: 'Crystal Caverns: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Twelve cave rooms, every crystal, then the exit at double speed',
-    description: 'Crystal Caverns, twice as fast. Each cave is one screen: grab every glowing crystal and the exit arch lights up green. Insane is the top of the remix ladder: past this there is nothing, so a personal best here is the one to brag about. Scores are kept apart from the original and the other remixes.',
+    description: 'Insane mode for Crystal Caverns: identical mechanics, game time × 2, warm palette, separate best score. Each cave is one screen: grab every glowing crystal and the exit arch lights up green. Treat the first few runs as reconnaissance — even the opening pattern feels new at this pace.',
     colors: ['#270d3b', '#ff6aa3'], tags: ['platformer', 'levels', 'cave', 'insane', 'remix'] });
 
   V('crystal-caverns', { id: 'crystal-caverns-turbo', title: 'Crystal Caverns Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -767,17 +767,17 @@
 
   V('crystal-caverns', { id: 'crystal-caverns-zen', title: 'Crystal Caverns Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Twelve cave rooms, every crystal, then the exit, at three-quarter pace',
-    description: 'A slow-motion cut of Crystal Caverns, tinted cool. Each cave is one screen: grab every glowing crystal and the exit arch lights up green. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
+    description: 'The relaxed version of Crystal Caverns. Each cave is one screen: grab every glowing crystal and the exit arch lights up green. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
     colors: ['#1a3414', '#71f8e5'], tags: ['platformer', 'levels', 'cave', 'zen', 'remix'] });
 
   V('darts', { id: 'darts-hyper', title: 'Darts Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: '301 down, two clicks a dart at 170% speed',
-    description: 'Darts, seventy percent faster, in a hotter palette. A proper board with doubles, trebles and both bulls. Each dart takes two clicks: the first stops a vertical line sweeping across, the second stops a horizontal one. Hyper strips out the breathing room the original gives you; what is left is pure pattern recognition and commitment. Practise in Zen or the original, then come here to see how far it holds.',
+    description: 'Hyper edition of Darts: same mechanics, 1.7× game speed, separate leaderboard. A proper board with doubles, trebles and both bulls. Each dart takes two clicks: the first stops a vertical line sweeping across, the second stops a horizontal one. The best runs come from reading two hazards ahead rather than one — the original rewards that, this one demands it.',
     colors: ['#150e13', '#f234f9'], tags: ['darts', 'timing', 'sports', 'hyper', 'remix'] });
 
   V('darts', { id: 'darts-insane', title: 'Darts: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: '301 down, two clicks a dart at double speed',
-    description: 'Darts at 2× — the version for people who found Hyper too polite. A proper board with doubles, trebles and both bulls. Each dart takes two clicks: the first stops a vertical line sweeping across, the second stops a horizontal one. At double speed reaction is barely enough; runs are won by knowing what comes next before it appears. Separate leaderboard so the numbers stay honest.',
+    description: 'Darts: Insane Mode runs Darts at exactly double speed. A proper board with doubles, trebles and both bulls. Each dart takes two clicks: the first stops a vertical line sweeping across, the second stops a horizontal one. Everything the original does, it does twice as fast — including the difficulty ramp — so this is less a game to beat than a game to survive, and a run that lasts thirty seconds is genuinely good. Own best score, warm palette.',
     colors: ['#15120e', '#fd6e30'], tags: ['darts', 'timing', 'sports', 'insane', 'remix'] });
 
   V('darts', { id: 'darts-turbo', title: 'Darts Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -787,17 +787,17 @@
 
   V('darts', { id: 'darts-zen', title: 'Darts Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: '301 down, two clicks a dart, at three-quarter pace',
-    description: 'Darts Zen slows Darts to about three-quarter speed and gives it a calmer palette. A proper board with doubles, trebles and both bulls. Each dart takes two clicks: the first stops a vertical line sweeping across, the second stops a horizontal one. With more time between decisions it becomes a game about planning rather than twitch — good for learning the patterns, or for playing one-handed with a coffee. Zen has its own best score.',
+    description: 'A slow-motion cut of Darts, tinted cool. A proper board with doubles, trebles and both bulls. Each dart takes two clicks: the first stops a vertical line sweeping across, the second stops a horizontal one. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
     colors: ['#0f1014', '#508fdd'], tags: ['darts', 'timing', 'sports', 'zen', 'remix'] });
 
   V('dash-runner', { id: 'dash-runner-hyper', title: 'Dash Runner Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Endless running, jumping and sliding at 170% speed',
-    description: 'Everything in Dash Runner at 1.7× speed. Sprint down a neon highway that never ends. Jump the blocks and spikes, slide under the bars, and grab every coin you can reach — each one is worth 25 points. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
+    description: 'The frantic edition of Dash Runner. Sprint down a neon highway that never ends. Jump the blocks and spikes, slide under the bars, and grab every coin you can reach — each one is worth 25 points. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
     colors: ['#11ff31', '#5cdfff'], tags: ['runner', 'endless', 'reflex', 'hyper', 'remix'] });
 
   V('dash-runner', { id: 'dash-runner-insane', title: 'Dash Runner: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Endless running, jumping and sliding at double speed',
-    description: 'Dash Runner, twice as fast. Sprint down a neon highway that never ends. Jump the blocks and spikes, slide under the bars, and grab every coin you can reach — each one is worth 25 points. Insane is the top of the remix ladder: past this there is nothing, so a personal best here is the one to brag about. Scores are kept apart from the original and the other remixes.',
+    description: 'Insane mode for Dash Runner: identical mechanics, game time × 2, warm palette, separate best score. Sprint down a neon highway that never ends. Jump the blocks and spikes, slide under the bars, and grab every coin you can reach — each one is worth 25 points. Treat the first few runs as reconnaissance — even the opening pattern feels new at this pace.',
     colors: ['#1190ff', '#b25cff'], tags: ['runner', 'endless', 'reflex', 'insane', 'remix'] });
 
   V('dash-runner', { id: 'dash-runner-turbo', title: 'Dash Runner Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -807,17 +807,17 @@
 
   V('dash-runner', { id: 'dash-runner-zen', title: 'Dash Runner Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Endless running, jumping and sliding, at three-quarter pace',
-    description: 'A slow-motion cut of Dash Runner, tinted cool. Sprint down a neon highway that never ends. Jump the blocks and spikes, slide under the bars, and grab every coin you can reach — each one is worth 25 points. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
+    description: 'The relaxed version of Dash Runner. Sprint down a neon highway that never ends. Jump the blocks and spikes, slide under the bars, and grab every coin you can reach — each one is worth 25 points. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
     colors: ['#e4b02c', '#84f764'], tags: ['runner', 'endless', 'reflex', 'zen', 'remix'] });
 
   V('domino-run', { id: 'domino-run-hyper', title: 'Domino Run Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Link the push to the bell with dominoes, stairs and springs at 170% speed',
-    description: 'The frantic edition of Domino Run. Each level gives you a push arrow, a bell, and a handful of pieces. Dominoes topple the next one if it is within about a domino-length; stairs carry the chain down a ledge; springs bounce a rolling steel ball up to a higher platform. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
+    description: 'Domino Run, seventy percent faster, in a hotter palette. Each level gives you a push arrow, a bell, and a handful of pieces. Dominoes topple the next one if it is within about a domino-length; stairs carry the chain down a ledge; springs bounce a rolling steel ball up to a higher platform. Hyper strips out the breathing room the original gives you; what is left is pure pattern recognition and commitment. Practise in Zen or the original, then come here to see how far it holds.',
     colors: ['#314b43', '#ff205e'], tags: ['physics', 'dominoes', 'chain reaction', 'hyper', 'remix'] });
 
   V('domino-run', { id: 'domino-run-insane', title: 'Domino Run: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Link the push to the bell with dominoes, stairs and springs at double speed',
-    description: 'Domino Run: Insane Mode runs Domino Run at exactly double speed. Each level gives you a push arrow, a bell, and a handful of pieces. Dominoes topple the next one if it is within about a domino-length; stairs carry the chain down a ledge; springs bounce a rolling steel ball up to a higher platform. Everything the original does, it does twice as fast — including the difficulty ramp — so this is less a game to beat than a game to survive, and a run that lasts thirty seconds is genuinely good. Own best score, warm palette.',
+    description: 'Domino Run, twice as fast. Each level gives you a push arrow, a bell, and a handful of pieces. Dominoes topple the next one if it is within about a domino-length; stairs carry the chain down a ledge; springs bounce a rolling steel ball up to a higher platform. Insane is the top of the remix ladder: past this there is nothing, so a personal best here is the one to brag about. Scores are kept apart from the original and the other remixes.',
     colors: ['#32314b', '#f3ff20'], tags: ['physics', 'dominoes', 'chain reaction', 'insane', 'remix'] });
 
   V('domino-run', { id: 'domino-run-turbo', title: 'Domino Run Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -827,17 +827,17 @@
 
   V('domino-run', { id: 'domino-run-zen', title: 'Domino Run Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Link the push to the bell with dominoes, stairs and springs, at three-quarter pace',
-    description: 'Zen edition of Domino Run: identical rules, 28% slower, separate high score. Each level gives you a push arrow, a bell, and a handful of pieces. Dominoes topple the next one if it is within about a domino-length; stairs carry the chain down a ledge; springs bounce a rolling steel ball up to a higher platform. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
+    description: 'Domino Run at a gentler pace. Each level gives you a push arrow, a bell, and a handful of pieces. Dominoes topple the next one if it is within about a domino-length; stairs carry the chain down a ledge; springs bounce a rolling steel ball up to a higher platform. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Domino Run.',
     colors: ['#424735', '#6a2ff0'], tags: ['physics', 'dominoes', 'chain reaction', 'zen', 'remix'] });
 
   V('dot-connect', { id: 'dot-connect-hyper', title: 'Dot Connect Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Join the pairs without crossing at 170% speed',
-    description: 'Dot Connect Hyper is Dot Connect with the clock running 70% faster. Every colour appears twice; drag a path from one dot to its partner. Paths cannot cross, so routing one carelessly blocks the next — and drawing over an existing line simply erases it, which makes the real puzzle finding the order to connect them in. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Dot Connect record.',
+    description: 'Everything in Dot Connect at 1.7× speed. Every colour appears twice; drag a path from one dot to its partner. Paths cannot cross, so routing one carelessly blocks the next — and drawing over an existing line simply erases it, which makes the real puzzle finding the order to connect them in. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
     colors: ['#093431', '#11ff31'], tags: ['logic', 'routing', 'brain', 'hyper', 'remix'] });
 
   V('dot-connect', { id: 'dot-connect-insane', title: 'Dot Connect: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Join the pairs without crossing at double speed',
-    description: 'Insane mode for Dot Connect: identical mechanics, game time × 2, warm palette, separate best score. Every colour appears twice; drag a path from one dot to its partner. Paths cannot cross, so routing one carelessly blocks the next — and drawing over an existing line simply erases it, which makes the real puzzle finding the order to connect them in. Treat the first few runs as reconnaissance — even the opening pattern feels new at this pace.',
+    description: 'The double-speed edition of Dot Connect. Every colour appears twice; drag a path from one dot to its partner. Paths cannot cross, so routing one carelessly blocks the next — and drawing over an existing line simply erases it, which makes the real puzzle finding the order to connect them in. Insane keeps every rule intact and simply halves the time you get for each decision; it is brutally short, oddly relaxing once you accept that, and tracked on its own high-score table.',
     colors: ['#130835', '#1190ff'], tags: ['logic', 'routing', 'brain', 'insane', 'remix'] });
 
   V('dot-connect', { id: 'dot-connect-turbo', title: 'Dot Connect Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -847,17 +847,17 @@
 
   V('dot-connect', { id: 'dot-connect-zen', title: 'Dot Connect Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Join the pairs without crossing, at three-quarter pace',
-    description: 'Dot Connect at a gentler pace. Every colour appears twice; drag a path from one dot to its partner. Paths cannot cross, so routing one carelessly blocks the next — and drawing over an existing line simply erases it, which makes the real puzzle finding the order to connect them in. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Dot Connect.',
+    description: 'Dot Connect Zen slows Dot Connect to about three-quarter speed and gives it a calmer palette. Every colour appears twice; drag a path from one dot to its partner. Paths cannot cross, so routing one carelessly blocks the next — and drawing over an existing line simply erases it, which makes the real puzzle finding the order to connect them in. With more time between decisions it becomes a game about planning rather than twitch — good for learning the patterns, or for playing one-handed with a coffee. Zen has its own best score.',
     colors: ['#1f2e0f', '#e4b02c'], tags: ['logic', 'routing', 'brain', 'zen', 'remix'] });
 
   V('dots-and-boxes', { id: 'dots-and-boxes-hyper', title: 'Dots & Boxes Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Close the square, take another turn at 170% speed',
-    description: 'Dots & Boxes Hyper is Dots & Boxes with the clock running 70% faster. Take turns drawing a single line between two adjacent dots. Whoever draws the fourth side of a box claims it and immediately goes again, so a well-timed sacrifice can hand you a whole chain. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Dots & Boxes record.',
+    description: 'Everything in Dots & Boxes at 1.7× speed. Take turns drawing a single line between two adjacent dots. Whoever draws the fourth side of a box claims it and immediately goes again, so a well-timed sacrifice can hand you a whole chain. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
     colors: ['#0b3d37', '#11ff31'], tags: ['board game', 'vs cpu', 'strategy', 'hyper', 'remix'] });
 
   V('dots-and-boxes', { id: 'dots-and-boxes-insane', title: 'Dots & Boxes: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Close the square, take another turn at double speed',
-    description: 'Insane mode for Dots & Boxes: identical mechanics, game time × 2, warm palette, separate best score. Take turns drawing a single line between two adjacent dots. Whoever draws the fourth side of a box claims it and immediately goes again, so a well-timed sacrifice can hand you a whole chain. Treat the first few runs as reconnaissance — even the opening pattern feels new at this pace.',
+    description: 'The double-speed edition of Dots & Boxes. Take turns drawing a single line between two adjacent dots. Whoever draws the fourth side of a box claims it and immediately goes again, so a well-timed sacrifice can hand you a whole chain. Insane keeps every rule intact and simply halves the time you get for each decision; it is brutally short, oddly relaxing once you accept that, and tracked on its own high-score table.',
     colors: ['#150a3e', '#1190ff'], tags: ['board game', 'vs cpu', 'strategy', 'insane', 'remix'] });
 
   V('dots-and-boxes', { id: 'dots-and-boxes-turbo', title: 'Dots & Boxes Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -867,17 +867,17 @@
 
   V('dots-and-boxes', { id: 'dots-and-boxes-zen', title: 'Dots & Boxes Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Close the square, take another turn, at three-quarter pace',
-    description: 'Dots & Boxes at a gentler pace. Take turns drawing a single line between two adjacent dots. Whoever draws the fourth side of a box claims it and immediately goes again, so a well-timed sacrifice can hand you a whole chain. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Dots & Boxes.',
+    description: 'Dots & Boxes Zen slows Dots & Boxes to about three-quarter speed and gives it a calmer palette. Take turns drawing a single line between two adjacent dots. Whoever draws the fourth side of a box claims it and immediately goes again, so a well-timed sacrifice can hand you a whole chain. With more time between decisions it becomes a game about planning rather than twitch — good for learning the patterns, or for playing one-handed with a coffee. Zen has its own best score.',
     colors: ['#263612', '#e4b02c'], tags: ['board game', 'vs cpu', 'strategy', 'zen', 'remix'] });
 
   V('dungeon-dash', { id: 'dungeon-dash-hyper', title: 'Dungeon Dash Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Clear the room, then choose shield or skull at 170% speed',
-    description: 'Dungeon Dash Hyper is Dungeon Dash with the clock running 70% faster. A top-down sword crawl through endless rooms of hopping slimes, swooping bats and, later, horned ogres. Your swing covers a wide arc in the direction you face but has a short cooldown, so commit to a swing and back off. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Dungeon Dash record.',
+    description: 'Everything in Dungeon Dash at 1.7× speed. A top-down sword crawl through endless rooms of hopping slimes, swooping bats and, later, horned ogres. Your swing covers a wide arc in the direction you face but has a short cooldown, so commit to a swing and back off. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
     colors: ['#2c1927', '#e95dff'], tags: ['dungeon', 'sword', 'rooms', 'hyper', 'remix'] });
 
   V('dungeon-dash', { id: 'dungeon-dash-insane', title: 'Dungeon Dash: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Clear the room, then choose shield or skull at double speed',
-    description: 'Insane mode for Dungeon Dash: identical mechanics, game time × 2, warm palette, separate best score. A top-down sword crawl through endless rooms of hopping slimes, swooping bats and, later, horned ogres. Your swing covers a wide arc in the direction you face but has a short cooldown, so commit to a swing and back off. Treat the first few runs as reconnaissance — even the opening pattern feels new at this pace.',
+    description: 'The double-speed edition of Dungeon Dash. A top-down sword crawl through endless rooms of hopping slimes, swooping bats and, later, horned ogres. Your swing covers a wide arc in the direction you face but has a short cooldown, so commit to a swing and back off. Insane keeps every rule intact and simply halves the time you get for each decision; it is brutally short, oddly relaxing once you accept that, and tracked on its own high-score table.',
     colors: ['#2c2419', '#ff7d5d'], tags: ['dungeon', 'sword', 'rooms', 'insane', 'remix'] });
 
   V('dungeon-dash', { id: 'dungeon-dash-turbo', title: 'Dungeon Dash Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -887,17 +887,17 @@
 
   V('dungeon-dash', { id: 'dungeon-dash-zen', title: 'Dungeon Dash Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Clear the room, then choose shield or skull, at three-quarter pace',
-    description: 'Dungeon Dash at a gentler pace. A top-down sword crawl through endless rooms of hopping slimes, swooping bats and, later, horned ogres. Your swing covers a wide arc in the direction you face but has a short cooldown, so commit to a swing and back off. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Dungeon Dash.',
+    description: 'Dungeon Dash Zen slows Dungeon Dash to about three-quarter speed and gives it a calmer palette. A top-down sword crawl through endless rooms of hopping slimes, swooping bats and, later, horned ogres. Your swing covers a wide arc in the direction you face but has a short cooldown, so commit to a swing and back off. With more time between decisions it becomes a game about planning rather than twitch — good for learning the patterns, or for playing one-handed with a coffee. Zen has its own best score.',
     colors: ['#1c1e29', '#65b6f7'], tags: ['dungeon', 'sword', 'rooms', 'zen', 'remix'] });
 
   V('flap-rocket', { id: 'flap-rocket-hyper', title: 'Flap Rocket Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'One-button flying through tight gates at 170% speed',
-    description: 'Everything in Flap Rocket at 1.7× speed. Tap, click or press Space to fire the thruster. Gravity does the rest. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
+    description: 'The frantic edition of Flap Rocket. Tap, click or press Space to fire the thruster. Gravity does the rest. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
     colors: ['#ff45ca', '#ff206f'], tags: ['one button', 'flappy', 'reflex', 'hyper', 'remix'] });
 
   V('flap-rocket', { id: 'flap-rocket-insane', title: 'Flap Rocket: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'One-button flying through tight gates at double speed',
-    description: 'Flap Rocket, twice as fast. Tap, click or press Space to fire the thruster. Gravity does the rest. Insane is the top of the remix ladder: past this there is nothing, so a personal best here is the one to brag about. Scores are kept apart from the original and the other remixes.',
+    description: 'Insane mode for Flap Rocket: identical mechanics, game time × 2, warm palette, separate best score. Tap, click or press Space to fire the thruster. Gravity does the rest. Treat the first few runs as reconnaissance — even the opening pattern feels new at this pace.',
     colors: ['#ffb845', '#fffa20'], tags: ['one button', 'flappy', 'reflex', 'insane', 'remix'] });
 
   V('flap-rocket', { id: 'flap-rocket-turbo', title: 'Flap Rocket Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -907,17 +907,17 @@
 
   V('flap-rocket', { id: 'flap-rocket-zen', title: 'Flap Rocket Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'One-button flying through tight gates, at three-quarter pace',
-    description: 'A slow-motion cut of Flap Rocket, tinted cool. Tap, click or press Space to fire the thruster. Gravity does the rest. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
+    description: 'The relaxed version of Flap Rocket. Tap, click or press Space to fire the thruster. Gravity does the rest. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
     colors: ['#4e64f6', '#592bf4'], tags: ['one button', 'flappy', 'reflex', 'zen', 'remix'] });
 
   V('fling-fortress', { id: 'fling-fortress-hyper', title: 'Fling Fortress Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Pull back and knock it all down at 170% speed',
-    description: 'Everything in Fling Fortress at 1.7× speed. Haul the sling back, line up the dotted arc and let fly. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
+    description: 'The frantic edition of Fling Fortress. Haul the sling back, line up the dotted arc and let fly. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
     colors: ['#83fcaf', '#fd2ae3'], tags: ['physics', 'aiming', 'destruction', 'hyper', 'remix'] });
 
   V('fling-fortress', { id: 'fling-fortress-insane', title: 'Fling Fortress: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Pull back and knock it all down at double speed',
-    description: 'Fling Fortress, twice as fast. Haul the sling back, line up the dotted arc and let fly. Insane is the top of the remix ladder: past this there is nothing, so a personal best here is the one to brag about. Scores are kept apart from the original and the other remixes.',
+    description: 'Insane mode for Fling Fortress: identical mechanics, game time × 2, warm palette, separate best score. Haul the sling back, line up the dotted arc and let fly. Treat the first few runs as reconnaissance — even the opening pattern feels new at this pace.',
     colors: ['#80a7ff', '#ff8a28'], tags: ['physics', 'aiming', 'destruction', 'insane', 'remix'] });
 
   V('fling-fortress', { id: 'fling-fortress-turbo', title: 'Fling Fortress Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -927,17 +927,17 @@
 
   V('fling-fortress', { id: 'fling-fortress-zen', title: 'Fling Fortress Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Pull back and knock it all down, at three-quarter pace',
-    description: 'A slow-motion cut of Fling Fortress, tinted cool. Haul the sling back, line up the dotted arc and let fly. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
+    description: 'The relaxed version of Fling Fortress. Haul the sling back, line up the dotted arc and let fly. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
     colors: ['#ebe694', '#4774e0'], tags: ['physics', 'aiming', 'destruction', 'zen', 'remix'] });
 
   V('floor-is-lava', { id: 'floor-is-lava-hyper', title: 'The Floor Is Lava Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Furniture parkour over lava that surges at 170% speed',
-    description: 'The frantic edition of The Floor Is Lava. Jump up the living room — sofas, tables, bookshelves, lamps, a piano — while the lava below creeps upward. Every few seconds the room rumbles and shakes, and a moment later the lava surges up several platforms at once, so treat a rumble as an order to climb. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
+    description: 'The Floor Is Lava, seventy percent faster, in a hotter palette. Jump up the living room — sofas, tables, bookshelves, lamps, a piano — while the lava below creeps upward. Every few seconds the room rumbles and shakes, and a moment later the lava surges up several platforms at once, so treat a rumble as an order to climb. Hyper strips out the breathing room the original gives you; what is left is pure pattern recognition and commitment. Practise in Zen or the original, then come here to see how far it holds.',
     colors: ['#f6bad3', '#ff2acd'], tags: ['platformer', 'endless', 'climbing', 'hyper', 'remix'] });
 
   V('floor-is-lava', { id: 'floor-is-lava-insane', title: 'The Floor Is Lava: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Furniture parkour over lava that surges at double speed',
-    description: 'The Floor Is Lava: Insane Mode runs The Floor Is Lava at exactly double speed. Jump up the living room — sofas, tables, bookshelves, lamps, a piano — while the lava below creeps upward. Every few seconds the room rumbles and shakes, and a moment later the lava surges up several platforms at once, so treat a rumble as an order to climb. Everything the original does, it does twice as fast — including the difficulty ramp — so this is less a game to beat than a game to survive, and a run that lasts thirty seconds is genuinely good. Own best score, warm palette.',
+    description: 'The Floor Is Lava, twice as fast. Jump up the living room — sofas, tables, bookshelves, lamps, a piano — while the lava below creeps upward. Every few seconds the room rumbles and shakes, and a moment later the lava surges up several platforms at once, so treat a rumble as an order to climb. Insane is the top of the remix ladder: past this there is nothing, so a personal best here is the one to brag about. Scores are kept apart from the original and the other remixes.',
     colors: ['#f7f2b9', '#ffa32a'], tags: ['platformer', 'endless', 'climbing', 'insane', 'remix'] });
 
   V('floor-is-lava', { id: 'floor-is-lava-turbo', title: 'The Floor Is Lava Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -947,17 +947,17 @@
 
   V('floor-is-lava', { id: 'floor-is-lava-zen', title: 'The Floor Is Lava Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Furniture parkour over lava that surges, at three-quarter pace',
-    description: 'Zen edition of The Floor Is Lava: identical rules, 28% slower, separate high score. Jump up the living room — sofas, tables, bookshelves, lamps, a piano — while the lava below creeps upward. Every few seconds the room rumbles and shakes, and a moment later the lava surges up several platforms at once, so treat a rumble as an order to climb. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
+    description: 'The Floor Is Lava at a gentler pace. Jump up the living room — sofas, tables, bookshelves, lamps, a piano — while the lava below creeps upward. Every few seconds the room rumbles and shakes, and a moment later the lava surges up several platforms at once, so treat a rumble as an order to climb. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from The Floor Is Lava.',
     colors: ['#cac2ee', '#3558f4'], tags: ['platformer', 'endless', 'climbing', 'zen', 'remix'] });
 
   V('free-kick', { id: 'free-kick-hyper', title: 'Free Kick Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Bend it around a growing wall at 170% speed',
-    description: 'Free Kick Hyper is Free Kick with the clock running 70% faster. Set-piece football where the shape of your drag is the shape of the shot: a long straight pull dips over the jumping wall into the top of the net, a bowed one whips the ball around the side of it. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Free Kick record.',
+    description: 'Everything in Free Kick at 1.7× speed. Set-piece football where the shape of your drag is the shape of the shot: a long straight pull dips over the jumping wall into the top of the net, a bowed one whips the ball around the side of it. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
     colors: ['#174366', '#32e918'], tags: ['football', 'curve', 'set piece', 'hyper', 'remix'] });
 
   V('free-kick', { id: 'free-kick-insane', title: 'Free Kick: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Bend it around a growing wall at double speed',
-    description: 'Insane mode for Free Kick: identical mechanics, game time × 2, warm palette, separate best score. Set-piece football where the shape of your drag is the shape of the shot: a long straight pull dips over the jumping wall into the top of the net, a bowed one whips the ball around the side of it. Treat the first few runs as reconnaissance — even the opening pattern feels new at this pace.',
+    description: 'The double-speed edition of Free Kick. Set-piece football where the shape of your drag is the shape of the shot: a long straight pull dips over the jumping wall into the top of the net, a bowed one whips the ball around the side of it. Insane keeps every rule intact and simply halves the time you get for each decision; it is brutally short, oddly relaxing once you accept that, and tracked on its own high-score table.',
     colors: ['#551667', '#14c0ed'], tags: ['football', 'curve', 'set piece', 'insane', 'remix'] });
 
   V('free-kick', { id: 'free-kick-turbo', title: 'Free Kick Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -967,17 +967,17 @@
 
   V('free-kick', { id: 'free-kick-zen', title: 'Free Kick Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Bend it around a growing wall, at three-quarter pace',
-    description: 'Free Kick at a gentler pace. Set-piece football where the shape of your drag is the shape of the shot: a long straight pull dips over the jumping wall into the top of the net, a bowed one whips the ball around the side of it. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Free Kick.',
+    description: 'Free Kick Zen slows Free Kick to about three-quarter speed and gives it a calmer palette. Set-piece football where the shape of your drag is the shape of the shot: a long straight pull dips over the jumping wall into the top of the net, a bowed one whips the ball around the side of it. With more time between decisions it becomes a game about planning rather than twitch — good for learning the patterns, or for playing one-handed with a coffee. Zen has its own best score.',
     colors: ['#225b24', '#cc7a35'], tags: ['football', 'curve', 'set piece', 'zen', 'remix'] });
 
   V('freecell', { id: 'freecell-hyper', title: 'FreeCell Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'All cards face up — pure planning at 170% speed',
-    description: 'Everything in FreeCell at 1.7× speed. Every card is visible from the deal, so nothing is left to luck. Four free cells each hold a single card, and how many you keep empty decides how long a run you can move in one go. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
+    description: 'The frantic edition of FreeCell. Every card is visible from the deal, so nothing is left to luck. Four free cells each hold a single card, and how many you keep empty decides how long a run you can move in one go. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
     colors: ['#0b5129', '#31ff70'], tags: ['solitaire', 'cards', 'logic', 'hyper', 'remix'] });
 
   V('freecell', { id: 'freecell-insane', title: 'FreeCell: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'All cards face up — pure planning at double speed',
-    description: 'FreeCell, twice as fast. Every card is visible from the deal, so nothing is left to luck. Four free cells each hold a single card, and how many you keep empty decides how long a run you can move in one go. Insane is the top of the remix ladder: past this there is nothing, so a personal best here is the one to brag about. Scores are kept apart from the original and the other remixes.',
+    description: 'Insane mode for FreeCell: identical mechanics, game time × 2, warm palette, separate best score. Every card is visible from the deal, so nothing is left to luck. Four free cells each hold a single card, and how many you keep empty decides how long a run you can move in one go. Treat the first few runs as reconnaissance — even the opening pattern feels new at this pace.',
     colors: ['#0a1b52', '#317bff'], tags: ['solitaire', 'cards', 'logic', 'insane', 'remix'] });
 
   V('freecell', { id: 'freecell-turbo', title: 'FreeCell Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -987,17 +987,17 @@
 
   V('freecell', { id: 'freecell-zen', title: 'FreeCell Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'All cards face up — pure planning, at three-quarter pace',
-    description: 'A slow-motion cut of FreeCell, tinted cool. Every card is visible from the deal, so nothing is left to luck. Four free cells each hold a single card, and how many you keep empty decides how long a run you can move in one go. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
+    description: 'The relaxed version of FreeCell. Every card is visible from the deal, so nothing is left to luck. Four free cells each hold a single card, and how many you keep empty decides how long a run you can move in one go. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
     colors: ['#474715', '#eedc42'], tags: ['solitaire', 'cards', 'logic', 'zen', 'remix'] });
 
   V('frost-peak', { id: 'frost-peak-hyper', title: 'Frost Peak Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Icy ledges, grip on rock, gusts that shove at 170% speed',
-    description: 'Frost Peak Hyper is Frost Peak with the clock running 70% faster. A vertical climb up a mountain of ledges. Rock ledges have grip — you stop dead and turn on a coin. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Frost Peak record.',
+    description: 'Everything in Frost Peak at 1.7× speed. A vertical climb up a mountain of ledges. Rock ledges have grip — you stop dead and turn on a coin. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
     colors: ['#05352b', '#bfffd5'], tags: ['platformer', 'endless', 'climbing', 'hyper', 'remix'] });
 
   V('frost-peak', { id: 'frost-peak-insane', title: 'Frost Peak: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Icy ledges, grip on rock, gusts that shove at double speed',
-    description: 'Insane mode for Frost Peak: identical mechanics, game time × 2, warm palette, separate best score. A vertical climb up a mountain of ledges. Rock ledges have grip — you stop dead and turn on a coin. Treat the first few runs as reconnaissance — even the opening pattern feels new at this pace.',
+    description: 'The double-speed edition of Frost Peak. A vertical climb up a mountain of ledges. Rock ledges have grip — you stop dead and turn on a coin. Insane keeps every rule intact and simply halves the time you get for each decision; it is brutally short, oddly relaxing once you accept that, and tracked on its own high-score table.',
     colors: ['#0a0436', '#bfd4ff'], tags: ['platformer', 'endless', 'climbing', 'insane', 'remix'] });
 
   V('frost-peak', { id: 'frost-peak-turbo', title: 'Frost Peak Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -1007,17 +1007,17 @@
 
   V('frost-peak', { id: 'frost-peak-zen', title: 'Frost Peak Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Icy ledges, grip on rock, gusts that shove, at three-quarter pace',
-    description: 'Frost Peak at a gentler pace. A vertical climb up a mountain of ledges. Rock ledges have grip — you stop dead and turn on a coin. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Frost Peak.',
+    description: 'Frost Peak Zen slows Frost Peak to about three-quarter speed and gives it a calmer palette. A vertical climb up a mountain of ledges. Rock ledges have grip — you stop dead and turn on a coin. With more time between decisions it becomes a game about planning rather than twitch — good for learning the patterns, or for playing one-handed with a coffee. Zen has its own best score.',
     colors: ['#212e0c', '#fcf8c2'], tags: ['platformer', 'endless', 'climbing', 'zen', 'remix'] });
 
   V('fruit-slice', { id: 'fruit-slice-hyper', title: 'Fruit Slice Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Swipe the fruit, dodge the bombs at 170% speed',
-    description: 'Fruit Slice, seventy percent faster, in a hotter palette. Fruit is launched up from the bottom of the screen and you cut it by dragging a blade through it. Catch several in a single swipe and the combo multiplier stacks. Hyper strips out the breathing room the original gives you; what is left is pure pattern recognition and commitment. Practise in Zen or the original, then come here to see how far it holds.',
+    description: 'Hyper edition of Fruit Slice: same mechanics, 1.7× game speed, separate leaderboard. Fruit is launched up from the bottom of the screen and you cut it by dragging a blade through it. Catch several in a single swipe and the combo multiplier stacks. The best runs come from reading two hazards ahead rather than one — the original rewards that, this one demands it.',
     colors: ['#0d1a27', '#ff34ff'], tags: ['swipe', 'reflex', 'arcade', 'hyper', 'remix'] });
 
   V('fruit-slice', { id: 'fruit-slice-insane', title: 'Fruit Slice: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Swipe the fruit, dodge the bombs at double speed',
-    description: 'Fruit Slice at 2× — the version for people who found Hyper too polite. Fruit is launched up from the bottom of the screen and you cut it by dragging a blade through it. Catch several in a single swipe and the combo multiplier stacks. At double speed reaction is barely enough; runs are won by knowing what comes next before it appears. Separate leaderboard so the numbers stay honest.',
+    description: 'Fruit Slice: Insane Mode runs Fruit Slice at exactly double speed. Fruit is launched up from the bottom of the screen and you cut it by dragging a blade through it. Catch several in a single swipe and the combo multiplier stacks. Everything the original does, it does twice as fast — including the difficulty ramp — so this is less a game to beat than a game to survive, and a run that lasts thirty seconds is genuinely good. Own best score, warm palette.',
     colors: ['#230d27', '#ff7834'], tags: ['swipe', 'reflex', 'arcade', 'insane', 'remix'] });
 
   V('fruit-slice', { id: 'fruit-slice-turbo', title: 'Fruit Slice Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -1027,17 +1027,17 @@
 
   V('fruit-slice', { id: 'fruit-slice-zen', title: 'Fruit Slice Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Swipe the fruit, dodge the bombs, at three-quarter pace',
-    description: 'Fruit Slice Zen slows Fruit Slice to about three-quarter speed and gives it a calmer palette. Fruit is launched up from the bottom of the screen and you cut it by dragging a blade through it. Catch several in a single swipe and the combo multiplier stacks. With more time between decisions it becomes a game about planning rather than twitch — good for learning the patterns, or for playing one-handed with a coffee. Zen has its own best score.',
+    description: 'A slow-motion cut of Fruit Slice, tinted cool. Fruit is launched up from the bottom of the screen and you cut it by dragging a blade through it. Catch several in a single swipe and the combo multiplier stacks. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
     colors: ['#112312', '#4d8de6'], tags: ['swipe', 'reflex', 'arcade', 'zen', 'remix'] });
 
   V('futoshiki', { id: 'futoshiki-hyper', title: 'Futoshiki Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Latin squares with attitude at 170% speed',
-    description: 'Futoshiki, seventy percent faster, in a hotter palette. Fill a five-by-five grid so each row and column uses the numbers 1 to 5 exactly once. The twist is the signs sitting between neighbouring cells: each one must stay true, so a single greater-than can rule out half the possibilities in a row. Hyper strips out the breathing room the original gives you; what is left is pure pattern recognition and commitment. Practise in Zen or the original, then come here to see how far it holds.',
+    description: 'Hyper edition of Futoshiki: same mechanics, 1.7× game speed, separate leaderboard. Fill a five-by-five grid so each row and column uses the numbers 1 to 5 exactly once. The twist is the signs sitting between neighbouring cells: each one must stay true, so a single greater-than can rule out half the possibilities in a row. The best runs come from reading two hazards ahead rather than one — the original rewards that, this one demands it.',
     colors: ['#184537', '#ff6ba6'], tags: ['logic', 'sudoku-like', 'numbers', 'hyper', 'remix'] });
 
   V('futoshiki', { id: 'futoshiki-insane', title: 'Futoshiki: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Latin squares with attitude at double speed',
-    description: 'Futoshiki at 2× — the version for people who found Hyper too polite. Fill a five-by-five grid so each row and column uses the numbers 1 to 5 exactly once. The twist is the signs sitting between neighbouring cells: each one must stay true, so a single greater-than can rule out half the possibilities in a row. At double speed reaction is barely enough; runs are won by knowing what comes next before it appears. Separate leaderboard so the numbers stay honest.',
+    description: 'Futoshiki: Insane Mode runs Futoshiki at exactly double speed. Fill a five-by-five grid so each row and column uses the numbers 1 to 5 exactly once. The twist is the signs sitting between neighbouring cells: each one must stay true, so a single greater-than can rule out half the possibilities in a row. Everything the original does, it does twice as fast — including the difficulty ramp — so this is less a game to beat than a game to survive, and a run that lasts thirty seconds is genuinely good. Own best score, warm palette.',
     colors: ['#181745', '#fff56b'], tags: ['logic', 'sudoku-like', 'numbers', 'insane', 'remix'] });
 
   V('futoshiki', { id: 'futoshiki-turbo', title: 'Futoshiki Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -1047,17 +1047,17 @@
 
   V('futoshiki', { id: 'futoshiki-zen', title: 'Futoshiki Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Latin squares with attitude, at three-quarter pace',
-    description: 'Futoshiki Zen slows Futoshiki to about three-quarter speed and gives it a calmer palette. Fill a five-by-five grid so each row and column uses the numbers 1 to 5 exactly once. The twist is the signs sitting between neighbouring cells: each one must stay true, so a single greater-than can rule out half the possibilities in a row. With more time between decisions it becomes a game about planning rather than twitch — good for learning the patterns, or for playing one-handed with a coffee. Zen has its own best score.',
+    description: 'A slow-motion cut of Futoshiki, tinted cool. Fill a five-by-five grid so each row and column uses the numbers 1 to 5 exactly once. The twist is the signs sitting between neighbouring cells: each one must stay true, so a single greater-than can rule out half the possibilities in a row. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
     colors: ['#353e1e', '#8b72f8'], tags: ['logic', 'sudoku-like', 'numbers', 'zen', 'remix'] });
 
   V('galaxy-raid', { id: 'galaxy-raid-hyper', title: 'Galaxy Raid Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Formation flyers that dive at you at 170% speed',
-    description: 'The frantic edition of Galaxy Raid. Enemies assemble into a swaying formation overhead, then peel off one or two at a time and swoop down along a looping path, firing as they come. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
+    description: 'Galaxy Raid, seventy percent faster, in a hotter palette. Enemies assemble into a swaying formation overhead, then peel off one or two at a time and swoop down along a looping path, firing as they come. Hyper strips out the breathing room the original gives you; what is left is pure pattern recognition and commitment. Practise in Zen or the original, then come here to see how far it holds.',
     colors: ['#020f0f', '#11ff31'], tags: ['classic', 'shooter', 'space', 'hyper', 'remix'] });
 
   V('galaxy-raid', { id: 'galaxy-raid-insane', title: 'Galaxy Raid: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Formation flyers that dive at you at double speed',
-    description: 'Galaxy Raid: Insane Mode runs Galaxy Raid at exactly double speed. Enemies assemble into a swaying formation overhead, then peel off one or two at a time and swoop down along a looping path, firing as they come. Everything the original does, it does twice as fast — including the difficulty ramp — so this is less a game to beat than a game to survive, and a run that lasts thirty seconds is genuinely good. Own best score, warm palette.',
+    description: 'Galaxy Raid, twice as fast. Enemies assemble into a swaying formation overhead, then peel off one or two at a time and swoop down along a looping path, firing as they come. Insane is the top of the remix ladder: past this there is nothing, so a personal best here is the one to brag about. Scores are kept apart from the original and the other remixes.',
     colors: ['#060110', '#1190ff'], tags: ['classic', 'shooter', 'space', 'insane', 'remix'] });
 
   V('galaxy-raid', { id: 'galaxy-raid-turbo', title: 'Galaxy Raid Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -1067,17 +1067,17 @@
 
   V('galaxy-raid', { id: 'galaxy-raid-zen', title: 'Galaxy Raid Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Formation flyers that dive at you, at three-quarter pace',
-    description: 'Zen edition of Galaxy Raid: identical rules, 28% slower, separate high score. Enemies assemble into a swaying formation overhead, then peel off one or two at a time and swoop down along a looping path, firing as they come. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
+    description: 'Galaxy Raid at a gentler pace. Enemies assemble into a swaying formation overhead, then peel off one or two at a time and swoop down along a looping path, firing as they come. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Galaxy Raid.',
     colors: ['#080d04', '#e4b02c'], tags: ['classic', 'shooter', 'space', 'zen', 'remix'] });
 
   V('gem-swap', { id: 'gem-swap-hyper', title: 'Gem Swap Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Match three, chain the cascade at 170% speed',
-    description: 'Everything in Gem Swap at 1.7× speed. Swap two adjacent gems to make a line of three or more. Cleared gems vanish, everything above drops into the gap, and any new matches that forms clear too — each step of a cascade multiplies the score. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
+    description: 'The frantic edition of Gem Swap. Swap two adjacent gems to make a line of three or more. Cleared gems vanish, everything above drops into the gap, and any new matches that forms clear too — each step of a cascade multiplies the score. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
     colors: ['#0b2a32', '#ea6dff'], tags: ['match 3', 'puzzle', 'cascade', 'hyper', 'remix'] });
 
   V('gem-swap', { id: 'gem-swap-insane', title: 'Gem Swap: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Match three, chain the cascade at double speed',
-    description: 'Gem Swap, twice as fast. Swap two adjacent gems to make a line of three or more. Cleared gems vanish, everything above drops into the gap, and any new matches that forms clear too — each step of a cascade multiplies the score. Insane is the top of the remix ladder: past this there is nothing, so a personal best here is the one to brag about. Scores are kept apart from the original and the other remixes.',
+    description: 'Insane mode for Gem Swap: identical mechanics, game time × 2, warm palette, separate best score. Swap two adjacent gems to make a line of three or more. Cleared gems vanish, everything above drops into the gap, and any new matches that forms clear too — each step of a cascade multiplies the score. Treat the first few runs as reconnaissance — even the opening pattern feels new at this pace.',
     colors: ['#200a33', '#ff896d'], tags: ['match 3', 'puzzle', 'cascade', 'insane', 'remix'] });
 
   V('gem-swap', { id: 'gem-swap-turbo', title: 'Gem Swap Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -1087,17 +1087,17 @@
 
   V('gem-swap', { id: 'gem-swap-zen', title: 'Gem Swap Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Match three, chain the cascade, at three-quarter pace',
-    description: 'A slow-motion cut of Gem Swap, tinted cool. Swap two adjacent gems to make a line of three or more. Cleared gems vanish, everything above drops into the gap, and any new matches that forms clear too — each step of a cascade multiplies the score. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
+    description: 'The relaxed version of Gem Swap. Swap two adjacent gems to make a line of three or more. Cleared gems vanish, everything above drops into the gap, and any new matches that forms clear too — each step of a cascade multiplies the score. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
     colors: ['#172c11', '#78bef4'], tags: ['match 3', 'puzzle', 'cascade', 'zen', 'remix'] });
 
   V('ghost-escape', { id: 'ghost-escape-hyper', title: 'Ghost Escape Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'A torch, a maze, and four things chasing you at 170% speed',
-    description: 'The frantic edition of Ghost Escape. A maze you can barely see. Your torch lights a small circle and burns down the whole time — the orbs you are collecting are also the only thing that refuels it, so standing still is never an option. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
+    description: 'Ghost Escape, seventy percent faster, in a hotter palette. A maze you can barely see. Your torch lights a small circle and burns down the whole time — the orbs you are collecting are also the only thing that refuels it, so standing still is never an option. Hyper strips out the breathing room the original gives you; what is left is pure pattern recognition and commitment. Practise in Zen or the original, then come here to see how far it holds.',
     colors: ['#153331', '#ff8aa9'], tags: ['maze', 'chase', 'stealth', 'hyper', 'remix'] });
 
   V('ghost-escape', { id: 'ghost-escape-insane', title: 'Ghost Escape: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'A torch, a maze, and four things chasing you at double speed',
-    description: 'Ghost Escape: Insane Mode runs Ghost Escape at exactly double speed. A maze you can barely see. Your torch lights a small circle and burns down the whole time — the orbs you are collecting are also the only thing that refuels it, so standing still is never an option. Everything the original does, it does twice as fast — including the difficulty ramp — so this is less a game to beat than a game to survive, and a run that lasts thirty seconds is genuinely good. Own best score, warm palette.',
+    description: 'Ghost Escape, twice as fast. A maze you can barely see. Your torch lights a small circle and burns down the whole time — the orbs you are collecting are also the only thing that refuels it, so standing still is never an option. Insane is the top of the remix ladder: past this there is nothing, so a personal best here is the one to brag about. Scores are kept apart from the original and the other remixes.',
     colors: ['#1c1434', '#f7ff8a'], tags: ['maze', 'chase', 'stealth', 'insane', 'remix'] });
 
   V('ghost-escape', { id: 'ghost-escape-turbo', title: 'Ghost Escape Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -1107,17 +1107,17 @@
 
   V('ghost-escape', { id: 'ghost-escape-zen', title: 'Ghost Escape Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'A torch, a maze, and four things chasing you, at three-quarter pace',
-    description: 'Zen edition of Ghost Escape: identical rules, 28% slower, separate high score. A maze you can barely see. Your torch lights a small circle and burns down the whole time — the orbs you are collecting are also the only thing that refuels it, so standing still is never an option. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
+    description: 'Ghost Escape at a gentler pace. A maze you can barely see. Your torch lights a small circle and burns down the whole time — the orbs you are collecting are also the only thing that refuels it, so standing still is never an option. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Ghost Escape.',
     colors: ['#242f19', '#b190f9'], tags: ['maze', 'chase', 'stealth', 'zen', 'remix'] });
 
   V('ghost-manor', { id: 'ghost-manor-hyper', title: 'Ghost Manor Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Ghosts only move when you do at 170% speed',
-    description: 'Ghost Manor, seventy percent faster, in a hotter palette. Twelve rooms of a haunted house, each with a few keys, a locked door and ghosts drifting along fixed patrol routes — straight through the walls. Hyper strips out the breathing room the original gives you; what is left is pure pattern recognition and commitment. Practise in Zen or the original, then come here to see how far it holds.',
+    description: 'Hyper edition of Ghost Manor: same mechanics, 1.7× game speed, separate leaderboard. Twelve rooms of a haunted house, each with a few keys, a locked door and ghosts drifting along fixed patrol routes — straight through the walls. The best runs come from reading two hazards ahead rather than one — the original rewards that, this one demands it.',
     colors: ['#131a33', '#f0fbff'], tags: ['stealth', 'platformer', 'levels', 'hyper', 'remix'] });
 
   V('ghost-manor', { id: 'ghost-manor-insane', title: 'Ghost Manor: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Ghosts only move when you do at double speed',
-    description: 'Ghost Manor at 2× — the version for people who found Hyper too polite. Twelve rooms of a haunted house, each with a few keys, a locked door and ghosts drifting along fixed patrol routes — straight through the walls. At double speed reaction is barely enough; runs are won by knowing what comes next before it appears. Separate leaderboard so the numbers stay honest.',
+    description: 'Ghost Manor: Insane Mode runs Ghost Manor at exactly double speed. Twelve rooms of a haunted house, each with a few keys, a locked door and ghosts drifting along fixed patrol routes — straight through the walls. Everything the original does, it does twice as fast — including the difficulty ramp — so this is less a game to beat than a game to survive, and a run that lasts thirty seconds is genuinely good. Own best score, warm palette.',
     colors: ['#341230', '#f9f0ff'], tags: ['stealth', 'platformer', 'levels', 'insane', 'remix'] });
 
   V('ghost-manor', { id: 'ghost-manor-turbo', title: 'Ghost Manor Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -1127,17 +1127,17 @@
 
   V('ghost-manor', { id: 'ghost-manor-zen', title: 'Ghost Manor Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Ghosts only move when you do, at three-quarter pace',
-    description: 'Ghost Manor Zen slows Ghost Manor to about three-quarter speed and gives it a calmer palette. Twelve rooms of a haunted house, each with a few keys, a locked door and ghosts drifting along fixed patrol routes — straight through the walls. With more time between decisions it becomes a game about planning rather than twitch — good for learning the patterns, or for playing one-handed with a coffee. Zen has its own best score.',
+    description: 'A slow-motion cut of Ghost Manor, tinted cool. Twelve rooms of a haunted house, each with a few keys, a locked door and ghosts drifting along fixed patrol routes — straight through the walls. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
     colors: ['#172f20', '#f3fef1'], tags: ['stealth', 'platformer', 'levels', 'zen', 'remix'] });
 
   V('goblin-gates', { id: 'goblin-gates-hyper', title: 'Goblin Gates Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Hold the gate through 15 waves at 170% speed',
-    description: 'Everything in Goblin Gates at 1.7× speed. Side-view gate defence. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
+    description: 'The frantic edition of Goblin Gates. Side-view gate defence. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
     colors: ['#193e2d', '#c3c351'], tags: ['defence', 'waves', 'goblins', 'hyper', 'remix'] });
 
   V('goblin-gates', { id: 'goblin-gates-insane', title: 'Goblin Gates: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Hold the gate through 15 waves at double speed',
-    description: 'Goblin Gates, twice as fast. Side-view gate defence. Insane is the top of the remix ladder: past this there is nothing, so a personal best here is the one to brag about. Scores are kept apart from the original and the other remixes.',
+    description: 'Insane mode for Goblin Gates: identical mechanics, game time × 2, warm palette, separate best score. Side-view gate defence. Treat the first few runs as reconnaissance — even the opening pattern feels new at this pace.',
     colors: ['#191d3e', '#4ec676'], tags: ['defence', 'waves', 'goblins', 'insane', 'remix'] });
 
   V('goblin-gates', { id: 'goblin-gates-turbo', title: 'Goblin Gates Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -1147,17 +1147,17 @@
 
   V('goblin-gates', { id: 'goblin-gates-zen', title: 'Goblin Gates Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Hold the gate through 15 waves, at three-quarter pace',
-    description: 'A slow-motion cut of Goblin Gates, tinted cool. Side-view gate defence. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
+    description: 'The relaxed version of Goblin Gates. Side-view gate defence. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
     colors: ['#35391e', '#b36183'], tags: ['defence', 'waves', 'goblins', 'zen', 'remix'] });
 
   V('golf-blast', { id: 'golf-blast-hyper', title: 'Golf Blast Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Nine holes, one huge shot each at 170% speed',
-    description: 'Everything in Golf Blast at 1.7× speed. Every hole is a long side-view fairway and you get exactly one swing on it. Drag back to set angle and power (the dotted arc only shows the first half-second — after that the wind takes over), then watch the ball bounce and roll on the actual slopes. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
+    description: 'The frantic edition of Golf Blast. Every hole is a long side-view fairway and you get exactly one swing on it. Drag back to set angle and power (the dotted arc only shows the first half-second — after that the wind takes over), then watch the ball bounce and roll on the actual slopes. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
     colors: ['#31ff70', '#adf138'], tags: ['golf', 'physics', 'aiming', 'hyper', 'remix'] });
 
   V('golf-blast', { id: 'golf-blast-insane', title: 'Golf Blast: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Nine holes, one huge shot each at double speed',
-    description: 'Golf Blast, twice as fast. Every hole is a long side-view fairway and you get exactly one swing on it. Drag back to set angle and power (the dotted arc only shows the first half-second — after that the wind takes over), then watch the ball bounce and roll on the actual slopes. Insane is the top of the remix ladder: past this there is nothing, so a personal best here is the one to brag about. Scores are kept apart from the original and the other remixes.',
+    description: 'Insane mode for Golf Blast: identical mechanics, game time × 2, warm palette, separate best score. Every hole is a long side-view fairway and you get exactly one swing on it. Drag back to set angle and power (the dotted arc only shows the first half-second — after that the wind takes over), then watch the ball bounce and roll on the actual slopes. Treat the first few runs as reconnaissance — even the opening pattern feels new at this pace.',
     colors: ['#317bff', '#34f4ba'], tags: ['golf', 'physics', 'aiming', 'insane', 'remix'] });
 
   V('golf-blast', { id: 'golf-blast-turbo', title: 'Golf Blast Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -1167,17 +1167,17 @@
 
   V('golf-blast', { id: 'golf-blast-zen', title: 'Golf Blast Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Nine holes, one huge shot each, at three-quarter pace',
-    description: 'A slow-motion cut of Golf Blast, tinted cool. Every hole is a long side-view fairway and you get exactly one swing on it. Drag back to set angle and power (the dotted arc only shows the first half-second — after that the wind takes over), then watch the ball bounce and roll on the actual slopes. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
+    description: 'The relaxed version of Golf Blast. Every hole is a long side-view fairway and you get exactly one swing on it. Drag back to set angle and power (the dotted arc only shows the first half-second — after that the wind takes over), then watch the ball bounce and roll on the actual slopes. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
     colors: ['#eedc42', '#d75158'], tags: ['golf', 'physics', 'aiming', 'zen', 'remix'] });
 
   V('golf-solitaire', { id: 'golf-solitaire-hyper', title: 'Golf Solitaire Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'One rank up or down, clear the course at 170% speed',
-    description: 'The frantic edition of Golf Solitaire. Seven columns of five cards and a single waste pile. Play any exposed card that sits exactly one rank above or below the top of the pile — and unlike some versions, King does not wrap round to Ace. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
+    description: 'Golf Solitaire, seventy percent faster, in a hotter palette. Seven columns of five cards and a single waste pile. Play any exposed card that sits exactly one rank above or below the top of the pile — and unlike some versions, King does not wrap round to Ace. Hyper strips out the breathing room the original gives you; what is left is pure pattern recognition and commitment. Practise in Zen or the original, then come here to see how far it holds.',
     colors: ['#32420d', '#69e720'], tags: ['solitaire', 'cards', 'quick', 'hyper', 'remix'] });
 
   V('golf-solitaire', { id: 'golf-solitaire-insane', title: 'Golf Solitaire: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'One rank up or down, clear the course at double speed',
-    description: 'Golf Solitaire: Insane Mode runs Golf Solitaire at exactly double speed. Seven columns of five cards and a single waste pile. Play any exposed card that sits exactly one rank above or below the top of the pile — and unlike some versions, King does not wrap round to Ace. Everything the original does, it does twice as fast — including the difficulty ramp — so this is less a game to beat than a game to survive, and a run that lasts thirty seconds is genuinely good. Own best score, warm palette.',
+    description: 'Golf Solitaire, twice as fast. Seven columns of five cards and a single waste pile. Play any exposed card that sits exactly one rank above or below the top of the pile — and unlike some versions, King does not wrap round to Ace. Insane is the top of the remix ladder: past this there is nothing, so a personal best here is the one to brag about. Scores are kept apart from the original and the other remixes.',
     colors: ['#0c432f', '#1cebe4'], tags: ['solitaire', 'cards', 'quick', 'insane', 'remix'] });
 
   V('golf-solitaire', { id: 'golf-solitaire-turbo', title: 'Golf Solitaire Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -1187,17 +1187,17 @@
 
   V('golf-solitaire', { id: 'golf-solitaire-zen', title: 'Golf Solitaire Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'One rank up or down, clear the course, at three-quarter pace',
-    description: 'Zen edition of Golf Solitaire: identical rules, 28% slower, separate high score. Seven columns of five cards and a single waste pile. Play any exposed card that sits exactly one rank above or below the top of the pile — and unlike some versions, King does not wrap round to Ace. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
+    description: 'Golf Solitaire at a gentler pace. Seven columns of five cards and a single waste pile. Play any exposed card that sits exactly one rank above or below the top of the pile — and unlike some versions, King does not wrap round to Ace. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Golf Solitaire.',
     colors: ['#3b1419', '#cb5b3c'], tags: ['solitaire', 'cards', 'quick', 'zen', 'remix'] });
 
   V('gomoku', { id: 'gomoku-hyper', title: 'Gomoku Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Five in a row on a 15×15 board at 170% speed',
-    description: 'Everything in Gomoku at 1.7× speed. Also called Five in a Row. Place stones on the intersections and get five in a line before the CPU does. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
+    description: 'The frantic edition of Gomoku. Also called Five in a Row. Place stones on the intersections and get five in a line before the CPU does. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
     colors: ['#c1477b', '#16453e'], tags: ['board game', 'vs cpu', 'strategy', 'hyper', 'remix'] });
 
   V('gomoku', { id: 'gomoku-insane', title: 'Gomoku: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Five in a row on a 15×15 board at double speed',
-    description: 'Gomoku, twice as fast. Also called Five in a Row. Place stones on the intersections and get five in a line before the CPU does. Insane is the top of the remix ladder: past this there is nothing, so a personal best here is the one to brag about. Scores are kept apart from the original and the other remixes.',
+    description: 'Insane mode for Gomoku: identical mechanics, game time × 2, warm palette, separate best score. Also called Five in a Row. Place stones on the intersections and get five in a line before the CPU does. Treat the first few runs as reconnaissance — even the opening pattern feels new at this pace.',
     colors: ['#c4b844', '#1f1546'], tags: ['board game', 'vs cpu', 'strategy', 'insane', 'remix'] });
 
   V('gomoku', { id: 'gomoku-turbo', title: 'Gomoku Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -1207,17 +1207,17 @@
 
   V('gomoku', { id: 'gomoku-zen', title: 'Gomoku Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Five in a row on a 15×15 board, at three-quarter pace',
-    description: 'A slow-motion cut of Gomoku, tinted cool. Also called Five in a Row. Place stones on the intersections and get five in a line before the CPU does. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
+    description: 'The relaxed version of Gomoku. Also called Five in a Row. Place stones on the intersections and get five in a line before the CPU does. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
     colors: ['#6658b0', '#2f3e1d'], tags: ['board game', 'vs cpu', 'strategy', 'zen', 'remix'] });
 
   V('gravity-swap', { id: 'gravity-swap-hyper', title: 'Gravity Swap Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'One button: which way is down at 170% speed',
-    description: 'Hyper edition of Gravity Swap: same mechanics, 1.7× game speed, separate leaderboard. You run automatically along either the floor or the ceiling, and your only control flips which. Obstacles come from both surfaces, sometimes staggered so you have to flip twice in quick succession. The best runs come from reading two hazards ahead rather than one — the original rewards that, this one demands it.',
+    description: 'Gravity Swap Hyper is Gravity Swap with the clock running 70% faster. You run automatically along either the floor or the ceiling, and your only control flips which. Obstacles come from both surfaces, sometimes staggered so you have to flip twice in quick succession. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Gravity Swap record.',
     colors: ['#072425', '#5cdfff'], tags: ['one button', 'endless', 'reflex', 'hyper', 'remix'] });
 
   V('gravity-swap', { id: 'gravity-swap-insane', title: 'Gravity Swap: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'One button: which way is down at double speed',
-    description: 'The double-speed edition of Gravity Swap. You run automatically along either the floor or the ceiling, and your only control flips which. Obstacles come from both surfaces, sometimes staggered so you have to flip twice in quick succession. Insane keeps every rule intact and simply halves the time you get for each decision; it is brutally short, oddly relaxing once you accept that, and tracked on its own high-score table.',
+    description: 'Gravity Swap at 2× — the version for people who found Hyper too polite. You run automatically along either the floor or the ceiling, and your only control flips which. Obstacles come from both surfaces, sometimes staggered so you have to flip twice in quick succession. At double speed reaction is barely enough; runs are won by knowing what comes next before it appears. Separate leaderboard so the numbers stay honest.',
     colors: ['#120626', '#b25cff'], tags: ['one button', 'endless', 'reflex', 'insane', 'remix'] });
 
   V('gravity-swap', { id: 'gravity-swap-turbo', title: 'Gravity Swap Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -1227,17 +1227,17 @@
 
   V('gravity-swap', { id: 'gravity-swap-zen', title: 'Gravity Swap Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'One button: which way is down, at three-quarter pace',
-    description: 'The relaxed version of Gravity Swap. You run automatically along either the floor or the ceiling, and your only control flips which. Obstacles come from both surfaces, sometimes staggered so you have to flip twice in quick succession. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
+    description: 'Zen edition of Gravity Swap: identical rules, 28% slower, separate high score. You run automatically along either the floor or the ceiling, and your only control flips which. Obstacles come from both surfaces, sometimes staggered so you have to flip twice in quick succession. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
     colors: ['#13210b', '#84f764'], tags: ['one button', 'endless', 'reflex', 'zen', 'remix'] });
 
   V('hangman', { id: 'hangman-hyper', title: 'Hangman Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Guess the word, save the stick figure at 170% speed',
-    description: 'Everything in Hangman at 1.7× speed. A hidden word and one letter at a time. Every wrong guess adds another line to the drawing, and after seven you are out. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
+    description: 'The frantic edition of Hangman. A hidden word and one letter at a time. Every wrong guess adds another line to the drawing, and after seven you are out. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
     colors: ['#103d35', '#d93b8a'], tags: ['word', 'guessing', 'classic', 'hyper', 'remix'] });
 
   V('hangman', { id: 'hangman-insane', title: 'Hangman: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Guess the word, save the stick figure at double speed',
-    description: 'Hangman, twice as fast. A hidden word and one letter at a time. Every wrong guess adds another line to the drawing, and after seven you are out. Insane is the top of the remix ladder: past this there is nothing, so a personal best here is the one to brag about. Scores are kept apart from the original and the other remixes.',
+    description: 'Insane mode for Hangman: identical mechanics, game time × 2, warm palette, separate best score. A hidden word and one letter at a time. Every wrong guess adds another line to the drawing, and after seven you are out. Treat the first few runs as reconnaissance — even the opening pattern feels new at this pace.',
     colors: ['#160f3d', '#dcc138'], tags: ['word', 'guessing', 'classic', 'insane', 'remix'] });
 
   V('hangman', { id: 'hangman-turbo', title: 'Hangman Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -1247,17 +1247,17 @@
 
   V('hangman', { id: 'hangman-zen', title: 'Hangman Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Guess the word, save the stick figure, at three-quarter pace',
-    description: 'A slow-motion cut of Hangman, tinted cool. A hidden word and one letter at a time. Every wrong guess adds another line to the drawing, and after seven you are out. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
+    description: 'The relaxed version of Hangman. A hidden word and one letter at a time. Every wrong guess adds another line to the drawing, and after seven you are out. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
     colors: ['#293616', '#5b51c3'], tags: ['word', 'guessing', 'classic', 'zen', 'remix'] });
 
   V('helix-drop', { id: 'helix-drop-hyper', title: 'Helix Drop Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Spin the tower, drop through the gaps at 170% speed',
-    description: 'Everything in Helix Drop at 1.7× speed. Drag to rotate a tower of coloured rings and let the ball fall through the gaps. Land on a purple section and you bounce; hit a red one and it is over — unless you have fallen through three levels in a row, in which case you smash straight through it instead. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
+    description: 'The frantic edition of Helix Drop. Drag to rotate a tower of coloured rings and let the ball fall through the gaps. Land on a purple section and you bounce; hit a red one and it is over — unless you have fallen through three levels in a row, in which case you smash straight through it instead. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
     colors: ['#082129', '#5cdfff'], tags: ['one finger', 'falling', 'reflex', 'hyper', 'remix'] });
 
   V('helix-drop', { id: 'helix-drop-insane', title: 'Helix Drop: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Spin the tower, drop through the gaps at double speed',
-    description: 'Helix Drop, twice as fast. Drag to rotate a tower of coloured rings and let the ball fall through the gaps. Land on a purple section and you bounce; hit a red one and it is over — unless you have fallen through three levels in a row, in which case you smash straight through it instead. Insane is the top of the remix ladder: past this there is nothing, so a personal best here is the one to brag about. Scores are kept apart from the original and the other remixes.',
+    description: 'Insane mode for Helix Drop: identical mechanics, game time × 2, warm palette, separate best score. Drag to rotate a tower of coloured rings and let the ball fall through the gaps. Land on a purple section and you bounce; hit a red one and it is over — unless you have fallen through three levels in a row, in which case you smash straight through it instead. Treat the first few runs as reconnaissance — even the opening pattern feels new at this pace.',
     colors: ['#1c072a', '#b25cff'], tags: ['one finger', 'falling', 'reflex', 'insane', 'remix'] });
 
   V('helix-drop', { id: 'helix-drop-turbo', title: 'Helix Drop Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -1267,17 +1267,17 @@
 
   V('helix-drop', { id: 'helix-drop-zen', title: 'Helix Drop Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Spin the tower, drop through the gaps, at three-quarter pace',
-    description: 'A slow-motion cut of Helix Drop, tinted cool. Drag to rotate a tower of coloured rings and let the ball fall through the gaps. Land on a purple section and you bounce; hit a red one and it is over — unless you have fallen through three levels in a row, in which case you smash straight through it instead. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
+    description: 'The relaxed version of Helix Drop. Drag to rotate a tower of coloured rings and let the ball fall through the gaps. Land on a purple section and you bounce; hit a red one and it is over — unless you have fallen through three levels in a row, in which case you smash straight through it instead. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
     colors: ['#10250c', '#84f764'], tags: ['one finger', 'falling', 'reflex', 'zen', 'remix'] });
 
   V('hex-game', { id: 'hex-game-hyper', title: 'Hex Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Build a bridge across the board at 170% speed',
-    description: 'Everything in Hex at 1.7× speed. A board game with one rule and no draws: place a stone anywhere empty, and win by joining your two coloured edges with an unbroken chain of your own cells. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
+    description: 'The frantic edition of Hex. A board game with one rule and no draws: place a stone anywhere empty, and win by joining your two coloured edges with an unbroken chain of your own cells. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
     colors: ['#16453b', '#ff30c5'], tags: ['board', 'strategy', 'two player', 'hyper', 'remix'] });
 
   V('hex-game', { id: 'hex-game-insane', title: 'Hex: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Build a bridge across the board at double speed',
-    description: 'Hex, twice as fast. A board game with one rule and no draws: place a stone anywhere empty, and win by joining your two coloured edges with an unbroken chain of your own cells. Insane is the top of the remix ladder: past this there is nothing, so a personal best here is the one to brag about. Scores are kept apart from the original and the other remixes.',
+    description: 'Insane mode for Hex: identical mechanics, game time × 2, warm palette, separate best score. A board game with one rule and no draws: place a stone anywhere empty, and win by joining your two coloured edges with an unbroken chain of your own cells. Treat the first few runs as reconnaissance — even the opening pattern feels new at this pace.',
     colors: ['#1b1546', '#ffaf30'], tags: ['board', 'strategy', 'two player', 'insane', 'remix'] });
 
   V('hex-game', { id: 'hex-game-turbo', title: 'Hex Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -1287,17 +1287,17 @@
 
   V('hex-game', { id: 'hex-game-zen', title: 'Hex Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Build a bridge across the board, at three-quarter pace',
-    description: 'A slow-motion cut of Hex, tinted cool. A board game with one rule and no draws: place a stone anywhere empty, and win by joining your two coloured edges with an unbroken chain of your own cells. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
+    description: 'The relaxed version of Hex. A board game with one rule and no draws: place a stone anywhere empty, and win by joining your two coloured edges with an unbroken chain of your own cells. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
     colors: ['#323e1d', '#485de7'], tags: ['board', 'strategy', 'two player', 'zen', 'remix'] });
 
   V('highway-rush', { id: 'highway-rush-hyper', title: 'Highway Rush Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Weave through endless traffic at 170% speed',
-    description: 'The frantic edition of Highway Rush. Five lanes of traffic and a car that only gets faster. Change lanes to slip through the gaps — passing close to another car counts as a near miss and pays 50 points, so the greedy line is also the risky one. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
+    description: 'Highway Rush, seventy percent faster, in a hotter palette. Five lanes of traffic and a car that only gets faster. Change lanes to slip through the gaps — passing close to another car counts as a near miss and pays 50 points, so the greedy line is also the risky one. Hyper strips out the breathing room the original gives you; what is left is pure pattern recognition and commitment. Practise in Zen or the original, then come here to see how far it holds.',
     colors: ['#11ff31', '#ff015f'], tags: ['driving', 'endless', 'reflex', 'hyper', 'remix'] });
 
   V('highway-rush', { id: 'highway-rush-insane', title: 'Highway Rush: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Weave through endless traffic at double speed',
-    description: 'Highway Rush: Insane Mode runs Highway Rush at exactly double speed. Five lanes of traffic and a car that only gets faster. Change lanes to slip through the gaps — passing close to another car counts as a near miss and pays 50 points, so the greedy line is also the risky one. Everything the original does, it does twice as fast — including the difficulty ramp — so this is less a game to beat than a game to survive, and a run that lasts thirty seconds is genuinely good. Own best score, warm palette.',
+    description: 'Highway Rush, twice as fast. Five lanes of traffic and a car that only gets faster. Change lanes to slip through the gaps — passing close to another car counts as a near miss and pays 50 points, so the greedy line is also the risky one. Insane is the top of the remix ladder: past this there is nothing, so a personal best here is the one to brag about. Scores are kept apart from the original and the other remixes.',
     colors: ['#1190ff', '#fff501'], tags: ['driving', 'endless', 'reflex', 'insane', 'remix'] });
 
   V('highway-rush', { id: 'highway-rush-turbo', title: 'Highway Rush Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -1307,17 +1307,17 @@
 
   V('highway-rush', { id: 'highway-rush-zen', title: 'Highway Rush Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Weave through endless traffic, at three-quarter pace',
-    description: 'Zen edition of Highway Rush: identical rules, 28% slower, separate high score. Five lanes of traffic and a car that only gets faster. Change lanes to slip through the gaps — passing close to another car counts as a near miss and pays 50 points, so the greedy line is also the risky one. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
+    description: 'Highway Rush at a gentler pace. Five lanes of traffic and a car that only gets faster. Change lanes to slip through the gaps — passing close to another car counts as a near miss and pays 50 points, so the greedy line is also the risky one. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Highway Rush.',
     colors: ['#e4b02c', '#4317e9'], tags: ['driving', 'endless', 'reflex', 'zen', 'remix'] });
 
   V('hole-eater', { id: 'hole-eater-hyper', title: 'Hole Eater Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Swallow the town and grow at 170% speed',
-    description: 'The frantic edition of Hole Eater. You are a hole in the ground. Move around and anything small enough falls in — trees and people first, then cars, then buses, then whole buildings as you widen. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
+    description: 'Hole Eater, seventy percent faster, in a hotter palette. You are a hole in the ground. Move around and anything small enough falls in — trees and people first, then cars, then buses, then whole buildings as you widen. Hyper strips out the breathing room the original gives you; what is left is pure pattern recognition and commitment. Practise in Zen or the original, then come here to see how far it holds.',
     colors: ['#403721', '#0b0b0b'], tags: ['io-style', 'growth', 'timed', 'hyper', 'remix'] });
 
   V('hole-eater', { id: 'hole-eater-insane', title: 'Hole Eater: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Swallow the town and grow at double speed',
-    description: 'Hole Eater: Insane Mode runs Hole Eater at exactly double speed. You are a hole in the ground. Move around and anything small enough falls in — trees and people first, then cars, then buses, then whole buildings as you widen. Everything the original does, it does twice as fast — including the difficulty ramp — so this is less a game to beat than a game to survive, and a run that lasts thirty seconds is genuinely good. Own best score, warm palette.',
+    description: 'Hole Eater, twice as fast. You are a hole in the ground. Move around and anything small enough falls in — trees and people first, then cars, then buses, then whole buildings as you widen. Insane is the top of the remix ladder: past this there is nothing, so a personal best here is the one to brag about. Scores are kept apart from the original and the other remixes.',
     colors: ['#204122', '#0b0b0b'], tags: ['io-style', 'growth', 'timed', 'insane', 'remix'] });
 
   V('hole-eater', { id: 'hole-eater-turbo', title: 'Hole Eater Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -1327,17 +1327,17 @@
 
   V('hole-eater', { id: 'hole-eater-zen', title: 'Hole Eater Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Swallow the town and grow, at three-quarter pace',
-    description: 'Zen edition of Hole Eater: identical rules, 28% slower, separate high score. You are a hole in the ground. Move around and anything small enough falls in — trees and people first, then cars, then buses, then whole buildings as you widen. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
+    description: 'Hole Eater at a gentler pace. You are a hole in the ground. Move around and anything small enough falls in — trees and people first, then cars, then buses, then whole buildings as you widen. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Hole Eater.',
     colors: ['#3c2535', '#0b0b0b'], tags: ['io-style', 'growth', 'timed', 'zen', 'remix'] });
 
   V('hoop-shot', { id: 'hoop-shot-hyper', title: 'Hoop Shot Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Sixty seconds of free throws at 170% speed',
-    description: 'Hoop Shot, seventy percent faster, in a hotter palette. Drag back from the ball and release to shoot — a dotted arc shows roughly where it will go. Hyper strips out the breathing room the original gives you; what is left is pure pattern recognition and commitment. Practise in Zen or the original, then come here to see how far it holds.',
+    description: 'Hyper edition of Hoop Shot: same mechanics, 1.7× game speed, separate leaderboard. Drag back from the ball and release to shoot — a dotted arc shows roughly where it will go. The best runs come from reading two hazards ahead rather than one — the original rewards that, this one demands it.',
     colors: ['#ff109d', '#ff38a5'], tags: ['basketball', 'aiming', 'timed', 'hyper', 'remix'] });
 
   V('hoop-shot', { id: 'hoop-shot-insane', title: 'Hoop Shot: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Sixty seconds of free throws at double speed',
-    description: 'Hoop Shot at 2× — the version for people who found Hyper too polite. Drag back from the ball and release to shoot — a dotted arc shows roughly where it will go. At double speed reaction is barely enough; runs are won by knowing what comes next before it appears. Separate leaderboard so the numbers stay honest.',
+    description: 'Hoop Shot: Insane Mode runs Hoop Shot at exactly double speed. Drag back from the ball and release to shoot — a dotted arc shows roughly where it will go. Everything the original does, it does twice as fast — including the difficulty ramp — so this is less a game to beat than a game to survive, and a run that lasts thirty seconds is genuinely good. Own best score, warm palette.',
     colors: ['#ffc210', '#ffd438'], tags: ['basketball', 'aiming', 'timed', 'insane', 'remix'] });
 
   V('hoop-shot', { id: 'hoop-shot-turbo', title: 'Hoop Shot Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -1347,17 +1347,17 @@
 
   V('hoop-shot', { id: 'hoop-shot-zen', title: 'Hoop Shot Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Sixty seconds of free throws, at three-quarter pace',
-    description: 'Hoop Shot Zen slows Hoop Shot to about three-quarter speed and gives it a calmer palette. Drag back from the ball and release to shoot — a dotted arc shows roughly where it will go. With more time between decisions it becomes a game about planning rather than twitch — good for learning the patterns, or for playing one-handed with a coffee. Zen has its own best score.',
+    description: 'A slow-motion cut of Hoop Shot, tinted cool. Drag back from the ball and release to shoot — a dotted arc shows roughly where it will go. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
     colors: ['#2123ee', '#4b46f1'], tags: ['basketball', 'aiming', 'timed', 'zen', 'remix'] });
 
   V('hover-bike', { id: 'hover-bike-hyper', title: 'Hover Bike Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Thrust, sink, and thread the boost rings at 170% speed',
-    description: 'Everything in Hover Bike at 1.7× speed. A hover bike hugs the dunes at sunset: hold to fire the thruster, release and gravity drags you back toward the sand. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
+    description: 'The frantic edition of Hover Bike. A hover bike hugs the dunes at sunset: hold to fire the thruster, release and gravity drags you back toward the sand. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
     colors: ['#f725d7', '#11ff31'], tags: ['endless', 'one button', 'fuel', 'hyper', 'remix'] });
 
   V('hover-bike', { id: 'hover-bike-insane', title: 'Hover Bike: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Thrust, sink, and thread the boost rings at double speed',
-    description: 'Hover Bike, twice as fast. A hover bike hugs the dunes at sunset: hold to fire the thruster, release and gravity drags you back toward the sand. Insane is the top of the remix ladder: past this there is nothing, so a personal best here is the one to brag about. Scores are kept apart from the original and the other remixes.',
+    description: 'Insane mode for Hover Bike: identical mechanics, game time × 2, warm palette, separate best score. A hover bike hugs the dunes at sunset: hold to fire the thruster, release and gravity drags you back toward the sand. Treat the first few runs as reconnaissance — even the opening pattern feels new at this pace.',
     colors: ['#fb8b21', '#1190ff'], tags: ['endless', 'one button', 'fuel', 'insane', 'remix'] });
 
   V('hover-bike', { id: 'hover-bike-turbo', title: 'Hover Bike Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -1367,17 +1367,17 @@
 
   V('hover-bike', { id: 'hover-bike-zen', title: 'Hover Bike Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Thrust, sink, and thread the boost rings, at three-quarter pace',
-    description: 'A slow-motion cut of Hover Bike, tinted cool. A hover bike hugs the dunes at sunset: hold to fire the thruster, release and gravity drags you back toward the sand. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
+    description: 'The relaxed version of Hover Bike. A hover bike hugs the dunes at sunset: hold to fire the thruster, release and gravity drags you back toward the sand. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
     colors: ['#426ada', '#e4b02c'], tags: ['endless', 'one button', 'fuel', 'zen', 'remix'] });
 
   V('ice-breaker', { id: 'ice-breaker-hyper', title: 'Ice Breaker Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Ram a channel; the lake freezes shut behind you at 170% speed',
-    description: 'Hyper edition of Ice Breaker: same mechanics, 1.7× game speed, separate leaderboard. You steer an icebreaker across a grid lake. Ramming a tile cracks it (thin ice in one hit, refrozen pack ice in two, later three) and every hit stresses the hull, which only recovers while you are not ramming. The best runs come from reading two hazards ahead rather than one — the original rewards that, this one demands it.',
+    description: 'Ice Breaker Hyper is Ice Breaker with the clock running 70% faster. You steer an icebreaker across a grid lake. Ramming a tile cracks it (thin ice in one hit, refrozen pack ice in two, later three) and every hit stresses the hull, which only recovers while you are not ramming. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Ice Breaker record.',
     colors: ['#04522c', '#dfffec'], tags: ['ice', 'grid', 'fishing', 'hyper', 'remix'] });
 
   V('ice-breaker', { id: 'ice-breaker-insane', title: 'Ice Breaker: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Ram a channel; the lake freezes shut behind you at double speed',
-    description: 'The double-speed edition of Ice Breaker. You steer an icebreaker across a grid lake. Ramming a tile cracks it (thin ice in one hit, refrozen pack ice in two, later three) and every hit stresses the hull, which only recovers while you are not ramming. Insane keeps every rule intact and simply halves the time you get for each decision; it is brutally short, oddly relaxing once you accept that, and tracked on its own high-score table.',
+    description: 'Ice Breaker at 2× — the version for people who found Hyper too polite. You steer an icebreaker across a grid lake. Ramming a tile cracks it (thin ice in one hit, refrozen pack ice in two, later three) and every hit stresses the hull, which only recovers while you are not ramming. At double speed reaction is barely enough; runs are won by knowing what comes next before it appears. Separate leaderboard so the numbers stay honest.',
     colors: ['#030f53', '#dfe8ff'], tags: ['ice', 'grid', 'fishing', 'insane', 'remix'] });
 
   V('ice-breaker', { id: 'ice-breaker-turbo', title: 'Ice Breaker Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -1387,17 +1387,17 @@
 
   V('ice-breaker', { id: 'ice-breaker-zen', title: 'Ice Breaker Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Ram a channel; the lake freezes shut behind you, at three-quarter pace',
-    description: 'The relaxed version of Ice Breaker. You steer an icebreaker across a grid lake. Ramming a tile cracks it (thin ice in one hit, refrozen pack ice in two, later three) and every hit stresses the hull, which only recovers while you are not ramming. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
+    description: 'Zen edition of Ice Breaker: identical rules, 28% slower, separate high score. You steer an icebreaker across a grid lake. Ramming a tile cracks it (thin ice in one hit, refrozen pack ice in two, later three) and every hit stresses the hull, which only recovers while you are not ramming. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
     colors: ['#41470f', '#fdfce2'], tags: ['ice', 'grid', 'fishing', 'zen', 'remix'] });
 
   V('ice-slide', { id: 'ice-slide-hyper', title: 'Ice Slide Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'You can’t stop until you hit something at 170% speed',
-    description: 'Hyper edition of Ice Slide: same mechanics, 1.7× game speed, separate leaderboard. Push off in a direction and you slide across the ice until a block or a wall stops you — you cannot choose where to halt. Reaching the exit means using the blocks as brakes, and picking up the coins usually means taking the long way round. The best runs come from reading two hazards ahead rather than one — the original rewards that, this one demands it.',
+    description: 'Ice Slide Hyper is Ice Slide with the clock running 70% faster. Push off in a direction and you slide across the ice until a block or a wall stops you — you cannot choose where to halt. Reaching the exit means using the blocks as brakes, and picking up the coins usually means taking the long way round. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Ice Slide record.',
     colors: ['#06331e', '#11ff31'], tags: ['sliding', 'logic', 'brain', 'hyper', 'remix'] });
 
   V('ice-slide', { id: 'ice-slide-insane', title: 'Ice Slide: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'You can’t stop until you hit something at double speed',
-    description: 'The double-speed edition of Ice Slide. Push off in a direction and you slide across the ice until a block or a wall stops you — you cannot choose where to halt. Reaching the exit means using the blocks as brakes, and picking up the coins usually means taking the long way round. Insane keeps every rule intact and simply halves the time you get for each decision; it is brutally short, oddly relaxing once you accept that, and tracked on its own high-score table.',
+    description: 'Ice Slide at 2× — the version for people who found Hyper too polite. Push off in a direction and you slide across the ice until a block or a wall stops you — you cannot choose where to halt. Reaching the exit means using the blocks as brakes, and picking up the coins usually means taking the long way round. At double speed reaction is barely enough; runs are won by knowing what comes next before it appears. Separate leaderboard so the numbers stay honest.',
     colors: ['#050a33', '#1190ff'], tags: ['sliding', 'logic', 'brain', 'insane', 'remix'] });
 
   V('ice-slide', { id: 'ice-slide-turbo', title: 'Ice Slide Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -1407,17 +1407,17 @@
 
   V('ice-slide', { id: 'ice-slide-zen', title: 'Ice Slide Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'You can’t stop until you hit something, at three-quarter pace',
-    description: 'The relaxed version of Ice Slide. Push off in a direction and you slide across the ice until a block or a wall stops you — you cannot choose where to halt. Reaching the exit means using the blocks as brakes, and picking up the coins usually means taking the long way round. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
+    description: 'Zen edition of Ice Slide: identical rules, 28% slower, separate high score. Push off in a direction and you slide across the ice until a block or a wall stops you — you cannot choose where to halt. Reaching the exit means using the blocks as brakes, and picking up the coins usually means taking the long way round. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
     colors: ['#282c0c', '#e4b02c'], tags: ['sliding', 'logic', 'brain', 'zen', 'remix'] });
 
   V('jump-quest', { id: 'jump-quest-hyper', title: 'Jump Quest Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Run, jump, collect, reach the flag at 170% speed',
-    description: 'The frantic edition of Jump Quest. A straightforward platformer across three hand-built levels. Run and jump between ledges, pick up the coins, avoid the spikes and touch the flag at the end. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
+    description: 'Jump Quest, seventy percent faster, in a hotter palette. A straightforward platformer across three hand-built levels. Run and jump between ledges, pick up the coins, avoid the spikes and touch the flag at the end. Hyper strips out the breathing room the original gives you; what is left is pure pattern recognition and commitment. Practise in Zen or the original, then come here to see how far it holds.',
     colors: ['#604e26', '#11ff31'], tags: ['platformer', 'levels', 'jumping', 'hyper', 'remix'] });
 
   V('jump-quest', { id: 'jump-quest-insane', title: 'Jump Quest: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Run, jump, collect, reach the flag at double speed',
-    description: 'Jump Quest: Insane Mode runs Jump Quest at exactly double speed. A straightforward platformer across three hand-built levels. Run and jump between ledges, pick up the coins, avoid the spikes and touch the flag at the end. Everything the original does, it does twice as fast — including the difficulty ramp — so this is less a game to beat than a game to survive, and a run that lasts thirty seconds is genuinely good. Own best score, warm palette.',
+    description: 'Jump Quest, twice as fast. A straightforward platformer across three hand-built levels. Run and jump between ledges, pick up the coins, avoid the spikes and touch the flag at the end. Insane is the top of the remix ladder: past this there is nothing, so a personal best here is the one to brag about. Scores are kept apart from the original and the other remixes.',
     colors: ['#256127', '#1190ff'], tags: ['platformer', 'levels', 'jumping', 'insane', 'remix'] });
 
   V('jump-quest', { id: 'jump-quest-turbo', title: 'Jump Quest Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -1427,17 +1427,17 @@
 
   V('jump-quest', { id: 'jump-quest-zen', title: 'Jump Quest Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Run, jump, collect, reach the flag, at three-quarter pace',
-    description: 'Zen edition of Jump Quest: identical rules, 28% slower, separate high score. A straightforward platformer across three hand-built levels. Run and jump between ledges, pick up the coins, avoid the spikes and touch the flag at the end. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
+    description: 'Jump Quest at a gentler pace. A straightforward platformer across three hand-built levels. Run and jump between ledges, pick up the coins, avoid the spikes and touch the flag at the end. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Jump Quest.',
     colors: ['#582e4c', '#e4b02c'], tags: ['platformer', 'levels', 'jumping', 'zen', 'remix'] });
 
   V('kart-sprint', { id: 'kart-sprint-hyper', title: 'Kart Sprint Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Drift-charge a three-race cup at 170% speed',
-    description: 'Kart Sprint Hyper is Kart Sprint with the clock running 70% faster. A candy-bright cup over three hand-made circuits — Sunny Loop, Snake Valley and the drift-happy Hairpin Ridge — three laps each against Bip, Zola and Rex. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Kart Sprint record.',
+    description: 'Everything in Kart Sprint at 1.7× speed. A candy-bright cup over three hand-made circuits — Sunny Loop, Snake Valley and the drift-happy Hairpin Ridge — three laps each against Bip, Zola and Rex. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
     colors: ['#d6a040', '#d54fff'], tags: ['karting', 'drift', 'racing', 'hyper', 'remix'] });
 
   V('kart-sprint', { id: 'kart-sprint-insane', title: 'Kart Sprint: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Drift-charge a three-race cup at double speed',
-    description: 'Insane mode for Kart Sprint: identical mechanics, game time × 2, warm palette, separate best score. A candy-bright cup over three hand-made circuits — Sunny Loop, Snake Valley and the drift-happy Hairpin Ridge — three laps each against Bip, Zola and Rex. Treat the first few runs as reconnaissance — even the opening pattern feels new at this pace.',
+    description: 'The double-speed edition of Kart Sprint. A candy-bright cup over three hand-made circuits — Sunny Loop, Snake Valley and the drift-happy Hairpin Ridge — three laps each against Bip, Zola and Rex. Insane keeps every rule intact and simply halves the time you get for each decision; it is brutally short, oddly relaxing once you accept that, and tracked on its own high-score table.',
     colors: ['#41d93d', '#ff604f'], tags: ['karting', 'drift', 'racing', 'insane', 'remix'] });
 
   V('kart-sprint', { id: 'kart-sprint-turbo', title: 'Kart Sprint Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -1447,17 +1447,17 @@
 
   V('kart-sprint', { id: 'kart-sprint-zen', title: 'Kart Sprint Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Drift-charge a three-race cup, at three-quarter pace',
-    description: 'Kart Sprint at a gentler pace. A candy-bright cup over three hand-made circuits — Sunny Loop, Snake Valley and the drift-happy Hairpin Ridge — three laps each against Bip, Zola and Rex. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Kart Sprint.',
+    description: 'Kart Sprint Zen slows Kart Sprint to about three-quarter speed and gives it a calmer palette. A candy-bright cup over three hand-made circuits — Sunny Loop, Snake Valley and the drift-happy Hairpin Ridge — three laps each against Bip, Zola and Rex. With more time between decisions it becomes a game about planning rather than twitch — good for learning the patterns, or for playing one-handed with a coffee. Zen has its own best score.',
     colors: ['#c155a9', '#58c0f6'], tags: ['karting', 'drift', 'racing', 'zen', 'remix'] });
 
   V('key-quest', { id: 'key-quest-hyper', title: 'Key Quest Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Every door wants a different key at 170% speed',
-    description: 'Key Quest Hyper is Key Quest with the clock running 70% faster. A top-down dungeon built entirely out of locked doors. Keys come in four colours and each one opens a single door of its colour and is then gone, so the room unlocks in a fixed order that you have to work out by exploring. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Key Quest record.',
+    description: 'Everything in Key Quest at 1.7× speed. A top-down dungeon built entirely out of locked doors. Keys come in four colours and each one opens a single door of its colour and is then gone, so the room unlocks in a fixed order that you have to work out by exploring. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
     colors: ['#19363e', '#fc3666'], tags: ['dungeon', 'puzzle', 'adventure', 'hyper', 'remix'] });
 
   V('key-quest', { id: 'key-quest-insane', title: 'Key Quest: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Every door wants a different key at double speed',
-    description: 'Insane mode for Key Quest: identical mechanics, game time × 2, warm palette, separate best score. A top-down dungeon built entirely out of locked doors. Keys come in four colours and each one opens a single door of its colour and is then gone, so the room unlocks in a fixed order that you have to work out by exploring. Treat the first few runs as reconnaissance — even the opening pattern feels new at this pace.',
+    description: 'The double-speed edition of Key Quest. A top-down dungeon built entirely out of locked doors. Keys come in four colours and each one opens a single door of its colour and is then gone, so the room unlocks in a fixed order that you have to work out by exploring. Insane keeps every rule intact and simply halves the time you get for each decision; it is brutally short, oddly relaxing once you accept that, and tracked on its own high-score table.',
     colors: ['#2d193e', '#ecff33'], tags: ['dungeon', 'puzzle', 'adventure', 'insane', 'remix'] });
 
   V('key-quest', { id: 'key-quest-turbo', title: 'Key Quest Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -1467,17 +1467,17 @@
 
   V('key-quest', { id: 'key-quest-zen', title: 'Key Quest Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Every door wants a different key, at three-quarter pace',
-    description: 'Key Quest at a gentler pace. A top-down dungeon built entirely out of locked doors. Keys come in four colours and each one opens a single door of its colour and is then gone, so the room unlocks in a fixed order that you have to work out by exploring. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Key Quest.',
+    description: 'Key Quest Zen slows Key Quest to about three-quarter speed and gives it a calmer palette. A top-down dungeon built entirely out of locked doors. Keys come in four colours and each one opens a single door of its colour and is then gone, so the room unlocks in a fixed order that you have to work out by exploring. With more time between decisions it becomes a game about planning rather than twitch — good for learning the patterns, or for playing one-handed with a coffee. Zen has its own best score.',
     colors: ['#24391e', '#8352e0'], tags: ['dungeon', 'puzzle', 'adventure', 'zen', 'remix'] });
 
   V('klondike', { id: 'klondike-hyper', title: 'Klondike Solitaire Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'The solitaire everyone knows at 170% speed',
-    description: 'Everything in Klondike Solitaire at 1.7× speed. Build all four foundations from Ace up to King. The tableau stacks downwards in alternating colours, only a King can start an empty column, and the stock recycles when you run out. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
+    description: 'The frantic edition of Klondike Solitaire. Build all four foundations from Ace up to King. The tableau stacks downwards in alternating colours, only a King can start an empty column, and the stock recycles when you run out. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
     colors: ['#234108', '#11ff31'], tags: ['solitaire', 'cards', 'classic', 'hyper', 'remix'] });
 
   V('klondike', { id: 'klondike-insane', title: 'Klondike Solitaire: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'The solitaire everyone knows at double speed',
-    description: 'Klondike Solitaire, twice as fast. Build all four foundations from Ace up to King. The tableau stacks downwards in alternating colours, only a King can start an empty column, and the stock recycles when you run out. Insane is the top of the remix ladder: past this there is nothing, so a personal best here is the one to brag about. Scores are kept apart from the original and the other remixes.',
+    description: 'Insane mode for Klondike Solitaire: identical mechanics, game time × 2, warm palette, separate best score. Build all four foundations from Ace up to King. The tableau stacks downwards in alternating colours, only a King can start an empty column, and the stock recycles when you run out. Treat the first few runs as reconnaissance — even the opening pattern feels new at this pace.',
     colors: ['#07423a', '#1190ff'], tags: ['solitaire', 'cards', 'classic', 'insane', 'remix'] });
 
   V('klondike', { id: 'klondike-turbo', title: 'Klondike Solitaire Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -1487,17 +1487,17 @@
 
   V('klondike', { id: 'klondike-zen', title: 'Klondike Solitaire Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'The solitaire everyone knows, at three-quarter pace',
-    description: 'A slow-motion cut of Klondike Solitaire, tinted cool. Build all four foundations from Ace up to King. The tableau stacks downwards in alternating colours, only a King can start an empty column, and the stock recycles when you run out. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
+    description: 'The relaxed version of Klondike Solitaire. Build all four foundations from Ace up to King. The tableau stacks downwards in alternating colours, only a King can start an empty column, and the stock recycles when you run out. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
     colors: ['#391510', '#e4b02c'], tags: ['solitaire', 'cards', 'classic', 'zen', 'remix'] });
 
   V('knife-throw', { id: 'knife-throw-hyper', title: 'Knife Throw Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Stick every blade in the spinning log at 170% speed',
-    description: 'Everything in Knife Throw at 1.7× speed. Throw knives into a rotating log without hitting one already stuck in it. Every stage adds knives to throw, speeds the spin up and leaves more grey blades in the way — and past stage four the log starts changing speed as it turns. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
+    description: 'The frantic edition of Knife Throw. Throw knives into a rotating log without hitting one already stuck in it. Every stage adds knives to throw, speeds the spin up and leaves more grey blades in the way — and past stage four the log starts changing speed as it turns. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
     colors: ['#741a4b', '#dffff9'], tags: ['timing', 'one tap', 'reflex', 'hyper', 'remix'] });
 
   V('knife-throw', { id: 'knife-throw-insane', title: 'Knife Throw: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Stick every blade in the spinning log at double speed',
-    description: 'Knife Throw, twice as fast. Throw knives into a rotating log without hitting one already stuck in it. Every stage adds knives to throw, speeds the spin up and leaves more grey blades in the way — and past stage four the log starts changing speed as it turns. Insane is the top of the remix ladder: past this there is nothing, so a personal best here is the one to brag about. Scores are kept apart from the original and the other remixes.',
+    description: 'Insane mode for Knife Throw: identical mechanics, game time × 2, warm palette, separate best score. Throw knives into a rotating log without hitting one already stuck in it. Every stage adds knives to throw, speeds the spin up and leaves more grey blades in the way — and past stage four the log starts changing speed as it turns. Treat the first few runs as reconnaissance — even the opening pattern feels new at this pace.',
     colors: ['#766218', '#e4dfff'], tags: ['timing', 'one tap', 'reflex', 'insane', 'remix'] });
 
   V('knife-throw', { id: 'knife-throw-turbo', title: 'Knife Throw Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -1507,17 +1507,17 @@
 
   V('knife-throw', { id: 'knife-throw-zen', title: 'Knife Throw Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Stick every blade in the spinning log, at three-quarter pace',
-    description: 'A slow-motion cut of Knife Throw, tinted cool. Throw knives into a rotating log without hitting one already stuck in it. Every stage adds knives to throw, speeds the spin up and leaves more grey blades in the way — and past stage four the log starts changing speed as it turns. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
+    description: 'The relaxed version of Knife Throw. Throw knives into a rotating log without hitting one already stuck in it. Every stage adds knives to throw, speeds the spin up and leaves more grey blades in the way — and past stage four the log starts changing speed as it turns. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
     colors: ['#292767', '#f2fde1'], tags: ['timing', 'one tap', 'reflex', 'zen', 'remix'] });
 
   V('laser-dodge', { id: 'laser-dodge-hyper', title: 'Laser Dodge Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Read the light, find the gap at 170% speed',
-    description: 'Laser Dodge, seventy percent faster, in a hotter palette. A single room that keeps filling with light. Every beam warns you first with a thin dotted line, so the whole game is reading the next second and being somewhere else when it arrives. Hyper strips out the breathing room the original gives you; what is left is pure pattern recognition and commitment. Practise in Zen or the original, then come here to see how far it holds.',
+    description: 'Hyper edition of Laser Dodge: same mechanics, 1.7× game speed, separate leaderboard. A single room that keeps filling with light. Every beam warns you first with a thin dotted line, so the whole game is reading the next second and being somewhere else when it arrives. The best runs come from reading two hazards ahead rather than one — the original rewards that, this one demands it.',
     colors: ['#0f2d2b', '#4fff7e'], tags: ['reflex', 'survival', 'dodging', 'hyper', 'remix'] });
 
   V('laser-dodge', { id: 'laser-dodge-insane', title: 'Laser Dodge: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Read the light, find the gap at double speed',
-    description: 'Laser Dodge at 2× — the version for people who found Hyper too polite. A single room that keeps filling with light. Every beam warns you first with a thin dotted line, so the whole game is reading the next second and being somewhere else when it arrives. At double speed reaction is barely enough; runs are won by knowing what comes next before it appears. Separate leaderboard so the numbers stay honest.',
+    description: 'Laser Dodge: Insane Mode runs Laser Dodge at exactly double speed. A single room that keeps filling with light. Every beam warns you first with a thin dotted line, so the whole game is reading the next second and being somewhere else when it arrives. Everything the original does, it does twice as fast — including the difficulty ramp — so this is less a game to beat than a game to survive, and a run that lasts thirty seconds is genuinely good. Own best score, warm palette.',
     colors: ['#160e2e', '#4f95ff'], tags: ['reflex', 'survival', 'dodging', 'insane', 'remix'] });
 
   V('laser-dodge', { id: 'laser-dodge-turbo', title: 'Laser Dodge Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -1527,17 +1527,17 @@
 
   V('laser-dodge', { id: 'laser-dodge-zen', title: 'Laser Dodge Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Read the light, find the gap, at three-quarter pace',
-    description: 'Laser Dodge Zen slows Laser Dodge to about three-quarter speed and gives it a calmer palette. A single room that keeps filling with light. Every beam warns you first with a thin dotted line, so the whole game is reading the next second and being somewhere else when it arrives. With more time between decisions it becomes a game about planning rather than twitch — good for learning the patterns, or for playing one-handed with a coffee. Zen has its own best score.',
+    description: 'A slow-motion cut of Laser Dodge, tinted cool. A single room that keeps filling with light. Every beam warns you first with a thin dotted line, so the whole game is reading the next second and being somewhere else when it arrives. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
     colors: ['#1e2913', '#f6de58'], tags: ['reflex', 'survival', 'dodging', 'zen', 'remix'] });
 
   V('laser-duel', { id: 'laser-duel-hyper', title: 'Laser Duel Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Bounce a laser round the pillar, win the round at 170% speed',
-    description: 'Hyper edition of Laser Duel: same mechanics, 1.7× game speed, separate leaderboard. A one-hit duel against an AI gunslinger, best of five rounds. Every bolt survives two wall bounces, so the strongest play is the shot your opponent never sees coming — banked off a wall or around a pillar, worth 150 instead of 100. The best runs come from reading two hazards ahead rather than one — the original rewards that, this one demands it.',
+    description: 'Laser Duel Hyper is Laser Duel with the clock running 70% faster. A one-hit duel against an AI gunslinger, best of five rounds. Every bolt survives two wall bounces, so the strongest play is the shot your opponent never sees coming — banked off a wall or around a pillar, worth 150 instead of 100. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Laser Duel record.',
     colors: ['#009e22', '#ff3c9e'], tags: ['duel', 'lasers', 'ricochet', 'hyper', 'remix'] });
 
   V('laser-duel', { id: 'laser-duel-insane', title: 'Laser Duel: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Bounce a laser round the pillar, win the round at double speed',
-    description: 'The double-speed edition of Laser Duel. A one-hit duel against an AI gunslinger, best of five rounds. Every bolt survives two wall bounces, so the strongest play is the shot your opponent never sees coming — banked off a wall or around a pillar, worth 150 instead of 100. Insane keeps every rule intact and simply halves the time you get for each decision; it is brutally short, oddly relaxing once you accept that, and tracked on its own high-score table.',
+    description: 'Laser Duel at 2× — the version for people who found Hyper too polite. A one-hit duel against an AI gunslinger, best of five rounds. Every bolt survives two wall bounces, so the strongest play is the shot your opponent never sees coming — banked off a wall or around a pillar, worth 150 instead of 100. At double speed reaction is barely enough; runs are won by knowing what comes next before it appears. Separate leaderboard so the numbers stay honest.',
     colors: ['#00479e', '#ffde3c'], tags: ['duel', 'lasers', 'ricochet', 'insane', 'remix'] });
 
   V('laser-duel', { id: 'laser-duel-turbo', title: 'Laser Duel Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -1547,17 +1547,17 @@
 
   V('laser-duel', { id: 'laser-duel-zen', title: 'Laser Duel Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Bounce a laser round the pillar, win the round, at three-quarter pace',
-    description: 'The relaxed version of Laser Duel. A one-hit duel against an AI gunslinger, best of five rounds. Every bolt survives two wall bounces, so the strongest play is the shot your opponent never sees coming — banked off a wall or around a pillar, worth 150 instead of 100. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
+    description: 'Zen edition of Laser Duel: identical rules, 28% slower, separate high score. A one-hit duel against an AI gunslinger, best of five rounds. Every bolt survives two wall bounces, so the strongest play is the shot your opponent never sees coming — banked off a wall or around a pillar, worth 150 instead of 100. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
     colors: ['#8a7215', '#5446f5'], tags: ['duel', 'lasers', 'ricochet', 'zen', 'remix'] });
 
   V('laser-maze', { id: 'laser-maze-hyper', title: 'Laser Maze Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Bounce the beam into the target at 170% speed',
-    description: 'Everything in Laser Maze at 1.7× speed. A beam fires from the left and you steer it by flipping mirrors between their two diagonal orientations. The beam updates live as you click, so you can see exactly where it goes wrong. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
+    description: 'The frantic edition of Laser Maze. A beam fires from the left and you steer it by flipping mirrors between their two diagonal orientations. The beam updates live as you click, so you can see exactly where it goes wrong. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
     colors: ['#072724', '#69e720'], tags: ['logic', 'light', 'brain', 'hyper', 'remix'] });
 
   V('laser-maze', { id: 'laser-maze-insane', title: 'Laser Maze: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Bounce the beam into the target at double speed',
-    description: 'Laser Maze, twice as fast. A beam fires from the left and you steer it by flipping mirrors between their two diagonal orientations. The beam updates live as you click, so you can see exactly where it goes wrong. Insane is the top of the remix ladder: past this there is nothing, so a personal best here is the one to brag about. Scores are kept apart from the original and the other remixes.',
+    description: 'Insane mode for Laser Maze: identical mechanics, game time × 2, warm palette, separate best score. A beam fires from the left and you steer it by flipping mirrors between their two diagonal orientations. The beam updates live as you click, so you can see exactly where it goes wrong. Treat the first few runs as reconnaissance — even the opening pattern feels new at this pace.',
     colors: ['#0d0628', '#1cebe4'], tags: ['logic', 'light', 'brain', 'insane', 'remix'] });
 
   V('laser-maze', { id: 'laser-maze-turbo', title: 'Laser Maze Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -1567,17 +1567,17 @@
 
   V('laser-maze', { id: 'laser-maze-zen', title: 'Laser Maze Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Bounce the beam into the target, at three-quarter pace',
-    description: 'A slow-motion cut of Laser Maze, tinted cool. A beam fires from the left and you steer it by flipping mirrors between their two diagonal orientations. The beam updates live as you click, so you can see exactly where it goes wrong. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
+    description: 'The relaxed version of Laser Maze. A beam fires from the left and you steer it by flipping mirrors between their two diagonal orientations. The beam updates live as you click, so you can see exactly where it goes wrong. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
     colors: ['#18230b', '#cb5b3c'], tags: ['logic', 'light', 'brain', 'zen', 'remix'] });
 
   V('lava-run', { id: 'lava-run-hyper', title: 'Lava Run Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Climb — the lava never stops at 170% speed',
-    description: 'Everything in Lava Run at 1.7× speed. A vertical scramble with a rising tide of lava underneath that gets faster the higher you climb. Brown ledges are solid, blue ones slide sideways, orange ones crumble the moment you leave them, and green ones fling you well above a normal jump. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
+    description: 'The frantic edition of Lava Run. A vertical scramble with a rising tide of lava underneath that gets faster the higher you climb. Brown ledges are solid, blue ones slide sideways, orange ones crumble the moment you leave them, and green ones fling you well above a normal jump. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
     colors: ['#1c061a', '#ff109d'], tags: ['platformer', 'climbing', 'endless', 'hyper', 'remix'] });
 
   V('lava-run', { id: 'lava-run-insane', title: 'Lava Run: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Climb — the lava never stops at double speed',
-    description: 'Lava Run, twice as fast. A vertical scramble with a rising tide of lava underneath that gets faster the higher you climb. Brown ledges are solid, blue ones slide sideways, orange ones crumble the moment you leave them, and green ones fling you well above a normal jump. Insane is the top of the remix ladder: past this there is nothing, so a personal best here is the one to brag about. Scores are kept apart from the original and the other remixes.',
+    description: 'Insane mode for Lava Run: identical mechanics, game time × 2, warm palette, separate best score. A vertical scramble with a rising tide of lava underneath that gets faster the higher you climb. Brown ledges are solid, blue ones slide sideways, orange ones crumble the moment you leave them, and green ones fling you well above a normal jump. Treat the first few runs as reconnaissance — even the opening pattern feels new at this pace.',
     colors: ['#1d1005', '#ffc210'], tags: ['platformer', 'climbing', 'endless', 'insane', 'remix'] });
 
   V('lava-run', { id: 'lava-run-turbo', title: 'Lava Run Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -1587,17 +1587,17 @@
 
   V('lava-run', { id: 'lava-run-zen', title: 'Lava Run Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Climb — the lava never stops, at three-quarter pace',
-    description: 'A slow-motion cut of Lava Run, tinted cool. A vertical scramble with a rising tide of lava underneath that gets faster the higher you climb. Brown ledges are solid, blue ones slide sideways, orange ones crumble the moment you leave them, and green ones fling you well above a normal jump. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
+    description: 'The relaxed version of Lava Run. A vertical scramble with a rising tide of lava underneath that gets faster the higher you climb. Brown ledges are solid, blue ones slide sideways, orange ones crumble the moment you leave them, and green ones fling you well above a normal jump. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
     colors: ['#090e19', '#2123ee'], tags: ['platformer', 'climbing', 'endless', 'zen', 'remix'] });
 
   V('letter-drop', { id: 'letter-drop-hyper', title: 'Letter Drop Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Spell words before the stack tops out at 170% speed',
-    description: 'Everything in Letter Drop at 1.7× speed. New rows of letters push up from the bottom on a timer that keeps getting shorter. Click a chain of touching letters — any direction, including diagonals — to spell a word, then press Enter to clear them and drop everything above down. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
+    description: 'The frantic edition of Letter Drop. New rows of letters push up from the bottom on a timer that keeps getting shorter. Click a chain of touching letters — any direction, including diagonals — to spell a word, then press Enter to clear them and drop everything above down. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
     colors: ['#0f3a35', '#11ff31'], tags: ['word', 'action', 'stacking', 'hyper', 'remix'] });
 
   V('letter-drop', { id: 'letter-drop-insane', title: 'Letter Drop: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Spell words before the stack tops out at double speed',
-    description: 'Letter Drop, twice as fast. New rows of letters push up from the bottom on a timer that keeps getting shorter. Click a chain of touching letters — any direction, including diagonals — to spell a word, then press Enter to clear them and drop everything above down. Insane is the top of the remix ladder: past this there is nothing, so a personal best here is the one to brag about. Scores are kept apart from the original and the other remixes.',
+    description: 'Insane mode for Letter Drop: identical mechanics, game time × 2, warm palette, separate best score. New rows of letters push up from the bottom on a timer that keeps getting shorter. Click a chain of touching letters — any direction, including diagonals — to spell a word, then press Enter to clear them and drop everything above down. Treat the first few runs as reconnaissance — even the opening pattern feels new at this pace.',
     colors: ['#180e3b', '#1190ff'], tags: ['word', 'action', 'stacking', 'insane', 'remix'] });
 
   V('letter-drop', { id: 'letter-drop-turbo', title: 'Letter Drop Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -1607,17 +1607,17 @@
 
   V('letter-drop', { id: 'letter-drop-zen', title: 'Letter Drop Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Spell words before the stack tops out, at three-quarter pace',
-    description: 'A slow-motion cut of Letter Drop, tinted cool. New rows of letters push up from the bottom on a timer that keeps getting shorter. Click a chain of touching letters — any direction, including diagonals — to spell a word, then press Enter to clear them and drop everything above down. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
+    description: 'The relaxed version of Letter Drop. New rows of letters push up from the bottom on a timer that keeps getting shorter. Click a chain of touching letters — any direction, including diagonals — to spell a word, then press Enter to clear them and drop everything above down. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
     colors: ['#253415', '#e4b02c'], tags: ['word', 'action', 'stacking', 'zen', 'remix'] });
 
   V('lunar-lander', { id: 'lunar-lander-hyper', title: 'Lunar Lander Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Down slowly, upright, on the pad at 170% speed',
-    description: 'Hyper edition of Lunar Lander: same mechanics, 1.7× game speed, separate leaderboard. Gravity is constant and your thruster burns fuel you cannot replace. To land you need all three at once: on a flat pad, close to upright, and slow — the descent and drift readouts turn green when each is safe. The best runs come from reading two hazards ahead rather than one — the original rewards that, this one demands it.',
+    description: 'Lunar Lander Hyper is Lunar Lander with the clock running 70% faster. Gravity is constant and your thruster burns fuel you cannot replace. To land you need all three at once: on a flat pad, close to upright, and slow — the descent and drift readouts turn green when each is safe. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Lunar Lander record.',
     colors: ['#04100f', '#85c3b9'], tags: ['classic', 'physics', 'precision', 'hyper', 'remix'] });
 
   V('lunar-lander', { id: 'lunar-lander-insane', title: 'Lunar Lander: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Down slowly, upright, on the pad at double speed',
-    description: 'The double-speed edition of Lunar Lander. Gravity is constant and your thruster burns fuel you cannot replace. To land you need all three at once: on a flat pad, close to upright, and slow — the descent and drift readouts turn green when each is safe. Insane keeps every rule intact and simply halves the time you get for each decision; it is brutally short, oddly relaxing once you accept that, and tracked on its own high-score table.',
+    description: 'Lunar Lander at 2× — the version for people who found Hyper too polite. Gravity is constant and your thruster burns fuel you cannot replace. To land you need all three at once: on a flat pad, close to upright, and slow — the descent and drift readouts turn green when each is safe. At double speed reaction is barely enough; runs are won by knowing what comes next before it appears. Separate leaderboard so the numbers stay honest.',
     colors: ['#070410', '#8f84c4'], tags: ['classic', 'physics', 'precision', 'insane', 'remix'] });
 
   V('lunar-lander', { id: 'lunar-lander-turbo', title: 'Lunar Lander Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -1627,17 +1627,17 @@
 
   V('lunar-lander', { id: 'lunar-lander-zen', title: 'Lunar Lander Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Down slowly, upright, on the pad, at three-quarter pace',
-    description: 'The relaxed version of Lunar Lander. Gravity is constant and your thruster burns fuel you cannot replace. To land you need all three at once: on a flat pad, close to upright, and slow — the descent and drift readouts turn green when each is safe. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
+    description: 'Zen edition of Lunar Lander: identical rules, 28% slower, separate high score. Gravity is constant and your thruster burns fuel you cannot replace. To land you need all three at once: on a flat pad, close to upright, and slow — the descent and drift readouts turn green when each is safe. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
     colors: ['#0a0f06', '#a7bb8d'], tags: ['classic', 'physics', 'precision', 'zen', 'remix'] });
 
   V('magnet-boots', { id: 'magnet-boots-hyper', title: 'Magnet Boots Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Flip polarity, walk the ceiling, dodge live wires at 170% speed',
-    description: 'Everything in Magnet Boots at 1.7× speed. There is no jump. Your boots cling to metal plates, and pressing flip while they are touching one reverses the pull so you fall to the opposite surface — cross a floor full of live wires by walking the ceiling over it. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
+    description: 'The frantic edition of Magnet Boots. There is no jump. Your boots cling to metal plates, and pressing flip while they are touching one reverses the pull so you fall to the opposite surface — cross a floor full of live wires by walking the ceiling over it. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
     colors: ['#133125', '#7fff95'], tags: ['gravity', 'platformer', 'levels', 'hyper', 'remix'] });
 
   V('magnet-boots', { id: 'magnet-boots-insane', title: 'Magnet Boots: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
     tagline: 'Flip polarity, walk the ceiling, dodge live wires at double speed',
-    description: 'Magnet Boots, twice as fast. There is no jump. Your boots cling to metal plates, and pressing flip while they are touching one reverses the pull so you fall to the opposite surface — cross a floor full of live wires by walking the ceiling over it. Insane is the top of the remix ladder: past this there is nothing, so a personal best here is the one to brag about. Scores are kept apart from the original and the other remixes.',
+    description: 'Insane mode for Magnet Boots: identical mechanics, game time × 2, warm palette, separate best score. There is no jump. Your boots cling to metal plates, and pressing flip while they are touching one reverses the pull so you fall to the opposite surface — cross a floor full of live wires by walking the ceiling over it. Treat the first few runs as reconnaissance — even the opening pattern feels new at this pace.',
     colors: ['#121532', '#7fbeff'], tags: ['gravity', 'platformer', 'levels', 'insane', 'remix'] });
 
   V('magnet-boots', { id: 'magnet-boots-turbo', title: 'Magnet Boots Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -1647,13 +1647,18 @@
 
   V('magnet-boots', { id: 'magnet-boots-zen', title: 'Magnet Boots Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Flip polarity, walk the ceiling, dodge live wires, at three-quarter pace',
-    description: 'A slow-motion cut of Magnet Boots, tinted cool. There is no jump. Your boots cling to metal plates, and pressing flip while they are touching one reverses the pull so you fall to the opposite surface — cross a floor full of live wires by walking the ceiling over it. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
+    description: 'The relaxed version of Magnet Boots. There is no jump. Your boots cling to metal plates, and pressing flip while they are touching one reverses the pull so you fall to the opposite surface — cross a floor full of live wires by walking the ceiling over it. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
     colors: ['#292d17', '#f9dc85'], tags: ['gravity', 'platformer', 'levels', 'zen', 'remix'] });
 
   V('make-24', { id: 'make-24-hyper', title: 'Make 24 Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Four numbers, one target at 170% speed',
-    description: 'Make 24, seventy percent faster, in a hotter palette. Combine all four numbers — each used exactly once — with addition, subtraction, multiplication and division to land on exactly 24. Fractions along the way are fine. Hyper strips out the breathing room the original gives you; what is left is pure pattern recognition and commitment. Practise in Zen or the original, then come here to see how far it holds.',
+    description: 'Hyper edition of Make 24: same mechanics, 1.7× game speed, separate leaderboard. Combine all four numbers — each used exactly once — with addition, subtraction, multiplication and division to land on exactly 24. Fractions along the way are fine. The best runs come from reading two hazards ahead rather than one — the original rewards that, this one demands it.',
     colors: ['#0f4139', '#ff5784'], tags: ['maths', 'brain', 'numbers', 'hyper', 'remix'] });
+
+  V('make-24', { id: 'make-24-insane', title: 'Make 24: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
+    tagline: 'Four numbers, one target at double speed',
+    description: 'Make 24: Insane Mode runs Make 24 at exactly double speed. Combine all four numbers — each used exactly once — with addition, subtraction, multiplication and division to land on exactly 24. Fractions along the way are fine. Everything the original does, it does twice as fast — including the difficulty ramp — so this is less a game to beat than a game to survive, and a run that lasts thirty seconds is genuinely good. Own best score, warm palette.',
+    colors: ['#180e42', '#f4ff57'], tags: ['maths', 'brain', 'numbers', 'insane', 'remix'] });
 
   V('make-24', { id: 'make-24-turbo', title: 'Make 24 Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
     tagline: 'Four numbers, one target — a third faster',
@@ -1662,13 +1667,18 @@
 
   V('make-24', { id: 'make-24-zen', title: 'Make 24 Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Four numbers, one target, at three-quarter pace',
-    description: 'Make 24 Zen slows Make 24 to about three-quarter speed and gives it a calmer palette. Combine all four numbers — each used exactly once — with addition, subtraction, multiplication and division to land on exactly 24. Fractions along the way are fine. With more time between decisions it becomes a game about planning rather than twitch — good for learning the patterns, or for playing one-handed with a coffee. Zen has its own best score.',
+    description: 'A slow-motion cut of Make 24, tinted cool. Combine all four numbers — each used exactly once — with addition, subtraction, multiplication and division to land on exactly 24. Fractions along the way are fine. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
     colors: ['#2a3a16', '#8f5ff7'], tags: ['maths', 'brain', 'numbers', 'zen', 'remix'] });
 
   V('mancala', { id: 'mancala-hyper', title: 'Mancala Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Sow seeds, capture, go again at 170% speed',
-    description: 'Mancala Hyper is Mancala with the clock running 70% faster. One of the oldest board games there is. Lift all the seeds from one of your pits and drop them one per pit going anticlockwise, skipping the opponent’s store. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Mancala record.',
+    description: 'Everything in Mancala at 1.7× speed. One of the oldest board games there is. Lift all the seeds from one of your pits and drop them one per pit going anticlockwise, skipping the opponent’s store. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
     colors: ['#741649', '#f24178'], tags: ['board game', 'vs cpu', 'ancient', 'hyper', 'remix'] });
+
+  V('mancala', { id: 'mancala-insane', title: 'Mancala: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
+    tagline: 'Sow seeds, capture, go again at double speed',
+    description: 'The double-speed edition of Mancala. One of the oldest board games there is. Lift all the seeds from one of your pits and drop them one per pit going anticlockwise, skipping the opponent’s store. Insane keeps every rule intact and simply halves the time you get for each decision; it is brutally short, oddly relaxing once you accept that, and tracked on its own high-score table.',
+    colors: ['#766214', '#f1f53e'], tags: ['board game', 'vs cpu', 'ancient', 'insane', 'remix'] });
 
   V('mancala', { id: 'mancala-turbo', title: 'Mancala Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
     tagline: 'Sow seeds, capture, go again — a third faster',
@@ -1677,13 +1687,18 @@
 
   V('mancala', { id: 'mancala-zen', title: 'Mancala Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Sow seeds, capture, go again, at three-quarter pace',
-    description: 'Mancala at a gentler pace. One of the oldest board games there is. Lift all the seeds from one of your pits and drop them one per pit going anticlockwise, skipping the opponent’s store. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Mancala.',
+    description: 'Mancala Zen slows Mancala to about three-quarter speed and gives it a calmer palette. One of the oldest board games there is. Lift all the seeds from one of your pits and drop them one per pit going anticlockwise, skipping the opponent’s store. With more time between decisions it becomes a game about planning rather than twitch — good for learning the patterns, or for playing one-handed with a coffee. Zen has its own best score.',
     colors: ['#262367', '#7c5ad9'], tags: ['board game', 'vs cpu', 'ancient', 'zen', 'remix'] });
 
   V('mastermind', { id: 'mastermind-hyper', title: 'Mastermind Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Crack the four-colour code at 170% speed',
-    description: 'Mastermind Hyper is Mastermind with the clock running 70% faster. A hidden sequence of four colours drawn from six, repeats allowed. Each guess comes back with pegs: a dark peg for a colour that is right and in the right place, a white peg for a colour that is right but misplaced. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Mastermind record.',
+    description: 'Everything in Mastermind at 1.7× speed. A hidden sequence of four colours drawn from six, repeats allowed. Each guess comes back with pegs: a dark peg for a colour that is right and in the right place, a white peg for a colour that is right but misplaced. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
     colors: ['#0e2a34', '#ea6dff'], tags: ['logic', 'deduction', 'brain', 'hyper', 'remix'] });
+
+  V('mastermind', { id: 'mastermind-insane', title: 'Mastermind: Insane Mode', emo: '💀', speed: 2, hue: 20, sat: 1.3,
+    tagline: 'Crack the four-colour code at double speed',
+    description: 'The double-speed edition of Mastermind. A hidden sequence of four colours drawn from six, repeats allowed. Each guess comes back with pegs: a dark peg for a colour that is right and in the right place, a white peg for a colour that is right but misplaced. Insane keeps every rule intact and simply halves the time you get for each decision; it is brutally short, oddly relaxing once you accept that, and tracked on its own high-score table.',
+    colors: ['#250e34', '#ff896d'], tags: ['logic', 'deduction', 'brain', 'insane', 'remix'] });
 
   V('mastermind', { id: 'mastermind-turbo', title: 'Mastermind Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
     tagline: 'Crack the four-colour code — a third faster',
@@ -1692,12 +1707,12 @@
 
   V('mastermind', { id: 'mastermind-zen', title: 'Mastermind Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Crack the four-colour code, at three-quarter pace',
-    description: 'Mastermind at a gentler pace. A hidden sequence of four colours drawn from six, repeats allowed. Each guess comes back with pegs: a dark peg for a colour that is right and in the right place, a white peg for a colour that is right but misplaced. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Mastermind.',
+    description: 'Mastermind Zen slows Mastermind to about three-quarter speed and gives it a calmer palette. A hidden sequence of four colours drawn from six, repeats allowed. Each guess comes back with pegs: a dark peg for a colour that is right and in the right place, a white peg for a colour that is right but misplaced. With more time between decisions it becomes a game about planning rather than twitch — good for learning the patterns, or for playing one-handed with a coffee. Zen has its own best score.',
     colors: ['#182f13', '#78bef4'], tags: ['logic', 'deduction', 'brain', 'zen', 'remix'] });
 
   V('math-blitz', { id: 'math-blitz-hyper', title: 'Math Blitz Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Sixty seconds of mental arithmetic at 170% speed',
-    description: 'The frantic edition of Math Blitz. Answer as many sums as you can in a minute. Every correct answer adds a second back to the clock and grows your streak multiplier; every wrong one takes two away. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
+    description: 'Math Blitz, seventy percent faster, in a hotter palette. Answer as many sums as you can in a minute. Every correct answer adds a second back to the clock and grows your streak multiplier; every wrong one takes two away. Hyper strips out the breathing room the original gives you; what is left is pure pattern recognition and commitment. Practise in Zen or the original, then come here to see how far it holds.',
     colors: ['#0a3425', '#11ff31'], tags: ['maths', 'timed', 'brain', 'hyper', 'remix'] });
 
   V('math-blitz', { id: 'math-blitz-turbo', title: 'Math Blitz Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -1707,12 +1722,12 @@
 
   V('math-blitz', { id: 'math-blitz-zen', title: 'Math Blitz Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Sixty seconds of mental arithmetic, at three-quarter pace',
-    description: 'Zen edition of Math Blitz: identical rules, 28% slower, separate high score. Answer as many sums as you can in a minute. Every correct answer adds a second back to the clock and grows your streak multiplier; every wrong one takes two away. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
+    description: 'Math Blitz at a gentler pace. Answer as many sums as you can in a minute. Every correct answer adds a second back to the clock and grows your streak multiplier; every wrong one takes two away. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Math Blitz.',
     colors: ['#272e10', '#e4b02c'], tags: ['maths', 'timed', 'brain', 'zen', 'remix'] });
 
   V('maze-muncher', { id: 'maze-muncher-hyper', title: 'Maze Muncher Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Eat the dots, dodge the ghosts at 170% speed',
-    description: 'Everything in Maze Muncher at 1.7× speed. Clear every dot in the maze while three ghosts hunt you down. The four big pellets in the corners turn them blue for seven seconds — catch one then and it is worth 200 points and a trip back to its box. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
+    description: 'The frantic edition of Maze Muncher. Clear every dot in the maze while three ghosts hunt you down. The four big pellets in the corners turn them blue for seven seconds — catch one then and it is worth 200 points and a trip back to its box. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
     colors: ['#0f9885', '#ff5784'], tags: ['classic', 'maze', 'arcade', 'hyper', 'remix'] });
 
   V('maze-muncher', { id: 'maze-muncher-turbo', title: 'Maze Muncher Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -1722,12 +1737,12 @@
 
   V('maze-muncher', { id: 'maze-muncher-zen', title: 'Maze Muncher Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Eat the dots, dodge the ghosts, at three-quarter pace',
-    description: 'A slow-motion cut of Maze Muncher, tinted cool. Clear every dot in the maze while three ghosts hunt you down. The four big pellets in the corners turn them blue for seven seconds — catch one then and it is worth 200 points and a trip back to its box. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
+    description: 'The relaxed version of Maze Muncher. Clear every dot in the maze while three ghosts hunt you down. The four big pellets in the corners turn them blue for seven seconds — catch one then and it is worth 200 points and a trip back to its box. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
     colors: ['#598522', '#8f5ff7'], tags: ['classic', 'maze', 'arcade', 'zen', 'remix'] });
 
   V('maze-runner', { id: 'maze-runner-hyper', title: 'Maze Runner Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Escape mazes by lantern-light at 170% speed',
-    description: 'The frantic edition of Maze Runner. Start top-left, reach the green exit bottom-right. Each maze is generated fresh, and your lantern lights only the corridors near you — so you are mapping it as you go. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
+    description: 'Maze Runner, seventy percent faster, in a hotter palette. Start top-left, reach the green exit bottom-right. Each maze is generated fresh, and your lantern lights only the corridors near you — so you are mapping it as you go. Hyper strips out the breathing room the original gives you; what is left is pure pattern recognition and commitment. Practise in Zen or the original, then come here to see how far it holds.',
     colors: ['#3dc6b7', '#69e720'], tags: ['maze', 'exploration', 'levels', 'hyper', 'remix'] });
 
   V('maze-runner', { id: 'maze-runner-turbo', title: 'Maze Runner Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -1737,12 +1752,12 @@
 
   V('maze-runner', { id: 'maze-runner-zen', title: 'Maze Runner Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Escape mazes by lantern-light, at three-quarter pace',
-    description: 'Zen edition of Maze Runner: identical rules, 28% slower, separate high score. Start top-left, reach the green exit bottom-right. Each maze is generated fresh, and your lantern lights only the corridors near you — so you are mapping it as you go. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
+    description: 'Maze Runner at a gentler pace. Start top-left, reach the green exit bottom-right. Each maze is generated fresh, and your lantern lights only the corridors near you — so you are mapping it as you go. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Maze Runner.',
     colors: ['#84b350', '#cb5b3c'], tags: ['maze', 'exploration', 'levels', 'zen', 'remix'] });
 
   V('mech-storm', { id: 'mech-storm-hyper', title: 'Mech Storm Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Jump jets, arm cannon, one long canyon at 170% speed',
-    description: 'Mech Storm, seventy percent faster, in a hotter palette. Your mech marches itself down the canyon — you work the jump jets and the arm cannon. Drone squadrons dive from the right while dug-in turrets lob arcing shells you have to jet over. Hyper strips out the breathing room the original gives you; what is left is pure pattern recognition and commitment. Practise in Zen or the original, then come here to see how far it holds.',
+    description: 'Hyper edition of Mech Storm: same mechanics, 1.7× game speed, separate leaderboard. Your mech marches itself down the canyon — you work the jump jets and the arm cannon. Drone squadrons dive from the right while dug-in turrets lob arcing shells you have to jet over. The best runs come from reading two hazards ahead rather than one — the original rewards that, this one demands it.',
     colors: ['#4a1969', '#58ff6f'], tags: ['mech', 'shooter', 'canyon', 'hyper', 'remix'] });
 
   V('mech-storm', { id: 'mech-storm-turbo', title: 'Mech Storm Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -1752,12 +1767,12 @@
 
   V('mech-storm', { id: 'mech-storm-zen', title: 'Mech Storm Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Jump jets, arm cannon, one long canyon, at three-quarter pace',
-    description: 'Mech Storm Zen slows Mech Storm to about three-quarter speed and gives it a calmer palette. Your mech marches itself down the canyon — you work the jump jets and the arm cannon. Drone squadrons dive from the right while dug-in turrets lob arcing shells you have to jet over. With more time between decisions it becomes a game about planning rather than twitch — good for learning the patterns, or for playing one-handed with a coffee. Zen has its own best score.',
+    description: 'A slow-motion cut of Mech Storm, tinted cool. Your mech marches itself down the canyon — you work the jump jets and the arm cannon. Drone squadrons dive from the right while dug-in turrets lob arcing shells you have to jet over. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
     colors: ['#24535e', '#f7cd60'], tags: ['mech', 'shooter', 'canyon', 'zen', 'remix'] });
 
   V('memory-sequence', { id: 'memory-sequence-hyper', title: 'Memory Sequence Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Sixteen squares, growing patterns at 170% speed',
-    description: 'Memory Sequence Hyper is Memory Sequence with the clock running 70% faster. A 4×4 grid flashes a sequence of squares and you tap them back in order. Each round adds one more step, and longer sequences flash faster — which is what actually breaks people, rather than the length itself. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Memory Sequence record.',
+    description: 'Everything in Memory Sequence at 1.7× speed. A 4×4 grid flashes a sequence of squares and you tap them back in order. Each round adds one more step, and longer sequences flash faster — which is what actually breaks people, rather than the length itself. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
     colors: ['#09342f', '#11ff31'], tags: ['memory', 'sequence', 'brain', 'hyper', 'remix'] });
 
   V('memory-sequence', { id: 'memory-sequence-turbo', title: 'Memory Sequence Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -1767,12 +1782,12 @@
 
   V('memory-sequence', { id: 'memory-sequence-zen', title: 'Memory Sequence Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Sixteen squares, growing patterns, at three-quarter pace',
-    description: 'Memory Sequence at a gentler pace. A 4×4 grid flashes a sequence of squares and you tap them back in order. Each round adds one more step, and longer sequences flash faster — which is what actually breaks people, rather than the length itself. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Memory Sequence.',
+    description: 'Memory Sequence Zen slows Memory Sequence to about three-quarter speed and gives it a calmer palette. A 4×4 grid flashes a sequence of squares and you tap them back in order. Each round adds one more step, and longer sequences flash faster — which is what actually breaks people, rather than the length itself. With more time between decisions it becomes a game about planning rather than twitch — good for learning the patterns, or for playing one-handed with a coffee. Zen has its own best score.',
     colors: ['#1f2e0f', '#e4b02c'], tags: ['memory', 'sequence', 'brain', 'zen', 'remix'] });
 
   V('merge-drop', { id: 'merge-drop-hyper', title: 'Merge Drop Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Two of a kind become one bigger one at 170% speed',
-    description: 'The frantic edition of Merge Drop. Drop fruit into a jar where everything rolls and settles properly. Two of the same fruit touching merge into the next size up, which can set off a chain all the way down the pile. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
+    description: 'Merge Drop, seventy percent faster, in a hotter palette. Drop fruit into a jar where everything rolls and settles properly. Two of the same fruit touching merge into the next size up, which can set off a chain all the way down the pile. Hyper strips out the breathing room the original gives you; what is left is pure pattern recognition and commitment. Practise in Zen or the original, then come here to see how far it holds.',
     colors: ['#2d0d21', '#f234f9'], tags: ['merging', 'physics', 'puzzle', 'hyper', 'remix'] });
 
   V('merge-drop', { id: 'merge-drop-turbo', title: 'Merge Drop Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -1782,12 +1797,12 @@
 
   V('merge-drop', { id: 'merge-drop-zen', title: 'Merge Drop Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Two of a kind become one bigger one, at three-quarter pace',
-    description: 'Zen edition of Merge Drop: identical rules, 28% slower, separate high score. Drop fruit into a jar where everything rolls and settles properly. Two of the same fruit touching merge into the next size up, which can set off a chain all the way down the pile. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
+    description: 'Merge Drop at a gentler pace. Drop fruit into a jar where everything rolls and settles properly. Two of the same fruit touching merge into the next size up, which can set off a chain all the way down the pile. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Merge Drop.',
     colors: ['#111229', '#508fdd'], tags: ['merging', 'physics', 'puzzle', 'zen', 'remix'] });
 
   V('meteor-miner', { id: 'meteor-miner-hyper', title: 'Meteor Miner Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Crack rocks in stages, make quota before the horn at 170% speed',
-    description: 'Everything in Meteor Miner at 1.7× speed. Asteroids with a day job. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
+    description: 'The frantic edition of Meteor Miner. Asteroids with a day job. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
     colors: ['#051c17', '#ff205e'], tags: ['mining', 'asteroids', 'upgrades', 'hyper', 'remix'] });
 
   V('meteor-miner', { id: 'meteor-miner-turbo', title: 'Meteor Miner Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -1797,12 +1812,12 @@
 
   V('meteor-miner', { id: 'meteor-miner-zen', title: 'Meteor Miner Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Crack rocks in stages, make quota before the horn, at three-quarter pace',
-    description: 'A slow-motion cut of Meteor Miner, tinted cool. Asteroids with a day job. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
+    description: 'The relaxed version of Meteor Miner. Asteroids with a day job. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
     colors: ['#131908', '#6a2ff0'], tags: ['mining', 'asteroids', 'upgrades', 'zen', 'remix'] });
 
   V('meteor-surf', { id: 'meteor-surf-hyper', title: 'Meteor Surf Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Dive the dips, launch the crests at 170% speed',
-    description: 'The frantic edition of Meteor Surf. You are surfing a molten wave that never ends. Hold to dive: pressed into a downslope you gain huge speed, and carrying that speed over a crest launches you into the air — which is the only way past the obsidian spires. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
+    description: 'Meteor Surf, seventy percent faster, in a hotter palette. You are surfing a molten wave that never ends. Hold to dive: pressed into a downslope you gain huge speed, and carrying that speed over a crest launches you into the air — which is the only way past the obsidian spires. Hyper strips out the breathing room the original gives you; what is left is pure pattern recognition and commitment. Practise in Zen or the original, then come here to see how far it holds.',
     colors: ['#8b118b', '#ff38a5'], tags: ['endless', 'surf', 'one button', 'hyper', 'remix'] });
 
   V('meteor-surf', { id: 'meteor-surf-turbo', title: 'Meteor Surf Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -1812,12 +1827,12 @@
 
   V('meteor-surf', { id: 'meteor-surf-zen', title: 'Meteor Surf Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Dive the dips, launch the crests, at three-quarter pace',
-    description: 'Zen edition of Meteor Surf: identical rules, 28% slower, separate high score. You are surfing a molten wave that never ends. Hold to dive: pressed into a downslope you gain huge speed, and carrying that speed over a crest launches you into the air — which is the only way past the obsidian spires. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
+    description: 'Meteor Surf at a gentler pace. You are surfing a molten wave that never ends. Hold to dive: pressed into a downslope you gain huge speed, and carrying that speed over a crest launches you into the air — which is the only way past the obsidian spires. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Meteor Surf.',
     colors: ['#22477a', '#4b46f1'], tags: ['endless', 'surf', 'one button', 'zen', 'remix'] });
 
   V('mini-golf', { id: 'mini-golf-hyper', title: 'Mini Golf Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Nine holes of drag-and-putt at 170% speed',
-    description: 'The frantic edition of Mini Golf. Drag back from the ball and let go — the length of the drag sets the power and a guide shows the line. Walls bounce the ball with a bit of energy lost each time, and sand traps kill your roll almost instantly. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
+    description: 'Mini Golf, seventy percent faster, in a hotter palette. Drag back from the ball and let go — the length of the drag sets the power and a guide shows the line. Walls bounce the ball with a bit of energy lost each time, and sand traps kill your roll almost instantly. Hyper strips out the breathing room the original gives you; what is left is pure pattern recognition and commitment. Practise in Zen or the original, then come here to see how far it holds.',
     colors: ['#587512', '#ffffff'], tags: ['golf', 'physics', 'aiming', 'hyper', 'remix'] });
 
   V('mini-golf', { id: 'mini-golf-turbo', title: 'Mini Golf Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -1827,12 +1842,12 @@
 
   V('mini-golf', { id: 'mini-golf-zen', title: 'Mini Golf Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Nine holes of drag-and-putt, at three-quarter pace',
-    description: 'Zen edition of Mini Golf: identical rules, 28% slower, separate high score. Drag back from the ball and let go — the length of the drag sets the power and a guide shows the line. Walls bounce the ball with a bit of energy lost each time, and sand traps kill your roll almost instantly. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
+    description: 'Mini Golf at a gentler pace. Drag back from the ball and let go — the length of the drag sets the power and a guide shows the line. Walls bounce the ball with a bit of energy lost each time, and sand traps kill your roll almost instantly. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Mini Golf.',
     colors: ['#672029', '#ffffff'], tags: ['golf', 'physics', 'aiming', 'zen', 'remix'] });
 
   V('missile-defense', { id: 'missile-defense-hyper', title: 'Missile Defense Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Intercept the incoming, save the cities at 170% speed',
-    description: 'Missile Defense Hyper is Missile Defense with the clock running 70% faster. Click where you want your counter-missile to detonate — the fireball destroys anything that flies through it while it lasts, so the trick is to lead the incoming rather than aim at it. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Missile Defense record.',
+    description: 'Everything in Missile Defense at 1.7× speed. Click where you want your counter-missile to detonate — the fireball destroys anything that flies through it while it lasts, so the trick is to lead the incoming rather than aim at it. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
     colors: ['#031a17', '#11ff31'], tags: ['classic', 'aiming', 'arcade', 'hyper', 'remix'] });
 
   V('missile-defense', { id: 'missile-defense-turbo', title: 'Missile Defense Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -1842,12 +1857,12 @@
 
   V('missile-defense', { id: 'missile-defense-zen', title: 'Missile Defense Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Intercept the incoming, save the cities, at three-quarter pace',
-    description: 'Missile Defense at a gentler pace. Click where you want your counter-missile to detonate — the fireball destroys anything that flies through it while it lasts, so the trick is to lead the incoming rather than aim at it. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Missile Defense.',
+    description: 'Missile Defense Zen slows Missile Defense to about three-quarter speed and gives it a calmer palette. Click where you want your counter-missile to detonate — the fireball destroys anything that flies through it while it lasts, so the trick is to lead the incoming rather than aim at it. With more time between decisions it becomes a game about planning rather than twitch — good for learning the patterns, or for playing one-handed with a coffee. Zen has its own best score.',
     colors: ['#101706', '#e4b02c'], tags: ['classic', 'aiming', 'arcade', 'zen', 'remix'] });
 
   V('moto-hill', { id: 'moto-hill-hyper', title: 'Moto Hill Climb Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Gas, brake, backflip, refuel at 170% speed',
-    description: 'Everything in Moto Hill Climb at 1.7× speed. A side-on physics bike over endless procedurally-generated hills that get taller the further you ride. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
+    description: 'The frantic edition of Moto Hill Climb. A side-on physics bike over endless procedurally-generated hills that get taller the further you ride. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
     colors: ['#ff109d', '#890567'], tags: ['bike', 'physics', 'stunts', 'hyper', 'remix'] });
 
   V('moto-hill', { id: 'moto-hill-turbo', title: 'Moto Hill Climb Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -1857,12 +1872,12 @@
 
   V('moto-hill', { id: 'moto-hill-zen', title: 'Moto Hill Climb Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Gas, brake, backflip, refuel, at three-quarter pace',
-    description: 'A slow-motion cut of Moto Hill Climb, tinted cool. A side-on physics bike over endless procedurally-generated hills that get taller the further you ride. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
+    description: 'The relaxed version of Moto Hill Climb. A side-on physics bike over endless procedurally-generated hills that get taller the further you ride. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
     colors: ['#2123ee', '#172777'], tags: ['bike', 'physics', 'stunts', 'zen', 'remix'] });
 
   V('neon-snake', { id: 'neon-snake-hyper', title: 'Neon Snake Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Classic snake with a neon glow at 170% speed',
-    description: 'Hyper edition of Neon Snake: same mechanics, 1.7× game speed, separate leaderboard. Steer the snake around the grid, eat every orb you can and grow. Gold orbs are worth triple and add three segments. The best runs come from reading two hazards ahead rather than one — the original rewards that, this one demands it.',
+    description: 'Neon Snake Hyper is Neon Snake with the clock running 70% faster. Steer the snake around the grid, eat every orb you can and grow. Gold orbs are worth triple and add three segments. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Neon Snake record.',
     colors: ['#11ff31', '#00f74d'], tags: ['classic', 'snake', 'solo', 'hyper', 'remix'] });
 
   V('neon-snake', { id: 'neon-snake-turbo', title: 'Neon Snake Turbo', emo: '⚡', speed: 1.45, hue: 140,
@@ -1872,12 +1887,12 @@
 
   V('neon-snake', { id: 'neon-snake-zen', title: 'Neon Snake Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Classic snake with a neon glow, at three-quarter pace',
-    description: 'The relaxed version of Neon Snake. Steer the snake around the grid, eat every orb you can and grow. Gold orbs are worth triple and add three segments. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
+    description: 'Zen edition of Neon Snake: identical rules, 28% slower, separate high score. Steer the snake around the grid, eat every orb you can and grow. Gold orbs are worth triple and add three segments. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
     colors: ['#e4b02c', '#dec919'], tags: ['classic', 'snake', 'solo', 'zen', 'remix'] });
 
   V('night-rider', { id: 'night-rider-hyper', title: 'Night Rider Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Thread the neon bike through traffic at 170% speed',
-    description: 'The frantic edition of Night Rider. Ride a neon motorbike up a four-lane night highway that never ends. Every car you skim past without touching pays a 50-point near-miss bonus, so the best line is always the scariest one. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
+    description: 'Night Rider, seventy percent faster, in a hotter palette. Ride a neon motorbike up a four-lane night highway that never ends. Every car you skim past without touching pays a 50-point near-miss bonus, so the best line is always the scariest one. Hyper strips out the breathing room the original gives you; what is left is pure pattern recognition and commitment. Practise in Zen or the original, then come here to see how far it holds.',
     colors: ['#0d3731', '#af67ff'], tags: ['endless', 'dodge', 'driving', 'hyper', 'remix'] });
 
   V('night-rider', { id: 'night-rider-turbo', title: 'Night Rider Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -1887,12 +1902,12 @@
 
   V('night-rider', { id: 'night-rider-zen', title: 'Night Rider Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Thread the neon bike through traffic, at three-quarter pace',
-    description: 'Zen edition of Night Rider: identical rules, 28% slower, separate high score. Ride a neon motorbike up a four-lane night highway that never ends. Every car you skim past without touching pays a 50-point near-miss bonus, so the best line is always the scariest one. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
+    description: 'Night Rider at a gentler pace. Ride a neon motorbike up a four-lane night highway that never ends. Every car you skim past without touching pays a 50-point near-miss bonus, so the best line is always the scariest one. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Night Rider.',
     colors: ['#243113', '#79e6ee'], tags: ['endless', 'dodge', 'driving', 'zen', 'remix'] });
 
   V('nim', { id: 'nim-hyper', title: 'Nim Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'The maths puzzle disguised as a game at 170% speed',
-    description: 'Everything in Nim at 1.7× speed. Four rows of matches. On your turn take as many as you like, but all from one row. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
+    description: 'The frantic edition of Nim. Four rows of matches. On your turn take as many as you like, but all from one row. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
     colors: ['#11322f', '#ff3ce0'], tags: ['maths', 'vs cpu', 'strategy', 'hyper', 'remix'] });
 
   V('nim', { id: 'nim-turbo', title: 'Nim Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -1902,12 +1917,12 @@
 
   V('nim', { id: 'nim-zen', title: 'Nim Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'The maths puzzle disguised as a game, at three-quarter pace',
-    description: 'A slow-motion cut of Nim, tinted cool. Four rows of matches. On your turn take as many as you like, but all from one row. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
+    description: 'The relaxed version of Nim. Four rows of matches. On your turn take as many as you like, but all from one row. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
     colors: ['#222e15', '#4673f5'], tags: ['maths', 'vs cpu', 'strategy', 'zen', 'remix'] });
 
   V('nine-mens-morris', { id: 'nine-mens-morris-hyper', title: 'Nine Men’s Morris Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Place, slide, mill, remove at 170% speed',
-    description: 'Everything in Nine Men’s Morris at 1.7× speed. An ancient game in three phases. First you both place nine pieces on the board; then you slide them along the lines; and once you are down to three you may fly anywhere. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
+    description: 'The frantic edition of Nine Men’s Morris. An ancient game in three phases. First you both place nine pieces on the board; then you slide them along the lines; and once you are down to three you may fly anywhere. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
     colors: ['#42122a', '#f7cede'], tags: ['board game', 'ancient', 'vs cpu', 'hyper', 'remix'] });
 
   V('nine-mens-morris', { id: 'nine-mens-morris-turbo', title: 'Nine Men’s Morris Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -1917,12 +1932,12 @@
 
   V('nine-mens-morris', { id: 'nine-mens-morris-zen', title: 'Nine Men’s Morris Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Place, slide, mill, remove, at three-quarter pace',
-    description: 'A slow-motion cut of Nine Men’s Morris, tinted cool. An ancient game in three phases. First you both place nine pieces on the board; then you slide them along the lines; and once you are down to three you may fly anywhere. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
+    description: 'The relaxed version of Nine Men’s Morris. An ancient game in three phases. First you both place nine pieces on the board; then you slide them along the lines; and once you are down to three you may fly anywhere. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
     colors: ['#1c193b', '#d9d4f1'], tags: ['board game', 'ancient', 'vs cpu', 'zen', 'remix'] });
 
   V('ninja-climb', { id: 'ninja-climb-hyper', title: 'Ninja Climb Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Wall-jump ahead of the rising floor at 170% speed',
-    description: 'Ninja Climb, seventy percent faster, in a hotter palette. A narrow shaft, two walls and a floor of fire that is always coming up behind you. Press jump while touching a wall and you kick off toward the other side, so climbing is a rhythm you have to keep. Hyper strips out the breathing room the original gives you; what is left is pure pattern recognition and commitment. Practise in Zen or the original, then come here to see how far it holds.',
+    description: 'Hyper edition of Ninja Climb: same mechanics, 1.7× game speed, separate leaderboard. A narrow shaft, two walls and a floor of fire that is always coming up behind you. Press jump while touching a wall and you kick off toward the other side, so climbing is a rhythm you have to keep. The best runs come from reading two hazards ahead rather than one — the original rewards that, this one demands it.',
     colors: ['#143c33', '#fb3cf6'], tags: ['platformer', 'endless', 'skill', 'hyper', 'remix'] });
 
   V('ninja-climb', { id: 'ninja-climb-turbo', title: 'Ninja Climb Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -1932,12 +1947,12 @@
 
   V('ninja-climb', { id: 'ninja-climb-zen', title: 'Ninja Climb Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Wall-jump ahead of the rising floor, at three-quarter pace',
-    description: 'Ninja Climb Zen slows Ninja Climb to about three-quarter speed and gives it a calmer palette. A narrow shaft, two walls and a floor of fire that is always coming up behind you. Press jump while touching a wall and you kick off toward the other side, so climbing is a rhythm you have to keep. With more time between decisions it becomes a game about planning rather than twitch — good for learning the patterns, or for playing one-handed with a coffee. Zen has its own best score.',
+    description: 'A slow-motion cut of Ninja Climb, tinted cool. A narrow shaft, two walls and a floor of fire that is always coming up behind you. Press jump while touching a wall and you kick off toward the other side, so climbing is a rhythm you have to keep. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
     colors: ['#2c361a', '#578ce0'], tags: ['platformer', 'endless', 'skill', 'zen', 'remix'] });
 
   V('ninja-slice', { id: 'ninja-slice-hyper', title: 'Ninja Slice Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Slice inside the ring; parry the exact moment for x3 at 170% speed',
-    description: 'Ninja Slice Hyper is Ninja Slice with the clock running 70% faster. A swipe game about timing rather than speed. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Ninja Slice record.',
+    description: 'Everything in Ninja Slice at 1.7× speed. A swipe game about timing rather than speed. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
     colors: ['#0c2734', '#ff34ff'], tags: ['ninja', 'swipe', 'timing', 'hyper', 'remix'] });
 
   V('ninja-slice', { id: 'ninja-slice-turbo', title: 'Ninja Slice Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -1947,12 +1962,12 @@
 
   V('ninja-slice', { id: 'ninja-slice-zen', title: 'Ninja Slice Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Slice inside the ring; parry the exact moment for x3, at three-quarter pace',
-    description: 'Ninja Slice at a gentler pace. A swipe game about timing rather than speed. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Ninja Slice.',
+    description: 'Ninja Slice Zen slows Ninja Slice to about three-quarter speed and gives it a calmer palette. A swipe game about timing rather than speed. With more time between decisions it becomes a game about planning rather than twitch — good for learning the patterns, or for playing one-handed with a coffee. Zen has its own best score.',
     colors: ['#152e12', '#4d8de6'], tags: ['ninja', 'swipe', 'timing', 'zen', 'remix'] });
 
   V('nonogram', { id: 'nonogram-hyper', title: 'Nonogram Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Fill the grid from the number clues at 170% speed',
-    description: 'Hyper edition of Nonogram: same mechanics, 1.7× game speed, separate leaderboard. Also called Picross. The numbers beside each row and above each column tell you the lengths of the filled runs, in order, with at least one gap between them. The best runs come from reading two hazards ahead rather than one — the original rewards that, this one demands it.',
+    description: 'Nonogram Hyper is Nonogram with the clock running 70% faster. Also called Picross. The numbers beside each row and above each column tell you the lengths of the filled runs, in order, with at least one gap between them. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Nonogram record.',
     colors: ['#0c3732', '#11ff31'], tags: ['logic', 'picross', 'brain', 'hyper', 'remix'] });
 
   V('nonogram', { id: 'nonogram-turbo', title: 'Nonogram Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -1962,12 +1977,12 @@
 
   V('nonogram', { id: 'nonogram-zen', title: 'Nonogram Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Fill the grid from the number clues, at three-quarter pace',
-    description: 'The relaxed version of Nonogram. Also called Picross. The numbers beside each row and above each column tell you the lengths of the filled runs, in order, with at least one gap between them. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
+    description: 'Zen edition of Nonogram: identical rules, 28% slower, separate high score. Also called Picross. The numbers beside each row and above each column tell you the lengths of the filled runs, in order, with at least one gap between them. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
     colors: ['#223112', '#e4b02c'], tags: ['logic', 'picross', 'brain', 'zen', 'remix'] });
 
   V('one-line', { id: 'one-line-hyper', title: 'One Line Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Draw the shape without lifting off at 170% speed',
-    description: 'Everything in One Line at 1.7× speed. Trace every line in the figure in a single unbroken stroke, never going over the same line twice. Where you start matters — most of these shapes only work from one or two dots, which is the actual puzzle. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
+    description: 'The frantic edition of One Line. Trace every line in the figure in a single unbroken stroke, never going over the same line twice. Where you start matters — most of these shapes only work from one or two dots, which is the actual puzzle. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
     colors: ['#0b3432', '#11ff31'], tags: ['logic', 'brain', 'drawing', 'hyper', 'remix'] });
 
   V('one-line', { id: 'one-line-turbo', title: 'One Line Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -1977,12 +1992,12 @@
 
   V('one-line', { id: 'one-line-zen', title: 'One Line Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Draw the shape without lifting off, at three-quarter pace',
-    description: 'A slow-motion cut of One Line, tinted cool. Trace every line in the figure in a single unbroken stroke, never going over the same line twice. Where you start matters — most of these shapes only work from one or two dots, which is the actual puzzle. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
+    description: 'The relaxed version of One Line. Trace every line in the figure in a single unbroken stroke, never going over the same line twice. Where you start matters — most of these shapes only work from one or two dots, which is the actual puzzle. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
     colors: ['#1f2e11', '#e4b02c'], tags: ['logic', 'brain', 'drawing', 'zen', 'remix'] });
 
   V('orbital-defense', { id: 'orbital-defense-hyper', title: 'Orbital Defense Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'One shield between your planet and the storm at 170% speed',
-    description: 'Orbital Defense Hyper is Orbital Defense with the clock running 70% faster. Meteors fall in from every angle and you have exactly one shield arc to swing around the planet. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Orbital Defense record.',
+    description: 'Everything in Orbital Defense at 1.7× speed. Meteors fall in from every angle and you have exactly one shield arc to swing around the planet. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
     colors: ['#04141a', '#ff205e'], tags: ['defense', 'meteors', 'orbit', 'hyper', 'remix'] });
 
   V('orbital-defense', { id: 'orbital-defense-turbo', title: 'Orbital Defense Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -1992,12 +2007,12 @@
 
   V('orbital-defense', { id: 'orbital-defense-zen', title: 'Orbital Defense Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'One shield between your planet and the storm, at three-quarter pace',
-    description: 'Orbital Defense at a gentler pace. Meteors fall in from every angle and you have exactly one shield arc to swing around the planet. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Orbital Defense.',
+    description: 'Orbital Defense Zen slows Orbital Defense to about three-quarter speed and gives it a calmer palette. Meteors fall in from every angle and you have exactly one shield arc to swing around the planet. With more time between decisions it becomes a game about planning rather than twitch — good for learning the patterns, or for playing one-handed with a coffee. Zen has its own best score.',
     colors: ['#091707', '#6a2ff0'], tags: ['defense', 'meteors', 'orbit', 'zen', 'remix'] });
 
   V('paint-wars', { id: 'paint-wars-hyper', title: 'Paint Wars Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: '90 seconds to out-paint two rival blobs at 170% speed',
-    description: 'The frantic edition of Paint Wars. Skate around the arena leaving your colour on every tile while Rosa and Limey do the same. Ink is the whole game: it drains as you claim tiles (stealing painted ground costs extra), only refills while you ride your own colour, and enemy paint slows you down. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
+    description: 'Paint Wars, seventy percent faster, in a hotter palette. Skate around the arena leaving your colour on every tile while Rosa and Limey do the same. Ink is the whole game: it drains as you claim tiles (stealing painted ground costs extra), only refills while you ride your own colour, and enemy paint slows you down. Hyper strips out the breathing room the original gives you; what is left is pure pattern recognition and commitment. Practise in Zen or the original, then come here to see how far it holds.',
     colors: ['#11ff31', '#af67ff'], tags: ['painting', 'territory', 'arena', 'hyper', 'remix'] });
 
   V('paint-wars', { id: 'paint-wars-turbo', title: 'Paint Wars Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -2007,12 +2022,12 @@
 
   V('paint-wars', { id: 'paint-wars-zen', title: 'Paint Wars Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: '90 seconds to out-paint two rival blobs, at three-quarter pace',
-    description: 'Zen edition of Paint Wars: identical rules, 28% slower, separate high score. Skate around the arena leaving your colour on every tile while Rosa and Limey do the same. Ink is the whole game: it drains as you claim tiles (stealing painted ground costs extra), only refills while you ride your own colour, and enemy paint slows you down. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
+    description: 'Paint Wars at a gentler pace. Skate around the arena leaving your colour on every tile while Rosa and Limey do the same. Ink is the whole game: it drains as you claim tiles (stealing painted ground costs extra), only refills while you ride your own colour, and enemy paint slows you down. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Paint Wars.',
     colors: ['#e4b02c', '#79e6ee'], tags: ['painting', 'territory', 'arena', 'zen', 'remix'] });
 
   V('paper-claim', { id: 'paper-claim-hyper', title: 'Paper Claim Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Claim ground by closing the loop at 170% speed',
-    description: 'Paper Claim Hyper is Paper Claim with the clock running 70% faster. You start with a small square of territory. Drive outside it and you leave a trail behind you; get back to your own land and everything the loop enclosed becomes yours. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Paper Claim record.',
+    description: 'Everything in Paper Claim at 1.7× speed. You start with a small square of territory. Drive outside it and you leave a trail behind you; get back to your own land and everything the loop enclosed becomes yours. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
     colors: ['#092722', '#11ff31'], tags: ['io-style', 'territory', 'arena', 'hyper', 'remix'] });
 
   V('paper-claim', { id: 'paper-claim-turbo', title: 'Paper Claim Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -2022,12 +2037,12 @@
 
   V('paper-claim', { id: 'paper-claim-zen', title: 'Paper Claim Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Claim ground by closing the loop, at three-quarter pace',
-    description: 'Paper Claim at a gentler pace. You start with a small square of territory. Drive outside it and you leave a trail behind you; get back to your own land and everything the loop enclosed becomes yours. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Paper Claim.',
+    description: 'Paper Claim Zen slows Paper Claim to about three-quarter speed and gives it a calmer palette. You start with a small square of territory. Drive outside it and you leave a trail behind you; get back to your own land and everything the loop enclosed becomes yours. With more time between decisions it becomes a game about planning rather than twitch — good for learning the patterns, or for playing one-handed with a coffee. Zen has its own best score.',
     colors: ['#1a230d', '#e4b02c'], tags: ['io-style', 'territory', 'arena', 'zen', 'remix'] });
 
   V('peg-solitaire', { id: 'peg-solitaire-hyper', title: 'Peg Solitaire Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Jump pegs off until one is left at 170% speed',
-    description: 'Hyper edition of Peg Solitaire: same mechanics, 1.7× game speed, separate leaderboard. The English cross board: 33 holes, 32 pegs and one gap in the middle. Jump a peg straight over a neighbour into an empty hole and the peg you jumped comes off. The best runs come from reading two hazards ahead rather than one — the original rewards that, this one demands it.',
+    description: 'Peg Solitaire Hyper is Peg Solitaire with the clock running 70% faster. The English cross board: 33 holes, 32 pegs and one gap in the middle. Jump a peg straight over a neighbour into an empty hole and the peg you jumped comes off. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Peg Solitaire record.',
     colors: ['#2d0f21', '#e180a6'], tags: ['logic', 'classic', 'brain', 'hyper', 'remix'] });
 
   V('peg-solitaire', { id: 'peg-solitaire-turbo', title: 'Peg Solitaire Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -2037,12 +2052,12 @@
 
   V('peg-solitaire', { id: 'peg-solitaire-zen', title: 'Peg Solitaire Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Jump pegs off until one is left, at three-quarter pace',
-    description: 'The relaxed version of Peg Solitaire. The English cross board: 33 holes, 32 pegs and one gap in the middle. Jump a peg straight over a neighbour into an empty hole and the peg you jumped comes off. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
+    description: 'Zen edition of Peg Solitaire: identical rules, 28% slower, separate high score. The English cross board: 33 holes, 32 pegs and one gap in the middle. Jump a peg straight over a neighbour into an empty hole and the peg you jumped comes off. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
     colors: ['#131329', '#9b8ed3'], tags: ['logic', 'classic', 'brain', 'zen', 'remix'] });
 
   V('penalty-shootout', { id: 'penalty-shootout-hyper', title: 'Penalty Shootout Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Five each, then sudden death at 170% speed',
-    description: 'Hyper edition of Penalty Shootout: same mechanics, 1.7× game speed, separate leaderboard. You alternate between taking penalties and keeping them out. Taking one, you drag to pick a spot in the goal; keeping, you commit to diving left, centre or right. The best runs come from reading two hazards ahead rather than one — the original rewards that, this one demands it.',
+    description: 'Penalty Shootout Hyper is Penalty Shootout with the clock running 70% faster. You alternate between taking penalties and keeping them out. Taking one, you drag to pick a spot in the goal; keeping, you commit to diving left, centre or right. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Penalty Shootout record.',
     colors: ['#537416', '#ff1040'], tags: ['football', 'aiming', 'sports', 'hyper', 'remix'] });
 
   V('penalty-shootout', { id: 'penalty-shootout-turbo', title: 'Penalty Shootout Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -2052,12 +2067,12 @@
 
   V('penalty-shootout', { id: 'penalty-shootout-zen', title: 'Penalty Shootout Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Five each, then sudden death, at three-quarter pace',
-    description: 'The relaxed version of Penalty Shootout. You alternate between taking penalties and keeping them out. Taking one, you drag to pick a spot in the goal; keeping, you commit to diving left, centre or right. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
+    description: 'Zen edition of Penalty Shootout: identical rules, 28% slower, separate high score. You alternate between taking penalties and keeping them out. Taking one, you drag to pick a spot in the goal; keeping, you commit to diving left, centre or right. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
     colors: ['#672327', '#6f20ef'], tags: ['football', 'aiming', 'sports', 'zen', 'remix'] });
 
   V('perfect-circle', { id: 'perfect-circle-hyper', title: 'Perfect Circle Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'How round can you draw freehand? at 170% speed',
-    description: 'Hyper edition of Perfect Circle: same mechanics, 1.7× game speed, separate leaderboard. One stroke, around the dot, no lifting. Your score multiplies how consistent your radius stayed by how much of the full turn you actually drew, so a beautiful three-quarter arc will not save you. The best runs come from reading two hazards ahead rather than one — the original rewards that, this one demands it.',
+    description: 'Perfect Circle Hyper is Perfect Circle with the clock running 70% faster. One stroke, around the dot, no lifting. Your score multiplies how consistent your radius stayed by how much of the full turn you actually drew, so a beautiful three-quarter arc will not save you. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Perfect Circle record.',
     colors: ['#0a342f', '#69e720'], tags: ['drawing', 'skill', 'one finger', 'hyper', 'remix'] });
 
   V('perfect-circle', { id: 'perfect-circle-turbo', title: 'Perfect Circle Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -2067,12 +2082,12 @@
 
   V('perfect-circle', { id: 'perfect-circle-zen', title: 'Perfect Circle Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'How round can you draw freehand?, at three-quarter pace',
-    description: 'The relaxed version of Perfect Circle. One stroke, around the dot, no lifting. Your score multiplies how consistent your radius stayed by how much of the full turn you actually drew, so a beautiful three-quarter arc will not save you. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
+    description: 'Zen edition of Perfect Circle: identical rules, 28% slower, separate high score. One stroke, around the dot, no lifting. Your score multiplies how consistent your radius stayed by how much of the full turn you actually drew, so a beautiful three-quarter arc will not save you. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
     colors: ['#202e10', '#cb5b3c'], tags: ['drawing', 'skill', 'one finger', 'zen', 'remix'] });
 
   V('piano-tap', { id: 'piano-tap-hyper', title: 'Piano Tap Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Hit every black tile, faster and faster at 170% speed',
-    description: 'Everything in Piano Tap at 1.7× speed. Four columns of tiles scroll down and exactly one in each row is black. Tap it — or use D, F, J and K — before it reaches the bottom. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
+    description: 'The frantic edition of Piano Tap. Four columns of tiles scroll down and exactly one in each row is black. Tap it — or use D, F, J and K — before it reaches the bottom. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
     colors: ['#123934', '#11ff31'], tags: ['reflex', 'music', 'speed', 'hyper', 'remix'] });
 
   V('piano-tap', { id: 'piano-tap-turbo', title: 'Piano Tap Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -2082,12 +2097,12 @@
 
   V('piano-tap', { id: 'piano-tap-zen', title: 'Piano Tap Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Hit every black tile, faster and faster, at three-quarter pace',
-    description: 'A slow-motion cut of Piano Tap, tinted cool. Four columns of tiles scroll down and exactly one in each row is black. Tap it — or use D, F, J and K — before it reaches the bottom. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
+    description: 'The relaxed version of Piano Tap. Four columns of tiles scroll down and exactly one in each row is black. Tap it — or use D, F, J and K — before it reaches the bottom. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
     colors: ['#273318', '#e4b02c'], tags: ['reflex', 'music', 'speed', 'zen', 'remix'] });
 
   V('pinball', { id: 'pinball-hyper', title: 'Pinball Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Bumpers, targets and a multiplier to build at 170% speed',
-    description: 'Everything in Pinball at 1.7× speed. A single-screen table with a charging plunger, two flippers and real physics. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
+    description: 'The frantic edition of Pinball. A single-screen table with a charging plunger, two flippers and real physics. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
     colors: ['#081c25', '#ea6dff'], tags: ['pinball', 'physics', 'arcade', 'hyper', 'remix'] });
 
   V('pinball', { id: 'pinball-turbo', title: 'Pinball Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -2097,12 +2112,12 @@
 
   V('pinball', { id: 'pinball-zen', title: 'Pinball Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Bumpers, targets and a multiplier to build, at three-quarter pace',
-    description: 'A slow-motion cut of Pinball, tinted cool. A single-screen table with a charging plunger, two flippers and real physics. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
+    description: 'The relaxed version of Pinball. A single-screen table with a charging plunger, two flippers and real physics. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
     colors: ['#0e210c', '#78bef4'], tags: ['pinball', 'physics', 'arcade', 'zen', 'remix'] });
 
   V('plinko', { id: 'plinko-hyper', title: 'Plinko Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Drop the chip, chase the edges at 170% speed',
-    description: 'The frantic edition of Plinko. Chips bounce down through a triangle of pegs into slots that multiply your stake. The outer slots pay ten times, but almost everything drifts toward the middle where the multipliers are less than one — which is the whole tension. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
+    description: 'Plinko, seventy percent faster, in a hotter palette. Chips bounce down through a triangle of pegs into slots that multiply your stake. The outer slots pay ten times, but almost everything drifts toward the middle where the multipliers are less than one — which is the whole tension. Hyper strips out the breathing room the original gives you; what is left is pure pattern recognition and commitment. Practise in Zen or the original, then come here to see how far it holds.',
     colors: ['#0b3433', '#ff5784'], tags: ['physics', 'luck', 'relaxing', 'hyper', 'remix'] });
 
   V('plinko', { id: 'plinko-turbo', title: 'Plinko Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -2112,12 +2127,12 @@
 
   V('plinko', { id: 'plinko-zen', title: 'Plinko Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Drop the chip, chase the edges, at three-quarter pace',
-    description: 'Zen edition of Plinko: identical rules, 28% slower, separate high score. Chips bounce down through a triangle of pegs into slots that multiply your stake. The outer slots pay ten times, but almost everything drifts toward the middle where the multipliers are less than one — which is the whole tension. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
+    description: 'Plinko at a gentler pace. Chips bounce down through a triangle of pegs into slots that multiply your stake. The outer slots pay ten times, but almost everything drifts toward the middle where the multipliers are less than one — which is the whole tension. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Plinko.',
     colors: ['#1e2e11', '#8f5ff7'], tags: ['physics', 'luck', 'relaxing', 'zen', 'remix'] });
 
   V('pogo-bounce', { id: 'pogo-bounce-hyper', title: 'Pogo Bounce Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Always bouncing — steer the drift, chain the combo at 170% speed',
-    description: 'Hyper edition of Pogo Bounce: same mechanics, 1.7× game speed, separate leaderboard. You are on a pogo stick and it never stops: every landing bounces you straight back up, so all you control is where you drift in the air. The best runs come from reading two hazards ahead rather than one — the original rewards that, this one demands it.',
+    description: 'Pogo Bounce Hyper is Pogo Bounce with the clock running 70% faster. You are on a pogo stick and it never stops: every landing bounces you straight back up, so all you control is where you drift in the air. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Pogo Bounce record.',
     colors: ['#6fffab', '#ff4793'], tags: ['bouncing', 'endless', 'combo', 'hyper', 'remix'] });
 
   V('pogo-bounce', { id: 'pogo-bounce-turbo', title: 'Pogo Bounce Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -2127,12 +2142,12 @@
 
   V('pogo-bounce', { id: 'pogo-bounce-zen', title: 'Pogo Bounce Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Always bouncing — steer the drift, chain the combo, at three-quarter pace',
-    description: 'The relaxed version of Pogo Bounce. You are on a pogo stick and it never stops: every landing bounces you straight back up, so all you control is where you drift in the air. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
+    description: 'Zen edition of Pogo Bounce: identical rules, 28% slower, separate high score. You are on a pogo stick and it never stops: every landing bounces you straight back up, so all you control is where you drift in the air. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
     colors: ['#f8f876', '#6c50f6'], tags: ['bouncing', 'endless', 'combo', 'zen', 'remix'] });
 
   V('pong-duel', { id: 'pong-duel-hyper', title: 'Pong Duel Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'First to seven against the machine at 170% speed',
-    description: 'Hyper edition of Pong Duel: same mechanics, 1.7× game speed, separate leaderboard. The original video game, sharpened up. Where the ball strikes your paddle sets the angle it comes off at, and every return makes it faster. The best runs come from reading two hazards ahead rather than one — the original rewards that, this one demands it.',
+    description: 'Pong Duel Hyper is Pong Duel with the clock running 70% faster. The original video game, sharpened up. Where the ball strikes your paddle sets the angle it comes off at, and every return makes it faster. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Pong Duel record.',
     colors: ['#11ff31', '#ea6dff'], tags: ['classic', 'vs cpu', 'paddle', 'hyper', 'remix'] });
 
   V('pong-duel', { id: 'pong-duel-turbo', title: 'Pong Duel Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -2142,12 +2157,12 @@
 
   V('pong-duel', { id: 'pong-duel-zen', title: 'Pong Duel Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'First to seven against the machine, at three-quarter pace',
-    description: 'The relaxed version of Pong Duel. The original video game, sharpened up. Where the ball strikes your paddle sets the angle it comes off at, and every return makes it faster. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
+    description: 'Zen edition of Pong Duel: identical rules, 28% slower, separate high score. The original video game, sharpened up. Where the ball strikes your paddle sets the angle it comes off at, and every return makes it faster. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
     colors: ['#e4b02c', '#78bef4'], tags: ['classic', 'vs cpu', 'paddle', 'zen', 'remix'] });
 
   V('pyramid-solitaire', { id: 'pyramid-solitaire-hyper', title: 'Pyramid Solitaire Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Pair cards that add up to 13 at 170% speed',
-    description: 'Hyper edition of Pyramid Solitaire: same mechanics, 1.7× game speed, separate leaderboard. A pyramid of 28 cards. Remove pairs that total thirteen — Ace counts 1, Jack 11 and Queen 12 — and Kings are worth 13 all by themselves. The best runs come from reading two hazards ahead rather than one — the original rewards that, this one demands it.',
+    description: 'Pyramid Solitaire Hyper is Pyramid Solitaire with the clock running 70% faster. A pyramid of 28 cards. Remove pairs that total thirteen — Ace counts 1, Jack 11 and Queen 12 — and Kings are worth 13 all by themselves. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Pyramid Solitaire record.',
     colors: ['#3f0d21', '#ff015f'], tags: ['solitaire', 'cards', 'numbers', 'hyper', 'remix'] });
 
   V('pyramid-solitaire', { id: 'pyramid-solitaire-turbo', title: 'Pyramid Solitaire Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -2157,12 +2172,12 @@
 
   V('pyramid-solitaire', { id: 'pyramid-solitaire-zen', title: 'Pyramid Solitaire Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Pair cards that add up to 13, at three-quarter pace',
-    description: 'The relaxed version of Pyramid Solitaire. A pyramid of 28 cards. Remove pairs that total thirteen — Ace counts 1, Jack 11 and Queen 12 — and Kings are worth 13 all by themselves. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
+    description: 'Zen edition of Pyramid Solitaire: identical rules, 28% slower, separate high score. A pyramid of 28 cards. Remove pairs that total thirteen — Ace counts 1, Jack 11 and Queen 12 — and Kings are worth 13 all by themselves. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
     colors: ['#1b1438', '#4317e9'], tags: ['solitaire', 'cards', 'numbers', 'zen', 'remix'] });
 
   V('quick-math', { id: 'quick-math-hyper', title: 'Quick Math Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'True or false, before the bar empties at 170% speed',
-    description: 'Hyper edition of Quick Math: same mechanics, 1.7× game speed, separate leaderboard. A sum with an answer already filled in — decide whether it is right. Wrong answers are deliberately close to correct, so you have to actually compute rather than eyeball. The best runs come from reading two hazards ahead rather than one — the original rewards that, this one demands it.',
+    description: 'Quick Math Hyper is Quick Math with the clock running 70% faster. A sum with an answer already filled in — decide whether it is right. Wrong answers are deliberately close to correct, so you have to actually compute rather than eyeball. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Quick Math record.',
     colors: ['#0d382d', '#69e720'], tags: ['maths', 'reflex', 'timed', 'hyper', 'remix'] });
 
   V('quick-math', { id: 'quick-math-turbo', title: 'Quick Math Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -2172,12 +2187,12 @@
 
   V('quick-math', { id: 'quick-math-zen', title: 'Quick Math Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'True or false, before the bar empties, at three-quarter pace',
-    description: 'The relaxed version of Quick Math. A sum with an answer already filled in — decide whether it is right. Wrong answers are deliberately close to correct, so you have to actually compute rather than eyeball. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
+    description: 'Zen edition of Quick Math: identical rules, 28% slower, separate high score. A sum with an answer already filled in — decide whether it is right. Wrong answers are deliberately close to correct, so you have to actually compute rather than eyeball. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
     colors: ['#283213', '#cb5b3c'], tags: ['maths', 'reflex', 'timed', 'zen', 'remix'] });
 
   V('ragdoll-launch', { id: 'ragdoll-launch-hyper', title: 'Ragdoll Launch Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Catapult a floppy ragdoll for distance at 170% speed',
-    description: 'Ragdoll Launch Hyper is Ragdoll Launch with the clock running 70% faster. Lock the swinging catapult angle with one tap and the pulsing power bar with the next, then watch a seven-joint ragdoll tumble down the valley. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Ragdoll Launch record.',
+    description: 'Everything in Ragdoll Launch at 1.7× speed. Lock the swinging catapult angle with one tap and the pulsing power bar with the next, then watch a seven-joint ragdoll tumble down the valley. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
     colors: ['#4b2496', '#ff59de'], tags: ['physics', 'launch', 'ragdoll', 'hyper', 'remix'] });
 
   V('ragdoll-launch', { id: 'ragdoll-launch-turbo', title: 'Ragdoll Launch Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -2187,12 +2202,12 @@
 
   V('ragdoll-launch', { id: 'ragdoll-launch-zen', title: 'Ragdoll Launch Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Catapult a floppy ragdoll for distance, at three-quarter pace',
-    description: 'Ragdoll Launch at a gentler pace. Lock the swinging catapult angle with one tap and the pulsing power bar with the next, then watch a seven-joint ragdoll tumble down the valley. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Ragdoll Launch.',
+    description: 'Ragdoll Launch Zen slows Ragdoll Launch to about three-quarter speed and gives it a calmer palette. Lock the swinging catapult angle with one tap and the pulsing power bar with the next, then watch a seven-joint ragdoll tumble down the valley. With more time between decisions it becomes a game about planning rather than twitch — good for learning the patterns, or for playing one-handed with a coffee. Zen has its own best score.',
     colors: ['#348681', '#6182f7'], tags: ['physics', 'launch', 'ragdoll', 'zen', 'remix'] });
 
   V('reaction-time', { id: 'reaction-time-hyper', title: 'Reaction Time Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Click the moment it turns green at 170% speed',
-    description: 'Everything in Reaction Time at 1.7× speed. The screen goes red, then turns green after an unpredictable pause of one to four seconds. Click as fast as you can once it does — clicking early makes you retry the round. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
+    description: 'The frantic edition of Reaction Time. The screen goes red, then turns green after an unpredictable pause of one to four seconds. Click as fast as you can once it does — clicking early makes you retry the round. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
     colors: ['#f30ff3', '#8ed90e'], tags: ['reflex', 'reaction time', 'quick', 'hyper', 'remix'] });
 
   V('reaction-time', { id: 'reaction-time-turbo', title: 'Reaction Time Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -2202,12 +2217,12 @@
 
   V('reaction-time', { id: 'reaction-time-zen', title: 'Reaction Time Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Click the moment it turns green, at three-quarter pace',
-    description: 'A slow-motion cut of Reaction Time, tinted cool. The screen goes red, then turns green after an unpredictable pause of one to four seconds. Click as fast as you can once it does — clicking early makes you retry the round. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
+    description: 'The relaxed version of Reaction Time. The screen goes red, then turns green after an unpredictable pause of one to four seconds. Click as fast as you can once it does — clicking early makes you retry the round. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
     colors: ['#2f73d3', '#bd2a31'], tags: ['reflex', 'reaction time', 'quick', 'zen', 'remix'] });
 
   V('rhythm-tap', { id: 'rhythm-tap-hyper', title: 'Rhythm Tap Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Four lanes, one line, keep the combo at 170% speed',
-    description: 'Rhythm Tap Hyper is Rhythm Tap with the clock running 70% faster. Notes drop down four lanes and you hit D, F, J or K as each crosses the line. Timing is graded — dead centre is a PERFECT and worth well over triple a GOOD — and every hit extends your combo, which adds to the score of every note after it. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Rhythm Tap record.',
+    description: 'Everything in Rhythm Tap at 1.7× speed. Notes drop down four lanes and you hit D, F, J or K as each crosses the line. Timing is graded — dead centre is a PERFECT and worth well over triple a GOOD — and every hit extends your combo, which adds to the score of every note after it. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
     colors: ['#072023', '#86e0ff'], tags: ['rhythm', 'music', 'timing', 'hyper', 'remix'] });
 
   V('rhythm-tap', { id: 'rhythm-tap-turbo', title: 'Rhythm Tap Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -2217,12 +2232,12 @@
 
   V('rhythm-tap', { id: 'rhythm-tap-zen', title: 'Rhythm Tap Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Four lanes, one line, keep the combo, at three-quarter pace',
-    description: 'Rhythm Tap at a gentler pace. Notes drop down four lanes and you hit D, F, J or K as each crosses the line. Timing is graded — dead centre is a PERFECT and worth well over triple a GOOD — and every hit extends your combo, which adds to the score of every note after it. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Rhythm Tap.',
+    description: 'Rhythm Tap Zen slows Rhythm Tap to about three-quarter speed and gives it a calmer palette. Notes drop down four lanes and you hit D, F, J or K as each crosses the line. Timing is graded — dead centre is a PERFECT and worth well over triple a GOOD — and every hit extends your combo, which adds to the score of every note after it. With more time between decisions it becomes a game about planning rather than twitch — good for learning the patterns, or for playing one-handed with a coffee. Zen has its own best score.',
     colors: ['#121f0b', '#a1f491'], tags: ['rhythm', 'music', 'timing', 'zen', 'remix'] });
 
   V('rise-up', { id: 'rise-up-hyper', title: 'Rise Up Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Shield the balloon on its way up at 170% speed',
-    description: 'Hyper edition of Rise Up: same mechanics, 1.7× game speed, separate leaderboard. The balloon climbs by itself and everything else falls toward it. Your shield does not destroy anything — it shoves obstacles aside, so you have to nudge them clear early rather than block at the last second. The best runs come from reading two hazards ahead rather than one — the original rewards that, this one demands it.',
+    description: 'Rise Up Hyper is Rise Up with the clock running 70% faster. The balloon climbs by itself and everything else falls toward it. Your shield does not destroy anything — it shoves obstacles aside, so you have to nudge them clear early rather than block at the last second. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Rise Up record.',
     colors: ['#06352b', '#ea6dff'], tags: ['one finger', 'protect', 'reflex', 'hyper', 'remix'] });
 
   V('rise-up', { id: 'rise-up-turbo', title: 'Rise Up Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -2232,12 +2247,12 @@
 
   V('rise-up', { id: 'rise-up-zen', title: 'Rise Up Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Shield the balloon on its way up, at three-quarter pace',
-    description: 'The relaxed version of Rise Up. The balloon climbs by itself and everything else falls toward it. Your shield does not destroy anything — it shoves obstacles aside, so you have to nudge them clear early rather than block at the last second. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
+    description: 'Zen edition of Rise Up: identical rules, 28% slower, separate high score. The balloon climbs by itself and everything else falls toward it. Your shield does not destroy anything — it shoves obstacles aside, so you have to nudge them clear early rather than block at the last second. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
     colors: ['#222e0d', '#78bef4'], tags: ['one finger', 'protect', 'reflex', 'zen', 'remix'] });
 
   V('river-raft', { id: 'river-raft-hyper', title: 'River Raft Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Read the fork before the river does at 170% speed',
-    description: 'Hyper edition of River Raft: same mechanics, 1.7× game speed, separate leaderboard. Steer a timber raft down an endless winding river. The best runs come from reading two hazards ahead rather than one — the original rewards that, this one demands it.',
+    description: 'River Raft Hyper is River Raft with the clock running 70% faster. Steer a timber raft down an endless winding river. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your River Raft record.',
     colors: ['#496f0c', '#31ff70'], tags: ['endless', 'dodge', 'river', 'hyper', 'remix'] });
 
   V('river-raft', { id: 'river-raft-turbo', title: 'River Raft Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -2247,12 +2262,12 @@
 
   V('river-raft', { id: 'river-raft-zen', title: 'River Raft Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Read the fork before the river does, at three-quarter pace',
-    description: 'The relaxed version of River Raft. Steer a timber raft down an endless winding river. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
+    description: 'Zen edition of River Raft: identical rules, 28% slower, separate high score. Steer a timber raft down an endless winding river. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
     colors: ['#611a1d', '#eedc42'], tags: ['endless', 'dodge', 'river', 'zen', 'remix'] });
 
   V('road-hopper', { id: 'road-hopper-hyper', title: 'Road Hopper Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Cross the road, then the river at 170% speed',
-    description: 'The frantic edition of Road Hopper. Hop across six lanes of traffic, then across a river where the water is the hazard and the logs are the only safe ground — and they carry you sideways while you stand on them. Fill all five bays at the top to win, with thirty seconds allowed for each crossing. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
+    description: 'Road Hopper, seventy percent faster, in a hotter palette. Hop across six lanes of traffic, then across a river where the water is the hazard and the logs are the only safe ground — and they carry you sideways while you stand on them. Fill all five bays at the top to win, with thirty seconds allowed for each crossing. Hyper strips out the breathing room the original gives you; what is left is pure pattern recognition and commitment. Practise in Zen or the original, then come here to see how far it holds.',
     colors: ['#077644', '#69e720'], tags: ['classic', 'arcade', 'timing', 'hyper', 'remix'] });
 
   V('road-hopper', { id: 'road-hopper-turbo', title: 'Road Hopper Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -2262,12 +2277,12 @@
 
   V('road-hopper', { id: 'road-hopper-zen', title: 'Road Hopper Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Cross the road, then the river, at three-quarter pace',
-    description: 'Zen edition of Road Hopper: identical rules, 28% slower, separate high score. Hop across six lanes of traffic, then across a river where the water is the hazard and the logs are the only safe ground — and they carry you sideways while you stand on them. Fill all five bays at the top to win, with thirty seconds allowed for each crossing. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
+    description: 'Road Hopper at a gentler pace. Hop across six lanes of traffic, then across a river where the water is the hazard and the logs are the only safe ground — and they carry you sideways while you stand on them. Fill all five bays at the top to win, with thirty seconds allowed for each crossing. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Road Hopper.',
     colors: ['#5c6716', '#cb5b3c'], tags: ['classic', 'arcade', 'timing', 'zen', 'remix'] });
 
   V('roll-block', { id: 'roll-block-hyper', title: 'Roll Block Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Tip it end over end into the hole at 170% speed',
-    description: 'Roll Block, seventy percent faster, in a hotter palette. A block twice as tall as it is wide, and a hole exactly one square across. It tips end over end, so it spends half its time lying flat across two tiles and half standing on one — and it only drops through the hole while standing. Hyper strips out the breathing room the original gives you; what is left is pure pattern recognition and commitment. Practise in Zen or the original, then come here to see how far it holds.',
+    description: 'Hyper edition of Roll Block: same mechanics, 1.7× game speed, separate leaderboard. A block twice as tall as it is wide, and a hole exactly one square across. It tips end over end, so it spends half its time lying flat across two tiles and half standing on one — and it only drops through the hole while standing. The best runs come from reading two hazards ahead rather than one — the original rewards that, this one demands it.',
     colors: ['#19443c', '#e917a8'], tags: ['puzzle', 'logic', 'isometric', 'hyper', 'remix'] });
 
   V('roll-block', { id: 'roll-block-turbo', title: 'Roll Block Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -2277,12 +2292,12 @@
 
   V('roll-block', { id: 'roll-block-zen', title: 'Roll Block Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Tip it end over end into the hole, at three-quarter pace',
-    description: 'Roll Block Zen slows Roll Block to about three-quarter speed and gives it a calmer palette. A block twice as tall as it is wide, and a hole exactly one square across. It tips end over end, so it spends half its time lying flat across two tiles and half standing on one — and it only drops through the hole while standing. With more time between decisions it becomes a game about planning rather than twitch — good for learning the patterns, or for playing one-handed with a coffee. Zen has its own best score.',
+    description: 'A slow-motion cut of Roll Block, tinted cool. A block twice as tall as it is wide, and a hole exactly one square across. It tips end over end, so it spends half its time lying flat across two tiles and half standing on one — and it only drops through the hole while standing. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
     colors: ['#323e1f', '#3445cc'], tags: ['puzzle', 'logic', 'isometric', 'zen', 'remix'] });
 
   V('rolling-ball', { id: 'rolling-ball-hyper', title: 'Rolling Ball Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Tilt the maze, mind the holes at 170% speed',
-    description: 'The frantic edition of Rolling Ball. A marble on a tilting board. The arrow keys lean the whole maze, and the ball keeps rolling long after you stop pushing — so the hard part is not getting somewhere, it is stopping once you arrive. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
+    description: 'Rolling Ball, seventy percent faster, in a hotter palette. A marble on a tilting board. The arrow keys lean the whole maze, and the ball keeps rolling long after you stop pushing — so the hard part is not getting somewhere, it is stopping once you arrive. Hyper strips out the breathing room the original gives you; what is left is pure pattern recognition and commitment. Practise in Zen or the original, then come here to see how far it holds.',
     colors: ['#123f2e', '#2ae990'], tags: ['maze', 'physics', 'relaxing', 'hyper', 'remix'] });
 
   V('rolling-ball', { id: 'rolling-ball-turbo', title: 'Rolling Ball Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -2292,12 +2307,12 @@
 
   V('rolling-ball', { id: 'rolling-ball-zen', title: 'Rolling Ball Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Tilt the maze, mind the holes, at three-quarter pace',
-    description: 'Zen edition of Rolling Ball: identical rules, 28% slower, separate high score. A marble on a tilting board. The arrow keys lean the whole maze, and the ball keeps rolling long after you stop pushing — so the hard part is not getting somewhere, it is stopping once you arrive. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
+    description: 'Rolling Ball at a gentler pace. A marble on a tilting board. The arrow keys lean the whole maze, and the ball keeps rolling long after you stop pushing — so the hard part is not getting somewhere, it is stopping once you arrive. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Rolling Ball.',
     colors: ['#313818', '#bece45'], tags: ['maze', 'physics', 'relaxing', 'zen', 'remix'] });
 
   V('rooftop-run', { id: 'rooftop-run-hyper', title: 'Rooftop Run Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Jump the gaps, slide the pipes, feed the combo at 170% speed',
-    description: 'Rooftop Run, seventy percent faster, in a hotter palette. A dusk parkour sprint across an endless skyline with exactly two moves: jump clears the gaps between rooftops, and holding slide gets you under the cyan pipes. Hyper strips out the breathing room the original gives you; what is left is pure pattern recognition and commitment. Practise in Zen or the original, then come here to see how far it holds.',
+    description: 'Hyper edition of Rooftop Run: same mechanics, 1.7× game speed, separate leaderboard. A dusk parkour sprint across an endless skyline with exactly two moves: jump clears the gaps between rooftops, and holding slide gets you under the cyan pipes. The best runs come from reading two hazards ahead rather than one — the original rewards that, this one demands it.',
     colors: ['#24888b', '#ea6dff'], tags: ['endless', 'parkour', 'runner', 'hyper', 'remix'] });
 
   V('rooftop-run', { id: 'rooftop-run-turbo', title: 'Rooftop Run Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -2307,12 +2322,12 @@
 
   V('rooftop-run', { id: 'rooftop-run-zen', title: 'Rooftop Run Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Jump the gaps, slide the pipes, feed the combo, at three-quarter pace',
-    description: 'Rooftop Run Zen slows Rooftop Run to about three-quarter speed and gives it a calmer palette. A dusk parkour sprint across an endless skyline with exactly two moves: jump clears the gaps between rooftops, and holding slide gets you under the cyan pipes. With more time between decisions it becomes a game about planning rather than twitch — good for learning the patterns, or for playing one-handed with a coffee. Zen has its own best score.',
+    description: 'A slow-motion cut of Rooftop Run, tinted cool. A dusk parkour sprint across an endless skyline with exactly two moves: jump clears the gaps between rooftops, and holding slide gets you under the cyan pipes. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
     colors: ['#4f7d32', '#78bef4'], tags: ['endless', 'parkour', 'runner', 'zen', 'remix'] });
 
   V('rope-cut', { id: 'rope-cut-hyper', title: 'Rope Cut Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Slice ropes, swing candy into the mouth at 170% speed',
-    description: 'The frantic edition of Rope Cut. A sweet hangs from real rope — cut one strand and it swings on the others, cut the last and it drops. Sixteen levels add bubbles that float the candy upward until you tap them, slack ropes that catch it mid-fall, and spike beds that end the attempt. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
+    description: 'Rope Cut, seventy percent faster, in a hotter palette. A sweet hangs from real rope — cut one strand and it swings on the others, cut the last and it drops. Sixteen levels add bubbles that float the candy upward until you tap them, slack ropes that catch it mid-fall, and spike beds that end the attempt. Hyper strips out the breathing room the original gives you; what is left is pure pattern recognition and commitment. Practise in Zen or the original, then come here to see how far it holds.',
     colors: ['#496f0c', '#af67ff'], tags: ['physics', 'rope', 'levels', 'hyper', 'remix'] });
 
   V('rope-cut', { id: 'rope-cut-turbo', title: 'Rope Cut Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -2322,12 +2337,12 @@
 
   V('rope-cut', { id: 'rope-cut-zen', title: 'Rope Cut Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Slice ropes, swing candy into the mouth, at three-quarter pace',
-    description: 'Zen edition of Rope Cut: identical rules, 28% slower, separate high score. A sweet hangs from real rope — cut one strand and it swings on the others, cut the last and it drops. Sixteen levels add bubbles that float the candy upward until you tap them, slack ropes that catch it mid-fall, and spike beds that end the attempt. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
+    description: 'Rope Cut at a gentler pace. A sweet hangs from real rope — cut one strand and it swings on the others, cut the last and it drops. Sixteen levels add bubbles that float the candy upward until you tap them, slack ropes that catch it mid-fall, and spike beds that end the attempt. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Rope Cut.',
     colors: ['#611a1d', '#79e6ee'], tags: ['physics', 'rope', 'levels', 'zen', 'remix'] });
 
   V('rotate-rings', { id: 'rotate-rings-hyper', title: 'Rotate Rings Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Spin the sliced picture back into one scene at 170% speed',
-    description: 'Rotate Rings, seventy percent faster, in a hotter palette. Seven procedurally painted scenes — a harbour sunset, a mountain cabin at night, a ringed planet, balloons over a meadow and more — each freshly drawn, then cut into concentric rings that have been twisted out of line. Hyper strips out the breathing room the original gives you; what is left is pure pattern recognition and commitment. Practise in Zen or the original, then come here to see how far it holds.',
+    description: 'Hyper edition of Rotate Rings: same mechanics, 1.7× game speed, separate leaderboard. Seven procedurally painted scenes — a harbour sunset, a mountain cabin at night, a ringed planet, balloons over a meadow and more — each freshly drawn, then cut into concentric rings that have been twisted out of line. The best runs come from reading two hazards ahead rather than one — the original rewards that, this one demands it.',
     colors: ['#ff109d', '#119775'], tags: ['picture', 'rotate', 'spatial', 'hyper', 'remix'] });
 
   V('rotate-rings', { id: 'rotate-rings-turbo', title: 'Rotate Rings Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -2337,12 +2352,12 @@
 
   V('rotate-rings', { id: 'rotate-rings-zen', title: 'Rotate Rings Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Spin the sliced picture back into one scene, at three-quarter pace',
-    description: 'Rotate Rings Zen slows Rotate Rings to about three-quarter speed and gives it a calmer palette. Seven procedurally painted scenes — a harbour sunset, a mountain cabin at night, a ringed planet, balloons over a meadow and more — each freshly drawn, then cut into concentric rings that have been twisted out of line. With more time between decisions it becomes a game about planning rather than twitch — good for learning the patterns, or for playing one-handed with a coffee. Zen has its own best score.',
+    description: 'A slow-motion cut of Rotate Rings, tinted cool. Seven procedurally painted scenes — a harbour sunset, a mountain cabin at night, a ringed planet, balloons over a meadow and more — each freshly drawn, then cut into concentric rings that have been twisted out of line. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
     colors: ['#2123ee', '#658523'], tags: ['picture', 'rotate', 'spatial', 'zen', 'remix'] });
 
   V('shadow-leap', { id: 'shadow-leap-hyper', title: 'Shadow Leap Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Every stone you touch starts dying at 170% speed',
-    description: 'Hyper edition of Shadow Leap: same mechanics, 1.7× game speed, separate leaderboard. You are a shade that moves only by teleporting: tap any stone inside your dashed ring and you are there instantly — but one second after you land, the stone under you shatters, and the ring above your head counts it down. The best runs come from reading two hazards ahead rather than one — the original rewards that, this one demands it.',
+    description: 'Shadow Leap Hyper is Shadow Leap with the clock running 70% faster. You are a shade that moves only by teleporting: tap any stone inside your dashed ring and you are there instantly — but one second after you land, the stone under you shatters, and the ring above your head counts it down. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Shadow Leap record.',
     colors: ['#154d51', '#c6fff4'], tags: ['endless', 'teleport', 'climbing', 'hyper', 'remix'] });
 
   V('shadow-leap', { id: 'shadow-leap-turbo', title: 'Shadow Leap Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -2352,12 +2367,12 @@
 
   V('shadow-leap', { id: 'shadow-leap-zen', title: 'Shadow Leap Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Every stone you touch starts dying, at three-quarter pace',
-    description: 'The relaxed version of Shadow Leap. You are a shade that moves only by teleporting: tap any stone inside your dashed ring and you are there instantly — but one second after you land, the stone under you shatters, and the ring above your head counts it down. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
+    description: 'Zen edition of Shadow Leap: identical rules, 28% slower, separate high score. You are a shade that moves only by teleporting: tap any stone inside your dashed ring and you are there instantly — but one second after you land, the stone under you shatters, and the ring above your head counts it down. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
     colors: ['#2d491d', '#e8fbca'], tags: ['endless', 'teleport', 'climbing', 'zen', 'remix'] });
 
   V('shark-escape', { id: 'shark-escape-hyper', title: 'Shark Escape Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Swim up 600 metres past sharks you can read at 170% speed',
-    description: 'The frantic edition of Shark Escape. A vertical escape from 600 metres down. Your air drains constantly and the only refills are the ringed bubbles drifting up the column, so the run is a chain of bubble to bubble. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
+    description: 'Shark Escape, seventy percent faster, in a hotter palette. A vertical escape from 600 metres down. Your air drains constantly and the only refills are the ringed bubbles drifting up the column, so the run is a chain of bubble to bubble. Hyper strips out the breathing room the original gives you; what is left is pure pattern recognition and commitment. Practise in Zen or the original, then come here to see how far it holds.',
     colors: ['#00160c', '#7affa5'], tags: ['underwater', 'sharks', 'stealth', 'hyper', 'remix'] });
 
   V('shark-escape', { id: 'shark-escape-turbo', title: 'Shark Escape Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -2367,12 +2382,12 @@
 
   V('shark-escape', { id: 'shark-escape-zen', title: 'Shark Escape Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Swim up 600 metres past sharks you can read, at three-quarter pace',
-    description: 'Zen edition of Shark Escape: identical rules, 28% slower, separate high score. A vertical escape from 600 metres down. Your air drains constantly and the only refills are the ringed bubbles drifting up the column, so the run is a chain of bubble to bubble. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
+    description: 'Shark Escape at a gentler pace. A vertical escape from 600 metres down. Your air drains constantly and the only refills are the ringed bubbles drifting up the column, so the run is a chain of bubble to bubble. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Shark Escape.',
     colors: ['#111303', '#f6eb83'], tags: ['underwater', 'sharks', 'stealth', 'zen', 'remix'] });
 
   V('simon-says', { id: 'simon-says-hyper', title: 'Simon Says Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Repeat the sequence, one longer each time at 170% speed',
-    description: 'The frantic edition of Simon Says. Four pads light up in a sequence and play a note each; repeat it back. Every round adds one more step, so it becomes a memory test dressed up as a reflex game. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
+    description: 'Simon Says, seventy percent faster, in a hotter palette. Four pads light up in a sequence and play a note each; repeat it back. Every round adds one more step, so it becomes a memory test dressed up as a reflex game. Hyper strips out the breathing room the original gives you; what is left is pure pattern recognition and commitment. Practise in Zen or the original, then come here to see how far it holds.',
     colors: ['#082722', '#69e720'], tags: ['memory', 'sequence', 'classic', 'hyper', 'remix'] });
 
   V('simon-says', { id: 'simon-says-turbo', title: 'Simon Says Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -2382,12 +2397,12 @@
 
   V('simon-says', { id: 'simon-says-zen', title: 'Simon Says Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Repeat the sequence, one longer each time, at three-quarter pace',
-    description: 'Zen edition of Simon Says: identical rules, 28% slower, separate high score. Four pads light up in a sequence and play a note each; repeat it back. Every round adds one more step, so it becomes a memory test dressed up as a reflex game. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
+    description: 'Simon Says at a gentler pace. Four pads light up in a sequence and play a note each; repeat it back. Every round adds one more step, so it becomes a memory test dressed up as a reflex game. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Simon Says.',
     colors: ['#19230c', '#cb5b3c'], tags: ['memory', 'sequence', 'classic', 'zen', 'remix'] });
 
   V('skate-park', { id: 'skate-park-hyper', title: 'Skate Park Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Pump, air, grind, don’t bail at 170% speed',
-    description: 'Hyper edition of Skate Park: same mechanics, 1.7× game speed, separate leaderboard. A 75-second halfpipe session where every trick is a held key: spin with ←, kickflip with →, grab with ↓, and stack them in one air for bigger points. The best runs come from reading two hazards ahead rather than one — the original rewards that, this one demands it.',
+    description: 'Skate Park Hyper is Skate Park with the clock running 70% faster. A 75-second halfpipe session where every trick is a held key: spin with ←, kickflip with →, grab with ↓, and stack them in one air for bigger points. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Skate Park record.',
     colors: ['#82ffb0', '#c404fa'], tags: ['skateboarding', 'tricks', 'combo', 'hyper', 'remix'] });
 
   V('skate-park', { id: 'skate-park-turbo', title: 'Skate Park Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -2397,12 +2412,12 @@
 
   V('skate-park', { id: 'skate-park-zen', title: 'Skate Park Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Pump, air, grind, don’t bail, at three-quarter pace',
-    description: 'The relaxed version of Skate Park. A 75-second halfpipe session where every trick is a held key: spin with ←, kickflip with →, grab with ↓, and stack them in one air for bigger points. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
+    description: 'Zen edition of Skate Park: identical rules, 28% slower, separate high score. A 75-second halfpipe session where every trick is a held key: spin with ←, kickflip with →, grab with ↓, and stack them in one air for bigger points. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
     colors: ['#ede993', '#2797d7'], tags: ['skateboarding', 'tricks', 'combo', 'zen', 'remix'] });
 
   V('ski-slalom', { id: 'ski-slalom-hyper', title: 'Ski Slalom Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Forty gates, glare ice, real trees at 170% speed',
-    description: 'Everything in Ski Slalom at 1.7× speed. Carve between forty pairs of slalom flags that swing further off the racing line the lower you get. Pale-blue glare ice barely answers the skis — you keep sliding the way you were already going — so set your line before a patch, not on it. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
+    description: 'The frantic edition of Ski Slalom. Carve between forty pairs of slalom flags that swing further off the racing line the lower you get. Pale-blue glare ice barely answers the skis — you keep sliding the way you were already going — so set your line before a patch, not on it. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
     colors: ['#dcf8eb', '#32ffb1'], tags: ['skiing', 'slalom', 'winter', 'hyper', 'remix'] });
 
   V('ski-slalom', { id: 'ski-slalom-turbo', title: 'Ski Slalom Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -2412,12 +2427,12 @@
 
   V('ski-slalom', { id: 'ski-slalom-zen', title: 'Ski Slalom Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Forty gates, glare ice, real trees, at three-quarter pace',
-    description: 'A slow-motion cut of Ski Slalom, tinted cool. Carve between forty pairs of slalom flags that swing further off the racing line the lower you get. Pale-blue glare ice barely answers the skis — you keep sliding the way you were already going — so set your line before a patch, not on it. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
+    description: 'The relaxed version of Ski Slalom. Carve between forty pairs of slalom flags that swing further off the racing line the lower you get. Pale-blue glare ice barely answers the skis — you keep sliding the way you were already going — so set your line before a patch, not on it. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
     colors: ['#f1f4e0', '#caed44'], tags: ['skiing', 'slalom', 'winter', 'zen', 'remix'] });
 
   V('sky-ace', { id: 'sky-ace-hyper', title: 'Sky Ace Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Biplane dogfights at dawn at 170% speed',
-    description: 'Sky Ace Hyper is Sky Ace with the clock running 70% faster. A side-view dogfight where physics matters: your bullets drop as they travel, so you aim above distant planes and lead the fast ones. Red scouts fly straight, gunners shoot back, and enemy aces corkscrew through loops that make them maddening to hit. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Sky Ace record.',
+    description: 'Everything in Sky Ace at 1.7× speed. A side-view dogfight where physics matters: your bullets drop as they travel, so you aim above distant planes and lead the fast ones. Red scouts fly straight, gunners shoot back, and enemy aces corkscrew through loops that make them maddening to hit. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
     colors: ['#d463bf', '#83612b'], tags: ['planes', 'dogfight', 'shooter', 'hyper', 'remix'] });
 
   V('sky-ace', { id: 'sky-ace-turbo', title: 'Sky Ace Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -2427,12 +2442,12 @@
 
   V('sky-ace', { id: 'sky-ace-zen', title: 'Sky Ace Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Biplane dogfights at dawn, at three-quarter pace',
-    description: 'Sky Ace at a gentler pace. A side-view dogfight where physics matters: your bullets drop as they travel, so you aim above distant planes and lead the fast ones. Red scouts fly straight, gunners shoot back, and enemy aces corkscrew through loops that make them maddening to hit. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Sky Ace.',
+    description: 'Sky Ace Zen slows Sky Ace to about three-quarter speed and gives it a calmer palette. A side-view dogfight where physics matters: your bullets drop as they travel, so you aim above distant planes and lead the fast ones. Red scouts fly straight, gunners shoot back, and enemy aces corkscrew through loops that make them maddening to hit. With more time between decisions it becomes a game about planning rather than twitch — good for learning the patterns, or for playing one-handed with a coffee. Zen has its own best score.',
     colors: ['#7385c4', '#77386a'], tags: ['planes', 'dogfight', 'shooter', 'zen', 'remix'] });
 
   V('sky-hopper', { id: 'sky-hopper-hyper', title: 'Sky Hopper Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Bounce up an endless tower at 170% speed',
-    description: 'Sky Hopper Hyper is Sky Hopper with the clock running 70% faster. Every platform bounces you back up — you only have to steer. Green springs launch you much higher, cyan pads slide side to side, and orange pads crumble the instant you leave them. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Sky Hopper record.',
+    description: 'Everything in Sky Hopper at 1.7× speed. Every platform bounces you back up — you only have to steer. Green springs launch you much higher, cyan pads slide side to side, and orange pads crumble the instant you leave them. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
     colors: ['#31ff70', '#86e0ff'], tags: ['jumping', 'endless', 'reflex', 'hyper', 'remix'] });
 
   V('sky-hopper', { id: 'sky-hopper-turbo', title: 'Sky Hopper Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -2442,12 +2457,12 @@
 
   V('sky-hopper', { id: 'sky-hopper-zen', title: 'Sky Hopper Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Bounce up an endless tower, at three-quarter pace',
-    description: 'Sky Hopper at a gentler pace. Every platform bounces you back up — you only have to steer. Green springs launch you much higher, cyan pads slide side to side, and orange pads crumble the instant you leave them. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Sky Hopper.',
+    description: 'Sky Hopper Zen slows Sky Hopper to about three-quarter speed and gives it a calmer palette. Every platform bounces you back up — you only have to steer. Green springs launch you much higher, cyan pads slide side to side, and orange pads crumble the instant you leave them. With more time between decisions it becomes a game about planning rather than twitch — good for learning the patterns, or for playing one-handed with a coffee. Zen has its own best score.',
     colors: ['#eedc42', '#a1f491'], tags: ['jumping', 'endless', 'reflex', 'zen', 'remix'] });
 
   V('slingshot-stars', { id: 'slingshot-stars-hyper', title: 'Slingshot Stars Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Curve a comet through gravity to catch every star at 170% speed',
-    description: 'The frantic edition of Slingshot Stars. Pull back on the comet and let go; from then on the planets steer. Each one bends your path in proportion to its mass, red planets shove you away, and the dotted preview shows the first couple of seconds of the curve. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
+    description: 'Slingshot Stars, seventy percent faster, in a hotter palette. Pull back on the comet and let go; from then on the planets steer. Each one bends your path in proportion to its mass, red planets shove you away, and the dotted preview shows the first couple of seconds of the curve. Hyper strips out the breathing room the original gives you; what is left is pure pattern recognition and commitment. Practise in Zen or the original, then come here to see how far it holds.',
     colors: ['#0d3f38', '#61ff73'], tags: ['physics', 'gravity', 'space', 'hyper', 'remix'] });
 
   V('slingshot-stars', { id: 'slingshot-stars-turbo', title: 'Slingshot Stars Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -2457,12 +2472,12 @@
 
   V('slingshot-stars', { id: 'slingshot-stars-zen', title: 'Slingshot Stars Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Curve a comet through gravity to catch every star, at three-quarter pace',
-    description: 'Zen edition of Slingshot Stars: identical rules, 28% slower, separate high score. Pull back on the comet and let go; from then on the planets steer. Each one bends your path in proportion to its mass, red planets shove you away, and the dotted preview shows the first couple of seconds of the curve. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
+    description: 'Slingshot Stars at a gentler pace. Pull back on the comet and let go; from then on the planets steer. Each one bends your path in proportion to its mass, red planets shove you away, and the dotted preview shows the first couple of seconds of the curve. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Slingshot Stars.',
     colors: ['#283814', '#f2ca6e'], tags: ['physics', 'gravity', 'space', 'zen', 'remix'] });
 
   V('snake-royale', { id: 'snake-royale-hyper', title: 'Snake Royale Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Eight snakes, one arena at 170% speed',
-    description: 'Everything in Snake Royale at 1.7× speed. A big open arena shared with seven rival snakes. Eat orbs to grow, steer with your mouse, and boost to close a gap — boosting burns length and leaves a trail of orbs behind you. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
+    description: 'The frantic edition of Snake Royale. A big open arena shared with seven rival snakes. Eat orbs to grow, steer with your mouse, and boost to close a gap — boosting burns length and leaves a trail of orbs behind you. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
     colors: ['#69e720', '#ff205e'], tags: ['io-style', 'snake', 'arena', 'hyper', 'remix'] });
 
   V('snake-royale', { id: 'snake-royale-turbo', title: 'Snake Royale Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -2472,12 +2487,12 @@
 
   V('snake-royale', { id: 'snake-royale-zen', title: 'Snake Royale Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Eight snakes, one arena, at three-quarter pace',
-    description: 'A slow-motion cut of Snake Royale, tinted cool. A big open arena shared with seven rival snakes. Eat orbs to grow, steer with your mouse, and boost to close a gap — boosting burns length and leaves a trail of orbs behind you. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
+    description: 'The relaxed version of Snake Royale. A big open arena shared with seven rival snakes. Eat orbs to grow, steer with your mouse, and boost to close a gap — boosting burns length and leaves a trail of orbs behind you. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
     colors: ['#cb5b3c', '#6a2ff0'], tags: ['io-style', 'snake', 'arena', 'zen', 'remix'] });
 
   V('space-defender', { id: 'space-defender-hyper', title: 'Space Defender Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Hold the line against the invaders at 170% speed',
-    description: 'Space Defender Hyper is Space Defender with the clock running 70% faster. Five rows of invaders shuffle across the screen and drop a step closer every time they hit the edge. They march faster the fewer of them are left, so the last few are the hardest. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Space Defender record.',
+    description: 'Everything in Space Defender at 1.7× speed. Five rows of invaders shuffle across the screen and drop a step closer every time they hit the edge. They march faster the fewer of them are left, so the last few are the hardest. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
     colors: ['#031010', '#69e720'], tags: ['classic', 'shooter', 'arcade', 'hyper', 'remix'] });
 
   V('space-defender', { id: 'space-defender-turbo', title: 'Space Defender Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -2487,12 +2502,12 @@
 
   V('space-defender', { id: 'space-defender-zen', title: 'Space Defender Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Hold the line against the invaders, at three-quarter pace',
-    description: 'Space Defender at a gentler pace. Five rows of invaders shuffle across the screen and drop a step closer every time they hit the edge. They march faster the fewer of them are left, so the last few are the hardest. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Space Defender.',
+    description: 'Space Defender Zen slows Space Defender to about three-quarter speed and gives it a calmer palette. Five rows of invaders shuffle across the screen and drop a step closer every time they hit the edge. They march faster the fewer of them are left, so the last few are the hardest. With more time between decisions it becomes a game about planning rather than twitch — good for learning the patterns, or for playing one-handed with a coffee. Zen has its own best score.',
     colors: ['#090e05', '#cb5b3c'], tags: ['classic', 'shooter', 'arcade', 'zen', 'remix'] });
 
   V('space-trader', { id: 'space-trader-hyper', title: 'Space Trader Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Buy low on one moon, sell high on another at 170% speed',
-    description: 'Space Trader Hyper is Space Trader with the clock running 70% faster. Forty days, five ports and 1,000 credits. Each port prices the same five goods differently and every jump reshuffles them, so the game is spotting a spread and having the hold space to exploit it. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Space Trader record.',
+    description: 'Everything in Space Trader at 1.7× speed. Forty days, five ports and 1,000 credits. Each port prices the same five goods differently and every jump reshuffles them, so the game is spotting a spread and having the hold space to exploit it. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
     colors: ['#072724', '#11ff31'], tags: ['trading', 'economy', 'strategy', 'hyper', 'remix'] });
 
   V('space-trader', { id: 'space-trader-turbo', title: 'Space Trader Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -2502,12 +2517,12 @@
 
   V('space-trader', { id: 'space-trader-zen', title: 'Space Trader Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Buy low on one moon, sell high on another, at three-quarter pace',
-    description: 'Space Trader at a gentler pace. Forty days, five ports and 1,000 credits. Each port prices the same five goods differently and every jump reshuffles them, so the game is spotting a spread and having the hold space to exploit it. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Space Trader.',
+    description: 'Space Trader Zen slows Space Trader to about three-quarter speed and gives it a calmer palette. Forty days, five ports and 1,000 credits. Each port prices the same five goods differently and every jump reshuffles them, so the game is spotting a spread and having the hold space to exploit it. With more time between decisions it becomes a game about planning rather than twitch — good for learning the patterns, or for playing one-handed with a coffee. Zen has its own best score.',
     colors: ['#18230b', '#e4b02c'], tags: ['trading', 'economy', 'strategy', 'zen', 'remix'] });
 
   V('spider-solitaire', { id: 'spider-solitaire-hyper', title: 'Spider Solitaire Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Two suits, eight runs to clear at 170% speed',
-    description: 'Everything in Spider Solitaire at 1.7× speed. Ten columns, two suits and a stock that deals a whole row at a time. Any card can sit on one a rank higher, but only a same-suit run moves as a group — and a complete King-to-Ace run in one suit lifts off the board. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
+    description: 'The frantic edition of Spider Solitaire. Ten columns, two suits and a stock that deals a whole row at a time. Any card can sit on one a rank higher, but only a same-suit run moves as a group — and a complete King-to-Ace run in one suit lifts off the board. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
     colors: ['#122d45', '#86e0ff'], tags: ['solitaire', 'cards', 'patience', 'hyper', 'remix'] });
 
   V('spider-solitaire', { id: 'spider-solitaire-turbo', title: 'Spider Solitaire Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -2517,12 +2532,12 @@
 
   V('spider-solitaire', { id: 'spider-solitaire-zen', title: 'Spider Solitaire Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Two suits, eight runs to clear, at three-quarter pace',
-    description: 'A slow-motion cut of Spider Solitaire, tinted cool. Ten columns, two suits and a stock that deals a whole row at a time. Any card can sit on one a rank higher, but only a same-suit run moves as a group — and a complete King-to-Ace run in one suit lifts off the board. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
+    description: 'The relaxed version of Spider Solitaire. Ten columns, two suits and a stock that deals a whole row at a time. Any card can sit on one a rank higher, but only a same-suit run moves as a group — and a complete King-to-Ace run in one suit lifts off the board. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
     colors: ['#193e1b', '#a1f491'], tags: ['solitaire', 'cards', 'patience', 'zen', 'remix'] });
 
   V('spike-dash', { id: 'spike-dash-hyper', title: 'Spike Dash Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Jump the spike bars on the beat at 170% speed',
-    description: 'The frantic edition of Spike Dash. An auto-running cube and one jump button. Spikes and purple blocks are laid out in four-beat musical bars that land on the metronome you can hear ticking, so the reliable way through a fast section is to jump on the beat rather than by eye. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
+    description: 'Spike Dash, seventy percent faster, in a hotter palette. An auto-running cube and one jump button. Spikes and purple blocks are laid out in four-beat musical bars that land on the metronome you can hear ticking, so the reliable way through a fast section is to jump on the beat rather than by eye. Hyper strips out the breathing room the original gives you; what is left is pure pattern recognition and commitment. Practise in Zen or the original, then come here to see how far it holds.',
     colors: ['#181b1b', '#ff1040'], tags: ['rhythm', 'one button', 'endless', 'hyper', 'remix'] });
 
   V('spike-dash', { id: 'spike-dash-turbo', title: 'Spike Dash Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -2532,12 +2547,12 @@
 
   V('spike-dash', { id: 'spike-dash-zen', title: 'Spike Dash Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Jump the spike bars on the beat, at three-quarter pace',
-    description: 'Zen edition of Spike Dash: identical rules, 28% slower, separate high score. An auto-running cube and one jump button. Spikes and purple blocks are laid out in four-beat musical bars that land on the metronome you can hear ticking, so the reliable way through a fast section is to jump on the beat rather than by eye. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
+    description: 'Spike Dash at a gentler pace. An auto-running cube and one jump button. Spikes and purple blocks are laid out in four-beat musical bars that land on the metronome you can hear ticking, so the reliable way through a fast section is to jump on the beat rather than by eye. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Spike Dash.',
     colors: ['#191b18', '#6f20ef'], tags: ['rhythm', 'one button', 'endless', 'zen', 'remix'] });
 
   V('spot-difference', { id: 'spot-difference-hyper', title: 'Spot the Difference Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Five changes, sixty seconds at 170% speed',
-    description: 'Hyper edition of Spot the Difference: same mechanics, 1.7× game speed, separate leaderboard. Two pictures side by side with exactly five differences between them, and a clock that does not wait. Something might have changed colour, changed shape, grown, shrunk, shuffled a little to one side, or simply gone — so there is no single thing to scan for. The best runs come from reading two hazards ahead rather than one — the original rewards that, this one demands it.',
+    description: 'Spot the Difference Hyper is Spot the Difference with the clock running 70% faster. Two pictures side by side with exactly five differences between them, and a clock that does not wait. Something might have changed colour, changed shape, grown, shrunk, shuffled a little to one side, or simply gone — so there is no single thing to scan for. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Spot the Difference record.',
     colors: ['#1b3b35', '#3fe049'], tags: ['observation', 'casual', 'brain', 'hyper', 'remix'] });
 
   V('spot-difference', { id: 'spot-difference-turbo', title: 'Spot the Difference Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -2547,12 +2562,12 @@
 
   V('spot-difference', { id: 'spot-difference-zen', title: 'Spot the Difference Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Five changes, sixty seconds, at three-quarter pace',
-    description: 'The relaxed version of Spot the Difference. Two pictures side by side with exactly five differences between them, and a clock that does not wait. Something might have changed colour, changed shape, grown, shrunk, shuffled a little to one side, or simply gone — so there is no single thing to scan for. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
+    description: 'Zen edition of Spot the Difference: identical rules, 28% slower, separate high score. Two pictures side by side with exactly five differences between them, and a clock that does not wait. Something might have changed colour, changed shape, grown, shrunk, shuffled a little to one side, or simply gone — so there is no single thing to scan for. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
     colors: ['#2e371f', '#caa055'], tags: ['observation', 'casual', 'brain', 'zen', 'remix'] });
 
   V('spring-heights', { id: 'spring-heights-hyper', title: 'Spring Heights Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Icy-tower climb with springs that sometimes lie at 170% speed',
-    description: 'Spring Heights Hyper is Spring Heights with the clock running 70% faster. A vertical tower where your jump height comes from your run speed: hold a direction to build up to full pelt, and the walls bounce you back with the speed kept, so the top players zig-zag the whole way up. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Spring Heights record.',
+    description: 'Everything in Spring Heights at 1.7× speed. A vertical tower where your jump height comes from your run speed: hold a direction to build up to full pelt, and the walls bounce you back with the speed kept, so the top players zig-zag the whole way up. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
     colors: ['#227b54', '#5affa8'], tags: ['platformer', 'endless', 'vertical', 'hyper', 'remix'] });
 
   V('spring-heights', { id: 'spring-heights-turbo', title: 'Spring Heights Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -2562,12 +2577,12 @@
 
   V('spring-heights', { id: 'spring-heights-zen', title: 'Spring Heights Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Icy-tower climb with springs that sometimes lie, at three-quarter pace',
-    description: 'Spring Heights at a gentler pace. A vertical tower where your jump height comes from your run speed: hold a direction to build up to full pelt, and the walls bounce you back with the speed kept, so the top players zig-zag the whole way up. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Spring Heights.',
+    description: 'Spring Heights Zen slows Spring Heights to about three-quarter speed and gives it a calmer palette. A vertical tower where your jump height comes from your run speed: hold a direction to build up to full pelt, and the walls bounce you back with the speed kept, so the top players zig-zag the whole way up. With more time between decisions it becomes a game about planning rather than twitch — good for learning the patterns, or for playing one-handed with a coffee. Zen has its own best score.',
     colors: ['#656e2f', '#eef762'], tags: ['platformer', 'endless', 'vertical', 'zen', 'remix'] });
 
   V('stack-ball', { id: 'stack-ball-hyper', title: 'Stack Ball Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Smash down the tower without bouncing at 170% speed',
-    description: 'Stack Ball, seventy percent faster, in a hotter palette. Hold to drive the ball down through a spinning tower of coloured rings. Coloured sections shatter; black ones bounce you back up, and bouncing off the top ends the run. Hyper strips out the breathing room the original gives you; what is left is pure pattern recognition and commitment. Practise in Zen or the original, then come here to see how far it holds.',
+    description: 'Hyper edition of Stack Ball: same mechanics, 1.7× game speed, separate leaderboard. Hold to drive the ball down through a spinning tower of coloured rings. Coloured sections shatter; black ones bounce you back up, and bouncing off the top ends the run. The best runs come from reading two hazards ahead rather than one — the original rewards that, this one demands it.',
     colors: ['#071d27', '#86e0ff'], tags: ['one button', 'smashing', 'combo', 'hyper', 'remix'] });
 
   V('stack-ball', { id: 'stack-ball-turbo', title: 'Stack Ball Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -2577,12 +2592,12 @@
 
   V('stack-ball', { id: 'stack-ball-zen', title: 'Stack Ball Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Smash down the tower without bouncing, at three-quarter pace',
-    description: 'Stack Ball Zen slows Stack Ball to about three-quarter speed and gives it a calmer palette. Hold to drive the ball down through a spinning tower of coloured rings. Coloured sections shatter; black ones bounce you back up, and bouncing off the top ends the run. With more time between decisions it becomes a game about planning rather than twitch — good for learning the patterns, or for playing one-handed with a coffee. Zen has its own best score.',
+    description: 'A slow-motion cut of Stack Ball, tinted cool. Hold to drive the ball down through a spinning tower of coloured rings. Coloured sections shatter; black ones bounce you back up, and bouncing off the top ends the run. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
     colors: ['#0e230b', '#a1f491'], tags: ['one button', 'smashing', 'combo', 'zen', 'remix'] });
 
   V('stick-bridge', { id: 'stick-bridge-hyper', title: 'Stick Bridge Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Grow the stick, drop it, pray it reaches at 170% speed',
-    description: 'The frantic edition of Stick Bridge. Hold to grow a stick straight up, let go and it topples across the gap. Land the tip on the next pillar and your hero walks over; miss short and the stick drops into the void, miss long and he walks right off the end. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
+    description: 'Stick Bridge, seventy percent faster, in a hotter palette. Hold to grow a stick straight up, let go and it topples across the gap. Land the tip on the next pillar and your hero walks over; miss short and the stick drops into the void, miss long and he walks right off the end. Hyper strips out the breathing room the original gives you; what is left is pure pattern recognition and commitment. Practise in Zen or the original, then come here to see how far it holds.',
     colors: ['#bfffd5', '#0c2d23'], tags: ['one button', 'timing', 'endless', 'hyper', 'remix'] });
 
   V('stick-bridge', { id: 'stick-bridge-turbo', title: 'Stick Bridge Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -2592,12 +2607,12 @@
 
   V('stick-bridge', { id: 'stick-bridge-zen', title: 'Stick Bridge Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Grow the stick, drop it, pray it reaches, at three-quarter pace',
-    description: 'Zen edition of Stick Bridge: identical rules, 28% slower, separate high score. Hold to grow a stick straight up, let go and it topples across the gap. Land the tip on the next pillar and your hero walks over; miss short and the stick drops into the void, miss long and he walks right off the end. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
+    description: 'Stick Bridge at a gentler pace. Hold to grow a stick straight up, let go and it topples across the gap. Land the tip on the next pillar and your hero walks over; miss short and the stick drops into the void, miss long and he walks right off the end. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Stick Bridge.',
     colors: ['#fcf8c2', '#222910'], tags: ['one button', 'timing', 'endless', 'zen', 'remix'] });
 
   V('storm-chaser', { id: 'storm-chaser-hyper', title: 'Storm Chaser Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Drop pods by the funnel; greed is the difficulty at 170% speed',
-    description: 'Hyper edition of Storm Chaser: same mechanics, 1.7× game speed, separate leaderboard. Top-down tornado chasing. The best runs come from reading two hazards ahead rather than one — the original rewards that, this one demands it.',
+    description: 'Storm Chaser Hyper is Storm Chaser with the clock running 70% faster. Top-down tornado chasing. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Storm Chaser record.',
     colors: ['#a6422e', '#1c3a2e'], tags: ['driving', 'tornado', 'risk', 'hyper', 'remix'] });
 
   V('storm-chaser', { id: 'storm-chaser-turbo', title: 'Storm Chaser Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -2607,12 +2622,12 @@
 
   V('storm-chaser', { id: 'storm-chaser-zen', title: 'Storm Chaser Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Drop pods by the funnel; greed is the difficulty, at three-quarter pace',
-    description: 'The relaxed version of Storm Chaser. Top-down tornado chasing. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
+    description: 'Zen edition of Storm Chaser: identical rules, 28% slower, separate high score. Top-down tornado chasing. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
     colors: ['#803f95', '#323620'], tags: ['driving', 'tornado', 'risk', 'zen', 'remix'] });
 
   V('submarine-strike', { id: 'submarine-strike-hyper', title: 'Submarine Strike Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Torpedoes float up — dive under, then fire at 170% speed',
-    description: 'Submarine Strike Hyper is Submarine Strike with the clock running 70% faster. Your torpedoes are buoyant: they rise as they run, so the killing shot is fired from below and ahead of a convoy ship, two torpedoes per hull. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Submarine Strike record.',
+    description: 'Everything in Submarine Strike at 1.7× speed. Your torpedoes are buoyant: they rise as they run, so the killing shot is fired from below and ahead of a convoy ship, two torpedoes per hull. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
     colors: ['#025212', '#aeff7d'], tags: ['submarine', 'torpedo', 'sonar', 'hyper', 'remix'] });
 
   V('submarine-strike', { id: 'submarine-strike-turbo', title: 'Submarine Strike Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -2622,12 +2637,12 @@
 
   V('submarine-strike', { id: 'submarine-strike-zen', title: 'Submarine Strike Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Torpedoes float up — dive under, then fire, at three-quarter pace',
-    description: 'Submarine Strike at a gentler pace. Your torpedoes are buoyant: they rise as they run, so the killing shot is fired from below and ahead of a convoy ship, two torpedoes per hull. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Submarine Strike.',
+    description: 'Submarine Strike Zen slows Submarine Strike to about three-quarter speed and gives it a calmer palette. Your torpedoes are buoyant: they rise as they run, so the killing shot is fired from below and ahead of a convoy ship, two torpedoes per hull. With more time between decisions it becomes a game about planning rather than twitch — good for learning the patterns, or for playing one-handed with a coffee. Zen has its own best score.',
     colors: ['#473b0d', '#f89c84'], tags: ['submarine', 'torpedo', 'sonar', 'zen', 'remix'] });
 
   V('sudoku', { id: 'sudoku-hyper', title: 'Sudoku Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Four difficulties, always solvable at 170% speed',
-    description: 'The frantic edition of Sudoku. Fill the grid so every row, column and 3×3 box contains 1 to 9 exactly once. Puzzles are generated from scratch and clues are only removed while exactly one solution remains, so nothing ever needs guessing. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
+    description: 'Sudoku, seventy percent faster, in a hotter palette. Fill the grid so every row, column and 3×3 box contains 1 to 9 exactly once. Puzzles are generated from scratch and clues are only removed while exactly one solution remains, so nothing ever needs guessing. Hyper strips out the breathing room the original gives you; what is left is pure pattern recognition and commitment. Practise in Zen or the original, then come here to see how far it holds.',
     colors: ['#0b342f', '#5cdfff'], tags: ['logic', 'numbers', 'brain', 'hyper', 'remix'] });
 
   V('sudoku', { id: 'sudoku-turbo', title: 'Sudoku Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -2637,12 +2652,12 @@
 
   V('sudoku', { id: 'sudoku-zen', title: 'Sudoku Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Four difficulties, always solvable, at three-quarter pace',
-    description: 'Zen edition of Sudoku: identical rules, 28% slower, separate high score. Fill the grid so every row, column and 3×3 box contains 1 to 9 exactly once. Puzzles are generated from scratch and clues are only removed while exactly one solution remains, so nothing ever needs guessing. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
+    description: 'Sudoku at a gentler pace. Fill the grid so every row, column and 3×3 box contains 1 to 9 exactly once. Puzzles are generated from scratch and clues are only removed while exactly one solution remains, so nothing ever needs guessing. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Sudoku.',
     colors: ['#212e11', '#84f764'], tags: ['logic', 'numbers', 'brain', 'zen', 'remix'] });
 
   V('sweet-match', { id: 'sweet-match-hyper', title: 'Sweet Match Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Fill the order before the moves run out at 170% speed',
-    description: 'Hyper edition of Sweet Match: same mechanics, 1.7× game speed, separate leaderboard. A match-three where score is not the point: each level names one sweet and a number of them to clear, and gives you a fixed number of moves to do it. The best runs come from reading two hazards ahead rather than one — the original rewards that, this one demands it.',
+    description: 'Sweet Match Hyper is Sweet Match with the clock running 70% faster. A match-three where score is not the point: each level names one sweet and a number of them to clear, and gives you a fixed number of moves to do it. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Sweet Match record.',
     colors: ['#0c1434', '#af67ff'], tags: ['match 3', 'objectives', 'puzzle', 'hyper', 'remix'] });
 
   V('sweet-match', { id: 'sweet-match-turbo', title: 'Sweet Match Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -2652,12 +2667,12 @@
 
   V('sweet-match', { id: 'sweet-match-zen', title: 'Sweet Match Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Fill the order before the moves run out, at three-quarter pace',
-    description: 'The relaxed version of Sweet Match. A match-three where score is not the point: each level names one sweet and a number of them to clear, and gives you a fixed number of moves to do it. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
+    description: 'Zen edition of Sweet Match: identical rules, 28% slower, separate high score. A match-three where score is not the point: each level names one sweet and a number of them to clear, and gives you a fixed number of moves to do it. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
     colors: ['#122e1d', '#79e6ee'], tags: ['match 3', 'objectives', 'puzzle', 'zen', 'remix'] });
 
   V('sword-storm', { id: 'sword-storm-hyper', title: 'Sword Storm Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Cut on the beat, from the side they come from at 170% speed',
-    description: 'Everything in Sword Storm at 1.7× speed. A rhythm brawler: attackers rush your samurai from four sides in time with a metronome that climbs four bpm every eight beats. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
+    description: 'The frantic edition of Sword Storm. A rhythm brawler: attackers rush your samurai from four sides in time with a metronome that climbs four bpm every eight beats. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
     colors: ['#101c1d', '#c404fa'], tags: ['rhythm', 'samurai', 'reaction', 'hyper', 'remix'] });
 
   V('sword-storm', { id: 'sword-storm-turbo', title: 'Sword Storm Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -2667,12 +2682,12 @@
 
   V('sword-storm', { id: 'sword-storm-zen', title: 'Sword Storm Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Cut on the beat, from the side they come from, at three-quarter pace',
-    description: 'A slow-motion cut of Sword Storm, tinted cool. A rhythm brawler: attackers rush your samurai from four sides in time with a metronome that climbs four bpm every eight beats. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
+    description: 'The relaxed version of Sword Storm. A rhythm brawler: attackers rush your samurai from four sides in time with a metronome that climbs four bpm every eight beats. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
     colors: ['#151b12', '#2797d7'], tags: ['rhythm', 'samurai', 'reaction', 'zen', 'remix'] });
 
   V('table-tennis', { id: 'table-tennis-hyper', title: 'Table Tennis Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Spin serves past the club robot at 170% speed',
-    description: 'Hyper edition of Table Tennis: same mechanics, 1.7× game speed, separate leaderboard. A behind-the-paddle rally game, first to 11 against a robot that gets faster and more accurate every game you take off it. The best runs come from reading two hazards ahead rather than one — the original rewards that, this one demands it.',
+    description: 'Table Tennis Hyper is Table Tennis with the clock running 70% faster. A behind-the-paddle rally game, first to 11 against a robot that gets faster and more accurate every game you take off it. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Table Tennis record.',
     colors: ['#0dae71', '#c92dd8'], tags: ['ping pong', 'spin', 'vs cpu', 'hyper', 'remix'] });
 
   V('table-tennis', { id: 'table-tennis-turbo', title: 'Table Tennis Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -2682,12 +2697,12 @@
 
   V('table-tennis', { id: 'table-tennis-zen', title: 'Table Tennis Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Spin serves past the club robot, at three-quarter pace',
-    description: 'The relaxed version of Table Tennis. A behind-the-paddle rally game, first to 11 against a robot that gets faster and more accurate every game you take off it. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
+    description: 'Zen edition of Table Tennis: identical rules, 28% slower, separate high score. A behind-the-paddle rally game, first to 11 against a robot that gets faster and more accurate every game you take off it. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
     colors: ['#809823', '#4583c0'], tags: ['ping pong', 'spin', 'vs cpu', 'zen', 'remix'] });
 
   V('tangram-fit', { id: 'tangram-fit-hyper', title: 'Tangram Fit Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Seven tans, one silhouette, no gaps at 170% speed',
-    description: 'Tangram Fit Hyper is Tangram Fit with the clock running 70% faster. The classic Chinese dissection puzzle: two large triangles, one medium, two small, a square and a parallelogram, and a black silhouette they must fill exactly. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Tangram Fit record.',
+    description: 'Everything in Tangram Fit at 1.7× speed. The classic Chinese dissection puzzle: two large triangles, one medium, two small, a square and a parallelogram, and a black silhouette they must fill exactly. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
     colors: ['#dc34ff', '#ff1040'], tags: ['tangram', 'shapes', 'classic', 'hyper', 'remix'] });
 
   V('tangram-fit', { id: 'tangram-fit-turbo', title: 'Tangram Fit Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -2697,12 +2712,12 @@
 
   V('tangram-fit', { id: 'tangram-fit-zen', title: 'Tangram Fit Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Seven tans, one silhouette, no gaps, at three-quarter pace',
-    description: 'Tangram Fit at a gentler pace. The classic Chinese dissection puzzle: two large triangles, one medium, two small, a square and a parallelogram, and a black silhouette they must fill exactly. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Tangram Fit.',
+    description: 'Tangram Fit Zen slows Tangram Fit to about three-quarter speed and gives it a calmer palette. The classic Chinese dissection puzzle: two large triangles, one medium, two small, a square and a parallelogram, and a black silhouette they must fill exactly. With more time between decisions it becomes a game about planning rather than twitch — good for learning the patterns, or for playing one-handed with a coffee. Zen has its own best score.',
     colors: ['#48a8eb', '#6f20ef'], tags: ['tangram', 'shapes', 'classic', 'zen', 'remix'] });
 
   V('tank-arena', { id: 'tank-arena-hyper', title: 'Tank Arena Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Ricochet duels in a walled maze at 170% speed',
-    description: 'Everything in Tank Arena at 1.7× speed. Drive a tank around a walled arena while hunting bots close in. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
+    description: 'The frantic edition of Tank Arena. Drive a tank around a walled arena while hunting bots close in. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
     colors: ['#55493e', '#11ff31'], tags: ['tanks', 'arena', 'shooter', 'hyper', 'remix'] });
 
   V('tank-arena', { id: 'tank-arena-turbo', title: 'Tank Arena Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -2712,12 +2727,12 @@
 
   V('tank-arena', { id: 'tank-arena-zen', title: 'Tank Arena Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Ricochet duels in a walled maze, at three-quarter pace',
-    description: 'A slow-motion cut of Tank Arena, tinted cool. Drive a tank around a walled arena while hunting bots close in. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
+    description: 'The relaxed version of Tank Arena. Drive a tank around a walled arena while hunting bots close in. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
     colors: ['#524151', '#e4b02c'], tags: ['tanks', 'arena', 'shooter', 'zen', 'remix'] });
 
   V('terra-dig', { id: 'terra-dig-hyper', title: 'Terra Dig Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Dig deep, strike gems, build back up at 170% speed',
-    description: 'The frantic edition of Terra Dig. A side-on world you can tunnel straight through. Hold the left button to dig — harder rock takes longer — and everything you break goes into your inventory. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
+    description: 'Terra Dig, seventy percent faster, in a hotter palette. A side-on world you can tunnel straight through. Hold the left button to dig — harder rock takes longer — and everything you break goes into your inventory. Hyper strips out the breathing room the original gives you; what is left is pure pattern recognition and commitment. Practise in Zen or the original, then come here to see how far it holds.',
     colors: ['#971f5c', '#11ff31'], tags: ['sandbox', 'mining', 'building', 'hyper', 'remix'] });
 
   V('terra-dig', { id: 'terra-dig-turbo', title: 'Terra Dig Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -2727,12 +2742,12 @@
 
   V('terra-dig', { id: 'terra-dig-zen', title: 'Terra Dig Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Dig deep, strike gems, build back up, at three-quarter pace',
-    description: 'Zen edition of Terra Dig: identical rules, 28% slower, separate high score. A side-on world you can tunnel straight through. Hold the left button to dig — harder rock takes longer — and everything you break goes into your inventory. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
+    description: 'Terra Dig at a gentler pace. A side-on world you can tunnel straight through. Hold the left button to dig — harder rock takes longer — and everything you break goes into your inventory. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Terra Dig.',
     colors: ['#363086', '#e4b02c'], tags: ['sandbox', 'mining', 'building', 'zen', 'remix'] });
 
   V('tile-match', { id: 'tile-match-hyper', title: 'Tile Match Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Clear the stack, pair by pair at 170% speed',
-    description: 'Tile Match Hyper is Tile Match with the clock running 70% faster. Tiles are stacked three layers deep. Remove matching pairs — but only tiles that have nothing on top of them and at least one open side can be taken, so the order matters as much as spotting the match. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Tile Match record.',
+    description: 'Everything in Tile Match at 1.7× speed. Tiles are stacked three layers deep. Remove matching pairs — but only tiles that have nothing on top of them and at least one open side can be taken, so the order matters as much as spotting the match. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
     colors: ['#324c11', '#f8d4de'], tags: ['mahjong', 'matching', 'brain', 'hyper', 'remix'] });
 
   V('tile-match', { id: 'tile-match-turbo', title: 'Tile Match Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -2742,12 +2757,12 @@
 
   V('tile-match', { id: 'tile-match-zen', title: 'Tile Match Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Clear the stack, pair by pair, at three-quarter pace',
-    description: 'Tile Match at a gentler pace. Tiles are stacked three layers deep. Remove matching pairs — but only tiles that have nothing on top of them and at least one open side can be taken, so the order matters as much as spotting the match. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Tile Match.',
+    description: 'Tile Match Zen slows Tile Match to about three-quarter speed and gives it a calmer palette. Tiles are stacked three layers deep. Remove matching pairs — but only tiles that have nothing on top of them and at least one open side can be taken, so the order matters as much as spotting the match. With more time between decisions it becomes a game about planning rather than twitch — good for learning the patterns, or for playing one-handed with a coffee. Zen has its own best score.',
     colors: ['#441b19', '#e1d9f3'], tags: ['mahjong', 'matching', 'brain', 'zen', 'remix'] });
 
   V('tower-defence', { id: 'tower-defence-hyper', title: 'Tower Defence Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Build the line, hold twenty waves at 170% speed',
-    description: 'Tower Defence Hyper is Tower Defence with the clock running 70% faster. Enemies follow a fixed path from one side to the other; you build towers on the ground beside it. Guns are cheap and fast, frost towers halve enemy speed, and cannons hit everything within a blast radius — the answer is usually a mix. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Tower Defence record.',
+    description: 'Everything in Tower Defence at 1.7× speed. Enemies follow a fixed path from one side to the other; you build towers on the ground beside it. Guns are cheap and fast, frost towers halve enemy speed, and cannons hit everything within a blast radius — the answer is usually a mix. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
     colors: ['#334112', '#11ff31'], tags: ['strategy', 'defence', 'waves', 'hyper', 'remix'] });
 
   V('tower-defence', { id: 'tower-defence-turbo', title: 'Tower Defence Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -2757,12 +2772,12 @@
 
   V('tower-defence', { id: 'tower-defence-zen', title: 'Tower Defence Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Build the line, hold twenty waves, at three-quarter pace',
-    description: 'Tower Defence at a gentler pace. Enemies follow a fixed path from one side to the other; you build towers on the ground beside it. Guns are cheap and fast, frost towers halve enemy speed, and cannons hit everything within a blast radius — the answer is usually a mix. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Tower Defence.',
+    description: 'Tower Defence Zen slows Tower Defence to about three-quarter speed and gives it a calmer palette. Enemies follow a fixed path from one side to the other; you build towers on the ground beside it. Guns are cheap and fast, frost towers halve enemy speed, and cannons hit everything within a blast radius — the answer is usually a mix. With more time between decisions it becomes a game about planning rather than twitch — good for learning the patterns, or for playing one-handed with a coffee. Zen has its own best score.',
     colors: ['#3a191d', '#e4b02c'], tags: ['strategy', 'defence', 'waves', 'zen', 'remix'] });
 
   V('tower-of-hanoi', { id: 'tower-of-hanoi-hyper', title: 'Tower of Hanoi Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Move the stack, one disc at a time at 170% speed',
-    description: 'Tower of Hanoi, seventy percent faster, in a hotter palette. Shift the whole tower from the left peg to the right one. You can only move a single disc at a time and a larger disc can never sit on a smaller one. Hyper strips out the breathing room the original gives you; what is left is pure pattern recognition and commitment. Practise in Zen or the original, then come here to see how far it holds.',
+    description: 'Hyper edition of Tower of Hanoi: same mechanics, 1.7× game speed, separate leaderboard. Shift the whole tower from the left peg to the right one. You can only move a single disc at a time and a larger disc can never sit on a smaller one. The best runs come from reading two hazards ahead rather than one — the original rewards that, this one demands it.',
     colors: ['#0c2734', '#31ff70'], tags: ['logic', 'classic', 'brain', 'hyper', 'remix'] });
 
   V('tower-of-hanoi', { id: 'tower-of-hanoi-turbo', title: 'Tower of Hanoi Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -2772,12 +2787,12 @@
 
   V('tower-of-hanoi', { id: 'tower-of-hanoi-zen', title: 'Tower of Hanoi Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Move the stack, one disc at a time, at three-quarter pace',
-    description: 'Tower of Hanoi Zen slows Tower of Hanoi to about three-quarter speed and gives it a calmer palette. Shift the whole tower from the left peg to the right one. You can only move a single disc at a time and a larger disc can never sit on a smaller one. With more time between decisions it becomes a game about planning rather than twitch — good for learning the patterns, or for playing one-handed with a coffee. Zen has its own best score.',
+    description: 'A slow-motion cut of Tower of Hanoi, tinted cool. Shift the whole tower from the left peg to the right one. You can only move a single disc at a time and a larger disc can never sit on a smaller one. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
     colors: ['#152e12', '#eedc42'], tags: ['logic', 'classic', 'brain', 'zen', 'remix'] });
 
   V('tower-stack', { id: 'tower-stack-hyper', title: 'Tower Stack Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'One-tap tower building at 170% speed',
-    description: 'The frantic edition of Tower Stack. A block slides back and forth above your tower. Tap to drop it. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
+    description: 'Tower Stack, seventy percent faster, in a hotter palette. A block slides back and forth above your tower. Tap to drop it. Hyper strips out the breathing room the original gives you; what is left is pure pattern recognition and commitment. Practise in Zen or the original, then come here to see how far it holds.',
     colors: ['#ff015f', '#ff34ff'], tags: ['one button', 'timing', 'stacking', 'hyper', 'remix'] });
 
   V('tower-stack', { id: 'tower-stack-turbo', title: 'Tower Stack Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -2787,12 +2802,12 @@
 
   V('tower-stack', { id: 'tower-stack-zen', title: 'Tower Stack Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'One-tap tower building, at three-quarter pace',
-    description: 'Zen edition of Tower Stack: identical rules, 28% slower, separate high score. A block slides back and forth above your tower. Tap to drop it. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
+    description: 'Tower Stack at a gentler pace. A block slides back and forth above your tower. Tap to drop it. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Tower Stack.',
     colors: ['#4317e9', '#4d8de6'], tags: ['one button', 'timing', 'stacking', 'zen', 'remix'] });
 
   V('tunnel-rush', { id: 'tunnel-rush-hyper', title: 'Tunnel Rush Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Find the gap in every gate — at speed at 170% speed',
-    description: 'Hyper edition of Tunnel Rush: same mechanics, 1.7× game speed, separate leaderboard. You are falling down a neon tunnel and every gate ahead is a solid ring with one gap in it. Steer around the tunnel wall to line up before the gate reaches you; hitting the ring dead centre scores a Perfect worth triple. The best runs come from reading two hazards ahead rather than one — the original rewards that, this one demands it.',
+    description: 'Tunnel Rush Hyper is Tunnel Rush with the clock running 70% faster. You are falling down a neon tunnel and every gate ahead is a solid ring with one gap in it. Steer around the tunnel wall to line up before the gate reaches you; hitting the ring dead centre scores a Perfect worth triple. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Tunnel Rush record.',
     colors: ['#28b0ff', '#9b35ff'], tags: ['endless', 'dodge', 'tunnel', 'hyper', 'remix'] });
 
   V('tunnel-rush', { id: 'tunnel-rush-turbo', title: 'Tunnel Rush Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
@@ -2802,306 +2817,291 @@
 
   V('tunnel-rush', { id: 'tunnel-rush-zen', title: 'Tunnel Rush Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Find the gap in every gate — at speed, at three-quarter pace',
-    description: 'The relaxed version of Tunnel Rush. You are falling down a neon tunnel and every gate ahead is a solid ring with one gap in it. Steer around the tunnel wall to line up before the gate reaches you; hitting the ring dead centre scores a Perfect worth triple. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
+    description: 'Zen edition of Tunnel Rush: identical rules, 28% slower, separate high score. You are falling down a neon tunnel and every gate ahead is a solid ring with one gap in it. Steer around the tunnel wall to line up before the gate reaches you; hitting the ring dead centre scores a Perfect worth triple. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
     colors: ['#4be443', '#50d7e4'], tags: ['endless', 'dodge', 'tunnel', 'zen', 'remix'] });
-
-  V('turbo-drift', { id: 'turbo-drift-hyper', title: 'Turbo Drift Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
-    tagline: 'Three laps, three rivals, one line at 170% speed',
-    description: 'Everything in Turbo Drift at 1.7× speed. A top-down circuit race. Your car steers better the faster it goes, but leave the tarmac and the grass will drag you down to a crawl. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
-    colors: ['#11ff31', '#ff34ff'], tags: ['racing', 'cars', 'laps', 'hyper', 'remix'] });
-
-  V('turbo-drift', { id: 'turbo-drift-turbo', title: 'Turbo Drift Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
-    tagline: 'Three laps, three rivals, one line — a third faster',
-    description: 'A faster cut of Turbo Drift. A top-down circuit race. Your car steers better the faster it goes, but leave the tarmac and the grass will drag you down to a crawl. Turbo multiplies game time by 1.35, which is enough to turn a comfortable rhythm into a proper reflex test without making it unfair. Learn the original first; bring the muscle memory here.',
-    colors: ['#fd13b7', '#37fc58'], tags: ['racing', 'cars', 'laps', 'turbo', 'remix'] });
-
-  V('turbo-drift', { id: 'turbo-drift-zen', title: 'Turbo Drift Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
-    tagline: 'Three laps, three rivals, one line, at three-quarter pace',
-    description: 'A slow-motion cut of Turbo Drift, tinted cool. A top-down circuit race. Your car steers better the faster it goes, but leave the tarmac and the grass will drag you down to a crawl. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
-    colors: ['#e4b02c', '#4d8de6'], tags: ['racing', 'cars', 'laps', 'zen', 'remix'] });
 
   V('turret-tower', { id: 'turret-tower-hyper', title: 'Turret Tower Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'One turret, 360°, and a hot barrel at 170% speed',
-    description: 'Hyper edition of Turret Tower: same mechanics, 1.7× game speed, separate leaderboard. You are a fixed turret in the middle of an open field, and rust-bots march in from every bearing — skimmers spiral, bombers hit the tower for three. Every shot heats the barrel: a hot gun sprays wide, and a maxed gauge locks you out while it vents. The best runs come from reading two hazards ahead rather than one — the original rewards that, this one demands it.',
+    description: 'Turret Tower, seventy percent faster, in a hotter palette. You are a fixed turret in the middle of an open field, and rust-bots march in from every bearing — skimmers spiral, bombers hit the tower for three. Every shot heats the barrel: a hot gun sprays wide, and a maxed gauge locks you out while it vents. Hyper strips out the breathing room the original gives you; what is left is pure pattern recognition and commitment. Practise in Zen or the original, then come here to see how far it holds.',
     colors: ['#2b3732', '#ff2a9d'], tags: ['turret', 'shooter', 'waves', 'hyper', 'remix'] });
 
   V('turret-tower', { id: 'turret-tower-turbo', title: 'Turret Tower Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
     tagline: 'One turret, 360°, and a hot barrel — a third faster',
-    description: 'Turret Tower Turbo is Turret Tower with game time running about a third faster. You are a fixed turret in the middle of an open field, and rust-bots march in from every bearing — skimmers spiral, bombers hit the tower for three. Every shot heats the barrel: a hot gun sprays wide, and a maxed gauge locks you out while it vents. At this pace the same patterns arrive before you have finished reading them, so the safe routes of the original become gambles here. Turbo keeps its own best score, separate from Turret Tower.',
+    description: 'Turret Tower, but hurried. You are a fixed turret in the middle of an open field, and rust-bots march in from every bearing — skimmers spiral, bombers hit the tower for three. Every shot heats the barrel: a hot gun sprays wide, and a maxed gauge locks you out while it vents. With the clock running a third faster, hazards bunch up and openings close sooner, and the scoring that ramps in the original ramps here too — just quicker. Separate best score, same controls.',
     colors: ['#372b2e', '#2affb0'], tags: ['turret', 'shooter', 'waves', 'turbo', 'remix'] });
 
   V('turret-tower', { id: 'turret-tower-zen', title: 'Turret Tower Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'One turret, 360°, and a hot barrel, at three-quarter pace',
-    description: 'The relaxed version of Turret Tower. You are a fixed turret in the middle of an open field, and rust-bots march in from every bearing — skimmers spiral, bombers hit the tower for three. Every shot heats the barrel: a hot gun sprays wide, and a maxed gauge locks you out while it vents. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
+    description: 'Turret Tower at a gentler pace. You are a fixed turret in the middle of an open field, and rust-bots march in from every bearing — skimmers spiral, bombers hit the tower for three. Every shot heats the barrel: a hot gun sprays wide, and a maxed gauge locks you out while it vents. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Turret Tower.',
     colors: ['#34352d', '#3d35f4'], tags: ['turret', 'shooter', 'waves', 'zen', 'remix'] });
 
   V('typing-test', { id: 'typing-test-hyper', title: 'Typing Test Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'How fast can you actually type? at 170% speed',
-    description: 'Typing Test Hyper is Typing Test with the clock running 70% faster. Sixty seconds of ordinary words. Type each one and press space; letters go green as you get them right and red as you get them wrong, so you can see a mistake before you commit it. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Typing Test record.',
+    description: 'Hyper edition of Typing Test: same mechanics, 1.7× game speed, separate leaderboard. Sixty seconds of ordinary words. Type each one and press space; letters go green as you get them right and red as you get them wrong, so you can see a mistake before you commit it. The best runs come from reading two hazards ahead rather than one — the original rewards that, this one demands it.',
     colors: ['#0b342f', '#11ff31'], tags: ['typing', 'speed', 'word', 'hyper', 'remix'] });
 
   V('typing-test', { id: 'typing-test-turbo', title: 'Typing Test Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
     tagline: 'How fast can you actually type? — a third faster',
-    description: 'The same Typing Test, wound up: everything moves at 135% speed and the reaction windows shrink to match. Sixty seconds of ordinary words. Type each one and press space; letters go green as you get them right and red as you get them wrong, so you can see a mistake before you commit it. Nothing about the rules changes — only how long you get to respond. A score that felt routine in Typing Test is worth something on the Turbo leaderboard.',
+    description: 'Turbo edition of Typing Test: identical mechanics, 35% more speed, its own leaderboard. Sixty seconds of ordinary words. Type each one and press space; letters go green as you get them right and red as you get them wrong, so you can see a mistake before you commit it. The trick is to stop reacting to individual threats and start reading the pattern a beat ahead — the original taught you the pattern, this one tests whether you learned it.',
     colors: ['#320e0d', '#fd13b7'], tags: ['typing', 'speed', 'word', 'turbo', 'remix'] });
 
   V('typing-test', { id: 'typing-test-zen', title: 'Typing Test Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'How fast can you actually type?, at three-quarter pace',
-    description: 'Typing Test at a gentler pace. Sixty seconds of ordinary words. Type each one and press space; letters go green as you get them right and red as you get them wrong, so you can see a mistake before you commit it. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Typing Test.',
+    description: 'A slow-motion cut of Typing Test, tinted cool. Sixty seconds of ordinary words. Type each one and press space; letters go green as you get them right and red as you get them wrong, so you can see a mistake before you commit it. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
     colors: ['#212e11', '#e4b02c'], tags: ['typing', 'speed', 'word', 'zen', 'remix'] });
 
   V('ultimate-ttt', { id: 'ultimate-ttt-hyper', title: 'Ultimate Tic Tac Toe Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Nine boards, and every move sends them somewhere at 170% speed',
-    description: 'Ultimate Tic Tac Toe, seventy percent faster, in a hotter palette. Nine small tic-tac-toe boards arranged in a big one. Win a small board and you claim that square; three claimed squares in a line wins overall. Hyper strips out the breathing room the original gives you; what is left is pure pattern recognition and commitment. Practise in Zen or the original, then come here to see how far it holds.',
+    description: 'The frantic edition of Ultimate Tic Tac Toe. Nine small tic-tac-toe boards arranged in a big one. Win a small board and you claim that square; three claimed squares in a line wins overall. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
     colors: ['#0b3834', '#11ff31'], tags: ['board game', 'vs cpu', 'strategy', 'hyper', 'remix'] });
 
   V('ultimate-ttt', { id: 'ultimate-ttt-turbo', title: 'Ultimate Tic Tac Toe Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
     tagline: 'Nine boards, and every move sends them somewhere — a third faster',
-    description: 'Turbo edition of Ultimate Tic Tac Toe: identical mechanics, 35% more speed, its own leaderboard. Nine small tic-tac-toe boards arranged in a big one. Win a small board and you claim that square; three claimed squares in a line wins overall. The trick is to stop reacting to individual threats and start reading the pattern a beat ahead — the original taught you the pattern, this one tests whether you learned it.',
+    description: 'A faster cut of Ultimate Tic Tac Toe. Nine small tic-tac-toe boards arranged in a big one. Win a small board and you claim that square; three claimed squares in a line wins overall. Turbo multiplies game time by 1.35, which is enough to turn a comfortable rhythm into a proper reflex test without making it unfair. Learn the original first; bring the muscle memory here.',
     colors: ['#36100c', '#fd13b7'], tags: ['board game', 'vs cpu', 'strategy', 'turbo', 'remix'] });
 
   V('ultimate-ttt', { id: 'ultimate-ttt-zen', title: 'Ultimate Tic Tac Toe Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Nine boards, and every move sends them somewhere, at three-quarter pace',
-    description: 'Ultimate Tic Tac Toe Zen slows Ultimate Tic Tac Toe to about three-quarter speed and gives it a calmer palette. Nine small tic-tac-toe boards arranged in a big one. Win a small board and you claim that square; three claimed squares in a line wins overall. With more time between decisions it becomes a game about planning rather than twitch — good for learning the patterns, or for playing one-handed with a coffee. Zen has its own best score.',
+    description: 'The relaxed version of Ultimate Tic Tac Toe. Nine small tic-tac-toe boards arranged in a big one. Win a small board and you claim that square; three claimed squares in a line wins overall. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
     colors: ['#213111', '#e4b02c'], tags: ['board game', 'vs cpu', 'strategy', 'zen', 'remix'] });
 
   V('velodrome-dash', { id: 'velodrome-dash-hyper', title: 'Velodrome Dash Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Draft, then empty the tank at 170% speed',
-    description: 'The frantic edition of Velodrome Dash. A best-of-three match sprint on the boards: alternate ← and → to turn the pedals, and watch the tank — every stroke costs stamina and hitting zero blows your legs for a long coasting eternity. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
+    description: 'Everything in Velodrome Dash at 1.7× speed. A best-of-three match sprint on the boards: alternate ← and → to turn the pedals, and watch the tank — every stroke costs stamina and hitting zero blows your legs for a long coasting eternity. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
     colors: ['#cf3e81', '#fd2ae0'], tags: ['cycling', 'sprint', 'stamina', 'hyper', 'remix'] });
 
   V('velodrome-dash', { id: 'velodrome-dash-turbo', title: 'Velodrome Dash Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
     tagline: 'Draft, then empty the tank — a third faster',
-    description: 'Velodrome Dash, but hurried. A best-of-three match sprint on the boards: alternate ← and → to turn the pedals, and watch the tank — every stroke costs stamina and hitting zero blows your legs for a long coasting eternity. With the clock running a third faster, hazards bunch up and openings close sooner, and the scoring that ramps in the original ramps here too — just quicker. Separate best score, same controls.',
+    description: 'The same Velodrome Dash, wound up: everything moves at 135% speed and the reaction windows shrink to match. A best-of-three match sprint on the boards: alternate ← and → to turn the pedals, and watch the tank — every stroke costs stamina and hitting zero blows your legs for a long coasting eternity. Nothing about the rules changes — only how long you get to respond. A score that felt routine in Velodrome Dash is worth something on the Turbo leaderboard.',
     colors: ['#43c9a1', '#32f56d'], tags: ['cycling', 'sprint', 'stamina', 'turbo', 'remix'] });
 
   V('velodrome-dash', { id: 'velodrome-dash-zen', title: 'Velodrome Dash Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Draft, then empty the tank, at three-quarter pace',
-    description: 'Zen edition of Velodrome Dash: identical rules, 28% slower, separate high score. A best-of-three match sprint on the boards: alternate ← and → to turn the pedals, and watch the tank — every stroke costs stamina and hitting zero blows your legs for a long coasting eternity. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
+    description: 'Velodrome Dash Zen slows Velodrome Dash to about three-quarter speed and gives it a calmer palette. A best-of-three match sprint on the boards: alternate ← and → to turn the pedals, and watch the tank — every stroke costs stamina and hitting zero blows your legs for a long coasting eternity. With more time between decisions it becomes a game about planning rather than twitch — good for learning the patterns, or for playing one-handed with a coffee. Zen has its own best score.',
     colors: ['#5e52ba', '#4772e0'], tags: ['cycling', 'sprint', 'stamina', 'zen', 'remix'] });
 
   V('vine-swing', { id: 'vine-swing-hyper', title: 'Vine Swing Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Grab, swing, let go at the top of the arc at 170% speed',
-    description: 'Vine Swing Hyper is Vine Swing with the clock running 70% faster. One button: hold it and you grab the nearest vine, release it and you fly with whatever speed the swing gave you. Where you let go is everything — on the way up just before the top sends you far and high, at the very top drops you like a stone. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Vine Swing record.',
+    description: 'Hyper edition of Vine Swing: same mechanics, 1.7× game speed, separate leaderboard. One button: hold it and you grab the nearest vine, release it and you fly with whatever speed the swing gave you. Where you let go is everything — on the way up just before the top sends you far and high, at the very top drops you like a stone. The best runs come from reading two hazards ahead rather than one — the original rewards that, this one demands it.',
     colors: ['#3f5017', '#ff4aaf'], tags: ['swinging', 'one button', 'endless', 'hyper', 'remix'] });
 
   V('vine-swing', { id: 'vine-swing-turbo', title: 'Vine Swing Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
     tagline: 'Grab, swing, let go at the top of the arc — a third faster',
-    description: 'The same Vine Swing, wound up: everything moves at 135% speed and the reaction windows shrink to match. One button: hold it and you grab the nearest vine, release it and you fly with whatever speed the swing gave you. Where you let go is everything — on the way up just before the top sends you far and high, at the very top drops you like a stone. Nothing about the rules changes — only how long you get to respond. A score that felt routine in Vine Swing is worth something on the Turbo leaderboard.',
+    description: 'Turbo edition of Vine Swing: identical mechanics, 35% more speed, its own leaderboard. One button: hold it and you grab the nearest vine, release it and you fly with whatever speed the swing gave you. Where you let go is everything — on the way up just before the top sends you far and high, at the very top drops you like a stone. The trick is to stop reacting to individual threats and start reading the pattern a beat ahead — the original taught you the pattern, this one tests whether you learned it.',
     colors: ['#311a4d', '#4affb8'], tags: ['swinging', 'one button', 'endless', 'turbo', 'remix'] });
 
   V('vine-swing', { id: 'vine-swing-zen', title: 'Vine Swing Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Grab, swing, let go at the top of the arc, at three-quarter pace',
-    description: 'Vine Swing at a gentler pace. One button: hold it and you grab the nearest vine, release it and you fly with whatever speed the swing gave you. Where you let go is everything — on the way up just before the top sends you far and high, at the very top drops you like a stone. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Vine Swing.',
+    description: 'A slow-motion cut of Vine Swing, tinted cool. One button: hold it and you grab the nearest vine, release it and you fly with whatever speed the swing gave you. Where you let go is everything — on the way up just before the top sends you far and high, at the very top drops you like a stone. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
     colors: ['#481f24', '#5753f6'], tags: ['swinging', 'one button', 'endless', 'zen', 'remix'] });
 
   V('volcano-escape', { id: 'volcano-escape-hyper', title: 'Volcano Escape Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Wall-jump out of the caldera between lava surges at 170% speed',
-    description: 'Everything in Volcano Escape at 1.7× speed. A wall-kick climber. You cling to one side of a winding basalt shaft and every jump kicks you across to the other wall a little higher up; hang on too long and your grip drains until you slide, faster on the red-hot patches. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
+    description: 'Volcano Escape Hyper is Volcano Escape with the clock running 70% faster. A wall-kick climber. You cling to one side of a winding basalt shaft and every jump kicks you across to the other wall a little higher up; hang on too long and your grip drains until you slide, faster on the red-hot patches. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Volcano Escape record.',
     colors: ['#1a161d', '#ff109d'], tags: ['climbing', 'wall-jump', 'volcano', 'hyper', 'remix'] });
 
   V('volcano-escape', { id: 'volcano-escape-turbo', title: 'Volcano Escape Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
     tagline: 'Wall-jump out of the caldera between lava surges — a third faster',
-    description: 'A faster cut of Volcano Escape. A wall-kick climber. You cling to one side of a winding basalt shaft and every jump kicks you across to the other wall a little higher up; hang on too long and your grip drains until you slide, faster on the red-hot patches. Turbo multiplies game time by 1.35, which is enough to turn a comfortable rhythm into a proper reflex test without making it unfair. Learn the original first; bring the muscle memory here.',
+    description: 'Volcano Escape Turbo is Volcano Escape with game time running about a third faster. A wall-kick climber. You cling to one side of a winding basalt shaft and every jump kicks you across to the other wall a little higher up; hang on too long and your grip drains until you slide, faster on the red-hot patches. At this pace the same patterns arrive before you have finished reading them, so the safe routes of the original become gambles here. Turbo keeps its own best score, separate from Volcano Escape.',
     colors: ['#181c17', '#10ff9a'], tags: ['climbing', 'wall-jump', 'volcano', 'turbo', 'remix'] });
 
   V('volcano-escape', { id: 'volcano-escape-zen', title: 'Volcano Escape Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Wall-jump out of the caldera between lava surges, at three-quarter pace',
-    description: 'A slow-motion cut of Volcano Escape, tinted cool. A wall-kick climber. You cling to one side of a winding basalt shaft and every jump kicks you across to the other wall a little higher up; hang on too long and your grip drains until you slide, faster on the red-hot patches. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
+    description: 'Zen edition of Volcano Escape: identical rules, 28% slower, separate high score. A wall-kick climber. You cling to one side of a winding basalt shaft and every jump kicks you across to the other wall a little higher up; hang on too long and your grip drains until you slide, faster on the red-hot patches. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
     colors: ['#171b1c', '#2123ee'], tags: ['climbing', 'wall-jump', 'volcano', 'zen', 'remix'] });
 
   V('volleyball-blobs', { id: 'volleyball-blobs-hyper', title: 'Blob Volleyball Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Bouncy one-on-one, first to 15 at 170% speed',
-    description: 'Blob Volleyball Hyper is Blob Volleyball with the clock running 70% faster. One-on-one volleyball between two wobbling blobs on an evening beach, first to 15. The ball inherits your blob’s motion, so the spike is all timing: rise into the ball at the net and it comes down steep on the far side. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Blob Volleyball record.',
+    description: 'Hyper edition of Blob Volleyball: same mechanics, 1.7× game speed, separate leaderboard. One-on-one volleyball between two wobbling blobs on an evening beach, first to 15. The ball inherits your blob’s motion, so the spike is all timing: rise into the ball at the net and it comes down steep on the far side. The best runs come from reading two hazards ahead rather than one — the original rewards that, this one demands it.',
     colors: ['#ff6dce', '#4cc8df'], tags: ['volleyball', 'blob', 'vs cpu', 'hyper', 'remix'] });
 
   V('volleyball-blobs', { id: 'volleyball-blobs-turbo', title: 'Blob Volleyball Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
     tagline: 'Bouncy one-on-one, first to 15 — a third faster',
-    description: 'The same Blob Volleyball, wound up: everything moves at 135% speed and the reaction windows shrink to match. One-on-one volleyball between two wobbling blobs on an evening beach, first to 15. The ball inherits your blob’s motion, so the spike is all timing: rise into the ball at the net and it comes down steep on the far side. Nothing about the rules changes — only how long you get to respond. A score that felt routine in Blob Volleyball is worth something on the Turbo leaderboard.',
+    description: 'Turbo edition of Blob Volleyball: identical mechanics, 35% more speed, its own leaderboard. One-on-one volleyball between two wobbling blobs on an evening beach, first to 15. The ball inherits your blob’s motion, so the spike is all timing: rise into the ball at the net and it comes down steep on the far side. The trick is to stop reacting to individual threats and start reading the pattern a beat ahead — the original taught you the pattern, this one tests whether you learned it.',
     colors: ['#6dffb6', '#d97d52'], tags: ['volleyball', 'blob', 'vs cpu', 'turbo', 'remix'] });
 
   V('volleyball-blobs', { id: 'volleyball-blobs-zen', title: 'Blob Volleyball Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Bouncy one-on-one, first to 15, at three-quarter pace',
-    description: 'Blob Volleyball at a gentler pace. One-on-one volleyball between two wobbling blobs on an evening beach, first to 15. The ball inherits your blob’s motion, so the spike is all timing: rise into the ball at the net and it comes down steep on the far side. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Blob Volleyball.',
+    description: 'A slow-motion cut of Blob Volleyball, tinted cool. One-on-one volleyball between two wobbling blobs on an evening beach, first to 15. The ball inherits your blob’s motion, so the spike is all timing: rise into the ball at the net and it comes down steep on the far side. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
     colors: ['#747ff8', '#7dca61'], tags: ['volleyball', 'blob', 'vs cpu', 'zen', 'remix'] });
 
   V('wall-jumper', { id: 'wall-jumper-hyper', title: 'Wall Jumper Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Kick between the walls, outrun the spikes at 170% speed',
-    description: 'The frantic edition of Wall Jumper. Cling to a wall and you slide slowly down it; tap and you kick off in a flat arc to the opposite wall, gaining a little height with every crossing. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
+    description: 'Everything in Wall Jumper at 1.7× speed. Cling to a wall and you slide slowly down it; tap and you kick off in a flat arc to the opposite wall, gaining a little height with every crossing. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
     colors: ['#0c8302', '#fc731f'], tags: ['endless', 'climbing', 'one tap', 'hyper', 'remix'] });
 
   V('wall-jumper', { id: 'wall-jumper-turbo', title: 'Wall Jumper Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
     tagline: 'Kick between the walls, outrun the spikes — a third faster',
-    description: 'Wall Jumper, but hurried. Cling to a wall and you slide slowly down it; tap and you kick off in a flat arc to the opposite wall, gaining a little height with every crossing. With the clock running a third faster, hazards bunch up and openings close sooner, and the scoring that ramps in the original ramps here too — just quicker. Separate best score, same controls.',
+    description: 'The same Wall Jumper, wound up: everything moves at 135% speed and the reaction windows shrink to match. Cling to a wall and you slide slowly down it; tap and you kick off in a flat arc to the opposite wall, gaining a little height with every crossing. Nothing about the rules changes — only how long you get to respond. A score that felt routine in Wall Jumper is worth something on the Turbo leaderboard.',
     colors: ['#7e0773', '#2884f3'], tags: ['endless', 'climbing', 'one tap', 'turbo', 'remix'] });
 
   V('wall-jumper', { id: 'wall-jumper-zen', title: 'Wall Jumper Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Kick between the walls, outrun the spikes, at three-quarter pace',
-    description: 'Zen edition of Wall Jumper: identical rules, 28% slower, separate high score. Cling to a wall and you slide slowly down it; tap and you kick off in a flat arc to the opposite wall, gaining a little height with every crossing. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
+    description: 'Wall Jumper Zen slows Wall Jumper to about three-quarter speed and gives it a calmer palette. Cling to a wall and you slide slowly down it; tap and you kick off in a flat arc to the opposite wall, gaining a little height with every crossing. With more time between decisions it becomes a game about planning rather than twitch — good for learning the patterns, or for playing one-handed with a coffee. Zen has its own best score.',
     colors: ['#714314', '#d73edd'], tags: ['endless', 'climbing', 'one tap', 'zen', 'remix'] });
 
   V('war-cards', { id: 'war-cards-hyper', title: 'War Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Highest card takes the pot at 170% speed',
-    description: 'The frantic edition of War. The simplest card game there is, and strangely hard to stop playing. The deck splits in two, you each flip one card, and the higher rank takes both. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
+    description: 'Everything in War at 1.7× speed. The simplest card game there is, and strangely hard to stop playing. The deck splits in two, you each flip one card, and the higher rank takes both. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
     colors: ['#0e1434', '#af67ff'], tags: ['cards', 'luck', 'quick', 'hyper', 'remix'] });
 
   V('war-cards', { id: 'war-cards-turbo', title: 'War Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
     tagline: 'Highest card takes the pot — a third faster',
-    description: 'War, but hurried. The simplest card game there is, and strangely hard to stop playing. The deck splits in two, you each flip one card, and the higher rank takes both. With the clock running a third faster, hazards bunch up and openings close sooner, and the scoring that ramps in the original ramps here too — just quicker. Separate best score, same controls.',
+    description: 'The same War, wound up: everything moves at 135% speed and the reaction windows shrink to match. The simplest card game there is, and strangely hard to stop playing. The deck splits in two, you each flip one card, and the higher rank takes both. Nothing about the rules changes — only how long you get to respond. A score that felt routine in War is worth something on the Turbo leaderboard.',
     colors: ['#323210', '#9efe68'], tags: ['cards', 'luck', 'quick', 'turbo', 'remix'] });
 
   V('war-cards', { id: 'war-cards-zen', title: 'War Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Highest card takes the pot, at three-quarter pace',
-    description: 'Zen edition of War: identical rules, 28% slower, separate high score. The simplest card game there is, and strangely hard to stop playing. The deck splits in two, you each flip one card, and the higher rank takes both. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
+    description: 'War Zen slows War to about three-quarter speed and gives it a calmer palette. The simplest card game there is, and strangely hard to stop playing. The deck splits in two, you each flip one card, and the higher rank takes both. With more time between decisions it becomes a game about planning rather than twitch — good for learning the patterns, or for playing one-handed with a coffee. Zen has its own best score.',
     colors: ['#132f1f', '#79e6ee'], tags: ['cards', 'luck', 'quick', 'zen', 'remix'] });
 
   V('water-sort', { id: 'water-sort-hyper', title: 'Water Sort Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Pour until every tube is one colour at 170% speed',
-    description: 'Water Sort Hyper is Water Sort with the clock running 70% faster. Tubes of stacked coloured liquid, jumbled up. Pour from one to another to sort them — but liquid only pours onto the same colour or into an empty tube, and a whole run of matching colour moves at once. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Water Sort record.',
+    description: 'Hyper edition of Water Sort: same mechanics, 1.7× game speed, separate leaderboard. Tubes of stacked coloured liquid, jumbled up. Pour from one to another to sort them — but liquid only pours onto the same colour or into an empty tube, and a whole run of matching colour moves at once. The best runs come from reading two hazards ahead rather than one — the original rewards that, this one demands it.',
     colors: ['#09342c', '#11ff31'], tags: ['sorting', 'logic', 'relaxing', 'hyper', 'remix'] });
 
   V('water-sort', { id: 'water-sort-turbo', title: 'Water Sort Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
     tagline: 'Pour until every tube is one colour — a third faster',
-    description: 'The same Water Sort, wound up: everything moves at 135% speed and the reaction windows shrink to match. Tubes of stacked coloured liquid, jumbled up. Pour from one to another to sort them — but liquid only pours onto the same colour or into an empty tube, and a whole run of matching colour moves at once. Nothing about the rules changes — only how long you get to respond. A score that felt routine in Water Sort is worth something on the Turbo leaderboard.',
+    description: 'Turbo edition of Water Sort: identical mechanics, 35% more speed, its own leaderboard. Tubes of stacked coloured liquid, jumbled up. Pour from one to another to sort them — but liquid only pours onto the same colour or into an empty tube, and a whole run of matching colour moves at once. The trick is to stop reacting to individual threats and start reading the pattern a beat ahead — the original taught you the pattern, this one tests whether you learned it.',
     colors: ['#330a0c', '#fd13b7'], tags: ['sorting', 'logic', 'relaxing', 'turbo', 'remix'] });
 
   V('water-sort', { id: 'water-sort-zen', title: 'Water Sort Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Pour until every tube is one colour, at three-quarter pace',
-    description: 'Water Sort at a gentler pace. Tubes of stacked coloured liquid, jumbled up. Pour from one to another to sort them — but liquid only pours onto the same colour or into an empty tube, and a whole run of matching colour moves at once. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Water Sort.',
+    description: 'A slow-motion cut of Water Sort, tinted cool. Tubes of stacked coloured liquid, jumbled up. Pour from one to another to sort them — but liquid only pours onto the same colour or into an empty tube, and a whole run of matching colour moves at once. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
     colors: ['#222e0f', '#e4b02c'], tags: ['sorting', 'logic', 'relaxing', 'zen', 'remix'] });
 
   V('whack-a-mole', { id: 'whack-a-mole-hyper', title: 'Whack-a-Mole Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Bop the moles, dodge the spikes at 170% speed',
-    description: 'Hyper edition of Whack-a-Mole: same mechanics, 1.7× game speed, separate leaderboard. Forty-five seconds of moles popping out of holes. Every brown mole you hit builds a combo worth more points, but the spiky green ones cost you 25 and reset the combo — as does swinging at nothing. The best runs come from reading two hazards ahead rather than one — the original rewards that, this one demands it.',
+    description: 'Whack-a-Mole, seventy percent faster, in a hotter palette. Forty-five seconds of moles popping out of holes. Every brown mole you hit builds a combo worth more points, but the spiky green ones cost you 25 and reset the combo — as does swinging at nothing. Hyper strips out the breathing room the original gives you; what is left is pure pattern recognition and commitment. Practise in Zen or the original, then come here to see how far it holds.',
     colors: ['#95326f', '#85692b'], tags: ['reflex', 'timed', 'clicking', 'hyper', 'remix'] });
 
   V('whack-a-mole', { id: 'whack-a-mole-turbo', title: 'Whack-a-Mole Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
     tagline: 'Bop the moles, dodge the spikes — a third faster',
-    description: 'Whack-a-Mole Turbo is Whack-a-Mole with game time running about a third faster. Forty-five seconds of moles popping out of holes. Every brown mole you hit builds a combo worth more points, but the spiky green ones cost you 25 and reset the combo — as does swinging at nothing. At this pace the same patterns arrive before you have finished reading them, so the safe routes of the original become gambles here. Turbo keeps its own best score, separate from Whack-a-Mole.',
+    description: 'Whack-a-Mole, but hurried. Forty-five seconds of moles popping out of holes. Every brown mole you hit builds a combo worth more points, but the spiky green ones cost you 25 and reset the combo — as does swinging at nothing. With the clock running a third faster, hazards bunch up and openings close sooner, and the scoring that ramps in the original ramps here too — just quicker. Separate best score, same controls.',
     colors: ['#369168', '#2f3a81'], tags: ['reflex', 'timed', 'clicking', 'turbo', 'remix'] });
 
   V('whack-a-mole', { id: 'whack-a-mole-zen', title: 'Whack-a-Mole Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Bop the moles, dodge the spikes, at three-quarter pace',
-    description: 'The relaxed version of Whack-a-Mole. Forty-five seconds of moles popping out of holes. Every brown mole you hit builds a combo worth more points, but the spiky green ones cost you 25 and reset the combo — as does swinging at nothing. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
+    description: 'Whack-a-Mole at a gentler pace. Forty-five seconds of moles popping out of holes. Every brown mole you hit builds a combo worth more points, but the spiky green ones cost you 25 and reset the combo — as does swinging at nothing. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Whack-a-Mole.',
     colors: ['#404387', '#783866'], tags: ['reflex', 'timed', 'clicking', 'zen', 'remix'] });
 
   V('wind-glider', { id: 'wind-glider-hyper', title: 'Wind Glider Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Speed is life — thermals are free at 170% speed',
-    description: 'Wind Glider Hyper is Wind Glider with the clock running 70% faster. A hang-glider run down an endless desert canyon. Holding pulls the nose up and trades airspeed for height; releasing dives and trades it back — let the speed readout drop under 40 km/h and the wing stalls, nose-down, until you dive out of it. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Wind Glider record.',
+    description: 'Hyper edition of Wind Glider: same mechanics, 1.7× game speed, separate leaderboard. A hang-glider run down an endless desert canyon. Holding pulls the nose up and trades airspeed for height; releasing dives and trades it back — let the speed readout drop under 40 km/h and the wing stalls, nose-down, until you dive out of it. The best runs come from reading two hazards ahead rather than one — the original rewards that, this one demands it.',
     colors: ['#ff205e', '#ab0180'], tags: ['endless', 'glider', 'one button', 'hyper', 'remix'] });
 
   V('wind-glider', { id: 'wind-glider-turbo', title: 'Wind Glider Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
     tagline: 'Speed is life — thermals are free — a third faster',
-    description: 'The same Wind Glider, wound up: everything moves at 135% speed and the reaction windows shrink to match. A hang-glider run down an endless desert canyon. Holding pulls the nose up and trades airspeed for height; releasing dives and trades it back — let the speed readout drop under 40 km/h and the wing stalls, nose-down, until you dive out of it. Nothing about the rules changes — only how long you get to respond. A score that felt routine in Wind Glider is worth something on the Turbo leaderboard.',
+    description: 'Turbo edition of Wind Glider: identical mechanics, 35% more speed, its own leaderboard. A hang-glider run down an endless desert canyon. Holding pulls the nose up and trades airspeed for height; releasing dives and trades it back — let the speed readout drop under 40 km/h and the wing stalls, nose-down, until you dive out of it. The trick is to stop reacting to individual threats and start reading the pattern a beat ahead — the original taught you the pattern, this one tests whether you learned it.',
     colors: ['#20ffe6', '#08a449'], tags: ['endless', 'glider', 'one button', 'turbo', 'remix'] });
 
   V('wind-glider', { id: 'wind-glider-zen', title: 'Wind Glider Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Speed is life — thermals are free, at three-quarter pace',
-    description: 'Wind Glider at a gentler pace. A hang-glider run down an endless desert canyon. Holding pulls the nose up and trades airspeed for height; releasing dives and trades it back — let the speed readout drop under 40 km/h and the wing stalls, nose-down, until you dive out of it. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Wind Glider.',
+    description: 'A slow-motion cut of Wind Glider, tinted cool. A hang-glider run down an endless desert canyon. Holding pulls the nose up and trades airspeed for height; releasing dives and trades it back — let the speed readout drop under 40 km/h and the wing stalls, nose-down, until you dive out of it. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
     colors: ['#6a2ff0', '#192d93'], tags: ['endless', 'glider', 'one button', 'zen', 'remix'] });
 
   V('word-grid', { id: 'word-grid-hyper', title: 'Word Grid Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Three minutes, sixteen letters at 170% speed',
-    description: 'Word Grid Hyper is Word Grid with the clock running 70% faster. A 4×4 tray of letter dice and three minutes on the clock. Drag through touching letters — diagonals count — to spell words, with no reusing a tile inside one word. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Word Grid record.',
+    description: 'Hyper edition of Word Grid: same mechanics, 1.7× game speed, separate leaderboard. A 4×4 tray of letter dice and three minutes on the clock. Drag through touching letters — diagonals count — to spell words, with no reusing a tile inside one word. The best runs come from reading two hazards ahead rather than one — the original rewards that, this one demands it.',
     colors: ['#112f37', '#ff5784'], tags: ['word', 'timed', 'boggle', 'hyper', 'remix'] });
 
   V('word-grid', { id: 'word-grid-turbo', title: 'Word Grid Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
     tagline: 'Three minutes, sixteen letters — a third faster',
-    description: 'The same Word Grid, wound up: everything moves at 135% speed and the reaction windows shrink to match. A 4×4 tray of letter dice and three minutes on the clock. Drag through touching letters — diagonals count — to spell words, with no reusing a tile inside one word. Nothing about the rules changes — only how long you get to respond. A score that felt routine in Word Grid is worth something on the Turbo leaderboard.',
+    description: 'Turbo edition of Word Grid: identical mechanics, 35% more speed, its own leaderboard. A 4×4 tray of letter dice and three minutes on the clock. Drag through touching letters — diagonals count — to spell words, with no reusing a tile inside one word. The trick is to stop reacting to individual threats and start reading the pattern a beat ahead — the original taught you the pattern, this one tests whether you learned it.',
     colors: ['#351f13', '#57ffee'], tags: ['word', 'timed', 'boggle', 'turbo', 'remix'] });
 
   V('word-grid', { id: 'word-grid-zen', title: 'Word Grid Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Three minutes, sixteen letters, at three-quarter pace',
-    description: 'Word Grid at a gentler pace. A 4×4 tray of letter dice and three minutes on the clock. Drag through touching letters — diagonals count — to spell words, with no reusing a tile inside one word. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Word Grid.',
+    description: 'A slow-motion cut of Word Grid, tinted cool. A 4×4 tray of letter dice and three minutes on the clock. Drag through touching letters — diagonals count — to spell words, with no reusing a tile inside one word. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
     colors: ['#1c3216', '#8f5ff7'], tags: ['word', 'timed', 'boggle', 'zen', 'remix'] });
 
   V('word-ladder', { id: 'word-ladder-hyper', title: 'Word Ladder Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'One letter at a time to the target at 170% speed',
-    description: 'Hyper edition of Word Ladder: same mechanics, 1.7× game speed, separate leaderboard. Climb from the starting word to the target by changing exactly one letter per step — and every rung has to be a real five-letter word. The best runs come from reading two hazards ahead rather than one — the original rewards that, this one demands it.',
+    description: 'Word Ladder, seventy percent faster, in a hotter palette. Climb from the starting word to the target by changing exactly one letter per step — and every rung has to be a real five-letter word. Hyper strips out the breathing room the original gives you; what is left is pure pattern recognition and commitment. Practise in Zen or the original, then come here to see how far it holds.',
     colors: ['#0e4226', '#69e720'], tags: ['word', 'brain', 'puzzle', 'hyper', 'remix'] });
 
   V('word-ladder', { id: 'word-ladder-turbo', title: 'Word Ladder Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
     tagline: 'One letter at a time to the target — a third faster',
-    description: 'Word Ladder Turbo is Word Ladder with game time running about a third faster. Climb from the starting word to the target by changing exactly one letter per step — and every rung has to be a real five-letter word. At this pace the same patterns arrive before you have finished reading them, so the safe routes of the original become gambles here. Turbo keeps its own best score, separate from Word Ladder.',
+    description: 'Word Ladder, but hurried. Climb from the starting word to the target by changing exactly one letter per step — and every rung has to be a real five-letter word. With the clock running a third faster, hazards bunch up and openings close sooner, and the scoring that ramps in the original ramps here too — just quicker. Separate best score, same controls.',
     colors: ['#401022', '#bb28df'], tags: ['word', 'brain', 'puzzle', 'turbo', 'remix'] });
 
   V('word-ladder', { id: 'word-ladder-zen', title: 'Word Ladder Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'One letter at a time to the target, at three-quarter pace',
-    description: 'The relaxed version of Word Ladder. Climb from the starting word to the target by changing exactly one letter per step — and every rung has to be a real five-letter word. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
+    description: 'Word Ladder at a gentler pace. Climb from the starting word to the target by changing exactly one letter per step — and every rung has to be a real five-letter word. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Word Ladder.',
     colors: ['#3a3b15', '#cb5b3c'], tags: ['word', 'brain', 'puzzle', 'zen', 'remix'] });
 
   V('word-search', { id: 'word-search-hyper', title: 'Word Search Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Nine words hidden in the letters at 170% speed',
-    description: 'Word Search, seventy percent faster, in a hotter palette. A 12×12 grid with nine words buried in it — horizontally, vertically or diagonally, and plenty of them written backwards. Drag from the first letter of a word to its last to claim it. Hyper strips out the breathing room the original gives you; what is left is pure pattern recognition and commitment. Practise in Zen or the original, then come here to see how far it holds.',
+    description: 'The frantic edition of Word Search. A 12×12 grid with nine words buried in it — horizontally, vertically or diagonally, and plenty of them written backwards. Drag from the first letter of a word to its last to claim it. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
     colors: ['#0d3f3a', '#69e720'], tags: ['word', 'searching', 'relaxing', 'hyper', 'remix'] });
 
   V('word-search', { id: 'word-search-turbo', title: 'Word Search Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
     tagline: 'Nine words hidden in the letters — a third faster',
-    description: 'Turbo edition of Word Search: identical mechanics, 35% more speed, its own leaderboard. A 12×12 grid with nine words buried in it — horizontally, vertically or diagonally, and plenty of them written backwards. Drag from the first letter of a word to its last to claim it. The trick is to stop reacting to individual threats and start reading the pattern a beat ahead — the original taught you the pattern, this one tests whether you learned it.',
+    description: 'A faster cut of Word Search. A 12×12 grid with nine words buried in it — horizontally, vertically or diagonally, and plenty of them written backwards. Drag from the first letter of a word to its last to claim it. Turbo multiplies game time by 1.35, which is enough to turn a comfortable rhythm into a proper reflex test without making it unfair. Learn the original first; bring the muscle memory here.',
     colors: ['#3d120f', '#bb28df'], tags: ['word', 'searching', 'relaxing', 'turbo', 'remix'] });
 
   V('word-search', { id: 'word-search-zen', title: 'Word Search Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Nine words hidden in the letters, at three-quarter pace',
-    description: 'Word Search Zen slows Word Search to about three-quarter speed and gives it a calmer palette. A 12×12 grid with nine words buried in it — horizontally, vertically or diagonally, and plenty of them written backwards. Drag from the first letter of a word to its last to claim it. With more time between decisions it becomes a game about planning rather than twitch — good for learning the patterns, or for playing one-handed with a coffee. Zen has its own best score.',
+    description: 'The relaxed version of Word Search. A 12×12 grid with nine words buried in it — horizontally, vertically or diagonally, and plenty of them written backwards. Drag from the first letter of a word to its last to claim it. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
     colors: ['#273814', '#cb5b3c'], tags: ['word', 'searching', 'relaxing', 'zen', 'remix'] });
 
   V('wrecking-ball', { id: 'wrecking-ball-hyper', title: 'Wrecking Ball Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Wind up, let go, flatten the tower at 170% speed',
-    description: 'The frantic edition of Wrecking Ball. Hold to haul the crane ball back and release to send it swinging into the block towers. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
+    description: 'Everything in Wrecking Ball at 1.7× speed. Hold to haul the crane ball back and release to send it swinging into the block towers. Hyper is for players who have the original memorised and want a version where every run is a sprint; survival past the first minute is an achievement, and the leaderboard is separate.',
     colors: ['#c8e4d7', '#ff1040'], tags: ['physics', 'destruction', 'crane', 'hyper', 'remix'] });
 
   V('wrecking-ball', { id: 'wrecking-ball-turbo', title: 'Wrecking Ball Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
     tagline: 'Wind up, let go, flatten the tower — a third faster',
-    description: 'Wrecking Ball, but hurried. Hold to haul the crane ball back and release to send it swinging into the block towers. With the clock running a third faster, hazards bunch up and openings close sooner, and the scoring that ramps in the original ramps here too — just quicker. Separate best score, same controls.',
+    description: 'The same Wrecking Ball, wound up: everything moves at 135% speed and the reaction windows shrink to match. Hold to haul the crane ball back and release to send it swinging into the block towers. Nothing about the rules changes — only how long you get to respond. A score that felt routine in Wrecking Ball is worth something on the Turbo leaderboard.',
     colors: ['#e3c9d1', '#10fff7'], tags: ['physics', 'destruction', 'crane', 'turbo', 'remix'] });
 
   V('wrecking-ball', { id: 'wrecking-ball-zen', title: 'Wrecking Ball Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Wind up, let go, flatten the tower, at three-quarter pace',
-    description: 'Zen edition of Wrecking Ball: identical rules, 28% slower, separate high score. Hold to haul the crane ball back and release to send it swinging into the block towers. Ideal when you want the loop without the adrenaline — or when you want to see exactly how a pattern works before facing it at full speed.',
+    description: 'Wrecking Ball Zen slows Wrecking Ball to about three-quarter speed and gives it a calmer palette. Hold to haul the crane ball back and release to send it swinging into the block towers. With more time between decisions it becomes a game about planning rather than twitch — good for learning the patterns, or for playing one-handed with a coffee. Zen has its own best score.',
     colors: ['#dde0cc', '#6f20ef'], tags: ['physics', 'destruction', 'crane', 'zen', 'remix'] });
 
   V('ws-animals', { id: 'ws-animals-hyper', title: 'Word Search: Animals Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Ten beasts per grid, GIRAFFE to SKUNK at 170% speed',
-    description: 'Word Search: Animals Hyper is Word Search: Animals with the clock running 70% faster. Ten animals from a thirty-strong list hide in a 12×12 grid — across, down, diagonal, and often spelled backwards. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Word Search: Animals record.',
+    description: 'Hyper edition of Word Search: Animals: same mechanics, 1.7× game speed, separate leaderboard. Ten animals from a thirty-strong list hide in a 12×12 grid — across, down, diagonal, and often spelled backwards. The best runs come from reading two hazards ahead rather than one — the original rewards that, this one demands it.',
     colors: ['#850256', '#ff205e'], tags: ['word', 'search', 'animals', 'hyper', 'remix'] });
 
   V('ws-animals', { id: 'ws-animals-turbo', title: 'Word Search: Animals Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
     tagline: 'Ten beasts per grid, GIRAFFE to SKUNK — a third faster',
-    description: 'The same Word Search: Animals, wound up: everything moves at 135% speed and the reaction windows shrink to match. Ten animals from a thirty-strong list hide in a 12×12 grid — across, down, diagonal, and often spelled backwards. Nothing about the rules changes — only how long you get to respond. A score that felt routine in Word Search: Animals is worth something on the Turbo leaderboard.',
+    description: 'Turbo edition of Word Search: Animals: identical mechanics, 35% more speed, its own leaderboard. Ten animals from a thirty-strong list hide in a 12×12 grid — across, down, diagonal, and often spelled backwards. The trick is to stop reacting to individual threats and start reading the pattern a beat ahead — the original taught you the pattern, this one tests whether you learned it.',
     colors: ['#078047', '#20ffe6'], tags: ['word', 'search', 'animals', 'turbo', 'remix'] });
 
   V('ws-animals', { id: 'ws-animals-zen', title: 'Word Search: Animals Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Ten beasts per grid, GIRAFFE to SKUNK, at three-quarter pace',
-    description: 'Word Search: Animals at a gentler pace. Ten animals from a thirty-strong list hide in a 12×12 grid — across, down, diagonal, and often spelled backwards. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Word Search: Animals.',
+    description: 'A slow-motion cut of Word Search: Animals, tinted cool. Ten animals from a thirty-strong list hide in a 12×12 grid — across, down, diagonal, and often spelled backwards. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
     colors: ['#141973', '#6a2ff0'], tags: ['word', 'search', 'animals', 'zen', 'remix'] });
 
   V('zig-zag', { id: 'zig-zag-hyper', title: 'Zig Zag Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'One tap to turn, don’t fall off at 170% speed',
-    description: 'Zig Zag, seventy percent faster, in a hotter palette. A ball rolls along a narrow zig-zagging path with nothing either side of it. Every tap switches your direction ninety degrees — the whole game is knowing exactly when. Hyper strips out the breathing room the original gives you; what is left is pure pattern recognition and commitment. Practise in Zen or the original, then come here to see how far it holds.',
+    description: 'The frantic edition of Zig Zag. A ball rolls along a narrow zig-zagging path with nothing either side of it. Every tap switches your direction ninety degrees — the whole game is knowing exactly when. With game time at 170%, hazards stack, gaps close early and there is no slack for a bad first move — but the scoring runs just as fast, so short runs can still post big numbers. Own high-score table.',
     colors: ['#062a22', '#11ff31'], tags: ['one tap', 'reflex', 'endless', 'hyper', 'remix'] });
 
   V('zig-zag', { id: 'zig-zag-turbo', title: 'Zig Zag Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
     tagline: 'One tap to turn, don’t fall off — a third faster',
-    description: 'Turbo edition of Zig Zag: identical mechanics, 35% more speed, its own leaderboard. A ball rolls along a narrow zig-zagging path with nothing either side of it. Every tap switches your direction ninety degrees — the whole game is knowing exactly when. The trick is to stop reacting to individual threats and start reading the pattern a beat ahead — the original taught you the pattern, this one tests whether you learned it.',
+    description: 'A faster cut of Zig Zag. A ball rolls along a narrow zig-zagging path with nothing either side of it. Every tap switches your direction ninety degrees — the whole game is knowing exactly when. Turbo multiplies game time by 1.35, which is enough to turn a comfortable rhythm into a proper reflex test without making it unfair. Learn the original first; bring the muscle memory here.',
     colors: ['#280809', '#fd13b7'], tags: ['one tap', 'reflex', 'endless', 'turbo', 'remix'] });
 
   V('zig-zag', { id: 'zig-zag-zen', title: 'Zig Zag Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'One tap to turn, don’t fall off, at three-quarter pace',
-    description: 'Zig Zag Zen slows Zig Zag to about three-quarter speed and gives it a calmer palette. A ball rolls along a narrow zig-zagging path with nothing either side of it. Every tap switches your direction ninety degrees — the whole game is knowing exactly when. With more time between decisions it becomes a game about planning rather than twitch — good for learning the patterns, or for playing one-handed with a coffee. Zen has its own best score.',
+    description: 'The relaxed version of Zig Zag. A ball rolls along a narrow zig-zagging path with nothing either side of it. Every tap switches your direction ninety degrees — the whole game is knowing exactly when. Game time runs at 72% of normal, so everything that felt urgent in the original becomes readable, and long runs are about consistency rather than reflexes. Separate leaderboard, same controls.',
     colors: ['#1b250b', '#e4b02c'], tags: ['one tap', 'reflex', 'endless', 'zen', 'remix'] });
 
   V('zombie-siege', { id: 'zombie-siege-hyper', title: 'Zombie Siege Hyper', emo: '🔥', speed: 1.7, hue: 300, sat: 1.25,
     tagline: 'Hold the farmhouse against the horde at 170% speed',
-    description: 'Zombie Siege Hyper is Zombie Siege with the clock running 70% faster. Zombies pour in from every edge, and half of them ignore you completely to chew through the farmhouse windows. Kill for ammo drops, then spend the short break between waves standing next to broken windows to hammer boards back on. This is the expert cut: openings that lasted a comfortable half-second in the original are gone in a blink, and the difficulty ramp compounds on top. Hyper keeps its own best score — expect it to be a fraction of your Zombie Siege record.',
+    description: 'Hyper edition of Zombie Siege: same mechanics, 1.7× game speed, separate leaderboard. Zombies pour in from every edge, and half of them ignore you completely to chew through the farmhouse windows. Kill for ammo drops, then spend the short break between waves standing next to broken windows to hammer boards back on. The best runs come from reading two hazards ahead rather than one — the original rewards that, this one demands it.',
     colors: ['#312e17', '#cf934d'], tags: ['zombies', 'shooter', 'waves', 'hyper', 'remix'] });
 
   V('zombie-siege', { id: 'zombie-siege-turbo', title: 'Zombie Siege Turbo', emo: '⚡', speed: 1.35, hue: 130, sat: 1.15,
     tagline: 'Hold the farmhouse against the horde — a third faster',
-    description: 'The same Zombie Siege, wound up: everything moves at 135% speed and the reaction windows shrink to match. Zombies pour in from every edge, and half of them ignore you completely to chew through the farmhouse windows. Kill for ammo drops, then spend the short break between waves standing next to broken windows to hammer boards back on. Nothing about the rules changes — only how long you get to respond. A score that felt routine in Zombie Siege is worth something on the Turbo leaderboard.',
+    description: 'Turbo edition of Zombie Siege: identical mechanics, 35% more speed, its own leaderboard. Zombies pour in from every edge, and half of them ignore you completely to chew through the farmhouse windows. Kill for ammo drops, then spend the short break between waves standing next to broken windows to hammer boards back on. The trick is to stop reacting to individual threats and start reading the pattern a beat ahead — the original taught you the pattern, this one tests whether you learned it.',
     colors: ['#1a1830', '#5275ca'], tags: ['zombies', 'shooter', 'waves', 'turbo', 'remix'] });
 
   V('zombie-siege', { id: 'zombie-siege-zen', title: 'Zombie Siege Zen', emo: '🧘', speed: 0.72, hue: 215, sat: 0.9,
     tagline: 'Hold the farmhouse against the horde, at three-quarter pace',
-    description: 'Zombie Siege at a gentler pace. Zombies pour in from every edge, and half of them ignore you completely to chew through the farmhouse windows. Kill for ammo drops, then spend the short break between waves standing next to broken windows to hammer boards back on. Zen is the same game with the clock dialled down — a way to enjoy the mechanics without the pressure, and the best place to work out strategies you can then take back to the original. Scores are kept apart from Zombie Siege.',
+    description: 'A slow-motion cut of Zombie Siege, tinted cool. Zombies pour in from every edge, and half of them ignore you completely to chew through the farmhouse windows. Kill for ammo drops, then spend the short break between waves standing next to broken windows to hammer boards back on. At three-quarter speed the difficulty ramp still arrives, it just takes its time, so runs last longer and higher scores are realistic for newer players. Your Zen best is tracked on its own.',
     colors: ['#2d1b24', '#bd5fb1'], tags: ['zombies', 'shooter', 'waves', 'zen', 'remix'] });
 })();

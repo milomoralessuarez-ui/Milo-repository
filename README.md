@@ -60,6 +60,19 @@ Some things worth calling out:
   three circuits built from Catmull-Rom splines, ordered checkpoints, three-lap
   races against the clock, a light drift at speed, a chase camera, and best
   times per track. Searching "polytrack" or "poly track" finds it.
+- **Turbo Drift** is a low-poly 3D racer over **50 grand-prix circuits** —
+  long straights into braking corners, chicanes, banked sweepers, tunnels and
+  ramps that jump gaps in the road. Five red lights start every race F1-style,
+  each lap splits into three timed sectors against your personal bests, and you
+  start at the back of a 19-car grid. The tracks are generated from seeds rather
+  than hand-drawn, so `tools/verify-tracks.mjs` checks every one is raceable —
+  closed loop, no overlapping stretches, no corner tighter than the car's
+  turning circle, no jump without a ramp steep enough to clear it. Run it before
+  changing any seed:
+
+  ```bash
+  node tools/verify-tracks.mjs
+  ```
 - **The quizzes** each draw twelve questions from a hand-written bank of
   twenty or more, with a per-question timer, streak bonuses and three lives.
 - **The solitaires** implement the real rules of twelve variants on a shared
