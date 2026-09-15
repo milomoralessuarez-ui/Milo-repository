@@ -31,7 +31,7 @@ worker (offline play) and for high scores to persist reliably.
 
 ## The games
 
-**378 originals** written for this site, plus **622 remixes** of the arcade
+**381 originals** written for this site, plus **619 remixes** of the arcade
 originals (see [Remixes](#remixes)). Every game has its own page with a
 description of how it actually plays, its controls, a high-score table, and
 its other versions.
