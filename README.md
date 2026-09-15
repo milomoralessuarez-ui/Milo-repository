@@ -71,6 +71,28 @@ official pages.
 
 ---
 
+## ChemQuest — study site
+
+`study/` is a separate, self-contained study app (Quizlet / Blooket style) built
+from the General Chemistry Concept 1–4 notes: lab safety and equipment,
+measurement, dimensional analysis and scientific notation, and the scientific
+method. Open `study/index.html` (or `/study/` on the deployed site).
+
+| Mode | What it does |
+|---|---|
+| **Flashcards** | Flip through every term; sort into "know" / "still learning", star the hard ones |
+| **Learn** | Adaptive rounds of multiple choice, true/false and typed answers until every item is mastered |
+| **Test** | Graded practice test (10 / 20 / 30 / all questions) with an explanation for each question |
+| **Match** | Race the clock pairing terms with definitions |
+| **Gold Quest** | Blooket-style: answer to open chests, swap or steal gold, beat the bots |
+| **Blitz** | Rapid-fire questions where speed and streaks multiply your score |
+| **Study guide** | Every term and question with its answer, grouped by topic and searchable |
+
+Progress, starred terms and best scores are saved in `localStorage`. All content
+lives in `study/data.js`; the app itself is `study/app.js` and `study/style.css`.
+
+---
+
 ## How it fits together
 
 ```
