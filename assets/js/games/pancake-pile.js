@@ -107,10 +107,10 @@
         d.plate.v = (d.plate.x - px) / Math.max(dt, .0001);
 
         // wobble: a spring that turns unstable as the tower grows
-        var hf = Math.min(1.25, d.stack.length / 22);
+        var hf = Math.min(1.6, d.stack.length / 18);
         var syr = d.syrup > 0;
-        d.omega += (-9.5 * d.lean + 12 * d.lean * hf) * dt;
-        d.omega -= d.plate.v * 0.0055 * (0.5 + hf) * dt * 60;
+        d.omega += (-10 * d.lean + 9 * d.lean * hf) * dt;
+        d.omega -= d.plate.v * 0.0016 * (0.15 + hf * 0.55) * dt;
         d.omega *= Math.pow(syr ? 0.03 : 0.45, dt);
         d.lean += d.omega * dt;
         if (d.syrup > 0) d.syrup -= dt;
@@ -216,12 +216,12 @@
         c.fillStyle = '#cbd5e1';
         c.beginPath(); c.ellipse(0, -2, PLATEW / 2, 9, 0, 0, 7); c.fill();
 
-        var topple = d.dead ? d.lean * 1.6 : 0;
+        var fallA = d.dead ? d.lean * 1.6 : 0;
         for (var i = 0; i < d.stack.length; i++) {
           var s = d.stack[i];
           var hy = -8 - i * PH;
-          var lx = s.off + (d.lean + topple) * (i + 1) * PH * 1.05;
-          pancake(lx, hy, (d.lean + topple) * .5, PLATEW - 14, s.gold, s.shade);
+          var lx = s.off + (d.lean + fallA) * (i + 1) * PH * 1.05;
+          pancake(lx, hy, (d.lean + fallA) * .5, PLATEW - 14, s.gold, s.shade);
         }
 
         // butter and syrup on top
@@ -307,7 +307,7 @@
         d.banner = { text: 'SYRUP! +' + gain, t: 1.2, col: '#f7b733' };
         Milo.sound.powerup();
       }
-      d.omega += off * 0.022 * (0.4 + hf);
+      d.omega += off * 0.004 * (0.4 + hf);
       g.score += gain;
       g.set('Score', U.fmt(g.score));
       for (var i = 0; i < 6; i++) {
