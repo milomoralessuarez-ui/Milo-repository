@@ -52,7 +52,9 @@ build is still standing when you come back.
 style circuits** — long straights into braking corners, chicanes, banked
 sweepers, tunnels, and ramps that jump gaps in the road. Five red lights start
 every race F1-style, and each lap splits into three timed sectors against
-your personal bests. You
+your personal bests. Handling runs on a real vehicle model — slip-angle
+tyres, load transfer, aero downforce and a seven-speed gearbox — rather than
+on velocity nudges. You
 start at the back of the grid with the fastest rivals on pole, grandstands full
 of fans line the straights, and every race runs past **two minutes** even in
 the fastest fully-tuned car. The tracks are
