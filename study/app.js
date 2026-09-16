@@ -35,6 +35,17 @@ const fmtSecs = (ms) => (ms / 1000).toFixed(1) + 's';
 const pct = (n, d) => (d ? Math.round((100 * n) / d) : 0);
 const uniqBy = (arr, fn) => { const seen = new Set(); return arr.filter((x) => { const k = fn(x); if (seen.has(k)) return false; seen.add(k); return true; }); };
 
+/* Every delayed callback is registered here so leaving a view (back button,
+   a link, a new mode) cannot let a win chime, a confetti burst or an auto
+   advance fire over whatever the student is looking at next. */
+const timers = new Set();
+function later(fn, ms) {
+  const id = setTimeout(() => { timers.delete(id); fn(); }, ms);
+  timers.add(id);
+  return id;
+}
+function clearTimers() { for (const id of timers) clearTimeout(id); timers.clear(); }
+
 let toastTimer = 0;
 function toast(msg) {
   const t = $('#toast');
@@ -51,24 +62,42 @@ function confetti(n = 90) {
     box.append(el('i', { style: `left:${Math.random() * 100}%;background:${pick(colors)};animation-duration:${1.6 + Math.random() * 1.6}s;animation-delay:${Math.random() * .6}s;transform:rotate(${Math.random() * 360}deg)` }));
   }
   document.body.append(box);
-  setTimeout(() => box.remove(), 3600);
+  later(() => box.remove(), 3600);
 }
 
 function floatText(txt, color) {
   const f = el('div', { class: 'float', style: `color:${color || 'var(--good)'}` }, txt);
   document.body.append(f);
-  setTimeout(() => f.remove(), 950);
+  later(() => f.remove(), 950);
 }
 
 /* --------------------------------------------------------------- state */
 const KEY = 'chemquest:v1';
 function loadState() { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch { return {}; } }
-const state = Object.assign(
-  { theme: '', sound: true, starred: {}, mastery: {}, best: {}, stats: { answered: 0, correct: 0 }, prefs: {} },
-  loadState(),
-);
-state.starred ||= {}; state.mastery ||= {}; state.best ||= {}; state.prefs ||= {}; state.stats ||= { answered: 0, correct: 0 };
+/** Fill in anything a payload from an older version is missing. */
+function hydrate(raw) {
+  const s = Object.assign({ theme: '', sound: true, starred: {}, mastery: {}, best: {}, stats: {}, prefs: {} }, raw || {});
+  for (const k of ['starred', 'mastery', 'best', 'prefs', 'stats']) {
+    if (!s[k] || typeof s[k] !== 'object') s[k] = {};
+  }
+  s.stats.answered = Number(s.stats.answered) || 0;
+  s.stats.correct = Number(s.stats.correct) || 0;
+  return s;
+}
+const state = hydrate(loadState());
 function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch { /* storage may be unavailable */ } }
+
+// A second tab writing progress used to be invisible here, and the next save
+// from this tab would quietly overwrite it. Adopt the newer payload instead —
+// it is the most recent truth — keeping this tab's own view settings.
+window.addEventListener('storage', (e) => {
+  if (e.key !== KEY || !e.newValue) return;
+  const incoming = hydrate(JSON.parse(e.newValue || '{}'));
+  state.starred = incoming.starred;
+  state.mastery = incoming.mastery;
+  state.best = incoming.best;
+  state.stats = incoming.stats;
+});
 
 function bumpMastery(id, correct) {
   const m = state.mastery[id] || 0;
@@ -102,7 +131,7 @@ function tone(freq, dur, type = 'sine', gain = .08, when = 0) {
   if (!state.sound) return;
   try {
     actx ||= new (window.AudioContext || window.webkitAudioContext)();
-    if (actx.state === 'suspended') actx.resume();
+    if (actx.state === 'suspended') actx.resume().catch(() => { /* needs a gesture first */ });
     const o = actx.createOscillator(), g = actx.createGain();
     o.type = type; o.frequency.value = freq;
     o.connect(g); g.connect(actx.destination);
@@ -131,13 +160,22 @@ const META = {
   3: { emoji: '🔢', color: '#ffb020' },
   4: { emoji: '🔬', color: '#ff4d9d' },
 };
+/* Progress is keyed by these ids, so they are derived from the term's own text
+   rather than its position: re-generating data.js then keeps a student's
+   starred cards and mastery attached to the same terms instead of sliding them
+   onto whatever now sits at that index. */
+function textId(prefix, text) {
+  let h = 2166136261;
+  for (let i = 0; i < text.length; i++) { h ^= text.charCodeAt(i); h = Math.imul(h, 16777619); }
+  return `${prefix}-${(h >>> 0).toString(36)}`;
+}
 const SETS = (window.STUDY_SETS || []).map((s) => {
   const id = 'c' + s.concept;
   const meta = META[s.concept] || { emoji: '📘', color: '#7c5cff' };
   return {
     ...s, id, ...meta,
     short: `Concept ${s.concept}`,
-    terms: (s.terms || []).map((t, i) => ({ ...t, id: `${id}-t${i + 1}`, setId: id })),
+    terms: (s.terms || []).map((t) => ({ ...t, id: textId(`${id}-t`, t.term), setId: id })),
     questions: (s.questions || []).map((q) => ({ ...q, setId: id })),
   };
 });
@@ -246,11 +284,18 @@ function checkWritten(q, input) {
   if (answers.some((a) => a.length > 3 && (u === a + 's' || u + 's' === a))) return true;
   const un = parseNum(input);
   if (un) {
+    // Whether a unit is required comes from the question's own answer, not from
+    // whichever accepted variant happens to be a bare number: "373" is a fair
+    // answer to "convert 100 °C to Kelvin", but "373 °F" is a different claim.
+    const canon = parseNum(q.answer);
+    const wants = canon && canon.unit;
     for (const a of [q.answer, ...(q.accept || [])]) {
       const an = parseNum(a);
       if (!an) continue;
       const tol = Math.max(Math.abs(an.value) * 0.006, 1e-9);
-      if (Math.abs(an.value - un.value) <= tol && (!un.unit || !an.unit || un.unit === an.unit)) return true;
+      if (Math.abs(an.value - un.value) > tol) continue;
+      if (wants && un.unit && un.unit !== canon.unit && un.unit !== an.unit) continue;
+      return true;
     }
   }
   return false;
@@ -298,7 +343,7 @@ function renderHome() {
       el('div', { class: 'stat' }, el('b', {}, `${pct(state.stats.correct, state.stats.answered)}%`), el('span', {}, 'Accuracy')),
       el('div', { class: 'stat' }, el('b', {}, Object.keys(state.starred).length), el('span', {}, 'Starred')),
     ),
-    el('div', { class: 'section-title' }, 'Study sets'),
+    el('h2', { class: 'section-title' }, 'Study sets'),
   );
   const grid = el('div', { class: 'grid' });
   for (const s of [...SETS, ALL]) {
@@ -316,7 +361,7 @@ function renderHome() {
     ));
   }
   v.append(grid);
-  v.append(el('div', { class: 'section-title' }, 'How to study'));
+  v.append(el('h2', { class: 'section-title' }, 'How to study'));
   v.append(el('div', { class: 'grid modes' },
     ...MODES.map((m) => el('a', { class: `card mode${m.game ? ' game' : ''}`, href: `#/set/all/${m.id}`, style: `--c:${m.color}` },
       el('div', { class: 'ico' }, m.ico), el('h3', {}, m.name), el('p', {}, m.desc))),
@@ -349,7 +394,7 @@ function renderSet(set) {
         } }, 'Reset progress'),
       ),
     ),
-    el('div', { class: 'section-title' }, 'Study modes'),
+    el('h2', { class: 'section-title' }, 'Study modes'),
   );
   const grid = el('div', { class: 'grid modes' });
   for (const md of MODES) {
@@ -390,7 +435,7 @@ function renderFlashcards(set) {
       backBtn(set),
       el('button', { class: 'btn sm', onclick: () => { start(baseDeck(), true); toast('Shuffled'); } }, '🔀 Shuffle'),
       el('button', { class: `btn sm${prefs.defFirst ? ' primary' : ''}`, onclick: () => { prefs.defFirst = !prefs.defFirst; save(); flipped = false; draw(); } }, prefs.defFirst ? 'Definition first' : 'Term first'),
-      el('button', { class: `btn sm${prefs.starredOnly ? ' primary' : ''}`, onclick: () => { prefs.starredOnly = !prefs.starredOnly; save(); start(baseDeck()); } }, `⭐ Starred only (${set.terms.filter((x) => state.starred[x.id]).length})`),
+      el('button', { class: `btn sm${prefs.starredOnly ? ' primary' : ''}`, 'aria-pressed': prefs.starredOnly ? 'true' : 'false', onclick: () => { prefs.starredOnly = !prefs.starredOnly; save(); start(baseDeck()); } }, `⭐ Starred only (${set.terms.filter((x) => state.starred[x.id]).length})`),
     );
     wrap.append(toolbar);
     if (!deck.length) {
@@ -401,11 +446,17 @@ function renderFlashcards(set) {
     const t = deck[idx];
     const front = prefs.defFirst ? t.definition : t.term;
     const back = prefs.defFirst ? t.term : t.definition;
-    const star = el('button', { class: `flash-star${state.starred[t.id] ? ' on' : ''}`, 'aria-label': 'Star this card', onclick: (e) => { e.stopPropagation(); toggleStar(t.id); star.classList.toggle('on', !!state.starred[t.id]); star.textContent = state.starred[t.id] ? '★' : '☆'; } }, state.starred[t.id] ? '★' : '☆');
-    const card = el('div', { class: `flash${flipped ? ' flipped' : ''}${dir < 0 ? ' slide-left' : dir > 0 ? ' slide-right' : ''}`, role: 'button', tabindex: '0', 'aria-label': 'Flashcard, tap to flip', onclick: flip, onkeydown: (e) => { if (e.key === 'Enter') { e.preventDefault(); flip(); } } },
-      el('div', { class: 'flash-face front' }, el('span', { class: 'lbl' }, prefs.defFirst ? 'Definition' : 'Term'), el('div', { class: 'txt' }, front), el('span', { class: 'hint' }, 'tap to flip'), star),
-      el('div', { class: 'flash-face back' }, el('span', { class: 'lbl' }, prefs.defFirst ? 'Term' : 'Definition'), el('div', { class: 'txt' }, back), el('span', { class: 'hint' }, `${setOf(t.setId).short} · slide ${t.page}`)),
-    );
+    const star = el('button', { class: `flash-star${state.starred[t.id] ? ' on' : ''}`, 'aria-label': `Star "${t.term}"`, 'aria-pressed': state.starred[t.id] ? 'true' : 'false', onclick: (e) => { e.stopPropagation(); toggleStar(t.id); star.classList.toggle('on', !!state.starred[t.id]); star.setAttribute('aria-pressed', state.starred[t.id] ? 'true' : 'false'); star.textContent = state.starred[t.id] ? '★' : '☆'; } }, state.starred[t.id] ? '★' : '☆');
+    // The face turned away is hidden from assistive tech, so the card reads as
+    // the side actually showing — an aria-label here would replace that text.
+    const faceFront = el('div', { class: 'flash-face front', 'aria-hidden': flipped ? 'true' : null },
+      el('span', { class: 'lbl' }, prefs.defFirst ? 'Definition' : 'Term'), el('div', { class: 'txt' }, front),
+      el('span', { class: 'hint' }, 'tap to flip'), star);
+    const faceBack = el('div', { class: 'flash-face back', 'aria-hidden': flipped ? null : 'true' },
+      el('span', { class: 'lbl' }, prefs.defFirst ? 'Term' : 'Definition'), el('div', { class: 'txt' }, back),
+      el('span', { class: 'hint' }, `${setOf(t.setId).short} · slide ${t.page}`));
+    const card = el('div', { class: `flash${flipped ? ' flipped' : ''}${dir < 0 ? ' slide-left' : dir > 0 ? ' slide-right' : ''}`, role: 'button', tabindex: '0', 'aria-roledescription': 'flashcard', onclick: flip, onkeydown: (e) => { if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') { e.preventDefault(); flip(); } } },
+      faceFront, faceBack);
     dir = 0;
     wrap.append(
       el('div', { class: 'flash-tally' }, el('span', { class: 'bad' }, `Still learning: ${learning.size}`), el('span', {}, `${idx + 1} / ${deck.length}`), el('span', { class: 'good' }, `Know: ${know.size}`)),
@@ -421,7 +472,13 @@ function renderFlashcards(set) {
         el('button', { class: 'btn', 'aria-label': 'Next card', onclick: next }, '→'),
       ),
     );
-    function flip() { flipped = !flipped; card.classList.toggle('flipped', flipped); sfx.flip(); }
+    function flip() {
+      flipped = !flipped;
+      card.classList.toggle('flipped', flipped);
+      faceFront.setAttribute('aria-hidden', flipped ? 'true' : 'false');
+      faceBack.setAttribute('aria-hidden', flipped ? 'false' : 'true');
+      sfx.flip();
+    }
   }
   function mark(k) {
     const t = deck[idx];
@@ -457,6 +514,16 @@ function renderFlashcards(set) {
   });
   start(baseDeck());
 }
+/** Wire up questionCard's "Override: I was right" so the score and the saved
+    mastery agree with the green box the student just saw. */
+function wireOverride(card, id, after) {
+  card.addEventListener('override', () => {
+    state.mastery[id] = Math.min(2, (state.mastery[id] || 0) + 1);
+    state.stats.correct++;
+    save();
+    if (after) after();
+  });
+}
 function toggleStar(id) { if (state.starred[id]) delete state.starred[id]; else state.starred[id] = true; save(); }
 function onKeys(fn) {
   const h = (e) => { if (['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)) return; fn(e); };
@@ -478,14 +545,21 @@ function questionCard(q, { onAnswer, showTag = true, instant = true }) {
     if (q.type !== 'written') {
       for (const b of box.querySelectorAll('.opt')) {
         b.disabled = true;
-        if (b.dataset.v === q.answer) b.classList.add('correct');
-        else if (b === chosenBtn) b.classList.add('wrong');
-        else b.classList.add('dim');
+        const key = b.querySelector('.k');
+        if (b.dataset.v === q.answer) {
+          b.classList.add('correct');
+          if (key) key.textContent = '✓';
+          b.append(el('span', { class: 'sr-only' }, ' — correct answer'));
+        } else if (b === chosenBtn) {
+          b.classList.add('wrong');
+          if (key) key.textContent = '✗';
+          b.append(el('span', { class: 'sr-only' }, ' — your answer, incorrect'));
+        } else b.classList.add('dim');
       }
     }
     if (instant) {
-      box.append(el('div', { class: `feedback ${correct ? 'good' : 'bad'}` },
-        el('b', { class: 'title' }, correct ? pick(['Correct!', 'Nice!', 'You got it!', 'Exactly right.']) : `Not quite — the answer is: ${q.answer}`),
+      box.append(el('div', { class: `feedback ${correct ? 'good' : 'bad'}`, role: 'status', 'aria-live': 'polite' },
+        el('b', { class: 'title' }, correct ? `✓ ${pick(['Correct!', 'Nice!', 'You got it!', 'Exactly right.'])}` : `✗ Not quite — the answer is: ${q.answer}`),
         q.explanation ? el('div', { class: 'exp' }, q.explanation) : null,
         src ? el('div', { class: 'src' }, src) : null,
       ));
@@ -501,7 +575,9 @@ function questionCard(q, { onAnswer, showTag = true, instant = true }) {
       el('button', { class: 'btn ghost', onclick: () => { if (done) return; inp.disabled = true; finish(false, ''); } }, "Don't know"),
     );
     box.append(row);
-    setTimeout(() => inp.focus(), 50);
+    // Auto-focus on a mouse/trackpad device only: on a phone this would throw
+    // the keyboard up over the question before it has been read.
+    if (matchMedia('(pointer: fine)').matches) later(() => inp.focus(), 50);
     function addOverride(v) {
       const b = el('button', { class: 'btn sm ghost', style: 'justify-self:start', onclick: () => {
         b.remove();
@@ -565,7 +641,7 @@ function renderLearn(set) {
         el('div', { class: 'seg', role: 'group', 'aria-label': 'Question types' },
           ...['mc', 'tf', 'written'].map((k) => el('button', { class: prefs[k] ? 'on' : '', 'aria-pressed': prefs[k] ? 'true' : 'false', onclick: () => { const on = ['mc', 'tf', 'written'].filter((x) => prefs[x]); if (prefs[k] && on.length === 1) return toast('Keep at least one type on'); prefs[k] = !prefs[k]; save(); newRound(); } }, { mc: 'Multiple choice', tf: 'True/false', written: 'Written' }[k])),
         ),
-        el('button', { class: `btn sm${prefs.starredOnly ? ' primary' : ''}`, onclick: () => { prefs.starredOnly = !prefs.starredOnly; save(); newRound(); } }, '⭐ Starred only'),
+        el('button', { class: `btn sm${prefs.starredOnly ? ' primary' : ''}`, 'aria-pressed': prefs.starredOnly ? 'true' : 'false', onclick: () => { prefs.starredOnly = !prefs.starredOnly; save(); newRound(); } }, '⭐ Starred only'),
       ),
       el('div', { class: 'row between' },
         el('span', {}, `Mastered ${mastered} · Familiar ${familiar} · Not started ${all.length - mastered - familiar}`),
@@ -611,13 +687,13 @@ function renderLearn(set) {
       const btn = el('button', { class: 'btn primary lg', onclick: nextQ }, correct ? 'Continue →' : 'Got it, continue →');
       card.append(el('div', { class: 'row' }, btn));
       btn.focus();
-      if (correct) setTimeout(() => { if (document.body.contains(btn)) nextQ(); }, 1400);
+      // Long explanations need longer on screen than a one-liner.
+      if (correct) later(() => { if (document.body.contains(btn)) nextQ(); }, clamp(1200 + (q.explanation || '').length * 22, 1400, 6000));
     } });
-    card.addEventListener('override', () => {
-      // convert the last miss into a hit
-      state.mastery[it.id] = Math.min(2, (state.mastery[it.id] || 0) + 1);
-      state.stats.correct++; save();
-      const i = queue.lastIndexOf(it); if (i >= 0) { queue.splice(i, 1); roundTotal--; }
+    wireOverride(card, it.id, () => {
+      // the miss was re-queued for later in the round; take it back out
+      const i = queue.lastIndexOf(it);
+      if (i >= 0) { queue.splice(i, 1); roundTotal--; }
       roundCorrect++;
     });
     body.append(toolbar(), el('div', { class: 'panel' }, card));
@@ -656,11 +732,11 @@ function renderTest(set) {
     body.append(el('div', { class: 'panel stack' },
       backBtn(set),
       el('div', { class: 'field' }, el('label', {}, 'Number of questions'),
-        el('div', { class: 'seg' }, ...counts.map((c) => el('button', { class: prefs.count === c ? 'on' : '', onclick: () => { prefs.count = c; save(); setup(); } }, String(c))))),
+        el('div', { class: 'seg', role: 'group', 'aria-label': 'Number of questions' }, ...counts.map((c) => el('button', { class: prefs.count === c ? 'on' : '', 'aria-pressed': prefs.count === c ? 'true' : 'false', onclick: () => { prefs.count = c; save(); setup(); } }, String(c))))),
       el('div', { class: 'field' }, el('label', {}, 'Question types'),
-        el('div', { class: 'seg' }, ...types.map((k) => el('button', { class: prefs[k] ? 'on' : '', 'aria-pressed': prefs[k] ? 'true' : 'false', onclick: () => { if (prefs[k] && types.filter((x) => prefs[x]).length === 1) return toast('Keep at least one type on'); prefs[k] = !prefs[k]; save(); setup(); } }, { mc: 'Multiple choice', tf: 'True/false', written: 'Written' }[k])))),
+        el('div', { class: 'seg', role: 'group', 'aria-label': 'Question types' }, ...types.map((k) => el('button', { class: prefs[k] ? 'on' : '', 'aria-pressed': prefs[k] ? 'true' : 'false', onclick: () => { if (prefs[k] && types.filter((x) => prefs[x]).length === 1) return toast('Keep at least one type on'); prefs[k] = !prefs[k]; save(); setup(); } }, { mc: 'Multiple choice', tf: 'True/false', written: 'Written' }[k])))),
       el('div', { class: 'row' },
-        el('button', { class: `btn sm${prefs.starredOnly ? ' primary' : ''}`, onclick: () => { prefs.starredOnly = !prefs.starredOnly; save(); setup(); } }, '⭐ Starred terms only'),
+        el('button', { class: `btn sm${prefs.starredOnly ? ' primary' : ''}`, 'aria-pressed': prefs.starredOnly ? 'true' : 'false', onclick: () => { prefs.starredOnly = !prefs.starredOnly; save(); setup(); } }, '⭐ Starred terms only'),
         el('span', { class: 'note' }, 'Pool: ' + buildPool().length + ' questions'),
       ),
       el('div', { class: 'row' }, el('button', { class: 'btn primary lg', onclick: start }, 'Start test')),
@@ -690,11 +766,14 @@ function renderTest(set) {
     qs.forEach((q, i) => {
       const row = el('div', { class: 'test-q', id: `tq${i}` }, el('div', { class: 'n' }, `QUESTION ${i + 1} OF ${qs.length}`), el('div', { class: 'q-prompt' }, q.prompt));
       if (q.type === 'written') {
-        row.append(el('div', { class: 'written' }, el('input', { class: 'input', type: 'text', placeholder: 'Type your answer…', autocomplete: 'off', 'aria-label': `Answer ${i + 1}`, oninput: (e) => answers.set(i, e.target.value) })));
+        row.append(el('div', { class: 'written' }, el('input', { class: 'input', type: 'text', placeholder: 'Type your answer…', autocomplete: 'off', 'aria-label': `Answer to question ${i + 1}`, oninput: (e) => { answers.set(i, e.target.value); row.classList.remove('blank'); } })));
       } else {
         const opts = el('div', { class: 'opts' });
         q.options.forEach((o, k) => {
-          const b = el('button', { class: 'opt', 'data-v': o, onclick: () => { answers.set(i, o); for (const x of opts.querySelectorAll('.opt')) x.classList.toggle('picked', x === b); } }, el('span', { class: 'k' }, q.type === 'tf' ? (o === 'True' ? 'T' : 'F') : String(k + 1)), el('span', {}, o));
+          const b = el('button', { class: 'opt', 'data-v': o, 'aria-pressed': 'false', onclick: () => {
+            answers.set(i, o); row.classList.remove('blank');
+            for (const x of opts.querySelectorAll('.opt')) { const on = x === b; x.classList.toggle('picked', on); x.setAttribute('aria-pressed', on ? 'true' : 'false'); }
+          } }, el('span', { class: 'k' }, q.type === 'tf' ? (o === 'True' ? 'T' : 'F') : String(k + 1)), el('span', {}, o));
           opts.append(b);
         });
         row.append(opts);
@@ -703,8 +782,16 @@ function renderTest(set) {
     });
     let armed = false;
     const submitBtn = el('button', { class: 'btn primary lg', onclick: () => {
-      const missing = qs.filter((_, i) => !(answers.get(i) || '').trim()).length;
-      if (missing && !armed) { armed = true; submitBtn.textContent = `${missing} unanswered — submit anyway?`; return; }
+      const blanks = qs.map((_, i) => i).filter((i) => !(answers.get(i) || '').trim());
+      if (blanks.length && !armed) {
+        armed = true;
+        submitBtn.textContent = `${blanks.length} unanswered — submit anyway?`;
+        // Take the student to the first gap instead of making them hunt.
+        for (const i of blanks) $(`#tq${i}`, list)?.classList.add('blank');
+        $(`#tq${blanks[0]}`, list)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        toast(`Question ${blanks[0] + 1} is the first one left blank`);
+        return;
+      }
       grade(qs, answers, Date.now() - t0);
     } }, 'Submit test');
     list.append(el('div', { class: 'row', style: 'padding-top:18px' }, submitBtn, el('button', { class: 'btn ghost', onclick: setup }, 'Cancel')));
@@ -750,7 +837,7 @@ function renderTest(set) {
           el('button', { class: 'btn ghost', onclick: setup }, 'Change settings'),
           backBtn(set, 'Back to set'),
         )),
-      el('div', { class: 'section-title' }, 'Review'), review);
+      el('h2', { class: 'section-title' }, 'Review'), review);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
   function retry(qs) {
@@ -763,6 +850,7 @@ function renderTest(set) {
       if (i >= qs.length) { box.append(el('div', { class: 'panel result-head' }, el('h2', {}, `Retry done: ${score} / ${qs.length}`), el('div', { class: 'row center' }, el('button', { class: 'btn primary', onclick: start }, 'New test'), backBtn(set, 'Back to set')))); return; }
       const q = qs[i].type === 'mc' ? { ...qs[i], options: shuffle(qs[i].options) } : qs[i];
       const card = questionCard(q, { onAnswer: (c) => { bumpMastery(q.id, c); if (c) { score++; sfx.good(); } else sfx.bad(); card.append(el('div', { class: 'row' }, el('button', { class: 'btn primary', onclick: () => { i++; step(); } }, 'Continue →'))); } });
+      wireOverride(card, q.id, () => { score++; });
       box.append(el('div', { class: 'panel' }, el('div', { class: 'note', style: 'margin-bottom:10px' }, `${i + 1} / ${qs.length}`), card));
     };
     step();
@@ -803,7 +891,7 @@ function renderMatch(set) {
       ...chosen.map((t) => ({ pair: t.id, text: t.definition, term: false })),
     ]);
     let first = null, left = chosen.length, started = 0, penalty = 0, lock = false;
-    const clock = el('span', { class: 'timer' }, '0.0s');
+    const clock = el('span', { class: 'timer', role: 'timer', 'aria-label': 'Elapsed time' }, '0.0s');
     const grid = el('div', { class: 'match-grid' });
     const tick = () => { if (started) clock.textContent = fmtSecs(Date.now() - started + penalty); };
     timerId = setInterval(tick, 100);
@@ -822,14 +910,14 @@ function renderMatch(set) {
       if (a.t.pair === t.pair && a.t.term !== t.term) {
         sfx.coin();
         for (const x of [a.b, b]) { x.classList.remove('sel'); x.classList.add('ok'); }
-        setTimeout(() => { for (const x of [a.b, b]) { x.classList.add('gone'); x.disabled = true; } lock = false; }, 260);
+        later(() => { for (const x of [a.b, b]) { x.classList.add('gone'); x.disabled = true; } lock = false; }, 260);
         bumpMastery(t.pair, true);
-        if (--left === 0) setTimeout(finish, 320);
+        if (--left === 0) later(finish, 320);
       } else {
         sfx.bad(); penalty += 1000;
         for (const x of [a.b, b]) { x.classList.remove('sel'); x.classList.add('no'); }
         floatText('+1s', 'var(--bad)');
-        setTimeout(() => { for (const x of [a.b, b]) x.classList.remove('no'); lock = false; }, 380);
+        later(() => { for (const x of [a.b, b]) x.classList.remove('no'); lock = false; }, 380);
       }
     }
     function finish() {
@@ -882,7 +970,7 @@ function renderGold(set) {
       el('h2', {}, 'Gold Quest'),
       el('p', {}, `Beat five bots to the most gold before time runs out. ${best != null ? `Your best haul is ${best.toLocaleString()} gold.` : ''}`),
       el('div', { class: 'field' }, el('label', {}, 'Game length'),
-        el('div', { class: 'seg' }, ...[2, 3, 5].map((m) => el('button', { class: prefs.minutes === m ? 'on' : '', onclick: () => { prefs.minutes = m; save(); intro(); } }, `${m} min`)))),
+        el('div', { class: 'seg', role: 'group', 'aria-label': 'Game length' }, ...[2, 3, 5].map((m) => el('button', { class: prefs.minutes === m ? 'on' : '', onclick: () => { prefs.minutes = m; save(); intro(); } }, `${m} min`)))),
       el('div', { class: 'row center' }, el('button', { class: 'btn gold lg', onclick: play }, 'Start quest'), backBtn(set, 'Back to set')),
     ));
   }
@@ -893,8 +981,8 @@ function renderGold(set) {
     const bots = makeBots(5);
     const players = [{ name: ME, get gold() { return gold; } }, ...bots];
     const endAt = Date.now() + prefs.minutes * 60000;
-    const clock = el('span', { class: 'bigtimer' }, fmtTime(prefs.minutes * 60000));
-    const hud = el('div', { class: 'game-hud' },
+    const clock = el('span', { class: 'bigtimer', role: 'timer', 'aria-label': 'Time remaining' }, fmtTime(prefs.minutes * 60000));
+    const hud = el('div', { class: 'game-hud', role: 'group', 'aria-label': 'Game status' },
       el('div', { class: 'stat' }, el('b', { class: 'gold-amt', id: 'g-gold' }, '0'), el('span', {}, 'Gold')),
       el('div', { class: 'stat' }, el('b', { class: 'streak', id: 'g-streak' }, '0'), el('span', {}, 'Streak')),
       el('div', { class: 'stat' }, el('b', { id: 'g-rank' }, '—'), el('span', {}, 'Rank')),
@@ -928,7 +1016,7 @@ function renderGold(set) {
         if (!live) return;
         answered++;
         bumpMastery(q.id, ok);
-        if (ok) { correct++; streak++; sfx.good(); setTimeout(chests, 450); }
+        if (ok) { correct++; streak++; sfx.good(); later(chests, 450); }
         else {
           streak = 0; sfx.bad();
           card.append(el('div', { class: 'feedback bad' }, el('b', { class: 'title' }, `Answer: ${q.answer}`), q.explanation ? el('div', { class: 'exp' }, q.explanation) : null), el('div', { class: 'row' }, el('button', { class: 'btn primary', onclick: nextQuestion }, 'Next →')));
@@ -984,7 +1072,7 @@ function renderGold(set) {
         updateHud();
         stage.prepend(el('div', { class: 'loot' }, el('div', { class: `big ${cls}` }, msg)));
         stage.append(el('div', { class: 'row center', style: 'margin-top:14px' }, el('button', { class: 'btn primary lg', onclick: nextQuestion }, 'Next question →')));
-        setTimeout(() => { if (document.body.contains(btn)) nextQuestion(); }, 1800);
+        later(() => { if (document.body.contains(btn)) nextQuestion(); }, 1800);
       }
     }
     function finish() {
@@ -1037,7 +1125,7 @@ function renderBlitz(set) {
       el('h2', {}, 'Blitz'),
       el('p', {}, `Rapid fire. ${best != null ? `Your best score is ${best.toLocaleString()}.` : 'Set a high score.'}`),
       el('div', { class: 'field' }, el('label', {}, 'Round length'),
-        el('div', { class: 'seg' }, ...[60, 90, 120].map((s) => el('button', { class: prefs.seconds === s ? 'on' : '', onclick: () => { prefs.seconds = s; save(); intro(); } }, `${s}s`)))),
+        el('div', { class: 'seg', role: 'group', 'aria-label': 'Round length' }, ...[60, 90, 120].map((s) => el('button', { class: prefs.seconds === s ? 'on' : '', onclick: () => { prefs.seconds = s; save(); intro(); } }, `${s}s`)))),
       el('div', { class: 'row center' }, el('button', { class: 'btn hot lg', onclick: play }, 'Go!'), backBtn(set, 'Back to set')),
     ));
   }
@@ -1046,8 +1134,8 @@ function renderBlitz(set) {
     if (!pool.length) { body.innerHTML = ''; body.append(el('div', { class: 'panel empty' }, 'No questions available.')); return; }
     let qi = 0, score = 0, streak = 0, best = 0, answered = 0, correct = 0, qStart = 0, live = true;
     const endAt = Date.now() + prefs.seconds * 1000;
-    const clock = el('span', { class: 'bigtimer' }, fmtTime(prefs.seconds * 1000));
-    const hud = el('div', { class: 'game-hud' },
+    const clock = el('span', { class: 'bigtimer', role: 'timer', 'aria-label': 'Time remaining' }, fmtTime(prefs.seconds * 1000));
+    const hud = el('div', { class: 'game-hud', role: 'group', 'aria-label': 'Game status' },
       el('div', { class: 'stat' }, el('b', { id: 'b-score' }, '0'), el('span', {}, 'Score')),
       el('div', { class: 'stat' }, el('b', { class: 'streak', id: 'b-streak' }, '0'), el('span', {}, 'Streak')),
       el('div', { class: 'stat' }, el('b', { id: 'b-mult' }, '×1.0'), el('span', {}, 'Multiplier')),
@@ -1083,11 +1171,11 @@ function renderBlitz(set) {
           correct++; streak++; best = Math.max(best, streak);
           const pts = Math.round((100 + 100 * speed) * mult());
           score += pts; sfx.good(); floatText(`+${pts}`, 'var(--good)');
-          setTimeout(nextQuestion, 500);
+          later(nextQuestion, 500);
         } else {
           streak = 0; sfx.bad();
           card.append(el('div', { class: 'feedback bad' }, el('b', { class: 'title' }, `Answer: ${q.answer}`)), el('div', { class: 'row' }, el('button', { class: 'btn primary', onclick: nextQuestion }, 'Next →')));
-          setTimeout(() => { if (document.body.contains(card)) nextQuestion(); }, 2200);
+          later(() => { if (document.body.contains(card)) nextQuestion(); }, 2200);
         }
         updateHud();
       } });
@@ -1133,14 +1221,14 @@ function renderGuide(set) {
       const topics = [...new Set(s.terms.map((t) => t.topic || 'General'))];
       let any = false;
       const block = el('div', {});
-      if (set.id === 'all') block.append(el('div', { class: 'section-title' }, `${s.emoji} ${s.short}: ${s.title}`));
+      if (set.id === 'all') block.append(el('h2', { class: 'section-title' }, `${s.emoji} ${s.short}: ${s.title}`));
       for (const tp of topics) {
         const rows = s.terms.filter((t) => (t.topic || 'General') === tp && (match(t.term) || match(t.definition)));
         if (!rows.length) continue;
         any = true;
         const sec = el('div', { class: 'guide-topic' }, el('h3', {}, tp));
         for (const t of rows) {
-          const star = el('button', { class: `star${state.starred[t.id] ? ' on' : ''}`, 'aria-label': 'Star term', onclick: () => { toggleStar(t.id); star.classList.toggle('on', !!state.starred[t.id]); star.textContent = state.starred[t.id] ? '★' : '☆'; } }, state.starred[t.id] ? '★' : '☆');
+          const star = el('button', { class: `star${state.starred[t.id] ? ' on' : ''}`, 'aria-label': `Star "${t.term}"`, 'aria-pressed': state.starred[t.id] ? 'true' : 'false', onclick: () => { toggleStar(t.id); star.classList.toggle('on', !!state.starred[t.id]); star.setAttribute('aria-pressed', state.starred[t.id] ? 'true' : 'false'); star.textContent = state.starred[t.id] ? '★' : '☆'; } }, state.starred[t.id] ? '★' : '☆');
           sec.append(el('div', { class: 'term-row' }, el('b', {}, t.term), el('span', {}, t.definition), star));
         }
         block.append(sec);
@@ -1165,6 +1253,7 @@ function renderGuide(set) {
 let cleanup = null;
 function route() {
   if (cleanup) { try { cleanup(); } catch { /* ignore */ } cleanup = null; }
+  clearTimers();
   main.innerHTML = '';
   window.scrollTo({ top: 0 });
   if (!SETS.length) { main.append(el('div', { class: 'empty' }, 'No study data found — data.js is missing.')); return; }
@@ -1172,12 +1261,15 @@ function route() {
   if (parts[0] !== 'set') { setCrumbs([]); document.title = 'ChemQuest — study Concepts 1–4'; return renderHome(); }
   const set = getSet(parts[1]);
   if (!set) { location.hash = '#/'; return; }
-  const mode = parts[2] || '';
   const views = { '': renderSet, flashcards: renderFlashcards, learn: renderLearn, test: renderTest, match: renderMatch, gold: renderGold, blitz: renderBlitz, guide: renderGuide };
-  const fn = views[mode] || renderSet;
-  setCrumbs(mode ? [[set.short, `#/set/${set.id}`], [MODE_NAMES[mode] || 'Set']] : [[set.short]]);
+  // An unrecognised mode in the URL shows the set rather than a half-titled page.
+  const mode = views[parts[2]] ? parts[2] : '';
+  setCrumbs(mode ? [[set.short, `#/set/${set.id}`], [MODE_NAMES[mode]]] : [[set.short]]);
   document.title = `${mode ? MODE_NAMES[mode] + ' · ' : ''}${set.title} — ChemQuest`;
-  fn(set);
+  views[mode](set);
+  // Send the screen reader (and the keyboard) to the new view's heading.
+  const h = main.querySelector('h1');
+  if (h) { h.tabIndex = -1; h.focus({ preventScroll: true }); }
 }
 window.addEventListener('hashchange', route);
 route();

@@ -1437,8 +1437,8 @@ window.STUDY_SETS = [
     "topic": "Metric conversions"
    },
    {
-    "term": "1 kg = 1,000,000 mg",
-    "definition": "Because there are 1,000 mg per gram and 1,000 g per kilogram, 1 kg equals 1,000,000 mg.",
+    "term": "1 kg = ?",
+    "definition": "1,000,000 mg",
     "page": 12,
     "topic": "Metric conversions"
    }
@@ -3007,20 +3007,20 @@ window.STUDY_SETS = [
     "topic": "Conversion factors"
    },
    {
-    "term": "24 hours = 1 day",
-    "definition": "Conversion factor written as 24 hours/1 day or 1 day/24 hours (Example #1).",
+    "term": "24 hours = ?",
+    "definition": "1 day",
     "page": 3,
     "topic": "Conversion factors"
    },
    {
-    "term": "12 inches = 1 foot",
-    "definition": "Conversion factor written as 12 inches/1 foot or 1 foot/12 inches (Example #2).",
+    "term": "12 inches = ?",
+    "definition": "1 foot",
     "page": 4,
     "topic": "Conversion factors"
    },
    {
-    "term": "7 days = 1 week",
-    "definition": "Conversion factor written as 7 days/1 week or 1 week/7 days.",
+    "term": "7 days = ?",
+    "definition": "1 week",
     "page": 4,
     "topic": "Conversion factors"
    },
@@ -3043,20 +3043,20 @@ window.STUDY_SETS = [
     "topic": "Picket fence method"
    },
    {
-    "term": "365 days = 1 year",
-    "definition": "A conversion factor: there are 365 days in one year.",
+    "term": "365 days = ?",
+    "definition": "1 year",
     "page": 6,
     "topic": "Conversion factors"
    },
    {
-    "term": "60 min = 1 hour",
-    "definition": "A conversion factor: there are 60 minutes in one hour.",
+    "term": "60 min = ?",
+    "definition": "1 hour",
     "page": 6,
     "topic": "Conversion factors"
    },
    {
-    "term": "60 s = 1 min",
-    "definition": "A conversion factor: there are 60 seconds in one minute.",
+    "term": "60 s = ?",
+    "definition": "1 min",
     "page": 6,
     "topic": "Conversion factors"
    },

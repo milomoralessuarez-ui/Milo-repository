@@ -130,6 +130,7 @@ p { margin: 0; }
   align-items: center;
   gap: 12px;
   padding: 0 clamp(16px, 4vw, 32px);
+  background: var(--bg);                                   /* fallback */
   background: color-mix(in srgb, var(--bg) 82%, transparent);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
@@ -158,7 +159,7 @@ p { margin: 0; }
 .header-actions { margin-left: auto; display: flex; gap: 8px; align-items: center; }
 .icon-btn {
   display: grid; place-items: center;
-  width: 40px; height: 40px; border-radius: 12px;
+  width: 44px; height: 44px; border-radius: 12px;
   border: 1px solid var(--line); background: var(--surface);
   font-size: 1.1rem;
   transition: transform .15s, background .15s;
@@ -215,9 +216,9 @@ p { margin: 0; }
 .card .meta { margin-top: 12px; display: flex; gap: 8px; flex-wrap: wrap; }
 .card.set { border-top: 3px solid var(--c, var(--brand)); }
 .card.set p.sum { display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
-.card.set .ico { background: color-mix(in srgb, var(--c, var(--brand)) 20%, transparent); }
+.card.set .ico { background: var(--surface-3); background: color-mix(in srgb, var(--c, var(--brand)) 20%, transparent); }
 .card.mode { --c: var(--brand); }
-.card.mode .ico { background: color-mix(in srgb, var(--c) 22%, transparent); }
+.card.mode .ico { background: var(--surface-3); background: color-mix(in srgb, var(--c) 22%, transparent); }
 .card.game { background: linear-gradient(160deg, color-mix(in srgb, var(--c) 18%, var(--surface)), var(--surface) 70%); }
 
 .chip {
@@ -260,7 +261,7 @@ p { margin: 0; }
 .btn.hot { background: var(--grad-hot); border-color: transparent; color: #fff; }
 .btn.gold { background: var(--grad-gold); border-color: transparent; color: #3a2600; }
 .btn.ghost { background: transparent; }
-.btn.sm { padding: 7px 12px; font-size: .85rem; min-height: 36px; border-radius: 10px; }
+.btn.sm { padding: 8px 13px; font-size: .85rem; min-height: 44px; border-radius: 11px; }
 .btn.lg { padding: 14px 24px; font-size: 1.05rem; border-radius: 15px; }
 .btn.block { width: 100%; }
 .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
@@ -340,7 +341,7 @@ kbd {
 .flash-face .hint { position: absolute; bottom: 14px; font-size: .78rem; color: var(--text-3); }
 .flash-star {
   position: absolute; top: 10px; right: 12px;
-  width: 40px; height: 40px; border-radius: 12px;
+  width: 44px; height: 44px; border-radius: 12px;
   border: 0; background: transparent; font-size: 1.3rem; color: var(--text-3);
 }
 .flash-star.on { color: var(--gold); }
@@ -374,8 +375,11 @@ kbd {
   width: 28px; height: 28px; border-radius: 8px;
   background: var(--surface-3); font-size: .8rem; font-weight: 800; color: var(--text-2);
 }
-.opt.correct { border-color: var(--good); background: color-mix(in srgb, var(--good) 16%, var(--surface-2)); }
-.opt.wrong { border-color: var(--bad); background: color-mix(in srgb, var(--bad) 16%, var(--surface-2)); }
+.opt.correct { border-color: var(--good); background: var(--surface-2); background: color-mix(in srgb, var(--good) 16%, var(--surface-2)); }
+.opt.wrong { border-color: var(--bad); background: var(--surface-2); background: color-mix(in srgb, var(--bad) 16%, var(--surface-2)); }
+/* The tick and cross carry the verdict where colour alone would not. */
+.opt.correct .k { background: var(--good); color: #04231a; }
+.opt.wrong .k { background: var(--bad); color: #2b0710; }
 .opt.picked { border-color: var(--brand); }
 .opt:disabled { cursor: default; }
 .opt.dim { opacity: .55; }
@@ -400,6 +404,8 @@ kbd {
 .test-q { padding: 18px 0; border-top: 1px solid var(--line-soft); display: grid; gap: 12px; }
 .test-q:first-of-type { border-top: 0; }
 .test-q .n { font-size: .78rem; font-weight: 800; color: var(--text-3); letter-spacing: .08em; }
+.test-q.blank { border-left: 3px solid var(--warm); padding-left: 12px; border-radius: 0 12px 12px 0; }
+.test-q.blank .n::after { content: " · NOT ANSWERED"; color: var(--warm); }
 .test-q .q-prompt { font-size: 1.08rem; }
 .test-q .opts { grid-template-columns: 1fr 1fr; }
 @media (max-width: 640px) { .test-q .opts { grid-template-columns: 1fr; } }
@@ -422,7 +428,8 @@ kbd {
   display: grid; gap: 10px;
   grid-template-columns: repeat(4, 1fr);
 }
-@media (max-width: 640px) { .match-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 720px) { .match-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 560px) { .match-grid { grid-template-columns: repeat(2, 1fr); } .tile { min-height: 96px; font-size: .88rem; } }
 .tile {
   min-height: 108px; padding: 12px; border-radius: 15px;
   background: var(--surface-2); border: 2px solid var(--line-soft);
@@ -508,7 +515,7 @@ kbd {
 }
 .term-row b { font-weight: 800; }
 .term-row span { color: var(--text-2); }
-.term-row .star { border: 0; background: transparent; font-size: 1.1rem; color: var(--text-3); width: 36px; height: 36px; border-radius: 10px; }
+.term-row .star { border: 0; background: transparent; font-size: 1.15rem; color: var(--text-3); width: 44px; height: 44px; border-radius: 12px; }
 .term-row .star.on { color: var(--gold); }
 @media (max-width: 640px) { .term-row { grid-template-columns: 1fr auto; } .term-row span { grid-column: 1 / -1; } }
 

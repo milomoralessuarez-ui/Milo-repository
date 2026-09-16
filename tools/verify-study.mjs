@@ -145,6 +145,44 @@ for (const set of SETS) {
   }
 }
 
+// The app's own answer checker has to accept every variant the data promises,
+// and reject a value that is right but carries the wrong unit. Lift the three
+// functions out of app.js rather than re-implementing them here, so this
+// notices when the two drift apart.
+{
+  const src = fs.readFileSync('study/app.js', 'utf8');
+  const grab = (name) => {
+    const i = src.indexOf(`function ${name}(`);
+    if (i < 0) return '';
+    let depth = 0;
+    for (let k = src.indexOf('{', i); k < src.length; k++) {
+      if (src[k] === '{') depth++;
+      else if (src[k] === '}' && --depth === 0) return src.slice(i, k + 1);
+    }
+    return '';
+  };
+  const code = ['norm', 'parseNum', 'checkWritten'].map(grab).join('\n');
+  if (!code.includes('function checkWritten')) {
+    warn('answer checking', 'could not lift checkWritten() out of study/app.js — skipped');
+  } else {
+    const checkWritten = new Function(`${code}; return checkWritten;`)();
+    for (const set of SETS) {
+      for (const q of (set.questions || []).filter((x) => x.type === 'written')) {
+        const where = `Concept ${set.concept} ${q.id}`;
+        for (const variant of [q.answer, ...(q.accept || [])]) {
+          if (!checkWritten(q, variant)) fail(where, `the app rejects its own accepted answer ${JSON.stringify(variant)}`);
+        }
+        // A numeric answer with a unit must not accept a different unit.
+        const m = /^\s*(-?[\d.,]+)\s*([A-Za-z°µ/]+)\s*$/.exec(q.answer);
+        if (m) {
+          const wrong = /k$|kelvin/i.test(m[2]) ? '°F' : 'furlongs';
+          if (checkWritten(q, `${m[1]} ${wrong}`)) fail(where, `accepts ${JSON.stringify(`${m[1]} ${wrong}`)} for an answer measured in ${m[2]}`);
+        }
+      }
+    }
+  }
+}
+
 for (const w of warnings) console.log(`warn  ${w}`);
 for (const p of problems) console.log(`FAIL  ${p}`);
 
