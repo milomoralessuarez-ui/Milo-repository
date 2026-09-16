@@ -1092,6 +1092,24 @@ body.touch .tp-btns { display: flex; }
 .td-nitro b { display: block; height: 100%; background: linear-gradient(90deg, #22d3ee, #a78bfa); }
 .td-msg { font: 800 .95rem/1.3 var(--font); color: #fff; text-shadow: 0 2px 8px #000; min-height: 1.3em; }
 .td-msg.warn { color: #fb7185; }
+/* Tachometer and gear: the sim runs a real gearbox, so show it. */
+.td-dash { display: flex; align-items: center; gap: 8px; }
+.td-tach {
+  flex: 1;
+  height: 9px;
+  border-radius: 5px;
+  background: rgba(8, 10, 26, .6);
+  border: 1px solid rgba(255, 255, 255, .16);
+  overflow: hidden;
+}
+.td-tach b { display: block; height: 100%; width: 0; background: linear-gradient(90deg, #4ade80, #ffd257 68%, #fb7185 92%); }
+.td-tach.redline b { background: #fb7185; }
+.td-gear {
+  min-width: 26px;
+  font: 800 1rem/1 var(--font);
+  color: #fff;
+  text-shadow: 0 2px 6px #000;
+}
 @media (pointer: coarse) { .td-hud { bottom: 148px; } }
 
 /* F1 start lights: five reds on one by one, all out means go. */
@@ -2525,6 +2543,8 @@ body.touch .tp-btns { display: flex; }
   'use strict';
   var Milo = global.Milo = global.Milo || {};
 
+  var TAU = Math.PI * 2;
+
   /* ============================================================== mat4 */
 
   var M = {};
@@ -2597,59 +2617,103 @@ body.touch .tp-btns { display: flex; }
   /* ====================================================== mesh builder */
 
   /**
-   * Vertices are pos(3) + colour(3) + shade(1) + tint(1). `tint` blends the
+   * Vertices are pos(3) + colour(3) + normal(3) + tint(1). `tint` blends the
    * vertex colour toward a per-draw uniform, so one car mesh serves every
    * paint job without rebuilding a buffer.
+   *
+   * Normals are real surface normals taken from the geometry, not hand-picked
+   * brightness constants: the shader lights them against a sun direction, so
+   * a face's shading follows how it actually sits in the world rather than
+   * which way it happened to be pointing when someone typed a number.
    */
   function Mesh() { this.v = []; }
 
-  Mesh.prototype.vert = function (x, y, z, col, shade, tint) {
-    this.v.push(x, y, z, col[0], col[1], col[2], shade, tint || 0);
+  var STRIDE = 10;
+  Mesh.STRIDE = STRIDE;
+
+  /** Unit normal of the triangle a-b-c, following its winding. */
+  function faceNormal(a, b, c) {
+    var ux = b[0] - a[0], uy = b[1] - a[1], uz = b[2] - a[2];
+    var vx = c[0] - b[0], vy = c[1] - b[1], vz = c[2] - b[2];
+    var nx = uy * vz - uz * vy, ny = uz * vx - ux * vz, nz = ux * vy - uy * vx;
+    var l = Math.hypot(nx, ny, nz) || 1;
+    return [nx / l, ny / l, nz / l];
+  }
+  Mesh.faceNormal = faceNormal;
+
+  Mesh.prototype.vert = function (x, y, z, col, n, tint) {
+    this.v.push(x, y, z, col[0], col[1], col[2], n[0], n[1], n[2], tint || 0);
   };
 
-  Mesh.prototype.tri = function (a, b, c, col, shade, tint) {
-    this.vert(a[0], a[1], a[2], col, shade, tint);
-    this.vert(b[0], b[1], b[2], col, shade, tint);
-    this.vert(c[0], c[1], c[2], col, shade, tint);
+  /**
+   * `shade` tints the stored colour (kerb stripes, worn tarmac and the like).
+   * It is a material choice now, not a stand-in for lighting.
+   */
+  Mesh.prototype.tri = function (a, b, c, col, shade, tint, nrm) {
+    var n = nrm || faceNormal(a, b, c);
+    var k = shade == null ? 1 : shade;
+    var cc = [col[0] * k, col[1] * k, col[2] * k];
+    this.vert(a[0], a[1], a[2], cc, n, tint);
+    this.vert(b[0], b[1], b[2], cc, n, tint);
+    this.vert(c[0], c[1], c[2], cc, n, tint);
   };
 
-  Mesh.prototype.quad = function (a, b, c, d, col, shade, tint) {
-    this.tri(a, b, c, col, shade, tint);
-    this.tri(a, c, d, col, shade, tint);
+  Mesh.prototype.quad = function (a, b, c, d, col, shade, tint, nrm) {
+    var n = nrm || faceNormal(a, b, c);
+    this.tri(a, b, c, col, shade, tint, n);
+    this.tri(a, c, d, col, shade, tint, n);
   };
 
-  /** Axis-aligned box from centre + half-extents, with per-face shading. */
-  Mesh.prototype.box = function (cx, cy, cz, hx, hy, hz, col, tint, shadeScale) {
-    var s = shadeScale == null ? 1 : shadeScale;
+  /** Axis-aligned box from centre + half-extents. */
+  Mesh.prototype.box = function (cx, cy, cz, hx, hy, hz, col, tint, shade) {
     var x0 = cx - hx, x1 = cx + hx, y0 = cy - hy, y1 = cy + hy, z0 = cz - hz, z1 = cz + hz;
     var t = this;
-    t.quad([x0, y1, z0], [x0, y1, z1], [x1, y1, z1], [x1, y1, z0], col, 1.00 * s, tint);
-    t.quad([x0, y0, z1], [x0, y0, z0], [x1, y0, z0], [x1, y0, z1], col, 0.45 * s, tint);
-    t.quad([x0, y0, z1], [x1, y0, z1], [x1, y1, z1], [x0, y1, z1], col, 0.80 * s, tint);
-    t.quad([x1, y0, z0], [x0, y0, z0], [x0, y1, z0], [x1, y1, z0], col, 0.66 * s, tint);
-    t.quad([x1, y0, z1], [x1, y0, z0], [x1, y1, z0], [x1, y1, z1], col, 0.90 * s, tint);
-    t.quad([x0, y0, z0], [x0, y0, z1], [x0, y1, z1], [x0, y1, z0], col, 0.58 * s, tint);
+    t.quad([x0, y1, z0], [x0, y1, z1], [x1, y1, z1], [x1, y1, z0], col, shade, tint, [0, 1, 0]);
+    t.quad([x0, y0, z1], [x0, y0, z0], [x1, y0, z0], [x1, y0, z1], col, shade, tint, [0, -1, 0]);
+    t.quad([x0, y0, z1], [x1, y0, z1], [x1, y1, z1], [x0, y1, z1], col, shade, tint, [0, 0, 1]);
+    t.quad([x1, y0, z0], [x0, y0, z0], [x0, y1, z0], [x1, y1, z0], col, shade, tint, [0, 0, -1]);
+    t.quad([x1, y0, z1], [x1, y0, z0], [x1, y1, z0], [x1, y1, z1], col, shade, tint, [1, 0, 0]);
+    t.quad([x0, y0, z0], [x0, y0, z1], [x0, y1, z1], [x0, y1, z0], col, shade, tint, [-1, 0, 0]);
   };
 
   /**
    * Box rotated about Y. Local +z runs along the given yaw, +x to its right,
    * which is what track-side buildings need to face the road.
    */
-  Mesh.prototype.boxR = function (cx, cy, cz, hx, hy, hz, yaw, col, tint, shadeScale) {
-    var sc = shadeScale == null ? 1 : shadeScale;
+  Mesh.prototype.boxR = function (cx, cy, cz, hx, hy, hz, yaw, col, tint, shade) {
     var c = Math.cos(yaw), s = Math.sin(yaw);
     function P(x, y, z) { return [cx + x * c + z * s, cy + y, cz - x * s + z * c]; }
+    function N(x, y, z) { return [x * c + z * s, y, -x * s + z * c]; }
     var p000 = P(-hx, -hy, -hz), p100 = P(hx, -hy, -hz), p010 = P(-hx, hy, -hz), p110 = P(hx, hy, -hz);
     var p001 = P(-hx, -hy, hz), p101 = P(hx, -hy, hz), p011 = P(-hx, hy, hz), p111 = P(hx, hy, hz);
-    this.quad(p010, p011, p111, p110, col, 1.00 * sc, tint);
-    this.quad(p001, p000, p100, p101, col, .45 * sc, tint);
-    this.quad(p001, p101, p111, p011, col, .80 * sc, tint);
-    this.quad(p100, p000, p010, p110, col, .66 * sc, tint);
-    this.quad(p101, p100, p110, p111, col, .90 * sc, tint);
-    this.quad(p000, p001, p011, p010, col, .58 * sc, tint);
+    this.quad(p010, p011, p111, p110, col, shade, tint, [0, 1, 0]);
+    this.quad(p001, p000, p100, p101, col, shade, tint, [0, -1, 0]);
+    this.quad(p001, p101, p111, p011, col, shade, tint, N(0, 0, 1));
+    this.quad(p100, p000, p010, p110, col, shade, tint, N(0, 0, -1));
+    this.quad(p101, p100, p110, p111, col, shade, tint, N(1, 0, 0));
+    this.quad(p000, p001, p011, p010, col, shade, tint, N(-1, 0, 0));
   };
 
-  Mesh.prototype.count = function () { return this.v.length / 8; };
+  /** A cylinder about the local X axis — wheels, rollers, pipes. */
+  Mesh.prototype.cylX = function (cx, cy, cz, half, radius, seg, col, tint, shade) {
+    var i;
+    for (i = 0; i < seg; i++) {
+      var a0 = i / seg * TAU, a1 = (i + 1) / seg * TAU;
+      var y0 = Math.cos(a0) * radius, z0 = Math.sin(a0) * radius;
+      var y1 = Math.cos(a1) * radius, z1 = Math.sin(a1) * radius;
+      var nA = [0, Math.cos(a0), Math.sin(a0)], nB = [0, Math.cos(a1), Math.sin(a1)];
+      // Tread: one quad per segment, with normals fanning out from the axis so
+      // the barrel lights as a curve rather than as a set of flat panels.
+      var pA0 = [cx - half, cy + y0, cz + z0], pA1 = [cx + half, cy + y0, cz + z0];
+      var pB0 = [cx - half, cy + y1, cz + z1], pB1 = [cx + half, cy + y1, cz + z1];
+      this.tri(pA0, pA1, pB1, col, shade, tint, nA);
+      this.tri(pA0, pB1, pB0, col, shade, tint, nB);
+      this.tri([cx + half, cy, cz], pA1, pB1, col, shade == null ? 1 : shade * .92, tint, [1, 0, 0]);
+      this.tri([cx - half, cy, cz], pB0, pA0, col, shade == null ? 1 : shade * .92, tint, [-1, 0, 0]);
+    }
+  };
+
+  Mesh.prototype.count = function () { return this.v.length / STRIDE; };
   Mesh.prototype.data = function () { return new Float32Array(this.v); };
 
   Milo.Mesh = Mesh;
@@ -2668,8 +2732,6 @@ body.touch .tp-btns { display: flex; }
   }
 
   /* ================================================ track generation */
-
-  var TAU = Math.PI * 2;
 
   /**
    * A periodic wobble built from whole-numbered harmonics, so it closes on
@@ -2984,14 +3046,14 @@ body.touch .tp-btns { display: flex; }
   /* ============================================================ themes */
 
   var THEMES = {
-    dawn: { sky: [.99, .71, .45], fog: [.99, .78, .58], ground: [.42, .30, .26], road: [.28, .27, .34], kerbA: [.94, .35, .29], kerbB: [.97, .95, .92], wall: [.98, .84, .40], accent: [1, .55, .25], scen: 'rock' },
-    grass: { sky: [.42, .72, .95], fog: [.68, .84, .96], ground: [.36, .63, .32], road: [.30, .30, .36], kerbA: [.90, .24, .24], kerbB: [.97, .97, .97], wall: [.95, .95, .97], accent: [.20, .80, .55], scen: 'tree' },
-    night: { sky: [.05, .05, .12], fog: [.08, .07, .18], ground: [.10, .10, .18], road: [.16, .16, .22], kerbA: [.20, .90, .95], kerbB: [.65, .30, .95], wall: [.30, .85, .95], accent: [.25, .95, .85], scen: 'neon' },
-    snow: { sky: [.75, .85, .95], fog: [.88, .93, .98], ground: [.90, .93, .97], road: [.34, .36, .44], kerbA: [.85, .30, .35], kerbB: [.98, .98, 1], wall: [.70, .82, .92], accent: [.45, .75, .95], scen: 'pine' },
-    desert: { sky: [.62, .80, .93], fog: [.90, .82, .64], ground: [.82, .70, .45], road: [.36, .33, .32], kerbA: [.92, .55, .20], kerbB: [.98, .95, .88], wall: [.85, .72, .48], accent: [.95, .70, .25], scen: 'cactus' },
-    volcano: { sky: [.20, .07, .08], fog: [.36, .12, .10], ground: [.18, .10, .10], road: [.20, .18, .20], kerbA: [.98, .42, .12], kerbB: [.30, .26, .28], wall: [.55, .18, .12], accent: [1, .45, .12], scen: 'rock' },
-    ocean: { sky: [.48, .80, .90], fog: [.62, .87, .93], ground: [.16, .48, .62], road: [.28, .32, .40], kerbA: [.98, .82, .30], kerbB: [.96, .98, 1], wall: [.30, .70, .82], accent: [.20, .85, .80], scen: 'palm' },
-    space: { sky: [.03, .02, .08], fog: [.08, .05, .16], ground: [.09, .07, .16], road: [.18, .17, .26], kerbA: [.75, .30, .95], kerbB: [.35, .80, 1], wall: [.55, .35, .90], accent: [.80, .40, 1], scen: 'crystal' }
+    dawn: { sun: [.62, .30, .72], sunCol: [1, .78, .52], sky: [.99, .71, .45], fog: [.99, .78, .58], ground: [.42, .30, .26], road: [.28, .27, .34], kerbA: [.94, .35, .29], kerbB: [.97, .95, .92], wall: [.98, .84, .40], accent: [1, .55, .25], scen: 'rock' },
+    grass: { sun: [.42, .80, .43], sunCol: [1, .98, .92], sky: [.42, .72, .95], fog: [.68, .84, .96], ground: [.36, .63, .32], road: [.30, .30, .36], kerbA: [.90, .24, .24], kerbB: [.97, .97, .97], wall: [.95, .95, .97], accent: [.20, .80, .55], scen: 'tree' },
+    night: { sun: [-.35, .66, .66], sunCol: [.55, .72, 1], sky: [.05, .05, .12], fog: [.08, .07, .18], ground: [.10, .10, .18], road: [.16, .16, .22], kerbA: [.20, .90, .95], kerbB: [.65, .30, .95], wall: [.30, .85, .95], accent: [.25, .95, .85], scen: 'neon' },
+    snow: { sun: [.30, .78, .55], sunCol: [.92, .96, 1], sky: [.75, .85, .95], fog: [.88, .93, .98], ground: [.90, .93, .97], road: [.34, .36, .44], kerbA: [.85, .30, .35], kerbB: [.98, .98, 1], wall: [.70, .82, .92], accent: [.45, .75, .95], scen: 'pine' },
+    desert: { sun: [.18, .92, .35], sunCol: [1, .95, .80], sky: [.62, .80, .93], fog: [.90, .82, .64], ground: [.82, .70, .45], road: [.36, .33, .32], kerbA: [.92, .55, .20], kerbB: [.98, .95, .88], wall: [.85, .72, .48], accent: [.95, .70, .25], scen: 'cactus' },
+    volcano: { sun: [.55, .38, .74], sunCol: [1, .55, .30], sky: [.20, .07, .08], fog: [.36, .12, .10], ground: [.18, .10, .10], road: [.20, .18, .20], kerbA: [.98, .42, .12], kerbB: [.30, .26, .28], wall: [.55, .18, .12], accent: [1, .45, .12], scen: 'rock' },
+    ocean: { sun: [.48, .74, .47], sunCol: [1, .97, .90], sky: [.48, .80, .90], fog: [.62, .87, .93], ground: [.16, .48, .62], road: [.28, .32, .40], kerbA: [.98, .82, .30], kerbB: [.96, .98, 1], wall: [.30, .70, .82], accent: [.20, .85, .80], scen: 'palm' },
+    space: { sun: [-.50, .58, .64], sunCol: [.82, .62, 1], sky: [.03, .02, .08], fog: [.08, .05, .16], ground: [.09, .07, .16], road: [.18, .17, .26], kerbA: [.75, .30, .95], kerbB: [.35, .80, 1], wall: [.55, .35, .90], accent: [.80, .40, 1], scen: 'crystal' }
   };
 
   /* ============================================================= cars */
@@ -97348,7 +97410,7 @@ body.touch .tp-btns { display: flex; }
  */
 (function () {
   'use strict';
-  var Milo = window.Milo, R = Milo.racing, M = Milo.mat4;
+  var Milo = window.Milo, R = Milo.racing, M = Milo.mat4, U = Milo.util;
 
   /* ------------------------------------------------------------- tracks */
 
@@ -97494,19 +97556,39 @@ body.touch .tp-btns { display: flex; }
   var VS = [
     'attribute vec3 aPos;',
     'attribute vec3 aCol;',
-    'attribute float aShade;',
+    'attribute vec3 aNrm;',
     'attribute float aTint;',
     'uniform mat4 uVP;',
     'uniform mat4 uModel;',
     'uniform vec3 uTint;',
     'uniform vec3 uEye;',
+    'uniform vec3 uSun;',
+    'uniform vec3 uSunCol;',
     'uniform vec2 uFog;',
+    'uniform float uUnlit;',
+    'uniform float uSpec;',
     'varying vec3 vCol;',
     'varying float vFog;',
     'void main(){',
     '  vec4 world = uModel * vec4(aPos, 1.0);',
     '  gl_Position = uVP * world;',
-    '  vCol = mix(aCol, uTint, aTint) * aShade;',
+    '  vec3 base = mix(aCol, uTint, aTint);',
+    '  if (uUnlit > 0.5) {',
+    '    vCol = base;',
+    '  } else {',
+    // Rotation lives in the model matrix's upper 3x3; every lit draw uses a
+    // uniform scale, so the inverse-transpose would be the same direction.
+    '    mat3 nm = mat3(uModel[0].xyz, uModel[1].xyz, uModel[2].xyz);',
+    '    vec3 N = normalize(nm * aNrm);',
+    '    float diff = max(dot(N, uSun), 0.0);',
+    // Hemisphere ambient: sky light from above, warmer bounce from the ground.
+    '    float amb = 0.30 + 0.22 * (N.y * 0.5 + 0.5);',
+    '    vec3 lit = base * (amb + diff * 0.86);',
+    '    vec3 V = normalize(uEye - world.xyz);',
+    '    vec3 H = normalize(uSun + V);',
+    '    lit += uSunCol * pow(max(dot(N, H), 0.0), 42.0) * uSpec * diff;',
+    '    vCol = lit;',
+    '  }',
     '  vFog = clamp((length(world.xyz - uEye) - uFog.x) / uFog.y, 0.0, 1.0);',
     '}'
   ].join('\n');
@@ -97739,49 +97821,214 @@ body.touch .tp-btns { display: flex; }
     return mesh;
   }
 
-  /** One car body, built once and drawn per racer with a different tint. */
+  /**
+   * The car body, minus wheels. Shaped like a single-seater: pointed nose,
+   * front and rear wings, sidepods and a roll hoop. Wheels are a separate
+   * mesh so they can steer and spin instead of being welded to the shell.
+   */
   function buildCarMesh() {
     var m = new Milo.Mesh();
-    m.box(0, .52, .1, .78, .26, 1.72, GREY, 1);              // main body
-    m.box(0, .86, -.15, .60, .26, .82, GLASS, 0);            // cabin
-    m.box(0, .30, 1.62, .74, .16, .22, GREY, 1, .9);         // nose
-    m.box(0, .95, -1.42, .70, .07, .18, GREY, 1, 1.1);       // wing blade
-    m.box(-.58, .74, -1.42, .09, .22, .16, DARK, 0);
-    m.box(.58, .74, -1.42, .09, .22, .16, DARK, 0);
-    m.box(-.52, .30, 1.60, .16, .10, .10, [1, .96, .8], 0, 1.4);   // headlights
-    m.box(.52, .30, 1.60, .16, .10, .10, [1, .96, .8], 0, 1.4);
-    m.box(-.50, .28, -1.60, .14, .08, .08, [1, .25, .2], 0, 1.4);  // tail lights
-    m.box(.50, .28, -1.60, .14, .08, .08, [1, .25, .2], 0, 1.4);
-    var wheels = [[-.80, 1.05], [.80, 1.05], [-.80, -1.05], [.80, -1.05]];
-    wheels.forEach(function (w) {
-      m.box(w[0], .34, w[1], .16, .34, .36, [.08, .08, .10], 0);
-    });
+    var TYRE = [.07, .07, .08], CARBON = [.13, .13, .16];
+
+    // Monocoque: a tapering tub from the cockpit forward to the nose.
+    m.box(0, .40, -.20, .40, .21, 1.05, GREY, 1);
+    m.box(0, .36, .95, .26, .15, .55, GREY, 1, .96);
+    m.box(0, .32, 1.52, .15, .11, .35, GREY, 1, .92);
+
+    // Front wing: a wide plane on two short pylons, with endplates.
+    m.box(0, .14, 1.92, .78, .035, .30, GREY, 1, 1.04);
+    m.box(0, .22, 1.86, .06, .09, .12, CARBON, 0);
+    m.box(-.76, .22, 1.92, .035, .15, .30, GREY, 1, .88);
+    m.box(.76, .22, 1.92, .035, .15, .30, GREY, 1, .88);
+
+    // Sidepods with their cooling outlets, tapering into the engine cover.
+    m.box(-.60, .36, -.30, .24, .19, .72, GREY, 1, .94);
+    m.box(.60, .36, -.30, .24, .19, .72, GREY, 1, .94);
+    m.box(-.50, .34, -1.02, .13, .14, .34, CARBON, 0);
+    m.box(.50, .34, -1.02, .13, .14, .34, CARBON, 0);
+
+    // Cockpit opening, roll hoop and the airbox feeding the engine.
+    m.box(0, .60, -.34, .27, .10, .40, GLASS, 0);
+    m.box(0, .80, -.62, .17, .22, .14, GREY, 1, .90);
+    m.box(0, .66, -.95, .20, .16, .40, GREY, 1, .88);
+
+    // Engine cover falling away to the rear axle.
+    m.box(0, .48, -1.28, .22, .16, .36, GREY, 1, .92);
+
+    // Rear wing on twin pylons, with endplates and a lower beam wing.
+    m.box(0, 1.00, -1.86, .62, .045, .26, GREY, 1, 1.02);
+    m.box(0, .86, -1.84, .05, .18, .10, CARBON, 0);
+    m.box(-.60, .86, -1.86, .035, .21, .26, GREY, 1, .86);
+    m.box(.60, .86, -1.86, .035, .21, .26, GREY, 1, .86);
+    m.box(0, .40, -1.92, .40, .04, .16, CARBON, 0);
+
+    // Diffuser and floor.
+    m.box(0, .16, -.40, .56, .035, 1.30, CARBON, 0);
+    m.box(0, .22, -1.60, .44, .10, .22, CARBON, 0);
     return m;
   }
 
-  /** A flat quad used for the drift smoke and boost puffs. */
+  /** Lights, drawn unlit so they read as emitting rather than reflecting. */
+  function buildLampMesh(col) {
+    var m = new Milo.Mesh();
+    m.box(0, 0, 0, 1, 1, 1, col, 0);
+    return m;
+  }
+
+  /** One wheel: a tyre barrel with a paler rim disc inside it. */
+  function buildWheelMesh() {
+    var m = new Milo.Mesh();
+    m.cylX(0, 0, 0, .19, .36, 12, [.08, .08, .09], 0);
+    m.cylX(0, 0, 0, .20, .17, 10, [.55, .57, .62], 0);
+    // A spoke pair so the wheel visibly rotates rather than just sitting there.
+    m.box(0, 0, 0, .21, .30, .045, [.62, .64, .70], 0);
+    m.box(0, 0, 0, .21, .045, .30, [.62, .64, .70], 0);
+    return m;
+  }
+
+  /** A flat ground quad, used for contact shadows. */
   function buildPuffMesh() {
     var m = new Milo.Mesh();
-    m.quad([-1, 0, -1], [-1, 0, 1], [1, 0, 1], [1, 0, -1], GREY, 1, 1);
+    m.quad([-1, 0, -1], [-1, 0, 1], [1, 0, 1], [1, 0, -1], GREY, 1, 1, [0, 1, 0]);
+    return m;
+  }
+
+  /**
+   * An upright quad facing +z, yawed toward the camera at draw time. Smoke
+   * lying flat on the tarmac reads as a grey slab painted on the road; a
+   * billboard reads as smoke.
+   */
+  function buildSmokeMesh() {
+    var m = new Milo.Mesh();
+    m.quad([-1, -1, 0], [1, -1, 0], [1, 1, 0], [-1, 1, 0], GREY, 1, 1, [0, 0, 1]);
+    return m;
+  }
+
+  /**
+   * Sky dome. A vertical gradient from the fog colour at the horizon up to the
+   * sky colour overhead, with the sun brightening the patch it sits in — a
+   * flat clear colour reads as a void, and the horizon never matches the fog.
+   */
+  function buildSkyMesh(theme, sun) {
+    var m = new Milo.Mesh();
+    var RINGS = 10, SEGS = 22, R = 3000;
+    function at(ring, seg) {
+      var el = (ring / RINGS) * (Math.PI / 2);
+      var az = (seg / SEGS) * Math.PI * 2;
+      var ce = Math.cos(el);
+      return [Math.cos(az) * ce * R, Math.sin(el) * R, Math.sin(az) * ce * R];
+    }
+    function tone(p) {
+      var el = Math.max(0, p[1] / R);
+      var k = Math.pow(el, .55);
+      var c = [
+        theme.fog[0] + (theme.sky[0] - theme.fog[0]) * k,
+        theme.fog[1] + (theme.sky[1] - theme.fog[1]) * k,
+        theme.fog[2] + (theme.sky[2] - theme.fog[2]) * k
+      ];
+      var l = Math.hypot(p[0], p[1], p[2]) || 1;
+      var dot = (p[0] * sun[0] + p[1] * sun[1] + p[2] * sun[2]) / l;
+      var glow = Math.pow(Math.max(0, dot), 26) * .8 + Math.pow(Math.max(0, dot), 4) * .16;
+      return [Math.min(1, c[0] + glow), Math.min(1, c[1] + glow * .93), Math.min(1, c[2] + glow * .78)];
+    }
+    for (var r = 0; r < RINGS; r++) {
+      for (var sgi = 0; sgi < SEGS; sgi++) {
+        var a = at(r, sgi), b = at(r, sgi + 1), c = at(r + 1, sgi + 1), dd = at(r + 1, sgi);
+        // Wound to face inward, since the camera sits inside the dome.
+        m.tri(a, c, b, tone(a), 1, 0, [0, -1, 0]);
+        m.tri(a, dd, c, tone(a), 1, 0, [0, -1, 0]);
+      }
+    }
+    // A skirt below the horizon so a downhill camera never sees past the dome.
+    for (var sg2 = 0; sg2 < SEGS; sg2++) {
+      var p0 = at(0, sg2), p1 = at(0, sg2 + 1);
+      var q0 = [p0[0], -R * .4, p0[2]], q1 = [p1[0], -R * .4, p1[2]];
+      m.tri(p0, q1, p1, theme.fog, 1, 0, [0, 1, 0]);
+      m.tri(p0, q0, q1, theme.fog, 1, 0, [0, 1, 0]);
+    }
     return m;
   }
 
   /* --------------------------------------------------------- physics */
 
-  var GRAV = 34;
+  /**
+   * Two gravities, deliberately.
+   *
+   * G is real gravity and is what the tyre model weighs the car with: grip is
+   * mu * load, so using anything else makes every cornering speed nonsense.
+   * GRAV_AIR is the exaggerated pull used only for airborne arcs, because a
+   * jump that hangs for a realistic two seconds feels broken in an arcade
+   * racer. Keeping them separate lets the handling be honest while the jumps
+   * stay snappy.
+   */
+  var G = 9.81;
+  var GRAV_AIR = 34;
+
+  // Chassis geometry, in metres. A front-heavy CG would understeer forever.
+  var WHEELBASE = 3.05;
+  var CG_FRONT = 1.62;                     // CG to front axle
+  var CG_REAR = WHEELBASE - CG_FRONT;      // CG to rear axle
+  var CG_HEIGHT = .32;
+  var WHEEL_R = .36;
+
+  // Aero. Both scale with v^2: drag sets top speed, downforce buys cornering
+  // grip that a slow car simply does not have.
+  var DRAG_K = .62;
+  var LIFT_K = 1.05;
+  var ROLL_RESIST = 11;
+
+  var GEARS = [2.92, 2.10, 1.62, 1.30, 1.09, .94, .82];
+  var RPM_IDLE = 1900, RPM_MAX = 13500;
+
+  /** Engine revs for a given road speed in a given gear. */
+  function revsAt(P, speed, gear) {
+    return Math.abs(speed) / WHEEL_R * (60 / (Math.PI * 2)) * GEARS[gear] * P.finalDrive;
+  }
+
+  /** Normalised torque curve: soft low down, peak at ~72% of the rev range. */
+  function torqueShape(rpm) {
+    var x = U.clamp((rpm - RPM_IDLE) / (RPM_MAX - RPM_IDLE), 0, 1);
+    return .52 + .48 * Math.sin(Math.min(1, x / .72) * Math.PI * .5) - .28 * Math.max(0, x - .82) / .18;
+  }
+
+  /**
+   * Simplified Pacejka: force rises steeply with slip angle, peaks near the
+   * limit, then falls away. That fall-off is what makes a slide something you
+   * have to catch rather than a state the car sits in happily.
+   */
+  function tyreForce(slip, load, mu, stiff) {
+    var B = stiff || 8.4, C = 1.5, D = mu * load;
+    return -D * Math.sin(C * Math.atan(B * slip));
+  }
 
   /** Turns 0..1 stat sliders into the numbers the simulation actually uses. */
   function physicsFor(stats) {
+    var top = 27 + stats.top * 43;
     return {
-      top: 27 + stats.top * 43,
-      accel: 11 + stats.accel * 17,
-      brakeF: 16 + stats.brake * 20,
-      grip: 3.4 + stats.grip * 7.2,
-      steer: 1.75 + stats.grip * .75,
+      top: top,
+      // Peak power is derived from the target top speed so that drag alone
+      // sets it: P = k * v^3 at terminal velocity.
+      power: DRAG_K * top * top * top,
+      mass: 660 + stats.mass * 560,
+      mu: 1.12 + stats.grip * .62,
+      brakeTorque: 4200 + stats.brake * 3800,
+      // Steering lock, and how much of it survives at speed.
+      lock: .46 + stats.grip * .10,
+      // Geared for its own top speed, the way a real car is: top gear must
+      // reach the limiter right as drag stops it accelerating, so every car
+      // uses its whole rev range instead of idling at maximum speed.
+      finalDrive: RPM_MAX * .96 /
+        (top / WHEEL_R * (60 / (Math.PI * 2)) * GEARS[GEARS.length - 1]),
       air: .35 + stats.air * 1.35,
       nitro: stats.nitro,
-      mass: stats.mass
+      accelStat: stats.accel
     };
+  }
+
+  /** Peak lateral acceleration available right now, aero included. */
+  function gripLimit(P, speed) {
+    var load = P.mass * G + LIFT_K * speed * speed;
+    return P.mu * load / P.mass;
   }
 
   var AI_NAMES = ['Rossi', 'Vega', 'Kade', 'Nyx', 'Orin', 'Sable', 'Juno', 'Ezra', 'Mika',
@@ -97806,12 +98053,14 @@ body.touch .tp-btns { display: flex; }
   }
 
   function mount(host) {
-    var U = Milo.util;
     var save = loadSave();
     var carMesh = buildCarMesh(), puffMesh = buildPuffMesh();
+    var wheelMesh = buildWheelMesh(), lampMesh = buildLampMesh([1, .25, .18]);
+    var smokeMesh = buildSmokeMesh();
 
     var gpu = null;     // lazily created once we have a GL context
     var menuEl = null, hudEl = null, nitroEl = null, msgEl = null, lightsEl = null;
+    var tachEl = null, gearEl = null;
 
     /* ------------------------------------------------------- track state */
 
@@ -98093,27 +98342,38 @@ body.touch .tp-btns { display: flex; }
         loc: {
           pos: gl.getAttribLocation(prog, 'aPos'),
           col: gl.getAttribLocation(prog, 'aCol'),
-          shade: gl.getAttribLocation(prog, 'aShade'),
+          nrm: gl.getAttribLocation(prog, 'aNrm'),
           tint: gl.getAttribLocation(prog, 'aTint'),
           vp: gl.getUniformLocation(prog, 'uVP'),
           model: gl.getUniformLocation(prog, 'uModel'),
           uTint: gl.getUniformLocation(prog, 'uTint'),
           eye: gl.getUniformLocation(prog, 'uEye'),
+          sun: gl.getUniformLocation(prog, 'uSun'),
+          sunCol: gl.getUniformLocation(prog, 'uSunCol'),
           fog: gl.getUniformLocation(prog, 'uFog'),
           fogColor: gl.getUniformLocation(prog, 'uFogColor'),
-          alpha: gl.getUniformLocation(prog, 'uAlpha')
+          alpha: gl.getUniformLocation(prog, 'uAlpha'),
+          unlit: gl.getUniformLocation(prog, 'uUnlit'),
+          spec: gl.getUniformLocation(prog, 'uSpec')
         },
         track: gl.createBuffer(), trackN: 0,
         ground: gl.createBuffer(), groundN: 0,
+        sky: gl.createBuffer(), skyN: 0,
         car: gl.createBuffer(), carN: 0,
-        puff: gl.createBuffer(), puffN: 0
+        wheel: gl.createBuffer(), wheelN: 0,
+        lamp: gl.createBuffer(), lampN: 0,
+        puff: gl.createBuffer(), puffN: 0,
+        smoke: gl.createBuffer(), smokeN: 0
       };
-      upload(gpu.car, carMesh);
-      gpu.carN = carMesh.count();
-      upload(gpu.puff, puffMesh);
-      gpu.puffN = puffMesh.count();
+      upload(gpu.car, carMesh); gpu.carN = carMesh.count();
+      upload(gpu.wheel, wheelMesh); gpu.wheelN = wheelMesh.count();
+      upload(gpu.lamp, lampMesh); gpu.lampN = lampMesh.count();
+      upload(gpu.puff, puffMesh); gpu.puffN = puffMesh.count();
+      upload(gpu.smoke, smokeMesh); gpu.smokeN = smokeMesh.count();
       gl.enable(gl.DEPTH_TEST);
       gl.depthFunc(gl.LEQUAL);
+      gl.enable(gl.CULL_FACE);
+      gl.cullFace(gl.BACK);
     }
 
     function upload(buf, mesh) {
@@ -98131,20 +98391,23 @@ body.touch .tp-btns { display: flex; }
       var gm = buildGroundMesh(cur.built, cur.theme);
       upload(gpu.ground, gm);
       gpu.groundN = gm.count();
+      var skm = buildSkyMesh(cur.theme, cur.theme.sun);
+      upload(gpu.sky, skm);
+      gpu.skyN = skm.count();
       cur.dirty = false;
     }
 
     function bindMesh(buf) {
-      var gl = gpu.gl, L = gpu.loc, stride = 32;
+      var gl = gpu.gl, L = gpu.loc, stride = Milo.Mesh.STRIDE * 4;
       gl.bindBuffer(gl.ARRAY_BUFFER, buf);
       gl.enableVertexAttribArray(L.pos);
       gl.vertexAttribPointer(L.pos, 3, gl.FLOAT, false, stride, 0);
       gl.enableVertexAttribArray(L.col);
       gl.vertexAttribPointer(L.col, 3, gl.FLOAT, false, stride, 12);
-      gl.enableVertexAttribArray(L.shade);
-      gl.vertexAttribPointer(L.shade, 1, gl.FLOAT, false, stride, 24);
+      gl.enableVertexAttribArray(L.nrm);
+      gl.vertexAttribPointer(L.nrm, 3, gl.FLOAT, false, stride, 24);
       gl.enableVertexAttribArray(L.tint);
-      gl.vertexAttribPointer(L.tint, 1, gl.FLOAT, false, stride, 28);
+      gl.vertexAttribPointer(L.tint, 1, gl.FLOAT, false, stride, 36);
     }
 
     /* ------------------------------------------------------------- HUD */
@@ -98155,15 +98418,21 @@ body.touch .tp-btns { display: flex; }
       lightsEl = el('div', 'td-lights', '<i></i><i></i><i></i><i></i><i></i>');
       msgEl = el('div', 'td-msg');
       nitroEl = el('div', 'td-nitro', '<b style="width:0%"></b>');
+      var dash = el('div', 'td-dash');
+      tachEl = el('div', 'td-tach', '<b></b>');
+      gearEl = el('div', 'td-gear', '1');
+      dash.appendChild(tachEl);
+      dash.appendChild(gearEl);
       hudEl.appendChild(lightsEl);
       hudEl.appendChild(msgEl);
+      hudEl.appendChild(dash);
       hudEl.appendChild(nitroEl);
       g.hud.appendChild(hudEl);
     }
 
     function hideHud() {
       if (hudEl) { hudEl.remove(); hudEl = null; }
-      lightsEl = null;
+      lightsEl = null; tachEl = null; gearEl = null;
     }
 
     /* --------------------------------------------------------- geometry */
@@ -98247,14 +98516,20 @@ body.touch .tp-btns { display: flex; }
       var diff = ((want - car.yaw + Math.PI * 3) % (Math.PI * 2)) - Math.PI;
       car.steerIn = U.clamp(diff * 2.3, -1, 1);
 
-      // Slow to whatever the tightest corner in view actually allows. The
-      // lateral-grip figure here is deliberately conservative: a rival that
-      // understeers into the outside barrier is slower than one that lifts.
+      // Slow to whatever the tightest corner in view actually allows, read
+      // off the same tyre-and-aero budget the physics uses. Rivals lift a
+      // little early: a car that understeers into the outside barrier is
+      // slower than one that lifts.
       var limit = car.phys.top;
       for (var k = 3; k < look + 34; k += 3) {
         var sm = s[(car.si + k) % n];
         var c = Math.abs(sm.curvS);
-        if (c > 1e-5) limit = Math.min(limit, Math.sqrt((8.5 * car.skill) / c) + k * .30);
+        if (c <= 1e-5) continue;
+        // Corner speed where lateral demand meets available grip, solved at
+        // that speed rather than this one, since downforce grows with it.
+        var ay = gripLimit(car.phys, Math.min(speed + k * .4, car.phys.top)) * .80 * car.skill;
+        ay += G * Math.abs(Math.sin(sm.bank || 0)) * .5;
+        limit = Math.min(limit, Math.sqrt(ay / c) + k * .30);
       }
       // Running wide is the warning sign; back off before the wall arrives.
       var wide = Math.abs(car.off) / Math.max(1, s[car.si].w);
@@ -98304,46 +98579,159 @@ body.touch .tp-btns { display: flex; }
         if (car.boost > 0) car.boost -= dt;
         var boosting = car.boost > 0;
 
-        // --- steering ----------------------------------------------------
+        // --- steering input ------------------------------------------------
+        // Keyboard steering is on or off, so the wheel is ramped toward the
+        // input rather than snapped to it; a real driver cannot reach full
+        // lock instantly either. Lock also falls away with speed, which is
+        // what stops a flick of the key spinning the car on a straight.
         var speed = Math.hypot(car.vx, car.vz);
-        var auth = car.ground
-          ? P.steer * (1 - .50 * Math.min(1, speed / P.top)) * Math.min(1, speed / 4.5)
-          : P.air * .55;
-        var vfSign = (car.vx * Math.sin(car.yaw) + car.vz * Math.cos(car.yaw)) < -.5 ? -1 : 1;
-        car.yaw += steer * auth * dt * vfSign;
+        var lockNow = P.lock * (1 - .70 * U.clamp(speed / P.top, 0, 1));
+        var rate = steer === 0 ? 5.2 : 3.4;
+        car.steerPos = car.steerPos == null ? 0 : car.steerPos;
+        car.steerPos += U.clamp(steer - car.steerPos, -rate * dt, rate * dt);
+        var delta = car.steerPos * lockNow;
+        car.steerAngle = delta;
 
-        // --- longitudinal + lateral --------------------------------------
         var sinY = Math.sin(car.yaw), cosY = Math.cos(car.yaw);
         var vf = car.vx * sinY + car.vz * cosY;
         var vr = car.vx * cosY - car.vz * sinY;
+        car.yawRate = car.yawRate || 0;
 
         if (car.ground) {
-          var topV = P.top * (boosting ? 1.30 : 1);
-          var accelF = P.accel * (boosting ? 1.75 : 1);
-          if (thr > 0 && vf < topV) vf += accelF * dt;
-          if (brk > 0) {
-            if (vf > .5) vf -= P.brakeF * dt;
-            else vf = Math.max(-14, vf - P.accel * .45 * dt);
-          }
-          // Coasting drag, plus a hard cap so boost bleeds off rather than sticks.
-          vf -= vf * (thr > 0 ? .02 : .55) * dt;
-          if (vf > topV) vf = topV;
+          var m = P.mass;
+          var boostK = boosting ? 1.35 : 1;
 
-          // Riding the kerb costs grip, which is what makes the edges risky.
+          // --- gearbox: pick a ratio, read the revs off the driveshaft -----
+          car.gear = car.gear == null ? 0 : car.gear;
+          var rpm = U.clamp(revsAt(P, vf, car.gear), RPM_IDLE, RPM_MAX);
+          car.shiftT = Math.max(0, (car.shiftT || 0) - dt);
+          if (!car.shiftT) {
+            if (rpm > RPM_MAX * .96 && car.gear < GEARS.length - 1) { car.gear++; car.shiftT = .12; }
+            else if (rpm < RPM_MAX * .42 && car.gear > 0) { car.gear--; car.shiftT = .10; }
+          }
+          car.rpm = rpm;
+
+          // --- longitudinal demand -----------------------------------------
+          // Power-limited above a crawl, torque-limited below it.
+          var driveF = 0;
+          if (thr > 0 && !car.shiftT) {
+            driveF = P.power * boostK * torqueShape(rpm) / Math.max(Math.abs(vf), 7);
+          }
+          var brakeF = 0;
+          if (brk > 0) {
+            if (vf > .6) brakeF = P.brakeTorque / WHEEL_R;
+            else driveF = -P.mass * 2.6;              // crawl backwards
+          }
+
+          // --- vertical load, with transfer and downforce ------------------
+          var downforce = LIFT_K * speed * speed;
+          var axPrev = car.ax || 0;
+          var staticF = m * G * (CG_REAR / WHEELBASE), staticR = m * G * (CG_FRONT / WHEELBASE);
+          // Accelerating pitches load onto the rear axle, braking onto the front.
+          var transfer = m * axPrev * CG_HEIGHT / WHEELBASE;
+          var loadF = Math.max(120, staticF - transfer + downforce * .44);
+          var loadR = Math.max(120, staticR + transfer + downforce * .56);
+
+          // --- slip angles --------------------------------------------------
+          // At walking pace the slip-angle formulation is numerically useless,
+          // so below a few m/s the model blends into plain kinematic steering.
+          var vsafe = Math.max(Math.abs(vf), 2.2);
+          var slipF = Math.atan2(vr + car.yawRate * CG_FRONT, vsafe) - delta * (vf < 0 ? -1 : 1);
+          var slipR = Math.atan2(vr - car.yawRate * CG_REAR, vsafe);
+
           var edgy = Math.abs(car.off) > car.roadW * .84;
-          var gripRate = P.grip * (edgy ? .62 : 1);
-          vr *= Math.exp(-gripRate * dt);
+          var muNow = P.mu * (edgy ? .74 : 1) * (sm.kind === 2 ? 1.04 : 1);
+
+          // The rear axle is deliberately the stiffer end. A car that lets go
+          // at the back first is a car nobody can catch on a keyboard.
+          var Fyf = tyreForce(slipF, loadF, muNow, 8.2);
+          var Fyr = tyreForce(slipR, loadR, muNow, 10.4);
+
+          var capR = muNow * loadR;
+          var capF = muNow * loadF;
+
+          // Traction and brake control. These are real systems on a real race
+          // car, and here they are also what makes the model driveable: a
+          // keyboard throttle is fully open or fully shut, so without them the
+          // car would sit permanently at the longitudinal limit with nothing
+          // left for cornering, and every corner would end in a spin.
+          driveF /= 1 + Math.max(0, Math.abs(slipR) - .09) * 7;
+          driveF = U.clamp(driveF, -capR * .92, capR * .92);
+          brakeF = Math.min(brakeF, (capF + capR) * .88);
+
+          // --- friction ellipse: a tyre spending grip forwards has less
+          //     left for cornering, which is why you cannot brake and turn.
+          var rearLong = driveF - brakeF * .38;
+          var frontLong = -brakeF * .62;
+          // Whatever is still beyond the contact patch is simply not delivered.
+          car.slipping = Math.abs(rearLong) > capR * .9;
+          rearLong = U.clamp(rearLong, -capR, capR);
+          frontLong = U.clamp(frontLong, -capF, capF);
+          var availR = Math.sqrt(Math.max(0, capR * capR - rearLong * rearLong));
+          var availF = Math.sqrt(Math.max(0, capF * capF - frontLong * frontLong));
+          Fyr = U.clamp(Fyr, -availR, availR);
+          Fyf = U.clamp(Fyf, -availF, availF);
+
+          // --- resistance ---------------------------------------------------
+          var drag = DRAG_K * vf * Math.abs(vf);
+          var roll = ROLL_RESIST * vf;
+          var Fx = rearLong + frontLong - drag - roll;
+
+          // --- accelerations -------------------------------------------------
+          var ax = Fx / m;
+          var ay = (Fyf * Math.cos(delta) + Fyr) / m;
+          // Banking tilts the contact patch, so part of the car's weight helps
+          // it turn — which is the whole point of a banked corner.
+          ay += G * Math.sin(car.roadBank || 0);
+          car.ax = ax;
+
+          vf += (ax + vr * car.yawRate) * dt;
+          vr += (ay - vf * car.yawRate) * dt;
+
+          var Iz = m * 1.62;
+          var yawAcc = (CG_FRONT * Fyf * Math.cos(delta) - CG_REAR * Fyr) / Iz;
+          car.yawRate += yawAcc * dt;
+
+          // Below a crawl the bicycle model has nothing to work with; steer
+          // kinematically so parking and slow hairpins still respond.
+          if (Math.abs(vf) < 4.5) {
+            var kin = vf * Math.tan(delta) / WHEELBASE;
+            var blend = 1 - Math.abs(vf) / 4.5;
+            car.yawRate += (kin - car.yawRate) * blend * Math.min(1, 9 * dt);
+          }
+          car.yawRate *= Math.exp(-.9 * dt);       // yaw damping from the tyres
+
+          // Stability control: bleed off yaw the tyres could never sustain at
+          // this speed. Oversteer still happens and still has to be caught —
+          // this only stops an unrecoverable spin from a single key press.
+          var yawCap = gripLimit(P, Math.abs(vf)) / Math.max(Math.abs(vf), 6) * 1.35;
+          if (Math.abs(car.yawRate) > yawCap) {
+            car.yawRate += (Math.sign(car.yawRate) * yawCap - car.yawRate) * Math.min(1, 5 * dt);
+          }
+          car.yaw += car.yawRate * dt;
+
           car.drift = Math.abs(vr);
-          if (car.drift > 3.4 && speed > 12 && Math.random() < .6) puff(d, car, false);
+          car.slipAngle = Math.abs(slipR);
+          if ((car.drift > 4.2 || (car.slipping && Math.abs(vf) < 26)) &&
+            speed > 11 && Math.random() < .4) puff(d, car, false);
         } else {
-          // In the air there is nothing to push against: only drag.
-          vf -= vf * .06 * dt;
+          // Airborne: no contact patch, so only drag acts, and the driver has
+          // just enough authority to line the car up for the landing.
+          car.yaw += steer * P.air * .55 * dt;
+          car.yawRate *= Math.exp(-2.0 * dt);
+          vf -= DRAG_K * vf * Math.abs(vf) / P.mass * dt;
           vr -= vr * .35 * dt;
           car.drift = 0;
+          car.slipping = false;
         }
 
         car.vx = sinY * vf + cosY * vr;
         car.vz = cosY * vf - sinY * vr;
+
+        // Wheels turn at road speed; a locked or spinning tyre does not.
+        var spin = car.slipping && thr > 0 ? vf * 1.9 : (brk > 0 && car.ground && Math.abs(vf) > 3 ? vf * .25 : vf);
+        car.wheelAng = (car.wheelAng || 0) + spin / WHEEL_R * dt;
+        car.braking = brk > 0;
 
         // --- move, then resolve against the surface at the NEW position ----
         car.x += car.vx * dt;
@@ -98397,7 +98785,7 @@ body.touch .tp-btns { display: flex; }
         // --- vertical ----------------------------------------------------
         var support = supported(car, sm);
         var targetY = car.roadY + RIDE;
-        car.vy -= GRAV * dt;
+        car.vy -= GRAV_AIR * dt;
         car.y += car.vy * dt;
         // Vertical speed relative to the road, so a car climbing a ramp at the
         // road's own rate still counts as being on it.
@@ -98467,22 +98855,32 @@ body.touch .tp-btns { display: flex; }
         car.prog = car.lap * n + car.si;
       });
 
-      // Keep cars from occupying the same patch of tarmac.
+      // Contact between cars. The overlap is pushed apart by mass, and the
+      // velocity change is an impulse along the contact normal, applied only
+      // while the two are closing. Scaling each car's whole velocity on every
+      // frame of contact instead — which is what this used to do — brings a
+      // queue of nineteen cars to a standstill within a second of the start.
+      var CONTACT = 2.7, RESTITUTION = .18;
       for (var a = 0; a < d.cars.length; a++) {
         for (var b = a + 1; b < d.cars.length; b++) {
           var c1 = d.cars[a], c2 = d.cars[b];
           var dx = c2.x - c1.x, dz = c2.z - c1.z;
           var dist = Math.hypot(dx, dz);
-          if (dist > 3.4 || dist < .001) continue;
+          if (dist > CONTACT || dist < .001) continue;
           if (Math.abs(c1.y - c2.y) > 2.5) continue;
-          var push = (3.4 - dist) / 2;
           var nx = dx / dist, nz = dz / dist;
-          // The heavier car gives less ground.
-          var m1 = c1.phys.mass + .2, m2 = c2.phys.mass + .2, mt = m1 + m2;
-          c1.x -= nx * push * (m2 / mt) * 2; c1.z -= nz * push * (m2 / mt) * 2;
-          c2.x += nx * push * (m1 / mt) * 2; c2.z += nz * push * (m1 / mt) * 2;
-          c1.vx *= .94; c1.vz *= .94; c2.vx *= .94; c2.vz *= .94;
-          if ((c1.player || c2.player)) Milo.sound.hit();
+          var inv1 = 1 / c1.phys.mass, inv2 = 1 / c2.phys.mass, invSum = inv1 + inv2;
+
+          var overlap = CONTACT - dist;
+          c1.x -= nx * overlap * (inv1 / invSum); c1.z -= nz * overlap * (inv1 / invSum);
+          c2.x += nx * overlap * (inv2 / invSum); c2.z += nz * overlap * (inv2 / invSum);
+
+          var vn = (c2.vx - c1.vx) * nx + (c2.vz - c1.vz) * nz;
+          if (vn >= 0) continue;                       // already separating
+          var j = -(1 + RESTITUTION) * vn / invSum;
+          c1.vx -= nx * j * inv1; c1.vz -= nz * j * inv1;
+          c2.vx += nx * j * inv2; c2.vz += nz * j * inv2;
+          if ((c1.player || c2.player) && -vn > 4) Milo.sound.hit();
         }
       }
     }
@@ -98589,14 +98987,15 @@ body.touch .tp-btns { display: flex; }
       if (!built) return;
 
       var me = d && d.me;
-      var eye, look;
+      var eye, look, roll = 0;
       if (me && g.state !== 'start') {
         var speed = Math.hypot(me.vx, me.vz);
         var k = U.clamp(speed / me.phys.top, 0, 1);
         var fwdX = Math.sin(me.yaw), fwdZ = Math.cos(me.yaw);
-        var want = [
-          me.x - fwdX * (9.6 + k * 3.4), me.y + 4.0 + k * .9, me.z - fwdZ * (9.6 + k * 3.4)
-        ];
+        // Close and low: the old camera sat so far back and so high that the
+        // car read as a dot and the road lost all sense of speed.
+        var back = 8.0 + k * 2.6;
+        var want = [me.x - fwdX * back, me.y + 2.55 + k * .55, me.z - fwdZ * back];
         if (!d.cam) d.cam = want.slice();
         // A lagging camera reads as speed; snapping to the car reads as a diagram.
         var f = 1 - Math.exp(-7 * Math.max(wall, .0001));
@@ -98604,7 +99003,13 @@ body.touch .tp-btns { display: flex; }
         d.cam[1] += (want[1] - d.cam[1]) * f;
         d.cam[2] += (want[2] - d.cam[2]) * f;
         eye = d.cam;
-        look = [me.x + fwdX * 7, me.y + 1.3, me.z + fwdZ * 7];
+        look = [me.x + fwdX * (9 + k * 5), me.y + 1.05, me.z + fwdZ * (9 + k * 5)];
+        // The horizon leans out of a slide, which is most of what sells the
+        // difference between gripping and sliding from behind the car.
+        var vrNow = me.vx * Math.cos(me.yaw) - me.vz * Math.sin(me.yaw);
+        var wantRoll = U.clamp(-vrNow * .006, -.09, .09);
+        d.camRoll = (d.camRoll || 0) + (wantRoll - (d.camRoll || 0)) * Math.min(1, 4 * wall);
+        roll = d.camRoll;
         g.data.camK = k;
       } else {
         // Menu: a slow orbit of the circuit, so the garage has the track behind it.
@@ -98617,58 +99022,142 @@ body.touch .tp-btns { display: flex; }
 
       var aspect = Math.max(.35, g.W / Math.max(1, g.H));
       var fov = (60 + (g.data.camK || 0) * 13) * Math.PI / 180;
-      var proj = M.perspective(fov, aspect, .6, 3600);
-      var view = M.lookAt(eye[0], eye[1], eye[2], look[0], look[1], look[2], 0, 1, 0);
+      var proj = M.perspective(fov, aspect, .5, 4200);
+      var view = M.lookAt(eye[0], eye[1], eye[2], look[0], look[1], look[2],
+        Math.sin(roll), Math.cos(roll), 0);
       var vp = M.mul(proj, view);
 
-      gl.clearColor(theme.sky[0], theme.sky[1], theme.sky[2], 1);
+      gl.clearColor(theme.fog[0], theme.fog[1], theme.fog[2], 1);
       gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-      gl.enable(gl.DEPTH_TEST);
-      gl.depthMask(true);
-      gl.disable(gl.BLEND);
 
       gl.useProgram(gpu.prog);
       gl.uniformMatrix4fv(L.vp, false, vp);
       gl.uniform3f(L.eye, eye[0], eye[1], eye[2]);
-      gl.uniform2f(L.fog, 150, 620);
+      gl.uniform3f(L.sun, theme.sun[0], theme.sun[1], theme.sun[2]);
+      gl.uniform3f(L.sunCol, theme.sunCol[0], theme.sunCol[1], theme.sunCol[2]);
+      gl.uniform2f(L.fog, 170, 900);
       gl.uniform3f(L.fogColor, theme.fog[0], theme.fog[1], theme.fog[2]);
       gl.uniform1f(L.alpha, 1);
+      gl.uniform3f(L.uTint, 1, 1, 1);
+
+      // --- sky: drawn first, unlit, and carried along with the camera -------
+      if (gpu.skyN) {
+        gl.depthMask(false);
+        gl.disable(gl.CULL_FACE);
+        gl.uniform1f(L.unlit, 1);
+        gl.uniform1f(L.spec, 0);
+        gl.uniformMatrix4fv(L.model, false, M.model(eye[0], eye[1], eye[2], 0, 0, 0, 1, 1, 1));
+        bindMesh(gpu.sky);
+        gl.drawArrays(gl.TRIANGLES, 0, gpu.skyN);
+        gl.depthMask(true);
+        gl.enable(gl.CULL_FACE);
+      }
 
       var ident = M.identity();
+      gl.uniform1f(L.unlit, 0);
+      gl.uniform1f(L.spec, .05);
       gl.uniformMatrix4fv(L.model, false, ident);
-      gl.uniform3f(L.uTint, 1, 1, 1);
 
       if (gpu.groundN) { bindMesh(gpu.ground); gl.drawArrays(gl.TRIANGLES, 0, gpu.groundN); }
       if (gpu.trackN) { bindMesh(gpu.track); gl.drawArrays(gl.TRIANGLES, 0, gpu.trackN); }
 
       if (d && d.cars) {
-        bindMesh(gpu.car);
+        // --- contact shadows ------------------------------------------------
+        // Without these every car looks pasted on top of the track rather than
+        // standing on it. They sit on the road, not on the car, so an airborne
+        // car's shadow stays down on the tarmac where it belongs.
+        gl.enable(gl.BLEND);
+        gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+        gl.depthMask(false);
+        gl.uniform1f(L.unlit, 1);
+        gl.uniform3f(L.uTint, .04, .05, .09);
+        bindMesh(gpu.puff);
         d.cars.forEach(function (car) {
-          if (car.respawnT > 0 && Math.floor(car.respawnT * 12) % 2) return;   // blink
+          if (car.respawnT > 0) return;
+          var lift = Math.max(0, car.y - (car.roadY || car.y));
+          var sc = 1 + lift * .10;
+          gl.uniform1f(L.alpha, U.clamp(.46 - lift * .05, .06, .46));
+          gl.uniformMatrix4fv(L.model, false,
+            M.model(car.x, (car.roadY || car.y) + .05, car.z, car.yaw, 0, car.roadBank || 0,
+              1.15 * sc, 1, 2.3 * sc));
+          gl.drawArrays(gl.TRIANGLES, 0, gpu.puffN);
+        });
+        gl.uniform1f(L.alpha, 1);
+        gl.depthMask(true);
+        gl.disable(gl.BLEND);
+
+        // --- bodies ------------------------------------------------------
+        gl.uniform1f(L.unlit, 0);
+        gl.uniform1f(L.spec, .55);           // clear-coat highlight on paint
+        bindMesh(gpu.car);
+        var models = [];
+        d.cars.forEach(function (car) {
+          if (car.respawnT > 0 && Math.floor(car.respawnT * 12) % 2) { models.push(null); return; }
           var model = M.model(car.x, car.y, car.z, car.yaw, car.pitch, car.roll, 1, 1, 1);
+          models.push(model);
           gl.uniformMatrix4fv(L.model, false, model);
           gl.uniform3f(L.uTint, car.col[0], car.col[1], car.col[2]);
           gl.drawArrays(gl.TRIANGLES, 0, gpu.carN);
         });
 
+        // --- wheels, close up only ------------------------------------------
+        // Four extra draws a car is worth it near the camera and invisible far
+        // away, so the field stays cheap to render.
+        gl.uniform1f(L.spec, .18);
+        gl.uniform3f(L.uTint, 1, 1, 1);
+        bindMesh(gpu.wheel);
+        var WHEELS = [[-.86, 1.30, 1], [.86, 1.30, 1], [-.92, -1.34, 0], [.92, -1.34, 0]];
+        d.cars.forEach(function (car, ci) {
+          var model = models[ci];
+          if (!model) return;
+          if (U.dist(car.x, car.z, eye[0], eye[2]) > 150) return;
+          for (var w = 0; w < 4; w++) {
+            var P4 = WHEELS[w];
+            var steerY = P4[2] ? (car.steerAngle || 0) : 0;
+            gl.uniformMatrix4fv(L.model, false,
+              M.mul(model, M.model(P4[0], WHEEL_R, P4[1], steerY, car.wheelAng || 0, 0, 1, 1, 1)));
+            gl.drawArrays(gl.TRIANGLES, 0, gpu.wheelN);
+          }
+        });
+
+        // --- brake lights ----------------------------------------------------
+        gl.uniform1f(L.unlit, 1);
+        bindMesh(gpu.lamp);
+        d.cars.forEach(function (car, ci) {
+          var model = models[ci];
+          if (!model) return;
+          if (U.dist(car.x, car.z, eye[0], eye[2]) > 180) return;
+          var hot = car.braking ? 1 : .18;
+          gl.uniform3f(L.uTint, hot, hot * .18, hot * .14);
+          gl.uniformMatrix4fv(L.model, false,
+            M.mul(model, M.model(0, .40, -2.00, 0, 0, 0, .16, .07, .05)));
+          gl.drawArrays(gl.TRIANGLES, 0, gpu.lampN);
+        });
+
+        // --- smoke -------------------------------------------------------
         if (d.puffs.length) {
           gl.enable(gl.BLEND);
           gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
           gl.depthMask(false);
-          bindMesh(gpu.puff);
+          gl.disable(gl.CULL_FACE);
+          bindMesh(gpu.smoke);
           d.puffs.forEach(function (p) {
             var f = p.life / p.max;
-            var sc = (1.6 - f) * (p.hot ? 1.5 : 2.1);
-            gl.uniformMatrix4fv(L.model, false, M.model(p.x, p.y + (1 - f) * 1.2, p.z, 0, 0, 0, sc, 1, sc));
+            var sc = (1.5 - f) * (p.hot ? .85 : 1.25);
+            var face = Math.atan2(eye[0] - p.x, eye[2] - p.z);
+            gl.uniformMatrix4fv(L.model, false,
+              M.model(p.x, p.y + .5 + (1 - f) * 1.6, p.z, face, 0, 0, sc, sc, 1));
             if (p.hot) gl.uniform3f(L.uTint, 1, .62, .25);
-            else gl.uniform3f(L.uTint, .88, .90, .96);
-            gl.uniform1f(L.alpha, f * (p.hot ? .55 : .35));
-            gl.drawArrays(gl.TRIANGLES, 0, gpu.puffN);
+            else gl.uniform3f(L.uTint, .82, .84, .90);
+            gl.uniform1f(L.alpha, f * (p.hot ? .5 : .26));
+            gl.drawArrays(gl.TRIANGLES, 0, gpu.smokeN);
           });
           gl.uniform1f(L.alpha, 1);
           gl.depthMask(true);
+          gl.enable(gl.CULL_FACE);
           gl.disable(gl.BLEND);
         }
+        gl.uniform1f(L.unlit, 0);
       }
     }
 
@@ -98729,6 +99218,17 @@ body.touch .tp-btns { display: flex; }
           if (msgEl.classList.contains('warn') !== warn) msgEl.classList.toggle('warn', warn);
         }
         if (nitroEl) nitroEl.firstChild.style.width = Math.round(me.nitro * 100) + '%';
+        if (tachEl) {
+          var rev = U.clamp(((me.rpm || RPM_IDLE) - RPM_IDLE) / (RPM_MAX - RPM_IDLE), 0, 1);
+          tachEl.firstChild.style.width = Math.round(rev * 100) + '%';
+          var red = rev > .93;
+          if (tachEl.classList.contains('redline') !== red) tachEl.classList.toggle('redline', red);
+        }
+        if (gearEl) {
+          var gtxt = 'N';
+          if (Math.abs(me.vx) + Math.abs(me.vz) > .5 || me.gear > 0) gtxt = String((me.gear || 0) + 1);
+          if (gearEl.textContent !== gtxt) gearEl.textContent = gtxt;
+        }
       }
 
       render(g, wall);

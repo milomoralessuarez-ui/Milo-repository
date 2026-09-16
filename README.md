@@ -64,7 +64,9 @@ Some things worth calling out:
   long straights into braking corners, chicanes, banked sweepers, tunnels and
   ramps that jump gaps in the road. Five red lights start every race F1-style,
   each lap splits into three timed sectors against your personal bests, and you
-  start at the back of a 19-car grid. The tracks are generated from seeds rather
+  start at the back of a 19-car grid. Handling runs on a real vehicle model —
+  slip-angle tyres, load transfer, aero downforce and a seven-speed gearbox —
+  rather than on velocity nudges. The tracks are generated from seeds rather
   than hand-drawn, so `tools/verify-tracks.mjs` checks every one is raceable —
   closed loop, no overlapping stretches, no corner tighter than the car's
   turning circle, no jump without a ramp steep enough to clear it. Run it before
