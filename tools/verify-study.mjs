@@ -23,9 +23,8 @@ for (const f of fs.readdirSync('study/subjects').filter((x) => x.endsWith('.js')
 // One flat list of units, each labelled for messages and tagged with its subject.
 const SETS = [
   ...(globalThis.window.STUDY_SETS || []).map((s) => ({ ...s, label: `Concept ${s.concept}`, subject: 'chem', slides: true })),
-  ...(globalThis.window.STUDY_SUBJECTS || []).flatMap((subj) => (subj.sets || []).map((u, i) => ({ ...u, label: `${subj.name} ${u.id || `unit ${i + 1}`}`, subject: subj.id, slides: false }))),
+  ...(globalThis.window.STUDY_SUBJECTS || []).flatMap((subj) => (subj.sets || []).map((u, i) => ({ ...u, label: `${subj.name || subj.id} ${u.id || `unit ${i + 1}`}`, subject: subj.id, slides: false }))),
 ];
-const SUBJECT_IDS = new Set((globalThis.window.STUDY_SUBJECTS || []).map((x) => x.id));
 
 const problems = [];
 const warnings = [];
@@ -262,7 +261,7 @@ for (const set of SETS) for (const t of set.terms || []) {
 for (const w of warnings) console.log(`warn  ${w}`);
 for (const p of problems) console.log(`FAIL  ${p}`);
 
-const summary = `${1 + SUBJECT_IDS.size} subjects, ${SETS.length} units, ${totalTerms} terms, ${totalQuestions} questions `
+const summary = `${new Set(SETS.map((s) => s.subject)).size} subjects, ${SETS.length} units, ${totalTerms} terms, ${totalQuestions} questions `
   + `(${byType.mc} multiple choice, ${byType.tf} true/false, ${byType.written} written)`;
 
 if (problems.length) {

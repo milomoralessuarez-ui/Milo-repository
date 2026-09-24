@@ -197,6 +197,12 @@ function textId(prefix, text) {
    from data.js and keeps its original ids (c1–c4) so saved progress survives;
    every other subject file pushes itself onto window.STUDY_SUBJECTS. */
 const UNIT_COLORS = ['#7c5cff', '#22d3ee', '#ffb020', '#ff4d9d', '#34d399', '#4d8cff', '#fb7185', '#a78bfa', '#f59e0b', '#2dd4bf', '#f472b6', '#60a5fa'];
+/** "4 concepts", "12 units", "4 concepts · 8 units": Chemistry's class-notes sets are concepts. */
+function unitWords(sets, join = ' · ') {
+  const c = sets.filter((x) => /^Concept /.test(x.short)).length, u = sets.length - c;
+  const w = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`;
+  return [c ? w(c, 'concept') : '', u ? w(u, 'unit') : ''].filter(Boolean).join(join) || '0 units';
+}
 function prepSet(raw, subject, id, short, meta) {
   return {
     ...raw, id, subject: subject.id, short, ...meta,
@@ -211,7 +217,19 @@ if ((window.STUDY_SETS || []).length) {
   SUBJECTS.push(chem);
 }
 for (const raw of window.STUDY_SUBJECTS || []) {
-  if (!raw || !raw.id || SUBJECTS.some((x) => x.id === raw.id) || !(raw.sets || []).length) continue;
+  if (!raw || !raw.id || !(raw.sets || []).length) continue;
+  const have = SUBJECTS.find((x) => x.id === raw.id);
+  // A file marked "extend" adds units to a subject that already exists —
+  // Chemistry's units after the class-notes concepts. They keep a note
+  // ("Beyond your notes") so the subject page can list them apart.
+  if (have && raw.extend) {
+    const at = have.sets.length;
+    have.sets.push(...raw.sets.map((u, i) => prepSet(u, have, u.id || `${raw.id}-u${at + i + 1}`, `Unit ${u.unit || at + i + 1}`,
+      { emoji: u.emoji || have.emoji, color: UNIT_COLORS[(at + i) % UNIT_COLORS.length], note: raw.note || '' })));
+    if (raw.blurb) have.blurb = raw.blurb;
+    continue;
+  }
+  if (have) continue;
   const subj = { ...raw };
   subj.sets = raw.sets.map((u, i) => prepSet(u, subj, u.id || `${raw.id}-u${i + 1}`, `Unit ${u.unit || i + 1}`, { emoji: raw.emoji || '📘', color: UNIT_COLORS[i % UNIT_COLORS.length] }));
   SUBJECTS.push(subj);
@@ -222,7 +240,7 @@ for (const subj of SUBJECTS) {
   subj.all = {
     id: `${subj.id}-all`, isAll: true, subject: subj.id,
     title: `All of ${subj.name}`, short: `All ${subj.name}`, emoji: '🌟', color: '#34d399',
-    summary: `Every term and question from all ${units.length} ${subj.id === 'chem' ? 'concepts' : 'units'} of ${subj.name} in one set — ideal before a final.`,
+    summary: `Every term and question from ${units.length === 1 ? 'the' : 'all'} ${unitWords(units, ' and ')} of ${subj.name} in one set — ideal before a final.`,
     topics: units.flatMap((u) => u.topics || []),
     // A term two units both define (Graduated cylinder, Thermometer) appears
     // once here, as its first unit has it — two cards with the same front and
@@ -497,8 +515,7 @@ function renderHome() {
     v.append(el('h2', { class: 'section-title' }, 'Pick up where you left off'));
     v.append(el('div', { class: 'grid' }, setCard(last)));
   }
-  v.append(el('h2', { class: 'section-title' }, 'Subjects'));
-  v.append(el('div', { class: 'grid' }, ...SUBJECTS.map((subj) => {
+  const subjectCard = (subj) => {
     const m = masteryOf(subj.all);
     const n = mistakesIn(subj.all).length;
     return el('a', { class: 'card set subject', href: `#/s/${subj.id}`, style: `--c:${subj.color || '#7c5cff'}` },
@@ -506,16 +523,33 @@ function renderHome() {
       el('h3', {}, subj.name),
       el('p', { class: 'sum', title: subj.blurb }, subj.blurb || ''),
       el('div', { class: 'meta' },
-        el('span', { class: 'chip' }, `${subj.sets.length} ${subj.id === 'chem' ? 'concepts' : 'units'}`),
+        el('span', { class: 'chip' }, unitWords(subj.sets)),
         el('span', { class: 'chip' }, `${subj.all.questions.length} questions`),
         el('span', { class: `chip ${m >= 80 ? 'good' : m > 0 ? 'warn' : ''}` }, `${m}% mastered`),
         n ? el('span', { class: 'chip warn' }, `🎯 ${n}`) : null,
       ),
       el('div', { class: 'progress', style: 'margin-top:12px' }, el('i', { style: `width:${m}%` })),
     );
-  })));
+  };
+  v.append(el('h2', { class: 'section-title' }, 'Subjects'));
+  const placed = new Set();
+  for (const [area, ids] of AREAS) {
+    const here = ids.map((id) => SUBJECT.get(id)).filter(Boolean);
+    if (!here.length) continue;
+    here.forEach((x) => placed.add(x.id));
+    v.append(el('h3', { class: 'area-title' }, area), el('div', { class: 'grid' }, ...here.map(subjectCard)));
+  }
+  const rest = SUBJECTS.filter((x) => !placed.has(x.id));
+  if (rest.length) v.append(el('h3', { class: 'area-title' }, placed.size ? 'More subjects' : ''), el('div', { class: 'grid' }, ...rest.map(subjectCard)));
   main.append(v);
 }
+/* How the home page groups subjects; a subject not listed goes under "More subjects". */
+const AREAS = [
+  ['Math', ['alg1', 'geo', 'alg2']],
+  ['Science', ['chem', 'bio', 'phys', 'earth']],
+  ['English and languages', ['ela', 'span1']],
+  ['Social studies', ['ush', 'wh', 'gov', 'econ', 'psych']],
+];
 
 /* --------------------------------------------------------- subject */
 function renderSubject(subj) {
@@ -530,13 +564,30 @@ function renderSubject(subj) {
         el('div', { class: 'progress', style: 'flex:1;min-width:160px' }, el('i', { style: `width:${m}%` })),
         el('b', {}, `${m}% mastered`)),
     ),
-    el('h2', { class: 'section-title' }, subj.id === 'chem' ? 'Concepts' : 'Units'),
-    el('div', { class: 'grid' }, ...subj.sets.map(setCard), setCard(subj.all)),
+    ...unitSections(subj),
     el('h2', { class: 'section-title' }, `Study all of ${subj.name}`),
     el('div', { class: 'grid modes' }, ...modesFor(subj.all).map((md) => el('a', { class: `card mode${md.game ? ' game' : ''}`, href: `#/set/${subj.all.id}/${md.id}`, style: `--c:${md.color}` },
       el('div', { class: 'ico' }, md.ico), el('h3', {}, md.name), el('p', {}, md.desc)))),
   );
   main.append(v);
+}
+
+/** The subject page's unit grids: units with a note (Chemistry's "Beyond
+    your notes") get their own heading after the rest. */
+function unitSections(subj) {
+  const plain = subj.sets.filter((x) => !x.note);
+  const notes = [...new Set(subj.sets.filter((x) => x.note).map((x) => x.note))];
+  const concepts = plain.length && plain.every((x) => /^Concept /.test(x.short));
+  const out = [
+    el('h2', { class: 'section-title' }, concepts ? (notes.length ? 'Concepts from your class notes' : 'Concepts') : 'Units'),
+    el('div', { class: 'grid' }, ...plain.map(setCard), notes.length ? null : setCard(subj.all)),
+  ];
+  for (const note of notes) {
+    out.push(el('h2', { class: 'section-title' }, note),
+      el('div', { class: 'grid' }, ...subj.sets.filter((x) => x.note === note).map(setCard)));
+  }
+  if (notes.length) out.push(el('div', { class: 'grid', style: 'margin-top:16px' }, setCard(subj.all)));
+  return out;
 }
 
 /* ------------------------------------------------------------- set */
