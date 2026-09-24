@@ -71,15 +71,54 @@ official pages.
 
 ---
 
-## ChemQuest — study site
+## StudyQuest — study site
 
-`study/` is a separate, self-contained study app (Quizlet / Blooket style) built
-from the General Chemistry Concept 1–4 notes: lab safety and equipment,
-measurement, dimensional analysis and scientific notation, and the scientific
-method. Open `study/index.html` (or `/study/` on the deployed site).
+`study/` is a separate, self-contained study app in the style of Quizlet and
+Blooket, one hub for a student's whole schedule. Open `study/index.html` (or
+`/study/` on the deployed site).
+
+| Subject | Where the content comes from |
+|---|---|
+| **Chemistry** (Concepts 1–4) | Built from the class notes: lab safety and equipment, measurement, dimensional analysis and scientific notation, the scientific method |
+| **Algebra 1, Geometry, Biology, English, U.S. History, World History, Spanish 1** | Standard high school courses, unit by unit; every item written, then fact-checked item by item by a separate reviewer |
+
+Every unit works in every mode:
 
 | Mode | What it does |
 |---|---|
+| **Flashcards** | Flip, star, sort into "know" / "still learning" (swipe on a phone); "still learning" goes on the Mistakes list |
+| **Learn** | Adaptive rounds of multiple choice, true/false and typed answers until every item is mastered; can focus on one topic |
+| **Test** | Graded practice test with an explanation for every question and a by-topic breakdown of the score |
+| **Mistakes** | Everything missed in any mode, readable as questions and answers, reviewed until each is right |
+| **Match** | Race the clock pairing terms with definitions |
+| **Gold Quest** | Blooket-style: answer to open chests, swap or steal gold, beat the bots |
+| **Race** | Blooket-style: each right answer drives your car forward; beat four bots to the flag |
+| **Blitz** | Rapid-fire questions where speed and streaks multiply your score |
+| **Study guide** | Every term and question with its answer, grouped by topic and searchable |
+
+Progress, starred terms, mistakes and best scores are saved in `localStorage`.
+Chemistry lives in `study/data.js`; every other subject is a file in
+`study/subjects/` that pushes itself onto `window.STUDY_SUBJECTS`. The app is
+`study/app.js` and `study/style.css`; features in their own files register
+through the small `window.CQ` interface at the bottom of `app.js`.
+
+Two checks guard the content and the interface. Run both before changing a
+subject or the app:
+
+```bash
+node tools/verify-study.mjs                          # every question in every subject
+node tools/smoke-study.mjs http://127.0.0.1:8000     # every mode and subject, in a browser
+```
+
+`verify-study.mjs` fails on a question a student could not answer — a right
+answer missing from its options, two options that say the same thing, a prompt
+or definition that gives the answer away, a set too small for Match — and runs
+the app's own answer checker against every accepted answer and a fixed table of
+tricky cases (units, variables, ordered pairs, fractions, scientific notation,
+Spanish accents). `smoke-study.mjs` plays each mode through, visits every
+subject, and fails on any console error.
+
+---|---|
 | **Flashcards** | Flip through every term; sort into "know" / "still learning", star the hard ones |
 | **Learn** | Adaptive rounds of multiple choice, true/false and typed answers until every item is mastered |
 | **Test** | Graded practice test (10 / 20 / 30 / all questions) with an explanation for each question |
