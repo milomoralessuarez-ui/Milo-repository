@@ -2469,7 +2469,7 @@
     },
     {
      "term": "tener…años",
-     "definition": "Pattern for stating age: a form of 'to have' + number + 'years' (e.g., Tengo 15 años).",
+     "definition": "Pattern for stating age: a form of 'to have' + number + 'years' (e.g., to say 'I am 15 years old').",
      "topic": "Tener Expressions"
     },
     {
@@ -2575,7 +2575,7 @@
       "tengo"
      ],
      "answer": "tenemos",
-     "explanation": "\"Tener\" is irregular; the \"nosotros\" form is \"tenemos,\" not the regular -emos pattern.",
+     "explanation": "Tener is irregular in the yo form (tengo) and changes e>ie in tienes, tiene and tienen. The nosotros form keeps the regular stem: ten- + -emos = \"tenemos.\"",
      "topic": "Tener Conjugation",
      "difficulty": "easy"
     },
@@ -2657,7 +2657,7 @@
     {
      "id": "span1-u5-q11",
      "type": "mc",
-     "prompt": "Si una persona nació en 2011 y el año actual es 2026, ¿cuántos años tiene aproximadamente?",
+     "prompt": "Si una persona nació en 2011, el año actual es 2026 y ya celebró su cumpleaños este año, ¿cuántos años tiene?",
      "options": [
       "15 años",
       "14 años",
@@ -2665,7 +2665,7 @@
       "11 años"
      ],
      "answer": "15 años",
-     "explanation": "2026 menos 2011 es igual a 15, así que la persona tiene 15 años.",
+     "explanation": "2026 menos 2011 es igual a 15, y como ya celebró su cumpleaños este año, la persona tiene 15 años.",
      "topic": "Tener Expressions",
      "difficulty": "hard"
     },
@@ -2870,14 +2870,15 @@
     {
      "id": "span1-u5-q27",
      "type": "written",
-     "prompt": "Una persona nació en 2010. Si el año actual es 2026, ¿cuántos años tiene? Escribe solo el número.",
+     "prompt": "Una persona nació en 2010. Si el año actual es 2026 y ya celebró su cumpleaños este año, ¿cuántos años tiene? Escribe solo el número.",
      "answer": "16",
      "accept": [
       "16 años",
       "dieciséis",
-      "dieciseis"
+      "dieciseis",
+      "dieciséis años"
      ],
-     "explanation": "2026 menos 2010 es igual a 16, así que la persona tiene 16 años.",
+     "explanation": "2026 menos 2010 es igual a 16, y como ya celebró su cumpleaños este año, la persona tiene 16 años.",
      "topic": "Tener Expressions",
      "difficulty": "hard"
     },
@@ -2896,8 +2897,10 @@
      "type": "written",
      "prompt": "¿Cómo se dice \"his dog\" en español? (el perro)",
      "answer": "su perro",
-     "accept": [],
-     "explanation": "\"Su\" means his/her/their/formal your and does not change based on the owner's gender.",
+     "accept": [
+      "el perro de él"
+     ],
+     "explanation": "\"Su\" means his/her/their/formal your and does not change based on the owner's gender. You can also say \"el perro de él\" to make clear whose dog it is.",
      "topic": "Possessive Adjectives",
      "difficulty": "medium"
     },
@@ -3229,7 +3232,7 @@
     {
      "id": "span1-u6-q13",
      "type": "mc",
-     "prompt": "Which question word changes its ending to agree with the noun it asks about — for example, \"¿____ libros tienes?\"",
+     "prompt": "Which question word changes its ending for BOTH gender and number to agree with the noun it asks about? For example: \"¿____ libros tienes?\" (How many books do you have?)",
      "options": [
       "cuánto",
       "qué",
@@ -3237,7 +3240,7 @@
       "cómo"
      ],
      "answer": "cuánto",
-     "explanation": "Cuánto/cuánta/cuántos/cuántas agrees with the noun it modifies, unlike qué, cuál, or cómo.",
+     "explanation": "Cuánto has four forms (cuánto, cuánta, cuántos, cuántas), so it agrees in gender and number: ¿Cuántos libros tienes? Qué and cómo never change, and cuál changes only for number (cuáles).",
      "topic": "Question Words",
      "difficulty": "hard"
     },
@@ -3573,7 +3576,7 @@
     },
     {
      "term": "le gusta",
-     "definition": "\"He/she likes\" or \"you (formal) like,\" used before a singular noun.",
+     "definition": "\"He/she likes\" or \"you (formal) like,\" used before a singular noun or an infinitive verb.",
      "topic": "Gustar Constructions"
     },
     {
@@ -3744,7 +3747,7 @@
       "me gustan"
      ],
      "answer": "le gustan",
-     "explanation": "Juan is a third-person subject (he/him), so the pronoun must be \"le,\" and since \"los tacos\" is plural, the verb must be \"gustan.\"",
+     "explanation": "Juan is third person (the tacos are pleasing to him), so the indirect object pronoun must be \"le,\" and since \"los tacos\" is plural, the verb must be \"gustan.\"",
      "topic": "Gustar Constructions",
      "difficulty": "hard"
     },
@@ -3901,7 +3904,7 @@
       "False"
      ],
      "answer": "True",
-     "explanation": "The pronoun \"le\" is used for both third-person singular subjects (he/she) and formal \"you,\" so context tells you which is meant.",
+     "explanation": "The indirect object pronoun \"le\" stands for \"to him,\" \"to her,\" or formal \"to you (usted),\" so context tells you which is meant.",
      "topic": "Gustar Constructions",
      "difficulty": "medium"
     },
@@ -4043,9 +4046,11 @@
      "prompt": "Translate to Spanish: \"vegetables\"",
      "answer": "las verduras",
      "accept": [
-      "verduras"
+      "verduras",
+      "los vegetales",
+      "vegetales"
      ],
-     "explanation": "\"Vegetables\" is \"las verduras\" in Spanish, a feminine plural noun.",
+     "explanation": "\"Vegetables\" is \"las verduras\" in Spanish, a feminine plural noun (\"los vegetales\" is also used in parts of Latin America).",
      "topic": "Food and Drink Vocabulary",
      "difficulty": "medium"
     }
@@ -4616,7 +4621,9 @@
      "prompt": "Write the Spanish sentence for 'I am going to study' using ir a + infinitive.",
      "answer": "Voy a estudiar",
      "accept": [
-      "Voy a estudiar."
+      "Voy a estudiar.",
+      "Yo voy a estudiar",
+      "Yo voy a estudiar."
      ],
      "explanation": "The near-future structure uses 'voy' (I go) + 'a' + the infinitive 'estudiar' to mean 'I am going to study.'",
      "topic": "Ir a + Infinitive",

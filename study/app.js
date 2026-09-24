@@ -375,7 +375,7 @@ function parseNum(s) {
   const lead = n.match(/^([a-z])=(.*)$/);
   if (lead) { v = lead[1]; n = lead[2]; }
   const frac = n.match(/^(-?\d+)\/(\d+)\s*([a-z%][a-z0-9/%^]*)?$/);
-  if (frac && Number(frac[2]) !== 0) return { value: Number(frac[1]) / Number(frac[2]), unit: frac[3] || '', v };
+  if (frac && Number(frac[2]) !== 0) { const value = Number(frac[1]) / Number(frac[2]); return { value, unit: frac[3] || '', v, sci: false, coef: value }; }
   const m = n.match(/^(-?\d*\.?\d+)(?:x10\^(-?\d+))?\s*([a-z%][a-z0-9/%^]*)?$/);
   if (!m) return null;
   const value = parseFloat(m[1]) * (m[2] != null ? Math.pow(10, parseInt(m[2], 10)) : 1);

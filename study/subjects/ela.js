@@ -331,7 +331,7 @@
       "Antagonist"
      ],
      "answer": "Round Character",
-     "explanation": "Round characters are fully developed with multiple, sometimes contradictory, traits, unlike flat or static characters.",
+     "explanation": "Round characters are fully developed with multiple, sometimes contradictory, traits, unlike flat characters, who have only one or two. Static vs. dynamic describes whether a character changes, not how complex the character is.",
      "topic": "Character Types",
      "difficulty": "easy"
     },
@@ -548,8 +548,18 @@
      "type": "written",
      "prompt": "What term describes a struggle that takes place entirely within a character's own mind?",
      "answer": "Internal conflict",
-     "accept": [],
-     "explanation": "A struggle within a character's own thoughts or emotions is called internal conflict.",
+     "accept": [
+      "Internal",
+      "Internal struggle",
+      "Character vs. self",
+      "Character vs self",
+      "Character versus self",
+      "Man vs. self",
+      "Man vs self",
+      "Person vs. self",
+      "Person vs self"
+     ],
+     "explanation": "A struggle within a character's own thoughts or emotions is called internal conflict (also called character vs. self).",
      "topic": "Conflict",
      "difficulty": "easy"
     },
@@ -560,9 +570,18 @@
      "answer": "Character vs. technology",
      "accept": [
       "Character vs technology",
-      "Man vs technology",
       "Character versus technology",
-      "Person vs technology"
+      "Man vs technology",
+      "Man vs. technology",
+      "Man versus technology",
+      "Person vs technology",
+      "Person vs. technology",
+      "Human vs technology",
+      "Human vs. technology",
+      "Character vs machine",
+      "Character vs. machine",
+      "Man vs machine",
+      "Man vs. machine"
      ],
      "explanation": "A struggle against a machine or computer system is classified as character vs. technology, a type of external conflict.",
      "topic": "Conflict",
@@ -598,7 +617,12 @@
      "accept": [
       "Third-person limited",
       "3rd person limited",
-      "Third person limited point of view"
+      "3rd-person limited",
+      "Third person limited point of view",
+      "Third-person limited point of view",
+      "Third person limited POV",
+      "Limited third person",
+      "Limited third-person"
      ],
      "explanation": "Access to only one character's inner thoughts, combined with third-person pronouns, defines third person limited point of view.",
      "topic": "Point of View & Narrator",
@@ -792,7 +816,7 @@
       "The library was as quiet as a tomb."
      ],
      "answer": "I could eat a horse right now.",
-     "explanation": "Claiming to eat an entire horse is an obvious exaggeration used for effect, which is hyperbole; option B is understatement and option D is a simile.",
+     "explanation": "Claiming to eat an entire horse is an obvious exaggeration used for effect, which is hyperbole; calling a deep wound 'just a scratch' is understatement, and 'as quiet as a tomb' is a simile.",
      "topic": "Emphasis & Wordplay",
      "difficulty": "medium"
     },
@@ -934,12 +958,12 @@
     {
      "id": "ela-u2-q15",
      "type": "mc",
-     "prompt": "In a play, the audience knows a character has been poisoned, but the other characters on stage do not. This creates:",
+     "prompt": "In a play, the audience knows a character has been poisoned, but the other characters on stage do not. This is an example of:",
      "options": [
       "Verbal irony",
       "Situational irony",
       "Dramatic irony",
-      "Suspense"
+      "Flashback"
      ],
      "answer": "Dramatic irony",
      "explanation": "When the audience has information the characters lack, that gap in knowledge is dramatic irony.",
@@ -972,7 +996,7 @@
       "Distant thunder rumbled ominously, hinting that trouble was near."
      ],
      "answer": "As the fireworks exploded, David was suddenly ten years old again, watching his father light sparklers in the backyard.",
-     "explanation": "The narrative shifts back in time to an earlier memory, which is a flashback; the other options show imagery, suspense, and foreshadowing.",
+     "explanation": "The narrative shifts back in time into an earlier scene, which is a flashback. The photograph sentence only mentions a memory without showing the past scene, 'cut it with a knife' is an idiom describing tension, and the ominous thunder is foreshadowing.",
      "topic": "Plot & Atmosphere",
      "difficulty": "hard"
     },
@@ -1144,7 +1168,9 @@
      "type": "written",
      "prompt": "After dropping her lunch tray in the cafeteria, a student says sarcastically, 'Well, that was graceful.' What type of irony is this?",
      "answer": "Verbal irony",
-     "accept": [],
+     "accept": [
+      "Verbal"
+     ],
      "explanation": "She says the opposite of what she means, which is the definition of verbal irony.",
      "topic": "Irony",
      "difficulty": "medium"
@@ -1154,7 +1180,9 @@
      "type": "written",
      "prompt": "A town builds a brand-new fire station, and on opening day the building catches fire. What type of irony is this?",
      "answer": "Situational irony",
-     "accept": [],
+     "accept": [
+      "Situational"
+     ],
      "explanation": "The outcome is the opposite of what anyone would expect from a fire station, which makes it situational irony.",
      "topic": "Irony",
      "difficulty": "hard"
@@ -1164,7 +1192,9 @@
      "type": "written",
      "prompt": "What term describes a brief reference in a text to a well-known person, place, event, or work outside the story?",
      "answer": "Allusion",
-     "accept": [],
+     "accept": [
+      "An allusion"
+     ],
      "explanation": "An allusion relies on the reader's outside knowledge to add meaning without fully explaining the reference.",
      "topic": "Symbolism & Imagery",
      "difficulty": "medium"
@@ -1440,7 +1470,7 @@
     {
      "id": "ela-u3-q9",
      "type": "written",
-     "prompt": "Type the rhyme scheme (using letters like ABAB) of this stanza:\n\"The rain fell soft upon the ground,\nIt made a soft and gentle sound.\nThe flowers drank the cooling rain,\nAnd lifted up their heads again.\"",
+     "prompt": "Type the rhyme scheme (using letters like ABAB) of this stanza:\n\"The rain fell soft upon the ground,\nIt made a soft and gentle sound.\nThe flowers drank the cooling rain\nThat swept across the fields of grain.\"",
      "answer": "AABB",
      "accept": [
       "A A B B",
@@ -1449,7 +1479,7 @@
       "aa bb",
       "A-A-B-B"
      ],
-     "explanation": "Lines 1 and 2 end in \"ground\" and \"sound\" (A). Lines 3 and 4 end in \"rain\" and \"again\" (B). That gives the pattern AABB.",
+     "explanation": "Lines 1 and 2 end in \"ground\" and \"sound\" (A). Lines 3 and 4 end in \"rain\" and \"grain\" (B). That gives the pattern AABB.",
      "topic": "Rhyme",
      "difficulty": "medium"
     },
@@ -2124,7 +2154,7 @@
     {
      "id": "ela-u4-q16",
      "type": "mc",
-     "prompt": "The audience watches a character walk confidently toward a trap that every other character on stage has already warned about, though this character has no idea it exists. This is an example of what?",
+     "prompt": "The audience watched a villain set a trap in an earlier scene. Now they watch a character walk confidently toward it, though this character has no idea it exists. This is an example of what?",
      "options": [
       "Dramatic irony",
       "Comic relief",
@@ -2327,9 +2357,10 @@
      "answer": "Tragic flaw",
      "accept": [
       "a tragic flaw",
-      "hamartia"
+      "hamartia",
+      "hubris"
      ],
-     "explanation": "The king's excessive pride is his tragic flaw, the personal weakness that leads an otherwise admirable character to downfall.",
+     "explanation": "The king's excessive pride is his tragic flaw (hamartia), the personal weakness that leads an otherwise admirable character to downfall. Excessive pride in particular is called hubris.",
      "topic": "Tragedy",
      "difficulty": "hard"
     },
@@ -2338,7 +2369,9 @@
      "type": "written",
      "prompt": "Name the dramatic genre that typically features humor and ends happily, often in marriage or reconciliation.",
      "answer": "Comedy",
-     "accept": [],
+     "accept": [
+      "a comedy"
+     ],
      "explanation": "Comedy is defined by its light, humorous tone and typically happy ending.",
      "topic": "Comedy",
      "difficulty": "easy"
@@ -2756,10 +2789,14 @@
     {
      "id": "ela-u5-q18",
      "type": "written",
-     "prompt": "What sentence error appears here: 'The museum was crowded, we could barely see the paintings.'?",
+     "prompt": "What specific sentence error appears here: 'The museum was crowded, we could barely see the paintings.'?",
      "answer": "comma splice",
-     "accept": [],
-     "explanation": "Two independent clauses are joined by only a comma with no coordinating conjunction, which is a comma splice.",
+     "accept": [
+      "a comma splice",
+      "comma-splice",
+      "comma splice error"
+     ],
+     "explanation": "Two independent clauses are joined by only a comma with no coordinating conjunction, which is a comma splice, a specific type of run-on sentence.",
      "topic": "Sentence Errors",
      "difficulty": "medium"
     },
@@ -2807,7 +2844,7 @@
     {
      "id": "ela-u5-q23",
      "type": "written",
-     "prompt": "Complete the sentence with the correct verb: 'Each of the players ___ ready for the game.'",
+     "prompt": "Complete the sentence with the correct verb (is / are): 'Each of the players ___ ready for the game.'",
      "answer": "is",
      "accept": [],
      "explanation": "'Each' is a singular pronoun, so it takes the singular verb 'is,' regardless of the plural noun 'players' that follows it.",
@@ -4104,7 +4141,13 @@
      "accept": [
       "vis",
       "vid",
-      "vis or vid"
+      "vis or vid",
+      "vis, vid",
+      "vis / vid",
+      "vis and vid",
+      "vid/vis",
+      "vid or vis",
+      "vid and vis"
      ],
      "explanation": "The root \"vis/vid\" means \"to see,\" so \"visible\" means able to be seen and \"video\" relates to seeing images.",
      "topic": "Greek and Latin Roots",

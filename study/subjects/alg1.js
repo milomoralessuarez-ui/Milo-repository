@@ -3669,7 +3669,7 @@
     },
     {
      "term": "Horizontal Asymptote",
-     "definition": "the line y = 0 that the graph of an exponential function approaches but never crosses.",
+     "definition": "a flat line y = k that a graph gets closer and closer to as x moves far to the left or right; for y = a·bˣ it is the line y = 0, which the graph never reaches.",
      "topic": "Exponential Functions"
     },
     {
@@ -4737,8 +4737,13 @@
      "type": "written",
      "prompt": "In FOIL, what does the letter \"O\" stand for?",
      "answer": "Outer",
-     "accept": [],
-     "explanation": "FOIL's second step multiplies the Outer pair of terms in the two binomials.",
+     "accept": [
+      "Outside",
+      "Outer terms",
+      "Outside terms",
+      "Outers"
+     ],
+     "explanation": "FOIL's second step multiplies the Outer (outside) pair of terms in the two binomials.",
      "topic": "Multiplying Polynomials",
      "difficulty": "easy"
     },
@@ -5420,7 +5425,7 @@
     },
     {
      "term": "Solving by graphing",
-     "definition": "Finding a quadratic equation's solutions by reading where its parabola crosses the x-axis.",
+     "definition": "Finding a quadratic equation's solutions by reading where its parabola crosses or touches the x-axis.",
      "topic": "Zeros & X-Intercepts"
     },
     {

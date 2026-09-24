@@ -4964,7 +4964,9 @@
      "prompt": "What is the name for a composition that combines a translation with a reflection over a line parallel to the translation?",
      "answer": "glide reflection",
      "accept": [
-      "a glide reflection"
+      "a glide reflection",
+      "glide-reflection",
+      "a glide-reflection"
      ],
      "explanation": "This specific composition — a slide followed by a flip over a line parallel to the slide's direction — is called a glide reflection.",
      "topic": "Compositions",
@@ -5049,7 +5051,7 @@
     },
     {
      "term": "Arc measure",
-     "definition": "The degree measure of an arc, equal to the central angle that forms it.",
+     "definition": "The degree measure of an arc: a minor arc equals its central angle, and a major arc equals 360° minus the central angle of the matching minor arc.",
      "topic": "Arcs & Central Angles"
     },
     {

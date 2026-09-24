@@ -2661,13 +2661,13 @@
      "type": "mc",
      "prompt": "Why did the Emancipation Proclamation not free enslaved people in border states like Kentucky or Maryland?",
      "options": [
-      "Lincoln had no wartime authority over states still loyal to the Union",
+      "Lincoln's war powers justified freeing enslaved people only in areas in rebellion",
       "Those states had already abolished slavery on their own",
       "The Confederacy controlled those states at the time",
       "Congress had not yet approved the proclamation"
      ],
-     "answer": "Lincoln had no wartime authority over states still loyal to the Union",
-     "explanation": "As a wartime military measure, the Proclamation could only target the rebellious Confederacy; loyal border states were outside its reach.",
+     "answer": "Lincoln's war powers justified freeing enslaved people only in areas in rebellion",
+     "explanation": "Lincoln issued the Proclamation as a wartime military measure against the rebellion, so it covered only areas still in rebellion. Leaving the loyal border states out also helped keep them from joining the Confederacy. Slavery there ended later, through state action and the 13th Amendment.",
      "topic": "Emancipation",
      "difficulty": "hard"
     },
@@ -2941,7 +2941,9 @@
      "prompt": "What was the name of the federal fort in South Carolina where the Civil War began?",
      "answer": "Fort Sumter",
      "accept": [
-      "Sumter"
+      "Sumter",
+      "Ft. Sumter",
+      "Ft Sumter"
      ],
      "explanation": "Confederate forces attacked the Union-held Fort Sumter in Charleston Harbor on April 12, 1861.",
      "topic": "Secession and Fort Sumter",
@@ -2977,7 +2979,12 @@
      "accept": [
       "Fifteenth Amendment",
       "15",
-      "the 15th Amendment"
+      "15th",
+      "Fifteenth",
+      "the 15th Amendment",
+      "Amendment 15",
+      "Amendment XV",
+      "XV"
      ],
      "explanation": "The 15th Amendment, ratified in 1870, prohibited denying voting rights based on race, color, or previous servitude.",
      "topic": "Reconstruction Amendments",
@@ -2990,7 +2997,10 @@
      "answer": "Freedmen's Bureau",
      "accept": [
       "the Freedmen's Bureau",
-      "Freedmens Bureau"
+      "Freedmens Bureau",
+      "Freedmans Bureau",
+      "Bureau of Refugees, Freedmen, and Abandoned Lands",
+      "Bureau of Refugees Freedmen and Abandoned Lands"
      ],
      "explanation": "Congress established the Freedmen's Bureau in 1865 to support freed people and poor whites during Reconstruction.",
      "topic": "Reconstruction Policies",
@@ -3013,7 +3023,10 @@
      "answer": "Plessy v. Ferguson",
      "accept": [
       "Plessy vs. Ferguson",
-      "Plessy versus Ferguson"
+      "Plessy versus Ferguson",
+      "Plessy v Ferguson",
+      "Plessy vs Ferguson",
+      "Plessy"
      ],
      "explanation": "In Plessy v. Ferguson (1896), the Supreme Court ruled that racial segregation was constitutional if facilities were considered equal.",
      "topic": "End of Reconstruction and Jim Crow",
@@ -3171,7 +3184,7 @@
     {
      "id": "ush-u6-q1",
      "type": "mc",
-     "prompt": "Which two railroad companies met at Promontory Point, Utah, in 1869 to complete the first transcontinental railroad?",
+     "prompt": "Which two railroad companies met at Promontory Summit, Utah, in 1869 to complete the first transcontinental railroad?",
      "options": [
       "Union Pacific and Central Pacific",
       "Union Pacific and Southern Pacific",
@@ -3179,7 +3192,7 @@
       "Union Pacific and Great Northern"
      ],
      "answer": "Union Pacific and Central Pacific",
-     "explanation": "The Union Pacific, building west from Nebraska, and the Central Pacific, building east from California, joined their tracks at Promontory Point in 1869.",
+     "explanation": "The Union Pacific, building west from Nebraska, and the Central Pacific, building east from California, joined their tracks at Promontory Summit, Utah, in 1869.",
      "topic": "Railroads & Big Business",
      "difficulty": "easy"
     },
@@ -3232,7 +3245,7 @@
      "prompt": "In what year was the transcontinental railroad completed?",
      "answer": "1869",
      "accept": [],
-     "explanation": "Workers drove the final \"golden spike\" at Promontory Point, Utah, in 1869, joining the rail lines.",
+     "explanation": "The final \"golden spike\" was driven at Promontory Summit, Utah, in 1869, joining the Union Pacific and Central Pacific lines.",
      "topic": "Railroads & Big Business",
      "difficulty": "easy"
     },
@@ -3315,7 +3328,14 @@
      "accept": [
       "Haymarket Riot",
       "Haymarket Square Riot",
-      "the Haymarket Affair"
+      "the Haymarket Affair",
+      "Haymarket",
+      "Haymarket Massacre",
+      "Haymarket Square Affair",
+      "Haymarket Square Massacre",
+      "Haymarket Square",
+      "Haymarket bombing",
+      "Haymarket Incident"
      ],
      "explanation": "At a labor rally in Chicago's Haymarket Square in 1886, someone threw a bomb, and the resulting violence and trials damaged the labor movement's reputation.",
      "topic": "Labor Movement",
@@ -3387,7 +3407,8 @@
      "accept": [
       "tenement building",
       "a tenement",
-      "tenements"
+      "tenements",
+      "tenement house"
      ],
      "explanation": "Tenements were cramped, poorly ventilated apartment buildings that housed many working-class and immigrant families in growing cities.",
      "topic": "Immigration & Urbanization",
@@ -3404,7 +3425,7 @@
       "A labor union"
      ],
      "answer": "A political machine",
-     "explanation": "Political machines, run by bosses like New York's Tammany Hall, traded favors and services for votes, often targeting new immigrants.",
+     "explanation": "Political machines, such as New York's Tammany Hall under bosses like William \"Boss\" Tweed, traded jobs, favors, and services for votes, often targeting new immigrants.",
      "topic": "Immigration & Urbanization",
      "difficulty": "medium"
     },
@@ -3528,7 +3549,9 @@
      "answer": "Pure Food and Drug Act",
      "accept": [
       "the Pure Food and Drug Act",
-      "Pure Food and Drugs Act"
+      "Pure Food and Drugs Act",
+      "Pure Food & Drug Act",
+      "Pure Food & Drugs Act"
      ],
      "explanation": "The Pure Food and Drug Act of 1906 set federal standards for labeling and banned harmful additives in food and medicine.",
      "topic": "Roosevelt & Trust-Busting",
@@ -3650,7 +3673,14 @@
      "type": "written",
      "prompt": "What policy describes a nation extending its power by acquiring territories or influence overseas, as the United States did after 1898?",
      "answer": "Imperialism",
-     "accept": [],
+     "accept": [
+      "American imperialism",
+      "US imperialism",
+      "U.S. imperialism",
+      "expansionism",
+      "overseas expansion",
+      "imperialist policy"
+     ],
      "explanation": "Imperialism is the policy of extending national power through overseas territory or influence, which the U.S. pursued after the Spanish-American War.",
      "topic": "Imperialism & Spanish-American War",
      "difficulty": "hard"
@@ -4380,7 +4410,7 @@
     },
     {
      "term": "V-J Day",
-     "definition": "Celebration of Japan's 1945 surrender, announced August 15 and formally signed September 2, ending World War II",
+     "definition": "Celebration of Japan's 1945 surrender, announced in mid-August (August 14 in the U.S.) and formally signed September 2, ending World War II",
      "topic": "The Manhattan Project and the War's End"
     }
    ],
@@ -4614,9 +4644,16 @@
       "Dec. 7, 1941",
       "Dec 7, 1941",
       "Dec 7 1941",
+      "Dec 7th, 1941",
+      "Dec 7th 1941",
+      "Dec. 7th, 1941",
       "12/7/1941",
+      "12/07/1941",
       "12/7/41",
-      "7 December 1941"
+      "12-7-1941",
+      "12-7-41",
+      "7 December 1941",
+      "7th December 1941"
      ]
     },
     {
@@ -4702,7 +4739,11 @@
       "war bond",
       "War bond",
       "defense bonds",
-      "war savings bonds"
+      "war savings bonds",
+      "war savings bond",
+      "savings bonds",
+      "savings bond",
+      "bonds"
      ]
     },
     {
@@ -4957,7 +4998,7 @@
     },
     {
      "term": "HUAC",
-     "definition": "House Un-American Activities Committee; investigated alleged communist influence in government and Hollywood.",
+     "definition": "Committee of the U.S. House of Representatives that investigated alleged communist influence in government and Hollywood during the Second Red Scare.",
      "topic": "Korean War & McCarthyism"
     },
     {

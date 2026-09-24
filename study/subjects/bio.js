@@ -4304,7 +4304,10 @@
       "true breeding",
       "truebreeding",
       "purebred",
-      "true-breeding line"
+      "true-breeding line",
+      "pure-breeding",
+      "pure breeding",
+      "purebreeding"
      ],
      "explanation": "A true-breeding organism is homozygous for the traits being studied, so self-pollination always yields offspring with the same phenotype.",
      "topic": "Mendel and Heredity",
@@ -5096,13 +5099,13 @@
     {
      "id": "bio-u9-q17",
      "type": "tf",
-     "prompt": "Darwin proposed that organisms can change their own traits during their lifetime through effort or use, and then pass those changes on to their offspring.",
+     "prompt": "According to Darwin's theory of natural selection, organisms change their own traits during their lifetime through effort or use, and then pass those changes on to their offspring.",
      "options": [
       "True",
       "False"
      ],
      "answer": "False",
-     "explanation": "This describes Lamarck's discredited idea of inheritance of acquired characteristics; Darwin's theory instead relies on natural selection acting on existing heritable variation.",
+     "explanation": "This describes Lamarck's discredited idea of inheritance of acquired characteristics; Darwin's theory of natural selection instead relies on selection acting on existing heritable variation.",
      "topic": "Natural Selection",
      "difficulty": "medium"
     },
@@ -5215,7 +5218,9 @@
      "type": "written",
      "prompt": "What is the term for the process by which organisms with helpful inherited traits survive and reproduce more successfully than others in their population?",
      "answer": "natural selection",
-     "accept": [],
+     "accept": [
+      "survival of the fittest"
+     ],
      "explanation": "Natural selection is the mechanism Darwin proposed by which advantageous heritable traits become more common in a population over generations.",
      "topic": "Natural Selection",
      "difficulty": "easy"
@@ -5228,7 +5233,9 @@
      "accept": [
       "20",
       "20 percent",
-      "0.2"
+      "0.2",
+      "twenty percent",
+      "twenty"
      ],
      "explanation": "Divide the number with the trait by the total population: 100 ÷ 500 = 0.20, which equals 20%.",
      "topic": "Natural Selection",
@@ -5240,7 +5247,8 @@
      "prompt": "Darwin noted that species on the Galápagos Islands closely resembled species found on the nearest mainland continent. Name that continent.",
      "answer": "South America",
      "accept": [
-      "S. America"
+      "S. America",
+      "S America"
      ],
      "explanation": "The Galápagos Islands lie off the coast of South America, and Darwin observed that island species resembled mainland South American species, suggesting common ancestry.",
      "topic": "Darwin and the Galápagos",
@@ -5263,7 +5271,9 @@
      "type": "written",
      "prompt": "What is the term for the movement of alleles between populations caused by migration and interbreeding?",
      "answer": "gene flow",
-     "accept": [],
+     "accept": [
+      "gene migration"
+     ],
      "explanation": "Gene flow occurs when migrating individuals interbreed with a new population, transferring alleles and reducing genetic differences between the two groups.",
      "topic": "Genetic Drift and Gene Flow",
      "difficulty": "easy"
@@ -6446,6 +6456,8 @@
       "eukaryota",
       "Eukaryotes",
       "eukaryotes",
+      "Eukaryote",
+      "eukaryote",
       "domain Eukarya",
       "Domain Eukarya"
      ],
@@ -6463,6 +6475,8 @@
       "Animal kingdom",
       "animals",
       "Animals",
+      "animal",
+      "Animal",
       "kingdom Animalia",
       "Kingdom Animalia"
      ],

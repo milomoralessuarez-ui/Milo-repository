@@ -4404,7 +4404,13 @@
      "prompt": "What name is given to the late-1800s rush by European nations to colonize nearly all of Africa?",
      "answer": "Scramble for Africa",
      "accept": [
-      "The Scramble for Africa"
+      "The Scramble for Africa",
+      "Scramble",
+      "The Scramble",
+      "Partition of Africa",
+      "The Partition of Africa",
+      "Race for Africa",
+      "The Race for Africa"
      ],
      "explanation": "Historians call this rapid wave of European colonization the Scramble for Africa.",
      "topic": "Imperialism and the Scramble for Africa",
@@ -4461,9 +4467,24 @@
      "prompt": "What event in Sarajevo in 1914 is usually cited as the immediate spark that triggered World War I?",
      "answer": "Assassination of Archduke Franz Ferdinand",
      "accept": [
+      "The assassination of Archduke Franz Ferdinand",
       "Assassination of Franz Ferdinand",
+      "The assassination of Franz Ferdinand",
       "Franz Ferdinand's assassination",
-      "Murder of Archduke Franz Ferdinand"
+      "Franz Ferdinands assassination",
+      "Archduke Franz Ferdinand's assassination",
+      "Archduke Franz Ferdinands assassination",
+      "Franz Ferdinand assassination",
+      "Archduke Franz Ferdinand assassination",
+      "Assassination of the Archduke",
+      "The assassination of the Archduke",
+      "Murder of Archduke Franz Ferdinand",
+      "The murder of Archduke Franz Ferdinand",
+      "Murder of Franz Ferdinand",
+      "Franz Ferdinand was assassinated",
+      "Archduke Franz Ferdinand was assassinated",
+      "Gavrilo Princip assassinated Franz Ferdinand",
+      "Gavrilo Princip assassinated Archduke Franz Ferdinand"
      ],
      "explanation": "The assassination of Archduke Franz Ferdinand of Austria-Hungary set off the chain of alliance obligations that started WWI.",
      "topic": "Causes and Course of World War I",
@@ -4518,7 +4539,9 @@
      "prompt": "What is the term for an agreement between warring sides to stop fighting, such as the one that ended combat on November 11, 1918?",
      "answer": "Armistice",
      "accept": [
-      "An armistice"
+      "An armistice",
+      "The armistice",
+      "Armistices"
      ],
      "explanation": "An armistice is a mutual agreement to halt fighting; the WWI armistice took effect on November 11, 1918.",
      "topic": "Causes and Course of World War I",
@@ -4546,7 +4569,10 @@
      "answer": "Tsar",
      "accept": [
       "Czar",
-      "Tzar"
+      "Tzar",
+      "The Tsar",
+      "The Czar",
+      "The Tzar"
      ],
      "explanation": "Tsar (also spelled Czar) was the title of Russia's emperor until the monarchy was overthrown in 1917.",
      "topic": "The Russian Revolution",
@@ -4751,9 +4777,11 @@
      "prompt": "What name is given to the Nazi genocide that killed six million European Jews and millions of others during World War II?",
      "answer": "The Holocaust",
      "accept": [
-      "Holocaust"
+      "Holocaust",
+      "Shoah",
+      "The Shoah"
      ],
-     "explanation": "The Holocaust was the systematic, state-sponsored genocide carried out by Nazi Germany and its collaborators.",
+     "explanation": "The Holocaust (called the Shoah in Hebrew) was the systematic, state-sponsored genocide carried out by Nazi Germany and its collaborators.",
      "topic": "World War II and the Holocaust",
      "difficulty": "easy"
     },

@@ -216,6 +216,8 @@ for (const set of SETS) for (const t of set.terms || []) {
       [Q('x = 5', ['5']), '5', true, 'the bare value'],
       [Q('x = 5', ['5']), 'y = 5', false, 'the wrong variable'],
       [Q('2/3', ['0.67']), '0.667', true, 'a fraction as a decimal'],
+      [Q('2/3'), '0.6667', true, 'a fraction answer typed as a decimal'],
+      [Q('0.75'), '3/4', true, 'a decimal answer typed as a fraction'],
       [Q('-3'), '−3', true, 'the Unicode minus sign'],
       [Q('-3'), '3', false, 'a dropped minus sign'],
       [Q('está', ['esta']), 'esta', true, 'Spanish typed without accents'],
