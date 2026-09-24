@@ -282,6 +282,22 @@ await check('blitz', async () => {
   if (!(await page.locator('#b-score').count())) fail('HUD vanished mid-round');
 });
 
+// Features that live in their own files bring their own checks: every
+// tools/study-checks/*.mjs default-exports async ({ page, go, check, fail,
+// answerOne, answerCorrectly, advance, target, STUDY }) and registers its
+// checks with check(name, fn), exactly as the ones above do.
+{
+  const { readdirSync } = await import('node:fs');
+  const { fileURLToPath, pathToFileURL } = await import('node:url');
+  const dir = fileURLToPath(new URL('./study-checks/', import.meta.url));
+  let files = [];
+  try { files = readdirSync(dir).filter((f) => f.endsWith('.mjs')).sort(); } catch { /* no extra checks */ }
+  for (const f of files) {
+    const mod = await import(pathToFileURL(dir + f).href);
+    await mod.default({ page, go, check, fail, answerOne, answerCorrectly, advance, target, STUDY });
+  }
+}
+
 await check('study guide', async () => {
   await go(`/set/${target}/guide`);
   if (!(await page.locator('.term-row').count())) return fail('guide listed no terms');
