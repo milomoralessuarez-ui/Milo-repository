@@ -111,6 +111,7 @@ Some subjects add their own modes:
 |---|---|---|
 | **Algebra Lab** | Algebra 1, every unit | Endless generated problems for 77 skills — equations (including literal and absolute-value), inequalities (including compound), slope and lines, systems, exponents and exponential models, polynomials, factoring (including by grouping), quadratics (factoring, completing the square, the quadratic formula), radicals, statistics, function transformations, piecewise and step functions, and rational expressions and equations — plus reading slope, intercepts, domain and range, a system's solution and a parabola's vertex and zeros off drawn graphs. Each has worked steps and a hint; answers are checked for equivalence, and for form where the form is the point (factored completely, radical simplified, slope-intercept form) |
 | **Problem Lab** | Chemistry, Concepts 2–3 and Units 5–12 | Endless problems — metric prefixes, temperature, scientific notation, dimensional analysis; protons, neutrons and electrons, average atomic mass, electron configurations; naming compounds and writing formulas; balancing equations; molar mass, mole conversions, percent composition, stoichiometry, limiting reactant, percent yield; gas laws; molarity, dilution and pH — with "Show me how" and a picket-fence worked solution, graded exactly |
+| **Geometry Lab** | Geometry, every unit | Endless problems for 40 skills — midpoint and distance, angle pairs, conditional statements, parallel lines and transversals, triangle angles, congruence and similarity shortcuts, the triangle inequality, the Pythagorean theorem, special right triangles, trigonometry, polygon angles, quadrilateral properties, transformations on a grid, circles, arcs and sectors, circle equations, and area, surface area and volume — each with a drawn figure where geometry needs one, a worked solution, and exact answers in π and radical form where the prompt asks |
 | **Physics Lab** | Physics, every unit | Endless problems for 40 skills — kinematics and free fall, vectors and projectiles, Newton's laws and friction, circular motion and gravitation, work, energy and power, momentum, waves, optics, circuits and Coulomb's law — each worked in the Givens / Unknown / Equation / Substitute / Solve layout, with free-body diagrams, circuits, ray diagrams and motion graphs, graded exactly to the stated rounding |
 | **Picture Quiz** | Chemistry, Concepts 1, 2, 4 | Name the lab equipment, judge accuracy and precision targets, read a graduated cylinder, spot what a graph is missing — all from drawings |
 
@@ -126,7 +127,7 @@ Progress, starred terms, mistakes, best scores and the collection are saved in
 other subject is a file in `study/subjects/` that pushes itself onto
 `window.STUDY_SUBJECTS` (a file marked `extend` adds units to a subject that
 already exists). The app is `study/app.js` and `study/style.css`; the modes
-above are `algebra.js`, `physics.js`, `lab.js`, `visuals.js` and `collect.js`, each
+above are `algebra.js`, `geometry.js`, `physics.js`, `lab.js`, `visuals.js` and `collect.js`, each
 registering itself through the small `window.CQ` interface at the bottom of
 `app.js`.
 
@@ -138,6 +139,7 @@ node tools/verify-study.mjs                          # every question in every s
 node tools/verify-algebra.mjs                        # Algebra Lab: thousands of problems re-solved independently
 node tools/verify-lab.mjs                            # Problem Lab: the same for chemistry, plus its element, ion and reaction data
 node tools/verify-physics.mjs                        # Physics Lab: the same for physics
+node tools/verify-geometry.mjs                       # Geometry Lab: the same for geometry, reading the figures too
 node tools/smoke-study.mjs http://127.0.0.1:8000     # every mode and subject, in a browser
 ```
 
