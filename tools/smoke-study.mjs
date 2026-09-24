@@ -48,7 +48,11 @@ page.on('pageerror', (e) => {
 });
 
 const go = async (hash) => {
-  await page.goto(`${STUDY}#${hash}`, { waitUntil: 'load' });
+  const url = `${STUDY}#${hash}`;
+  // Navigating to the URL already showing fires no hashchange, which would
+  // leave the previous check's round running; step through home first.
+  if (page.url() === url) await page.goto(`${STUDY}#/`, { waitUntil: 'load' });
+  await page.goto(url, { waitUntil: 'load' });
   await page.waitForTimeout(250);
 };
 /** Answer whatever question is on screen; returns false if there wasn't one. */
@@ -210,7 +214,7 @@ await check('gold quest', async () => {
   if (!(await page.locator('#g-gold').count())) return fail('no gold counter in the HUD');
   let opened = 0;
   for (let i = 0; i < 10 && opened < 2; i++) {
-    await answerOne();
+    if (!(await answerCorrectly())) await answerOne();
     await page.waitForTimeout(600);
     const chest = page.locator('.chest:not([disabled])').first();
     if (await chest.count()) { await chest.click(); opened++; await page.waitForTimeout(250); }
@@ -240,6 +244,30 @@ await check('race', async () => {
     await page.waitForTimeout(500);
   }
   if (!moved) fail('never managed a correct answer to test movement');
+});
+
+await check('race to a win', async () => {
+  // Answer every question right on the shortest track against the slowest
+  // bots: the student must cross first, and the result has to say so.
+  await go(`/set/${target}/race`);
+  await page.locator('.seg button', { hasText: '10 spaces' }).click();
+  await page.locator('.seg button', { hasText: 'Easy' }).click();
+  await page.click('text=Start race');
+  for (let i = 0; i < 30; i++) {
+    if (await page.locator('.game-intro h2').count()) break;
+    if (!(await answerCorrectly())) { await answerOne(); await page.waitForTimeout(200); await advance(); }
+    await page.waitForTimeout(550);
+  }
+  const headline = await page.locator('.game-intro h2').textContent().catch(() => '');
+  if (!/you won/i.test(headline)) return fail(`crossed the line first but the result reads ${JSON.stringify(headline)}`);
+  const top = await page.locator('.board .brow').first().textContent();
+  if (!/you/i.test(top)) fail(`won the race but the results board puts ${JSON.stringify(top.trim())} first`);
+  await go(`/set/${target}`);
+  const stored = await page.evaluate((id) => JSON.parse(localStorage.getItem('chemquest:v1') || '{}').best?.[`race:${id}`], target);
+  if (!stored) fail('a win did not record a best time');
+  const card = page.locator('.card.mode').filter({ has: page.locator('h3', { hasText: /^Race$/ }) });
+  const chip = await card.locator('.chip').textContent().catch(() => '');
+  if (!/best/i.test(chip)) fail(`the set page's Race card shows no best time (chip: ${JSON.stringify(chip)})`);
 });
 
 await check('blitz', async () => {

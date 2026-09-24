@@ -1299,7 +1299,7 @@ function renderMistakes(set) {
     const round = items.slice(0, 20);
     const queue = round.slice();
     const retried = new Set();
-    let cleared = 0;
+    let cleared = 0, total = round.length;   // total grows when a miss comes back
     const next = () => {
       keyPick = null;
       body.innerHTML = '';
@@ -1313,7 +1313,7 @@ function renderMistakes(set) {
         else {
           sfx.bad();
           // one more go later in this round, then it waits for next time
-          if (!retried.has(it.id)) { retried.add(it.id); queue.push(it); }
+          if (!retried.has(it.id)) { retried.add(it.id); queue.push(it); total++; }
         }
         const btn = el('button', { class: 'btn primary lg', onclick: next }, 'Continue →');
         card.append(el('div', { class: 'row' }, btn));
@@ -1322,12 +1322,12 @@ function renderMistakes(set) {
       wireOverride(card, it.id, () => {
         cleared++;
         const i = queue.lastIndexOf(it);
-        if (i >= 0) queue.splice(i, 1);
+        if (i >= 0) { queue.splice(i, 1); total--; }
       });
       body.append(
         el('div', { class: 'learn-head' },
-          el('div', { class: 'row between' }, backBtn(set), el('span', {}, `${round.length - queue.length + 1} of ${round.length}${retried.size ? ` · ${retried.size} coming back` : ''}`)),
-          el('div', { class: 'progress good' }, el('i', { style: `width:${pct(round.length - queue.length, round.length)}%` }))),
+          el('div', { class: 'row between' }, backBtn(set), el('span', {}, `${total - queue.length + 1} of ${total}`)),
+          el('div', { class: 'progress good' }, el('i', { style: `width:${pct(total - queue.length, total)}%` }))),
         el('div', { class: 'panel' }, card));
       keyPick = (k) => card.pickByKey && card.pickByKey(k);
     };
@@ -1395,9 +1395,9 @@ function renderRace(set) {
     if (!pool.length) { body.innerHTML = ''; body.append(el('div', { class: 'panel empty' }, 'No questions available.')); return; }
     const LEN = prefs.length;
     const [slow, fast] = LEVELS[prefs.level] || LEVELS.normal;
-    const me = { name: 'You', car: '🏎️', pos: 0, me: true, done: 0 };
+    const me = { name: 'You', car: '🏎️', pos: 0, me: true, finished: false, time: 0 };
     const bots = shuffle(BOT_NAMES).slice(0, 4).map((name, i) => ({
-      name, car: CARS[i], pos: 0, done: 0,
+      name, car: CARS[i], pos: 0, finished: false, time: 0,
       secs: fast + Math.random() * (slow - fast),   // this bot's seconds per space
     }));
     const racers = [me, ...bots];
@@ -1424,26 +1424,38 @@ function renderRace(set) {
     body.append(el('div', { class: 'row between' }, backBtn(set), el('span', { class: 'note' }, set.title)),
       el('div', { class: 'track' }, ...lanes), hud, status, stage);
 
-    const standing = () => racers.slice().sort((a, b) => (b.done ? 1e9 - b.done : b.pos) - (a.done ? 1e9 - a.done : a.pos));
+    // Everyone who has crossed the line, in the order they crossed it, then
+    // everyone still racing, furthest along first. (Ranking on a clock reading
+    // mixed into a position sort once put the winner last.)
+    const standing = () => [...finishers, ...racers.filter((r) => !r.finished).sort((a, b) => b.pos - a.pos)];
     const draw = () => {
-      for (const r of racers) r.el.style.left = `calc(4px + (100% - 2.2rem - 8px) * ${Math.min(1, r.pos / LEN)})`;
+      // --car-w comes from the stylesheet (it shrinks on phones); 1.4rem keeps
+      // the flag clear so a finished car parks at the line instead of on it.
+      for (const r of racers) r.el.style.left = `calc(4px + (100% - var(--car-w) - 8px - 1.4rem) * ${Math.min(1, r.pos / LEN)})`;
       $('#r-pos', hud).textContent = `${me.pos} / ${LEN}`;
       $('#r-streak', hud).textContent = String(streak);
       const i = standing().indexOf(me) + 1;
       place.textContent = `${i}${['st', 'nd', 'rd'][i - 1] || 'th'}`;
     };
     const advance = (r, n) => {
-      if (r.done || !live) return;
+      if (r.finished || !live) return;
       r.pos = Math.min(LEN, r.pos + n);
-      if (r.pos >= LEN) { r.done = Date.now(); finishers.push(r); r.lane.classList.add('finished'); }
+      if (r.pos >= LEN) { r.finished = true; r.time = Date.now() - t0; finishers.push(r); r.lane.classList.add('finished'); }
     };
 
     // Bots roll every half second; each move is a coin flip weighted by its speed.
+    let lastPlace = '', lastSaid = 0;
     tick = setInterval(() => {
       if (!live) return;
-      for (const b of bots) if (!b.done && Math.random() < 0.5 / b.secs) advance(b, 1);
+      for (const b of bots) if (!b.finished && Math.random() < 0.5 / b.secs) advance(b, 1);
       draw();
-      if (bots.every((b) => b.done)) finish();
+      // Announce a change of place, at most every few seconds so a close
+      // battle doesn't talk over the question being read.
+      if (place.textContent !== lastPlace && Date.now() - lastSaid > 4000) {
+        if (lastPlace) status.textContent = `You are now ${place.textContent}.`;
+        lastPlace = place.textContent; lastSaid = Date.now();
+      }
+      if (bots.every((b) => b.finished)) finish();
     }, 500);
 
     function nextQuestion() {
@@ -1463,7 +1475,7 @@ function renderRace(set) {
           floatText(boost ? 'Boost! +2' : '+1', boost ? 'var(--warm)' : 'var(--good)');
           status.textContent = `Correct. ${me.pos} of ${LEN} spaces.${boost ? ' Boost!' : ''}`;
           draw();
-          if (me.done) return later(finish, 350);
+          if (me.finished) return later(finish, 350);
           later(nextQuestion, 450);
         } else {
           streak = 0; sfx.bad();
@@ -1486,8 +1498,8 @@ function renderRace(set) {
       draw();
       const order = standing();
       const placeNum = order.indexOf(me) + 1;
-      const ms = me.done ? me.done - t0 : null;
-      const won = placeNum === 1 && me.done;
+      const ms = me.finished ? me.time : null;
+      const won = placeNum === 1 && me.finished;
       const isBest = won && recordBest(`race:${set.id}`, ms, false);
       if (won) { sfx.win(); confetti(); } else sfx.lose();
       const medal = ['🥇', '🥈', '🥉'][placeNum - 1] || '🏁';
@@ -1495,11 +1507,11 @@ function renderRace(set) {
       body.append(el('div', { class: 'panel' },
         el('div', { class: 'game-intro' },
           el('div', { class: 'big-ico' }, medal),
-          el('h2', {}, won ? `You won${isBest ? ' — fastest yet!' : '!'}` : me.done ? `You finished ${placeNum}${['st', 'nd', 'rd'][placeNum - 1] || 'th'}` : 'The bots all finished first'),
+          el('h2', {}, won ? `You won${isBest ? ' — fastest yet!' : '!'}` : me.finished ? `You finished ${placeNum}${['st', 'nd', 'rd'][placeNum - 1] || 'th'}` : 'The bots all finished first'),
           el('p', {}, `${correct} / ${answered} correct${ms != null ? ` · ${fmtSecs(ms)}` : ` · ${me.pos} of ${LEN} spaces`}${state.best[`race:${set.id}`] != null ? ` · best win ${fmtSecs(state.best[`race:${set.id}`])}` : ''}`)),
         el('div', { class: 'board' }, ...order.map((r, i) => el('div', { class: `brow${r.me ? ' me' : ''}` },
           el('span', { class: 'rank' }, `${i + 1}.`), el('span', { class: 'nm' }, `${r.car} ${r.name}`),
-          el('span', { class: 'amt' }, r.done ? fmtSecs(r.done - t0) : `${r.pos} / ${LEN}`)))),
+          el('span', { class: 'amt' }, r.finished ? fmtSecs(r.time) : `${r.pos} / ${LEN}`)))),
         el('div', { class: 'row center', style: 'margin-top:18px' },
           el('button', { class: 'btn primary lg', onclick: play }, 'Race again'),
           el('button', { class: 'btn ghost', onclick: intro }, 'Change track'),

@@ -508,6 +508,7 @@ kbd {
 
 /* ---------- race ---------- */
 .track {
+  --car-w: 2.2rem;
   display: grid; gap: 8px;
   padding: 14px 16px; border-radius: 18px;
   background: var(--surface); border: 1px solid var(--line-soft);
@@ -528,7 +529,7 @@ kbd {
 /* Car emoji face left on most platforms; flip them toward the flag. */
 .racer {
   position: absolute; top: 50%; left: 0;
-  font-size: 1.65rem; line-height: 1; width: 2.2rem; text-align: center;
+  font-size: 1.65rem; line-height: 1; width: var(--car-w); text-align: center;
   transform: translateY(-50%) scaleX(-1);
   transition: left .45s cubic-bezier(.2, .8, .2, 1);
 }
@@ -536,11 +537,11 @@ kbd {
 /* On a phone the track has to leave room for the question below it, so the
    lanes stay single-row with a narrow name column rather than stacking. */
 @media (max-width: 520px) {
-  .track { gap: 6px; padding: 10px 12px; }
+  .track { --car-w: 1.9rem; gap: 6px; padding: 10px 12px; }
   .lane { grid-template-columns: 58px 1fr; gap: 8px; }
   .lane-name { font-size: .72rem; }
   .lane-track { height: 34px; }
-  .racer { font-size: 1.35rem; width: 1.9rem; }
+  .racer { font-size: 1.35rem; }
 }
 
 /* ---------- mistakes ---------- */
