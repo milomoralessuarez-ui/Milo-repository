@@ -73,6 +73,21 @@ function floatText(txt, color) {
   later(() => f.remove(), 950);
 }
 
+/* "10^-3" and "x^2" read as 10⁻³ and x² on screen. Answer checking still sees
+   the plain text; this is display only. */
+function rich(text) {
+  if (text == null || typeof text !== 'string' || !text.includes('^')) return text;
+  const frag = document.createDocumentFragment();
+  let last = 0;
+  text.replace(/\^\(?([−-]?\d+)\)?/g, (m, exp, i) => {
+    frag.append(text.slice(last, i), el('sup', {}, exp.replace('-', '−')));
+    last = i + m.length;
+    return m;
+  });
+  frag.append(text.slice(last));
+  return frag;
+}
+
 /* --------------------------------------------------------------- state */
 const KEY = 'chemquest:v1';
 function loadState() { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch { return {}; } }
@@ -303,13 +318,13 @@ function termMC(term, set, dir) {
   const set2 = set.terms.length >= 4 ? set : allOf(set.subject);
   if (dir === 'def2term') {
     const ds = termDistractors(term, set2, (t) => t.term);
-    return { id: term.id, kind: 'term', type: 'mc', ask: 'Which term matches this definition?', prompt: term.definition, options: shuffle([term.term, ...ds.map((t) => t.term)]), answer: term.term, explanation: `${term.term} — ${term.definition}`, page: term.page, setId: term.setId };
+    return { id: term.id, kind: 'term', type: 'mc', ask: 'Which term matches this definition?', prompt: term.definition, options: shuffle([term.term, ...ds.map((t) => t.term)]), answer: term.term, explanation: `${term.term} — ${term.definition}`, page: term.page, setId: term.setId, topic: term.topic };
   }
   const ds = termDistractors(term, set2, (t) => t.definition);
-  return { id: term.id, kind: 'term', type: 'mc', ask: 'Which definition matches this term?', prompt: term.term, options: shuffle([term.definition, ...ds.map((t) => t.definition)]), answer: term.definition, explanation: `${term.term} — ${term.definition}`, page: term.page, setId: term.setId };
+  return { id: term.id, kind: 'term', type: 'mc', ask: 'Which definition matches this term?', prompt: term.term, options: shuffle([term.definition, ...ds.map((t) => t.definition)]), answer: term.definition, explanation: `${term.term} — ${term.definition}`, page: term.page, setId: term.setId, topic: term.topic };
 }
 function termWritten(term) {
-  return { id: term.id, kind: 'term', type: 'written', ask: 'Type the term', prompt: term.definition, answer: stripParens(term.term), accept: [term.term, ...termAccepts(term.term)], explanation: `${term.term} — ${term.definition}`, page: term.page, setId: term.setId };
+  return { id: term.id, kind: 'term', type: 'written', ask: 'Type the term', prompt: term.definition, answer: stripParens(term.term), accept: [term.term, ...termAccepts(term.term)], explanation: `${term.term} — ${term.definition}`, page: term.page, setId: term.setId, topic: term.topic };
 }
 function authored(q) {
   const out = { ...q, kind: 'q', ask: q.type === 'tf' ? 'True or false?' : q.type === 'written' ? 'Type your answer' : 'Choose the best answer' };
@@ -410,6 +425,11 @@ function setCrumbs(items) {
     c.append(href ? el('a', { href }, label) : el('span', {}, label));
   });
 }
+/** Has the student answered anything in this set yet? */
+function started(set) {
+  return set.terms.some((t) => t.id in state.mastery || t.id in state.missed)
+    || set.questions.some((q) => q.id in state.mastery || q.id in state.missed);
+}
 function masteryOf(set) {
   const ids = [...set.terms.map((t) => t.id), ...set.questions.map((q) => q.id)];
   const got = ids.reduce((n, id) => n + Math.min(2, state.mastery[id] || 0), 0);
@@ -438,7 +458,7 @@ function setCard(s) {
     el('div', { class: 'meta' },
       el('span', { class: 'chip' }, `${s.terms.length} terms`),
       el('span', { class: 'chip' }, `${s.questions.length} questions`),
-      el('span', { class: `chip ${m >= 80 ? 'good' : m > 0 ? 'warn' : ''}` }, `${m}% mastered`),
+      el('span', { class: `chip ${m >= 80 ? 'good' : m > 0 ? 'warn' : ''}` }, started(s) ? `${m}% mastered` : 'Not started'),
       n ? el('span', { class: 'chip warn' }, `🎯 ${n} to review`) : null,
     ),
     el('div', { class: 'progress', style: 'margin-top:12px' }, el('i', { style: `width:${m}%` })),
@@ -518,8 +538,8 @@ function renderSet(set) {
     el('div', { class: 'hero' },
       el('span', { class: 'eyebrow' }, `${set.emoji} ${subjectOf(set).name} · ${set.isAll ? 'Everything' : set.short}`),
       el('h1', {}, set.title),
-      el('p', {}, set.summary),
-      el('div', { class: 'row', style: 'margin-top:14px' },
+      el('p', { class: 'set-sum' }, set.summary),
+      el('div', { class: 'row set-topics', style: 'margin-top:14px' },
         el('span', { class: 'chip' }, `${set.terms.length} terms`),
         el('span', { class: 'chip' }, `${set.questions.length} questions`),
         ...(set.isAll ? [] : (set.topics || []).map((t) => el('span', { class: 'chip brand' }, t))),
@@ -543,7 +563,7 @@ function renderSet(set) {
     let chip = null;
     if (md.id === 'mistakes') {
       const n = mistakesIn(set).length;
-      chip = el('span', { class: `chip ${n ? 'warn' : 'good'}` }, n ? `${n} to review` : 'All clear');
+      chip = n ? el('span', { class: 'chip warn' }, `${n} to review`) : started(set) ? el('span', { class: 'chip good' }, 'All clear') : null;
     } else if (best != null && ['match', 'gold', 'blitz', 'race'].includes(md.id)) {
       chip = el('span', { class: 'chip warn' }, md.id === 'match' || md.id === 'race' ? `Best ${fmtSecs(best)}` : `Best ${best.toLocaleString()}`);
     }
@@ -734,7 +754,7 @@ function questionCard(q, { onAnswer, showTag = true, instant = true }) {
     if (q.figure instanceof Node) fig.append(q.figure); else fig.innerHTML = q.figure;
     box.append(fig);
   }
-  box.append(el('div', { class: 'q-prompt' }, q.prompt));
+  box.append(el('div', { class: 'q-prompt' }, rich(q.prompt)));
 
   function finish(correct, given, chosenBtn) {
     if (done) return; done = true;
@@ -755,8 +775,8 @@ function questionCard(q, { onAnswer, showTag = true, instant = true }) {
     }
     if (instant) {
       box.append(el('div', { class: `feedback ${correct ? 'good' : 'bad'}`, role: 'status', 'aria-live': 'polite' },
-        el('b', { class: 'title' }, correct ? `✓ ${pick(['Correct!', 'Nice!', 'You got it!', 'Exactly right.'])}` : `✗ Not quite — the answer is: ${q.answer}`),
-        q.explanation ? el('div', { class: 'exp' }, q.explanation) : null,
+        el('b', { class: 'title' }, correct ? `✓ ${pick(['Correct!', 'Nice!', 'You got it!', 'Exactly right.'])}` : ['✗ Not quite — the answer is: ', rich(q.answer)]),
+        q.explanation ? el('div', { class: 'exp' }, rich(q.explanation)) : null,
         src ? el('div', { class: 'src' }, src) : null,
       ));
     }
@@ -794,7 +814,7 @@ function questionCard(q, { onAnswer, showTag = true, instant = true }) {
   } else {
     const opts = el('div', { class: 'opts' });
     (q.options || []).forEach((o, i) => {
-      const b = el('button', { class: 'opt', 'data-v': o, onclick: () => finish(o === q.answer, o, b) }, el('span', { class: 'k' }, q.type === 'tf' ? (o === 'True' ? 'T' : 'F') : String(i + 1)), el('span', {}, o));
+      const b = el('button', { class: 'opt', 'data-v': o, onclick: () => finish(o === q.answer, o, b) }, el('span', { class: 'k' }, q.type === 'tf' ? (o === 'True' ? 'T' : 'F') : String(i + 1)), el('span', {}, rich(o)));
       opts.append(b);
     });
     box.append(opts);
@@ -813,14 +833,18 @@ function renderLearn(set) {
   main.append(v);
 
   const ROUND = 7;
+  // A topic filter set from a test result applies only to the set it came from.
+  const topic = prefs.topic && prefs.topic.setId === set.id ? prefs.topic.name : null;
   function items() {
     const out = [];
     for (const t of set.terms) {
+      if (topic && t.topic !== topic) continue;
       if (prefs.starredOnly && !state.starred[t.id]) continue;
       if (!prefs.mc && !(prefs.written && typeable(t))) continue;
       out.push({ id: t.id, kind: 'term', term: t });
     }
     if (!prefs.starredOnly) for (const q of set.questions) {
+      if (topic && q.topic !== topic) continue;
       if (!prefs[q.type]) continue;
       out.push({ id: q.id, kind: 'q', q });
     }
@@ -842,10 +866,15 @@ function renderLearn(set) {
     return el('div', { class: 'learn-head' },
       el('div', { class: 'toolbar', style: 'margin-bottom:0' },
         backBtn(set),
-        el('div', { class: 'seg', role: 'group', 'aria-label': 'Question types' },
-          ...['mc', 'tf', 'written'].map((k) => el('button', { class: prefs[k] ? 'on' : '', 'aria-pressed': prefs[k] ? 'true' : 'false', onclick: () => { const on = ['mc', 'tf', 'written'].filter((x) => prefs[x]); if (prefs[k] && on.length === 1) return toast('Keep at least one type on'); prefs[k] = !prefs[k]; save(); newRound(); } }, { mc: 'Multiple choice', tf: 'True/false', written: 'Written' }[k])),
-        ),
-        el('button', { class: `btn sm${prefs.starredOnly ? ' primary' : ''}`, 'aria-pressed': prefs.starredOnly ? 'true' : 'false', onclick: () => { prefs.starredOnly = !prefs.starredOnly; save(); newRound(); } }, '⭐ Starred only'),
+        topic ? el('button', { class: 'chip brand topic-chip', 'aria-label': `Topic: ${topic}. Remove filter`, onclick: () => { delete prefs.topic; save(); route(); } }, `Topic: ${topic} ✕`) : null,
+        // The type toggles live behind "Options" so the question sits higher on a phone.
+        el('details', { class: 'learn-options', open: !matchMedia('(max-width: 600px)').matches || null },
+          el('summary', { class: 'btn sm' }, '⚙ Options'),
+          el('div', { class: 'row' },
+            el('div', { class: 'seg', role: 'group', 'aria-label': 'Question types' },
+              ...['mc', 'tf', 'written'].map((k) => el('button', { class: prefs[k] ? 'on' : '', 'aria-pressed': prefs[k] ? 'true' : 'false', onclick: () => { const on = ['mc', 'tf', 'written'].filter((x) => prefs[x]); if (prefs[k] && on.length === 1) return toast('Keep at least one type on'); prefs[k] = !prefs[k]; save(); newRound(); } }, { mc: 'Multiple choice', tf: 'True/false', written: 'Written' }[k])),
+            ),
+            el('button', { class: `btn sm${prefs.starredOnly ? ' primary' : ''}`, 'aria-pressed': prefs.starredOnly ? 'true' : 'false', onclick: () => { prefs.starredOnly = !prefs.starredOnly; save(); newRound(); } }, '⭐ Starred only'))),
       ),
       el('div', { class: 'row between' },
         el('span', {}, `Mastered ${mastered} · Familiar ${familiar} · Not started ${all.length - mastered - familiar}`),
@@ -921,6 +950,14 @@ function renderLearn(set) {
   let keyPick = null;
   cleanup = onKeys((e) => { if (keyPick && /^[1-4tf]$/i.test(e.key)) keyPick(e.key.toLowerCase()); });
   newRound();
+}
+
+/** Open Learn on one topic of a set (from a test's by-topic breakdown). */
+function practiceTopic(set, topic) {
+  const prefs = state.prefs.learn ||= { mc: true, written: true, tf: true, starredOnly: false };
+  prefs.topic = { setId: set.id, name: topic };
+  save();
+  location.hash = `#/set/${set.id}/learn`;
 }
 
 /* ---------------------------------------------------------------- test */
@@ -1017,22 +1054,57 @@ function renderTest(set) {
     const p = pct(score, qs.length);
     if (p >= 80) { sfx.win(); confetti(); } else sfx.lose();
     body.innerHTML = '';
+    hideToast();
     const review = el('div', { class: 'panel' });
     results.forEach((r, i) => {
-      const row = el('div', { class: 'test-q' }, el('div', { class: 'n' }, `QUESTION ${i + 1} · ${r.correct ? '✅ CORRECT' : '❌ INCORRECT'}`), el('div', { class: 'q-prompt' }, r.q.prompt));
+      const src = `${setOf(r.q.setId).short}${r.q.page ? ` · slide ${r.q.page}` : ''}`;
+      const row = el('div', { class: `test-q ${r.correct ? 'right' : 'miss'}` }, el('div', { class: 'n' }, `QUESTION ${i + 1} · ${r.correct ? '✅ CORRECT' : '❌ INCORRECT'}`), el('div', { class: 'q-prompt' }, rich(r.q.prompt)));
       if (r.q.type === 'written') {
         row.append(el('div', { class: `feedback ${r.correct ? 'good' : 'bad'}` },
-          el('b', { class: 'title' }, r.correct ? `Your answer: ${r.given}` : `Your answer: ${r.given || '(blank)'} · Correct: ${r.q.answer}`),
-          r.q.explanation ? el('div', { class: 'exp' }, r.q.explanation) : null,
-          el('div', { class: 'src' }, `${setOf(r.q.setId).short}${r.q.page ? ` · slide ${r.q.page}` : ''}`)));
+          el('b', { class: 'title' }, r.correct ? ['Your answer: ', r.given] : ['Your answer: ', r.given || '(blank)', ' · Correct: ', rich(r.q.answer)]),
+          r.q.explanation ? el('div', { class: 'exp' }, rich(r.q.explanation)) : null,
+          el('div', { class: 'src' }, src)));
       } else {
         const opts = el('div', { class: 'opts' });
-        r.q.options.forEach((o, k) => opts.append(el('button', { class: `opt${o === r.q.answer ? ' correct' : o === r.given ? ' wrong' : ' dim'}`, disabled: true }, el('span', { class: 'k' }, r.q.type === 'tf' ? (o === 'True' ? 'T' : 'F') : String(k + 1)), el('span', {}, o))));
-        row.append(opts, el('div', { class: `feedback ${r.correct ? 'good' : 'bad'}` }, r.q.explanation ? el('div', { class: 'exp' }, r.q.explanation) : null, el('div', { class: 'src' }, `${setOf(r.q.setId).short}${r.q.page ? ` · slide ${r.q.page}` : ''}`)));
+        r.q.options.forEach((o, k) => {
+          const right = o === r.q.answer, chose = o === r.given;
+          opts.append(el('button', { class: `opt${right ? ' correct' : chose ? ' wrong' : ' dim'}`, disabled: true },
+            el('span', { class: 'k' }, right ? '✓' : chose ? '✗' : r.q.type === 'tf' ? (o === 'True' ? 'T' : 'F') : String(k + 1)),
+            el('span', {}, rich(o)),
+            right ? el('span', { class: 'sr-only' }, ' — correct answer') : chose ? el('span', { class: 'sr-only' }, ' — your answer, incorrect') : null));
+        });
+        row.append(opts, el('div', { class: `feedback ${r.correct ? 'good' : 'bad'}` },
+          !r.correct ? el('b', { class: 'title' }, r.given ? ['Your answer: ', rich(r.given)] : 'You left this blank') : null,
+          r.q.explanation ? el('div', { class: 'exp' }, rich(r.q.explanation)) : null, el('div', { class: 'src' }, src)));
       }
       review.append(row);
     });
     const missed = results.filter((r) => !r.correct);
+    // Where the points were lost, weakest topic first, each a click from practice.
+    const byTopic = new Map();
+    for (const r of results) {
+      const k = r.q.topic || 'General';
+      const t = byTopic.get(k) || { right: 0, total: 0 };
+      t.total++; if (r.correct) t.right++;
+      byTopic.set(k, t);
+    }
+    const topics = [...byTopic].sort((a, b) => a[1].right / a[1].total - b[1].right / b[1].total || b[1].total - a[1].total);
+    const topicTable = topics.length > 1 ? el('div', { class: 'panel' },
+      el('h2', { style: 'font-size:1.1rem;margin-bottom:10px' }, 'By topic'),
+      el('div', { class: 'topic-table' }, ...topics.map(([name, t]) => el('div', { class: 'topic-row' },
+        el('span', { class: 'nm' }, name),
+        el('div', { class: `progress ${t.right === t.total ? 'good' : ''}` }, el('i', { style: `width:${pct(t.right, t.total)}%` })),
+        el('b', {}, `${t.right}/${t.total}`),
+        t.right < t.total ? el('button', { class: 'btn sm', onclick: () => practiceTopic(set, name) }, 'Practice') : el('span', { class: 'chip good' }, '✓')))),
+    ) : null;
+    let onlyMisses = missed.length > 0 && missed.length < results.length;
+    const filterBtn = el('button', { class: 'btn sm', 'aria-pressed': String(onlyMisses), onclick: () => {
+      onlyMisses = !onlyMisses;
+      review.classList.toggle('only-misses', onlyMisses);
+      filterBtn.setAttribute('aria-pressed', String(onlyMisses));
+      filterBtn.textContent = onlyMisses ? 'Show all questions' : 'Show only the ones I missed';
+    } }, onlyMisses ? 'Show all questions' : 'Show only the ones I missed');
+    review.classList.toggle('only-misses', onlyMisses);
     body.append(
       el('div', { class: 'panel' },
         el('div', { class: 'result-head' },
@@ -1046,7 +1118,9 @@ function renderTest(set) {
           el('button', { class: 'btn ghost', onclick: setup }, 'Change settings'),
           backBtn(set, 'Back to set'),
         )),
-      el('h2', { class: 'section-title' }, 'Review'), review);
+      topicTable || '',
+      el('div', { class: 'row between', style: 'margin-top:8px' }, el('h2', { class: 'section-title', style: 'flex:1;margin:0' }, 'Review'), missed.length && missed.length < results.length ? filterBtn : ''),
+      review);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
   function retry(qs) {
@@ -1150,6 +1224,24 @@ function renderMatch(set) {
 }
 
 /* -------------------------------------------------- game helpers */
+/** Wrong-answer feedback for the games: answer + explanation, scrolled into
+    view (on a phone it otherwise lands below the fold and moves on unseen). */
+function gameMiss(card, q, next, ms) {
+  const fb = el('div', { class: 'feedback bad', role: 'status' }, el('b', { class: 'title' }, ['✗ Answer: ', rich(q.answer)]), q.explanation ? el('div', { class: 'exp' }, rich(q.explanation)) : '');
+  const row = el('div', { class: 'row' }, el('button', { class: 'btn primary', onclick: next }, 'Next →'));
+  card.append(fb, row);
+  fb.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  later(() => { if (document.body.contains(card)) next(); }, ms);
+}
+/** "Questions you missed" for a game's results screen. */
+function missedList(missed) {
+  const uniq = uniqBy(missed, (q) => q.id + '|' + q.prompt);
+  if (!uniq.length) return '';
+  return el('details', { class: 'panel missed-list', style: 'margin-top:14px;text-align:left' },
+    el('summary', {}, el('b', {}, `Questions you missed (${uniq.length})`), el('span', { class: 'note' }, ' — they are on your Mistakes list too')),
+    ...uniq.map((q) => el('div', { class: 'missed-item' }, el('div', { class: 'q-prompt', style: 'font-size:1rem' }, rich(q.prompt)),
+      el('div', {}, el('b', {}, 'Answer: '), rich(q.answer)), q.explanation ? el('div', { class: 'note' }, rich(q.explanation)) : '')));
+}
 const BOT_NAMES = ['Beaker Bob', 'Molly Mole', 'Kelvin Kat', 'Sir Isaac', 'Lab Rat Lucy', 'Bunsen Bee', 'Dr. Pipette', 'Erlen Meyer'];
 function makeBots(n) {
   return shuffle(BOT_NAMES).slice(0, n).map((name) => ({ name, gold: 0, skill: .5 + Math.random() * .6 }));
@@ -1189,6 +1281,7 @@ function renderGold(set) {
     const pool = gameQuestions(set);
     if (!pool.length) { body.innerHTML = ''; body.append(el('div', { class: 'panel empty' }, 'No questions available.')); return; }
     let qi = 0, gold = 0, streak = 0, answered = 0, correct = 0, live = true;
+    const missed = [];
     const bots = makeBots(5);
     const players = [{ name: ME, get gold() { return gold; } }, ...bots];
     const endAt = Date.now() + prefs.minutes * 60000;
@@ -1229,8 +1322,8 @@ function renderGold(set) {
         bumpMastery(q.id, ok);
         if (ok) { correct++; streak++; sfx.good(); later(chests, 450); }
         else {
-          streak = 0; sfx.bad();
-          card.append(el('div', { class: 'feedback bad' }, el('b', { class: 'title' }, `Answer: ${q.answer}`), q.explanation ? el('div', { class: 'exp' }, q.explanation) : null), el('div', { class: 'row' }, el('button', { class: 'btn primary', onclick: nextQuestion }, 'Next →')));
+          streak = 0; sfx.bad(); missed.push(q);
+          gameMiss(card, q, nextQuestion, 6000);
         }
         updateHud();
       } });
@@ -1302,6 +1395,7 @@ function renderGold(set) {
         ),
         leaderboard(players.map((p) => ({ name: p.name, gold: p.gold })), ME),
         el('div', { class: 'row center', style: 'margin-top:18px' }, el('button', { class: 'btn gold lg', onclick: play }, 'Play again'), el('button', { class: 'btn ghost', onclick: intro }, 'Change length'), backBtn(set, 'Back to set')),
+        missedList(missed),
       ));
     }
     updateHud();
@@ -1344,6 +1438,7 @@ function renderBlitz(set) {
     const pool = gameQuestions(set);
     if (!pool.length) { body.innerHTML = ''; body.append(el('div', { class: 'panel empty' }, 'No questions available.')); return; }
     let qi = 0, score = 0, streak = 0, best = 0, answered = 0, correct = 0, qStart = 0, live = true;
+    const missed = [];
     const endAt = Date.now() + prefs.seconds * 1000;
     const clock = el('span', { class: 'bigtimer', role: 'timer', 'aria-label': 'Time remaining' }, fmtTime(prefs.seconds * 1000));
     const hud = el('div', { class: 'game-hud', role: 'group', 'aria-label': 'Game status' },
@@ -1388,9 +1483,8 @@ function renderBlitz(set) {
           score += pts; sfx.good(); floatText(`+${pts}`, 'var(--good)');
           later(nextQuestion, 500);
         } else {
-          streak = 0; sfx.bad();
-          card.append(el('div', { class: 'feedback bad' }, el('b', { class: 'title' }, `Answer: ${q.answer}`)), el('div', { class: 'row' }, el('button', { class: 'btn primary', onclick: nextQuestion }, 'Next →')));
-          later(() => { if (document.body.contains(card)) nextQuestion(); }, 2200);
+          streak = 0; sfx.bad(); missed.push(q);
+          gameMiss(card, q, nextQuestion, 4000);
         }
         updateHud();
       } });
@@ -1409,6 +1503,7 @@ function renderBlitz(set) {
         el('h2', {}, `${score.toLocaleString()} points${isBest && score > 0 ? ' — new best!' : ''}`),
         el('p', {}, `${correct} / ${answered} correct · longest streak ${best} · best ever ${(state.best[`blitz:${set.id}`] || 0).toLocaleString()}`),
         el('div', { class: 'row center' }, el('button', { class: 'btn hot lg', onclick: play }, 'Play again'), el('button', { class: 'btn ghost', onclick: intro }, 'Change length'), backBtn(set, 'Back to set')),
+        missedList(missed),
       ));
     }
     updateHud();
@@ -1453,29 +1548,39 @@ function renderMistakes(set) {
       ));
       return;
     }
-    const byConcept = new Map();
-    for (const it of items) byConcept.set(it.setId, (byConcept.get(it.setId) || 0) + 1);
+    const byUnit = new Map();
+    for (const it of items) byUnit.set(it.setId, (byUnit.get(it.setId) || 0) + 1);
+    // In a combined set the list can be narrowed to one unit.
+    const shown = unitFilter && byUnit.has(unitFilter) ? items.filter((it) => it.setId === unitFilter) : items;
+    const answerOf = (it) => {
+      if (it.kind === 'gen') return el('p', { class: 'note' }, 'A practice skill — reviewing it gives you a fresh problem.');
+      if (it.kind === 'term') return el('p', {}, rich(it.term.definition));
+      return el('div', {}, el('p', {}, el('b', {}, 'Answer: '), rich(it.q.answer)), it.q.explanation ? el('p', { class: 'note', style: 'margin-top:4px' }, rich(it.q.explanation)) : '');
+    };
     body.append(
       el('div', { class: 'panel stack' },
         el('div', { class: 'row between' },
-          el('div', {},
-            el('h2', { style: 'font-size:1.4rem' }, `${items.length} to review`),
-            set.isAll ? el('p', { class: 'note', style: 'margin-top:4px' }, [...byConcept].map(([id, n]) => `${setOf(id).short}: ${n}`).join(' · ')) : null),
+          el('h2', { style: 'font-size:1.4rem' }, `${shown.length} to review`),
           el('div', { class: 'row' },
-            el('button', { class: 'btn primary lg', onclick: () => review(items) }, `Review ${items.length > 20 ? 'the newest 20' : 'them'}`),
+            shown.length > 5 ? el('button', { class: 'btn lg', onclick: () => review(shown.slice(0, 5)) }, 'Quick 5') : '',
+            el('button', { class: 'btn primary lg', onclick: () => review(shown) }, `Review ${shown.length > 20 ? 'the newest 20' : shown.length > 5 ? `all ${shown.length}` : 'them'}`),
             el('button', { class: 'btn ghost sm', onclick: () => {
-              if (!confirm(`Clear all ${items.length} mistakes from the list? Your mastery is not affected.`)) return;
-              for (const it of items) delete state.missed[it.id];
+              if (!confirm(`Clear all ${shown.length} mistakes from the list? Your mastery is not affected.`)) return;
+              for (const it of shown) delete state.missed[it.id];
               save(); overview(); toast('Mistakes list cleared');
             } }, 'Clear list'))),
+        set.isAll && byUnit.size > 1 ? el('div', { class: 'row', role: 'group', 'aria-label': 'Show mistakes from' },
+          el('button', { class: `chip-btn${!unitFilter ? ' on' : ''}`, 'aria-pressed': String(!unitFilter), onclick: () => { unitFilter = null; overview(); } }, `All (${items.length})`),
+          ...[...byUnit].sort((a, b) => SETS.findIndex((x) => x.id === a[0]) - SETS.findIndex((x) => x.id === b[0])).map(([id, n]) => el('button', { class: `chip-btn${unitFilter === id ? ' on' : ''}`, 'aria-pressed': String(unitFilter === id), onclick: () => { unitFilter = id; overview(); } }, `${setOf(id).short} (${n})`))) : '',
       ),
-      el('h2', { class: 'section-title' }, 'Most recent first'),
-      el('div', {}, ...items.slice(0, 40).map((it) => el('div', { class: 'term-row mistake-row' },
-        el('b', {}, label(it)),
-        el('span', { class: 'note' }, `${setOf(it.setId).short} · ${where(it)}`)))),
-      items.length > 40 ? el('p', { class: 'note' }, `…and ${items.length - 40} more.`) : '',
+      el('h2', { class: 'section-title' }, 'Most recent first · tap one to see its answer'),
+      el('div', {}, ...shown.slice(0, 40).map((it) => el('details', { class: 'mistake-row' },
+        el('summary', {}, el('b', {}, rich(it.kind === 'term' ? it.term.term : label(it))), el('span', { class: 'note' }, `${setOf(it.setId).short} · ${where(it)}`)),
+        el('div', { class: 'mistake-answer' }, answerOf(it))))),
+      shown.length > 40 ? el('p', { class: 'note' }, `…and ${shown.length - 40} more.`) : '',
     );
   }
+  let unitFilter = null;
 
   function review(items) {
     const round = items.slice(0, 20);
@@ -1554,6 +1659,8 @@ function renderRace(set) {
   // (seconds per question and accuracy; a wrong answer costs 2.6 s).
   const LEVELS = { easy: [13, 18], normal: [8, 11.5], hard: [5.5, 7.5] };
   const CARS = ['🚗', '🚙', '🚕', '🚓'];
+  const PAINT = ['#ef4444', '#3b82f6', '#f59e0b', '#10b981'];
+  const carSvg = (color) => `<svg viewBox="0 0 64 32" width="100%" height="100%" aria-hidden="true"><path d="M6 22 L8 14 Q10 11 14 11 L30 10 Q36 4 44 6 L52 12 Q60 13 60 18 L60 22 Z" fill="${color}"/><path d="M31 11 Q36 6.5 43 7.5 L48 12 Z" fill="rgba(255,255,255,.75)"/><circle cx="17" cy="23" r="5.5" fill="#1f2937"/><circle cx="17" cy="23" r="2.2" fill="#d1d5db"/><circle cx="49" cy="23" r="5.5" fill="#1f2937"/><circle cx="49" cy="23" r="2.2" fill="#d1d5db"/></svg>`;
 
   function intro() {
     clearInterval(tick);
@@ -1577,20 +1684,21 @@ function renderRace(set) {
     if (!pool.length) { body.innerHTML = ''; body.append(el('div', { class: 'panel empty' }, 'No questions available.')); return; }
     const LEN = prefs.length;
     const [slow, fast] = LEVELS[prefs.level] || LEVELS.normal;
-    const me = { name: 'You', car: '🏎️', pos: 0, me: true, finished: false, time: 0 };
+    const me = { name: 'You', car: '🏎️', paint: '#7c5cff', pos: 0, me: true, finished: false, time: 0 };
     const bots = shuffle(BOT_NAMES).slice(0, 4).map((name, i) => ({
-      name, car: CARS[i], pos: 0, finished: false, time: 0,
+      name, car: CARS[i], paint: PAINT[i], pos: 0, finished: false, time: 0,
       secs: fast + Math.random() * (slow - fast),   // this bot's seconds per space
     }));
     const racers = [me, ...bots];
     const finishers = [];
     const t0 = Date.now();
     let qi = 0, streak = 0, answered = 0, correct = 0, live = true;
+    const missed = [];
 
     const lanes = racers.map((r) => {
-      const car = el('span', { class: 'racer', 'aria-hidden': 'true' }, r.car);
+      const car = el('span', { class: 'racer', 'aria-hidden': 'true', html: carSvg(r.paint) });
       const lane = el('div', { class: `lane${r.me ? ' me' : ''}` },
-        el('span', { class: 'lane-name' }, r.name),
+        el('span', { class: 'lane-name' }, el('span', { class: 'full' }, r.name), el('span', { class: 'short', 'aria-hidden': 'true' }, r.name.split(' ').pop())),
         el('div', { class: 'lane-track' }, car, el('span', { class: 'flag', 'aria-hidden': 'true' }, '🏁')));
       r.el = car; r.lane = lane;
       return lane;
@@ -1617,7 +1725,7 @@ function renderRace(set) {
       $('#r-pos', hud).textContent = `${me.pos} / ${LEN}`;
       $('#r-streak', hud).textContent = String(streak);
       const i = standing().indexOf(me) + 1;
-      place.textContent = `${i}${['st', 'nd', 'rd'][i - 1] || 'th'}`;
+      place.textContent = racers.every((r) => r.pos === 0) ? '—' : `${i}${['st', 'nd', 'rd'][i - 1] || 'th'}`;
     };
     const advance = (r, n) => {
       if (r.finished || !live) return;
@@ -1660,11 +1768,9 @@ function renderRace(set) {
           if (me.finished) return later(finish, 350);
           later(nextQuestion, 450);
         } else {
-          streak = 0; sfx.bad();
+          streak = 0; sfx.bad(); missed.push(q);
           status.textContent = `Not quite. The answer is ${q.answer}.`;
-          card.append(el('div', { class: 'feedback bad' }, el('b', { class: 'title' }, `✗ Answer: ${q.answer}`), q.explanation ? el('div', { class: 'exp' }, q.explanation) : null),
-            el('div', { class: 'row' }, el('button', { class: 'btn primary', onclick: nextQuestion }, 'Next →')));
-          later(() => { if (document.body.contains(card)) nextQuestion(); }, 2600);
+          gameMiss(card, q, nextQuestion, 4000);
           draw();
         }
       } });
@@ -1698,6 +1804,7 @@ function renderRace(set) {
           el('button', { class: 'btn primary lg', onclick: play }, 'Race again'),
           el('button', { class: 'btn ghost', onclick: intro }, 'Change track'),
           backBtn(set, 'Back to set')),
+        missedList(missed),
       ));
     }
     draw();
