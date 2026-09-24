@@ -157,7 +157,7 @@ p { margin: 0; }
   color: var(--text-3); font-size: .95rem; min-width: 0;
   overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
 }
-.crumbs a { color: var(--text-2); }
+.crumbs a { color: var(--text-2); display: inline-flex; align-items: center; min-height: 44px; }
 .crumbs span { overflow: hidden; text-overflow: ellipsis; }
 .header-actions { margin-left: auto; display: flex; gap: 8px; align-items: center; }
 .icon-btn {
@@ -286,7 +286,7 @@ p { margin: 0; }
 }
 .toolbar .spacer { flex: 1; }
 .seg { display: inline-flex; background: var(--surface-2); border: 1px solid var(--line); border-radius: 12px; padding: 3px; gap: 2px; }
-.seg button { border: 0; background: transparent; padding: 7px 12px; border-radius: 9px; font-weight: 600; font-size: .88rem; color: var(--text-2); }
+.seg button { border: 0; background: transparent; padding: 7px 12px; min-height: 40px; border-radius: 9px; font-weight: 600; font-size: .88rem; color: var(--text-2); }
 .seg button.on { background: var(--surface); color: var(--text); box-shadow: 0 2px 8px rgba(0,0,0,.25); }
 .field { display: grid; gap: 6px; }
 .field label { font-size: .82rem; font-weight: 700; color: var(--text-2); }
@@ -378,7 +378,7 @@ kbd {
   transition: transform .12s, border-color .12s, background .12s;
   min-height: 56px;
 }
-.opt:hover:not(:disabled) { transform: translateY(-1px); border-color: var(--brand); }
+@media (hover: hover) { .opt:hover:not(:disabled) { transform: translateY(-1px); border-color: var(--brand); } }
 .opt .k {
   flex: none; display: grid; place-items: center;
   width: 28px; height: 28px; border-radius: 8px;
@@ -446,12 +446,16 @@ kbd {
   display: grid; place-items: center; text-align: center;
   transition: transform .15s, border-color .15s, opacity .3s, background .15s;
 }
-.tile:hover:not(:disabled) { transform: translateY(-2px); border-color: var(--brand); }
+@media (hover: hover) { .tile:hover:not(:disabled) { transform: translateY(-2px); border-color: var(--brand); } }
 .tile.sel { border-color: var(--brand); background: color-mix(in srgb, var(--brand) 18%, var(--surface-2)); }
 .tile.ok { border-color: var(--good); background: color-mix(in srgb, var(--good) 20%, var(--surface-2)); animation: pop .3s ease; }
 .tile.no { border-color: var(--bad); animation: shake .35s ease; }
 .tile.gone { opacity: 0; pointer-events: none; transform: scale(.8); }
-.tile.term { font-weight: 800; }
+.tile.term { font-weight: 800; position: relative; }
+.tile.term::before {
+  content: "TERM"; position: absolute; top: 6px; left: 8px;
+  font-size: .6rem; font-weight: 800; letter-spacing: .1em; color: var(--text-3);
+}
 @keyframes pop { 50% { transform: scale(1.06); } }
 @keyframes shake { 20% { transform: translateX(-6px); } 40% { transform: translateX(6px); } 60% { transform: translateX(-4px); } 80% { transform: translateX(4px); } }
 .timer { font-family: var(--mono); font-weight: 700; font-size: 1.25rem; }
@@ -592,4 +596,18 @@ kbd {
 .footer a { color: var(--text-2); }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .001s !important; transition-duration: .001s !important; }
+}
+
+/* ---------- phones: get to the question sooner ---------- */
+@media (max-width: 600px) {
+  /* Every screen has its own Back button, so the breadcrumb is redundant here. */
+  .crumbs { display: none; }
+  .mode-head { margin-bottom: 12px !important; }
+  .mode-head h1 { font-size: 1.45rem; }
+  .mode-head p { display: none; }
+  .mode-head .eyebrow { margin-bottom: 4px; }
+  .grid.modes .card p { display: none; }
+  .grid.modes { grid-template-columns: repeat(2, 1fr); }
+  .grid.modes .card { padding: 14px; }
+  .grid.modes .card .ico { width: 38px; height: 38px; font-size: 1.2rem; margin-bottom: 8px; }
 }

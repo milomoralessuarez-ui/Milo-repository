@@ -214,6 +214,10 @@ for (const set of SETS) for (const t of set.terms || []) {
       [Q('los'), 'las', false, 'a different Spanish word'],
       [Q('373 K', ['373']), '373 °F', false, 'the wrong unit'],
       [Q('3.54 × 10^8'), '3.54e8', true, 'e-notation'],
+      [Q('3.54 × 10^8'), '354000000', false, 'the number copied back instead of converted'],
+      [Q('3.54 × 10^8'), '35.4 x 10^7', false, 'scientific notation with two digits before the point'],
+      [Q('205.7'), '2.057 x 10^2', false, 'left in scientific notation when standard was asked'],
+      [Q('5 ft', ['5']), 'dunno 5', false, 'a number buried in other words'],
     ]) {
       if (checkWritten(q, input) !== want) fail('answer checking', `${want ? 'rejects' : 'accepts'} ${JSON.stringify(input)} for ${JSON.stringify(q.answer)} (${why})`);
     }

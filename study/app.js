@@ -48,6 +48,7 @@ function later(fn, ms) {
 function clearTimers() { for (const id of timers) clearTimeout(id); timers.clear(); }
 
 let toastTimer = 0;
+function hideToast() { clearTimeout(toastTimer); $('#toast').classList.remove('show'); }
 function toast(msg) {
   const t = $('#toast');
   t.textContent = msg;
@@ -363,7 +364,7 @@ function parseNum(s) {
   const m = n.match(/^(-?\d*\.?\d+)(?:x10\^(-?\d+))?\s*([a-z%][a-z0-9/%^]*)?$/);
   if (!m) return null;
   const value = parseFloat(m[1]) * (m[2] != null ? Math.pow(10, parseInt(m[2], 10)) : 1);
-  return Number.isFinite(value) ? { value, unit: m[3] || '', v } : null;
+  return Number.isFinite(value) ? { value, unit: m[3] || '', v, sci: m[2] != null, coef: parseFloat(m[1]) } : null;
 }
 function checkWritten(q, input) {
   // A generated problem can bring its own checker (algebraic equivalence…).
@@ -385,6 +386,12 @@ function checkWritten(q, input) {
       if (!an) continue;
       const tol = Math.max(Math.abs(an.value) * 0.006, 1e-9);
       if (Math.abs(an.value - un.value) > tol) continue;
+      // The notation is part of the answer: "Write 354,000,000 in scientific
+      // notation" is not answered by copying 354000000 back, nor by 35.4 × 10^7.
+      // Match the form of an accepted variant, and scientific notation must
+      // have one digit before the decimal point.
+      if (un.sci !== an.sci) continue;
+      if (un.sci && !(Math.abs(un.coef) >= 1 && Math.abs(un.coef) < 10)) continue;
       if (wants && un.unit && un.unit !== canon.unit && un.unit !== an.unit) continue;
       // Likewise the variable: "5" answers "x = 5", but "y = 5" does not.
       if (canon && canon.v && un.v && un.v !== canon.v && un.v !== an.v) continue;
@@ -410,7 +417,7 @@ function masteryOf(set) {
 }
 function panelHead(set, mode, extra) {
   const m = MODES.find((x) => x.id === mode);
-  return el('div', { class: 'hero', style: 'margin-bottom:18px' },
+  return el('div', { class: 'hero mode-head', style: 'margin-bottom:18px' },
     el('span', { class: 'eyebrow' }, `${set.emoji} ${set.short} · ${set.title}`),
     el('h1', {}, `${m.ico} ${m.name}`),
     extra ? el('p', {}, extra) : null,
@@ -555,7 +562,9 @@ function renderSet(set) {
 function renderFlashcards(set) {
   const prefs = state.prefs.flash ||= { defFirst: false, starredOnly: false };
   const v = el('div', { class: 'view' });
-  v.append(panelHead(set, 'flashcards', 'Tap the card to flip it. Use ← → to move, space to flip, 1 = still learning, 2 = know.'));
+  v.append(panelHead(set, 'flashcards', matchMedia('(pointer: coarse)').matches
+    ? 'Tap the card to flip it. Swipe right if you know it, left if you are still learning it.'
+    : 'Click the card to flip it. Keys: ← → move, space flips, 1 still learning, 2 know it.'));
   const wrap = el('div', { class: 'flash-wrap' });
   v.append(wrap);
   main.append(v);
@@ -598,6 +607,17 @@ function renderFlashcards(set) {
       el('span', { class: 'hint' }, `${setOf(t.setId).short}${t.page ? ` · slide ${t.page}` : ''}`));
     const card = el('div', { class: `flash${flipped ? ' flipped' : ''}${dir < 0 ? ' slide-left' : dir > 0 ? ' slide-right' : ''}`, role: 'button', tabindex: '0', 'aria-roledescription': 'flashcard', onclick: flip, onkeydown: (e) => { if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') { e.preventDefault(); flip(); } } },
       faceFront, faceBack);
+    // Swipe on touch screens: right = know it, left = still learning. A swipe
+    // must not also count as the tap that flips the card.
+    let sx = null, swiped = false;
+    card.addEventListener('pointerdown', (e) => { sx = e.clientX; swiped = false; });
+    card.addEventListener('pointerup', (e) => {
+      if (sx == null) return;
+      const dx = e.clientX - sx; sx = null;
+      if (Math.abs(dx) > 60) { swiped = true; mark(dx > 0); }
+    });
+    card.addEventListener('click', (e) => { if (swiped) { e.stopImmediatePropagation(); swiped = false; } }, true);
+    card.style.touchAction = 'pan-y';
     dir = 0;
     wrap.append(
       el('div', { class: 'flash-tally' }, el('span', { class: 'bad' }, `Still learning: ${learning.size}`), el('span', {}, `${idx + 1} / ${deck.length}`), el('span', { class: 'good' }, `Know: ${know.size}`)),
@@ -625,6 +645,13 @@ function renderFlashcards(set) {
     const t = deck[idx];
     (k ? know : learning).add(t.id); (k ? learning : know).delete(t.id);
     if (k) bumpMastery(t.id, true);
+    else {
+      // "Still learning" is a self-reported miss: it goes on the Mistakes list
+      // and restarts the card's mastery, without counting as an answer.
+      state.mastery[t.id] = 0;
+      state.missed[t.id] = Date.now();
+      save();
+    }
     dir = 1; idx++; flipped = false; draw();
   }
   function next() { if (idx < deck.length) { dir = 1; idx++; flipped = false; draw(); } }
@@ -675,6 +702,28 @@ function onKeys(fn) {
 
 /* ------------------------------------------------ question widget */
 /* Renders one question; calls onAnswer(correct, given) once. Returns the element. */
+/* An answer close enough to an accepted one that the student may be right
+   (a typo, an unexpected but valid form). Only these get "Override: I was
+   right" — offering it after a guess would just be a way to skip. */
+function editDistance(a, b) {
+  if (Math.abs(a.length - b.length) > 3) return 99;
+  const d = Array.from({ length: a.length + 1 }, (_, i) => [i]);
+  for (let j = 1; j <= b.length; j++) d[0][j] = j;
+  for (let i = 1; i <= a.length; i++) for (let j = 1; j <= b.length; j++) {
+    d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+  }
+  return d[a.length][b.length];
+}
+function nearMiss(q, input) {
+  const u = norm(input);
+  const un = parseNum(input);
+  return [q.answer, ...(q.accept || [])].some((a) => {
+    const an = parseNum(a);
+    if (un && an && an.value) return Math.abs(un.value - an.value) / Math.abs(an.value) <= 0.05;
+    const n = norm(a);
+    return n.length >= 4 && editDistance(u, n) <= Math.max(1, Math.floor(n.length / 5));
+  });
+}
 function questionCard(q, { onAnswer, showTag = true, instant = true }) {
   const box = el('div', { class: 'q-card' });
   let done = false;
@@ -715,7 +764,15 @@ function questionCard(q, { onAnswer, showTag = true, instant = true }) {
   }
   if (q.type === 'written') {
     const inp = el('input', { class: 'input', type: 'text', placeholder: 'Type your answer…', autocomplete: 'off', autocapitalize: 'off', spellcheck: 'false', 'aria-label': 'Your answer' });
-    const submit = () => { if (done) return; const v = inp.value.trim(); if (!v) { inp.focus(); return; } inp.disabled = true; finish(checkWritten(q, v), v); if (!checkWritten(q, v)) addOverride(v); };
+    const submit = () => {
+      if (done) return;
+      const v = inp.value.trim();
+      if (!v) { inp.focus(); return; }
+      inp.disabled = true;
+      const ok = checkWritten(q, v);
+      finish(ok, v);
+      if (!ok && nearMiss(q, v)) addOverride(v);
+    };
     inp.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); submit(); } });
     const row = el('div', { class: 'written' }, inp,
       el('button', { class: 'btn primary', onclick: submit }, 'Answer'),
@@ -835,7 +892,10 @@ function renderLearn(set) {
       card.append(el('div', { class: 'row' }, btn));
       btn.focus();
       // Long explanations need longer on screen than a one-liner.
-      if (correct) later(() => { if (document.body.contains(btn)) nextQ(); }, clamp(1200 + (q.explanation || '').length * 22, 1400, 6000));
+      // Move on automatically only after a quick tap-answer with a short
+      // explanation; a typed answer or a worked solution waits for Continue.
+      const expl = typeof q.explanation === 'string' ? q.explanation : '';
+      if (correct && q.type !== 'written' && expl.length <= 90 && !/[×=]/.test(expl)) later(() => { if (document.body.contains(btn)) nextQ(); }, 1600);
     } });
     wireOverride(card, it.id, () => {
       // the miss was re-queued for later in the round; take it back out
@@ -899,7 +959,9 @@ function renderTest(set) {
       else if (prefs.mc) tq.push(termMC(t, set));
       else if (prefs.written && typeable(t)) tq.push(termWritten(t));
     }
-    return [...shuffle(pool), ...shuffle(tq)];
+    // One shuffled pool, so a 20-question test draws from vocabulary and
+    // questions alike (it used to be all questions, vocabulary never reached).
+    return shuffle([...pool, ...tq]);
   }
   function start() {
     const pool = buildPool();
@@ -1012,7 +1074,8 @@ function renderMatch(set) {
   const body = el('div', { class: 'stack' });
   v.append(body);
   main.append(v);
-  const PAIRS = 6;
+  // Six pairs fill a desktop; on a phone four fit without scrolling mid-game.
+  const PAIRS = matchMedia('(max-width: 560px)').matches ? 4 : 6;
   let timerId = 0;
   cleanup = () => clearInterval(timerId);
 
@@ -1410,7 +1473,7 @@ function renderMistakes(set) {
       el('div', {}, ...items.slice(0, 40).map((it) => el('div', { class: 'term-row mistake-row' },
         el('b', {}, label(it)),
         el('span', { class: 'note' }, `${setOf(it.setId).short} · ${where(it)}`)))),
-      items.length > 40 ? el('p', { class: 'note' }, `…and ${items.length - 40} more.`) : null,
+      items.length > 40 ? el('p', { class: 'note' }, `…and ${items.length - 40} more.`) : '',
     );
   }
 
@@ -1653,7 +1716,7 @@ function renderGuide(set) {
   let query = '', showQ = false;
   const search = el('input', { class: 'input', type: 'search', placeholder: 'Search terms and questions…', 'aria-label': 'Search', oninput: (e) => { query = e.target.value.trim().toLowerCase(); draw(); } });
   const list = el('div', {});
-  body.append(el('div', { class: 'toolbar' }, backBtn(set), search, el('button', { class: 'btn sm', onclick: () => { showQ = !showQ; draw(); } }, 'Toggle question bank')), list);
+  body.append(el('div', { class: 'toolbar' }, backBtn(set), search, el('button', { class: 'btn sm', 'aria-pressed': 'false', onclick: (e) => { showQ = !showQ; e.currentTarget.textContent = showQ ? 'Hide question bank' : 'Show question bank'; e.currentTarget.setAttribute('aria-pressed', String(showQ)); draw(); } }, 'Show question bank')), list);
   function draw() {
     list.innerHTML = '';
     const match = (s) => !query || s.toLowerCase().includes(query);
@@ -1695,6 +1758,7 @@ let cleanup = null;
 function route() {
   if (cleanup) { try { cleanup(); } catch { /* ignore */ } cleanup = null; }
   clearTimers();
+  hideToast();
   main.innerHTML = '';
   window.scrollTo({ top: 0 });
   if (!SETS.length) { main.append(el('div', { class: 'empty' }, 'No study data found — data.js is missing.')); return; }
