@@ -1,6 +1,6 @@
 /* ==========================================================================
-   Problem Lab — endless, freshly generated calculation practice for
-   Concepts 2 and 3, with a worked solution for every problem.
+   Problem Lab — endless, freshly generated practice for Chemistry
+   Concepts 2 and 3 and Units 5–12, with a worked solution for every problem.
 
    A fixed question bank lets a student memorise "6,100 s" without ever
    learning to move a decimal. Here every problem is new, built only from the
@@ -10,7 +10,7 @@
    arithmetic — so no 0.30000000000000004 ever reaches a student.
 
    Registers through window.CQ (see the plugin section of app.js):
-   - mode "lab" on Concepts 2, 3 and All;
+   - mode "lab" on Concepts 2 and 3, Units 5, 6 and 8–12, and All;
    - a game source (multiple-choice versions whose wrong options are the
      classic mistakes) for Gold Quest, Race and Blitz;
    - an item resolver so a missed "lab:<skill>" comes back in Mistakes.
@@ -159,6 +159,19 @@ function rich(text) {
   return out;
 }
 const note = (...kids) => el('p', { class: 'lab-aside' }, ...kids);
+/* On screen, a number never wraps away from its unit ("178" at the end of one
+   line, "°C" on the next): a no-break space goes between them. Done when a
+   card is drawn, so the question's own text (and what the verifier reads)
+   keeps plain spaces. */
+const UNIT_AFTER = /(\d) (?=(?:°C|°F|K|L|mL|atm|kPa|mmHg|M|g|mg|kg|mol|g\/mol|amu|%)(?![A-Za-z0-9]))/g;
+const keepUnits = (t) => String(t).replace(UNIT_AFTER, '$1\u00a0');
+function keepUnitsIn(node) {
+  const walk = document.createTreeWalker(node, NodeFilter.SHOW_TEXT);
+  for (let t = walk.nextNode(); t; t = walk.nextNode()) if (/\d /.test(t.nodeValue)) t.nodeValue = keepUnits(t.nodeValue);
+  return node;
+}
+/** 10 to a symbolic power, like 10⁻ᵖᴴ, as a real superscript. */
+const pow10 = (e) => el('span', { class: 'lab-pow' }, '10', el('span', { class: 'sr-only' }, ' to the power '), el('sup', {}, e));
 
 /* A box that scrolls sideways when its content is too wide (a long fence on a
    phone). It fades the edge that has more to see and shows a thin scrollbar,
@@ -226,6 +239,29 @@ const SOURCES = {
   dim: 'Concept 3 · slides 5–8 (the picket fence and the conversion table)',
   sci: 'Concept 3 · slides 10–13 (converting to scientific notation)',
   std: 'Concept 3 · slides 14–15 (converting to standard notation)',
+  pne: 'Unit 5 · Atomic Number, Mass Number and Ions',
+  avgmass: 'Unit 5 · Isotopes and Average Atomic Mass',
+  config: 'Unit 6 · Electron Configuration',
+  valence: 'Unit 6 · Valence Electrons',
+  noble: 'Unit 6 · Electron Configuration (noble-gas shorthand)',
+  formula: 'Unit 8 · Writing Formulas',
+  naming: 'Unit 8 · Naming Compounds',
+  balance: 'Unit 9 · Balancing Equations',
+  rxntype: 'Unit 9 · Reaction Types',
+  molar: 'Unit 10 · Molar Mass',
+  moles: 'Unit 10 · Mole Conversions',
+  pcomp: 'Unit 10 · Percent Composition',
+  empirical: 'Unit 10 · Empirical Formulas',
+  stoich: 'Unit 10 · Stoichiometry and Mole Ratios',
+  limiting: 'Unit 10 · Limiting Reactant',
+  yield: 'Unit 10 · Percent Yield',
+  pressure: 'Unit 11 · Pressure',
+  gaslaw: 'Unit 11 · Gas Laws',
+  ideal: 'Unit 11 · Ideal Gas Law',
+  molarity: 'Unit 12 · Molarity',
+  dilution: 'Unit 12 · Dilution',
+  ph: 'Unit 12 · pH Scale',
+  acidbase: 'Unit 12 · Acids and Bases',
 };
 const LEVEL_NAMES = { 1: 'Warm-up', 2: 'Standard', 3: 'Challenge' };
 
@@ -354,6 +390,30 @@ const SKILLS = [
   { id: 'std', setId: 'c3', name: 'To standard notation', ico: '🔎', label: 'Scientific to standard notation' },
   { id: 'factor', setId: 'c3', name: 'Conversion factors', ico: '🔀', label: 'Choosing the conversion factor that cancels' },
   { id: 'dim', setId: 'c3', name: 'Dimensional analysis', ico: '🚧', label: 'Dimensional analysis with the picket fence' },
+  // units after the class notes
+  { id: 'pne', setId: 'chem-u5', name: 'Protons, neutrons, electrons', ico: '⚛️', label: 'Protons, neutrons and electrons in atoms and ions' },
+  { id: 'avgmass', setId: 'chem-u5', name: 'Average atomic mass', ico: '📊', label: 'Average atomic mass from isotopes' },
+  { id: 'config', setId: 'chem-u6', name: 'Electron configuration', ico: '🌀', label: 'Writing electron configurations' },
+  { id: 'valence', setId: 'chem-u6', name: 'Valence electrons', ico: '💫', label: 'Valence electrons of main-group elements' },
+  { id: 'noble', setId: 'chem-u6', name: 'Noble-gas shorthand', ico: '👑', label: 'Noble-gas shorthand configurations' },
+  { id: 'formula', setId: 'chem-u8', name: 'Writing formulas', ico: '✍️', label: 'Writing formulas from names' },
+  { id: 'naming', setId: 'chem-u8', name: 'Naming compounds', ico: '🏷️', label: 'Naming ionic and molecular compounds' },
+  { id: 'balance', setId: 'chem-u9', name: 'Balancing equations', ico: '⚗️', label: 'Balancing chemical equations' },
+  { id: 'rxntype', setId: 'chem-u9', name: 'Reaction types', ico: '💥', label: 'Classifying reactions' },
+  { id: 'molar', setId: 'chem-u10', name: 'Molar mass', ico: '🧪', label: 'Molar mass of a compound' },
+  { id: 'moles', setId: 'chem-u10', name: 'Mole conversions', ico: '🔁', label: 'Grams, moles and particles' },
+  { id: 'pcomp', setId: 'chem-u10', name: 'Percent composition', ico: '🥧', label: 'Percent composition by mass' },
+  { id: 'empirical', setId: 'chem-u10', name: 'Empirical formula', ico: '🧩', label: 'Empirical formula from percent composition' },
+  { id: 'stoich', setId: 'chem-u10', name: 'Stoichiometry', ico: '🍳', label: 'Mass-to-mass stoichiometry' },
+  { id: 'limiting', setId: 'chem-u10', name: 'Limiting reactant', ico: '🚦', label: 'Limiting reactant' },
+  { id: 'yield', setId: 'chem-u10', name: 'Percent yield', ico: '🎯', label: 'Percent yield' },
+  { id: 'pressure', setId: 'chem-u11', name: 'Pressure units', ico: '🌬️', label: 'Converting pressure units' },
+  { id: 'gaslaw', setId: 'chem-u11', name: 'Gas laws', ico: '🎈', label: 'Boyle\'s, Charles\'s, Gay-Lussac\'s and the combined gas law' },
+  { id: 'ideal', setId: 'chem-u11', name: 'Ideal gas law', ico: '💨', label: 'The ideal gas law, PV = nRT' },
+  { id: 'molarity', setId: 'chem-u12', name: 'Molarity', ico: '🥤', label: 'Molarity, moles and grams of solute' },
+  { id: 'dilution', setId: 'chem-u12', name: 'Dilution', ico: '💧', label: 'Dilution, M₁V₁ = M₂V₂' },
+  { id: 'ph', setId: 'chem-u12', name: 'pH and pOH', ico: '🍋', label: 'pH, pOH and [H⁺]' },
+  { id: 'acidbase', setId: 'chem-u12', name: 'Acidic or basic?', ico: '🧫', label: 'Acidic, basic or neutral' },
 ];
 const SK = Object.fromEntries(SKILLS.map((s) => [s.id, s]));
 // short enough to show in full beside the buttons on a phone
@@ -364,6 +424,14 @@ const PLACEHOLDER = {
   sci: 'Like 3.5 x 10^4',
   std: 'Written out in full',
   dim: 'Number and unit',
+  pne: 'protons, neutrons, electrons',
+  config: 'Like 1s2 2s2 …',
+  valence: 'A number',
+  formula: 'Formula (type 2 for ₂)',
+  naming: 'Name of the compound',
+  balance: 'Coefficients in order',
+  ph: 'A number',
+  phConc: 'Like 1 x 10^-5 M',
 };
 
 /** Bundle what every generator produces into one question object. */
@@ -1028,7 +1096,1929 @@ function factorQ(lvl, { correct, prompt, distract, given, start, known, end, cha
   });
 }
 
-const GENERATORS = { prefix: genPrefix, temp: genTemp, avg: genAvg, sci: genSci, std: genStd, factor: genFactor, dim: genDim };
+/* ==========================================================================
+   Units 5–12 — atomic structure, electrons, naming, reactions, the mole,
+   gases and solutions. The same rules as above: every number is an exact
+   BigInt fraction until it is deliberately rounded, and the only facts a
+   problem uses are the tables below (atomic masses to two decimals, ion
+   charges, real reactions with their balanced coefficients).
+   tools/verify-lab.mjs checks those tables against its own copy.
+   ========================================================================== */
+
+/* ------------------------------------------------ the periodic table */
+// [atomic number, symbol, name, atomic mass to two decimals]
+const PT_ROWS = [
+  [1, 'H', 'hydrogen', '1.01'], [2, 'He', 'helium', '4.00'], [3, 'Li', 'lithium', '6.94'], [4, 'Be', 'beryllium', '9.01'],
+  [5, 'B', 'boron', '10.81'], [6, 'C', 'carbon', '12.01'], [7, 'N', 'nitrogen', '14.01'], [8, 'O', 'oxygen', '16.00'],
+  [9, 'F', 'fluorine', '19.00'], [10, 'Ne', 'neon', '20.18'], [11, 'Na', 'sodium', '22.99'], [12, 'Mg', 'magnesium', '24.31'],
+  [13, 'Al', 'aluminum', '26.98'], [14, 'Si', 'silicon', '28.09'], [15, 'P', 'phosphorus', '30.97'], [16, 'S', 'sulfur', '32.07'],
+  [17, 'Cl', 'chlorine', '35.45'], [18, 'Ar', 'argon', '39.95'], [19, 'K', 'potassium', '39.10'], [20, 'Ca', 'calcium', '40.08'],
+  [21, 'Sc', 'scandium', '44.96'], [22, 'Ti', 'titanium', '47.87'], [23, 'V', 'vanadium', '50.94'], [24, 'Cr', 'chromium', '52.00'],
+  [25, 'Mn', 'manganese', '54.94'], [26, 'Fe', 'iron', '55.85'], [27, 'Co', 'cobalt', '58.93'], [28, 'Ni', 'nickel', '58.69'],
+  [29, 'Cu', 'copper', '63.55'], [30, 'Zn', 'zinc', '65.38'], [31, 'Ga', 'gallium', '69.72'], [32, 'Ge', 'germanium', '72.63'],
+  [33, 'As', 'arsenic', '74.92'], [34, 'Se', 'selenium', '78.97'], [35, 'Br', 'bromine', '79.90'], [36, 'Kr', 'krypton', '83.80'],
+  [37, 'Rb', 'rubidium', '85.47'], [38, 'Sr', 'strontium', '87.62'], [47, 'Ag', 'silver', '107.87'], [50, 'Sn', 'tin', '118.71'],
+  [53, 'I', 'iodine', '126.90'], [54, 'Xe', 'xenon', '131.29'], [56, 'Ba', 'barium', '137.33'], [79, 'Au', 'gold', '196.97'],
+  [80, 'Hg', 'mercury', '200.59'], [82, 'Pb', 'lead', '207.20'],
+];
+const ELEM = {};
+const BY_Z = {};
+for (const [z, sym, name, mass] of PT_ROWS) ELEM[sym] = BY_Z[z] = { z, sym, name, mass, m: D(mass) };
+const cap1 = (s) => s[0].toUpperCase() + s.slice(1);
+/** "a 5.00 L container" but "an 8.00 L container", "an 11.2 L …", "an 18,000 …" */
+const aN = (s) => (/^(8|1[18](?![\d,])|1[18],\d{3}(?![\d,]))/.test(String(s)) ? `an ${s}` : `a ${s}`);
+const { uniqBy } = CQ;
+
+/* ------------------------------------------------ writing formulas */
+const SUBD = '₀₁₂₃₄₅₆₇₈₉';
+const SUPD9 = '⁰¹²³⁴⁵⁶⁷⁸⁹';
+const subDigits = (s) => String(s).replace(/\d/g, (d) => SUBD[d]);
+const supText = (s) => String(s).replace(/\d/g, (d) => SUPD9[d]).replace(/\+/g, '⁺').replace(/[-−]/g, '⁻');
+/** "Ca(OH)2" → "Ca(OH)₂": a number after a letter or a bracket is a subscript. */
+const fm = (f) => String(f).replace(/([A-Za-z)])(\d+)/g, (_, a, d) => a + subDigits(d));
+const unSub = (s) => String(s).replace(/[₀-₉]/g, (c) => String(SUBD.indexOf(c)));
+/** "6.02 × 10^23" → "6.02 × 10²³", for text that is not run through rich(). */
+const supPow10 = (s) => String(s).replace(/10\^(-?\d+)/g, (_, e) => `10${supText(e)}`);
+/** An ion's charge as a superscript: "²⁺", "⁻". */
+const chargeText = (c) => supText(`${Math.abs(c) === 1 ? '' : Math.abs(c)}${c > 0 ? '+' : '-'}`);
+const ROMAN = ['', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII'];
+const gcdN = (a, b) => { a = Math.abs(a); b = Math.abs(b); while (b) [a, b] = [b, a % b]; return a; };
+
+/** Atoms in a formula, in order of first appearance: "Ca(NO3)2" → { Ca: 1, N: 2, O: 6 }. */
+function atomsOf(formula) {
+  const s = unSub(formula);
+  let i = 0;
+  const group = () => {
+    const out = {};
+    while (i < s.length && s[i] !== ')') {
+      let part;
+      if (s[i] === '(') {
+        i++;
+        part = group();
+        if (s[i] !== ')') throw new Error(`unclosed bracket in ${formula}`);
+        i++;
+      } else {
+        const m = /^[A-Z][a-z]?/.exec(s.slice(i));
+        if (!m || !ELEM[m[0]]) throw new Error(`not a formula: ${formula}`);
+        i += m[0].length;
+        part = { [m[0]]: 1 };
+      }
+      const d = /^\d+/.exec(s.slice(i));
+      const k = d ? Number(d[0]) : 1;
+      if (d) i += d[0].length;
+      for (const [e, c] of Object.entries(part)) out[e] = (out[e] || 0) + c * k;
+    }
+    return out;
+  };
+  const r = group();
+  if (i !== s.length || !Object.keys(r).length) throw new Error(`not a formula: ${formula}`);
+  return r;
+}
+const sameAtoms = (a, b) => { const k = Object.keys(a); return k.length === Object.keys(b).length && k.every((e) => a[e] === b[e]); };
+const molarMass = (f) => Object.entries(atomsOf(f)).reduce((t, [e, c]) => add(t, mul(ELEM[e].m, R(c))), R(0));
+/** A value with exactly two decimals, as the tables write it: "164.10". */
+const fx2 = (r) => commas(placePoint((roundDp(r, 2).p * 100n) / roundDp(r, 2).q, 2, false));
+/** "Atomic masses: Ca = 40.08, N = 14.01, O = 16.00 (g/mol)." for the elements in these formulas. */
+function massNote(formulas) {
+  const seen = [];
+  for (const f of formulas) for (const e of Object.keys(atomsOf(f))) if (!seen.includes(e)) seen.push(e);
+  return `Atomic masses: ${seen.map((e) => `${e} = ${ELEM[e].mass}`).join(', ')} (g/mol).`;
+}
+
+/* ------------------------------------------------ numbers, rounded or not */
+/** floor(log10 |r|) for r ≠ 0. */
+function expOf(r) {
+  const P0 = r.p < 0n ? -r.p : r.p;
+  let e = P0.toString().length - r.q.toString().length;
+  if (!(e >= 0 ? P0 >= r.q * p10(e) : P0 * p10(-e) >= r.q)) e -= 1;
+  return e;
+}
+const roundSig = (r, n) => D(sigStr(r, n));
+const bigOrSmall = (e) => e >= 6 || e <= -4;
+/** r to n significant figures as it is shown: "0.0123", "1,520", "3.01 × 10^24". */
+function sfShow(r, n) {
+  const v = roundSig(r, n);
+  if (isZero(v)) return '0';
+  const e = expOf(v);
+  if (!bigOrSmall(e)) return commas(sigStr(r, n));
+  const m = scale10(absR(v), -e);
+  return `${isNeg(v) ? '-' : ''}${placePoint((m.p * p10(n - 1)) / m.q, n - 1, false)} × 10^${e}`;
+}
+/** An exact or long value for a worked solution: all of it when it is short,
+    otherwise the first digits and "…". */
+function longShow(r, maxSig = 7) {
+  if (isZero(r)) return '0';
+  const e = expOf(r);
+  const exact = terminates(r) && sigCount(r) <= maxSig;
+  if (!bigOrSmall(e)) return exact ? fx(r) : `${commas(sigCut(r, maxSig))}…`;
+  const m = scale10(r, -e);
+  return `${exact ? plain(m) : `${sigCut(m, maxSig)}…`} × 10^${e}`;
+}
+/** A given amount: n significant figures, trailing zeros kept ("25.0", "0.500"). */
+function given3(eLo, eHi, n = 3) {
+  const e = ri(eLo, eHi);
+  let int = ri(10 ** (n - 1), 10 ** n - 1);
+  if (chance(.4)) int = Math.round(int / 10) * 10 || 10 ** (n - 1);
+  if (int >= 10 ** n) int = 10 ** n - 10;
+  const r = scale10(R(int), e - (n - 1));
+  const s = e - (n - 1) < 0 ? placePoint(B(int), n - 1 - e, false) : commas(plain(r));
+  return { r, s: bigOrSmall(e) ? sfShow(r, n) : s };
+}
+/** How a typed number is graded: exactly, or rounded to sf significant figures or dp decimal places. */
+function numAns(truth, how) {
+  if (how.exact) return { str: fx(truth), stated: truth, exact: truth, truth, place: null, howText: '' };
+  if (how.dp != null) {
+    const st = roundDp(truth, how.dp);
+    return { str: commas(placePoint((st.p * p10(how.dp)) / st.q, how.dp, false)), stated: st, truth, place: -how.dp, howText: `${how.dp === 1 ? 'one decimal place' : `${['', 'one', 'two', 'three'][how.dp]} decimal places`}` };
+  }
+  const st = roundSig(truth, how.sf);
+  return { str: sfShow(truth, how.sf), stated: st, truth, place: expOf(st) - (how.sf - 1), howText: `${how.sf} significant figures` };
+}
+const SF3 = { sf: 3 };
+/** The digit just after the last one kept. */
+const nextDigit = (r, place) => { const k = div(absR(r), scale10(R(1), place - 1)); return Number((k.p / k.q) % 10n); };
+/** half away from zero to a multiple of 10^place */
+function roundPlace(r, place) {
+  const u = scale10(R(1), place);
+  const k = div(r, u);
+  const neg = k.p < 0n;
+  const P0 = neg ? -k.p : k.p;
+  const int = (2n * P0 + k.q) / (2n * k.q);
+  return mul(R(neg ? -int : int), u);
+}
+
+/* ------------------------------------------------ units the student types */
+spell('gmol', ['g/mol', 'g/mole', 'g mol-1', 'g mol^-1', 'gmol-1', 'grams per mole', 'gram per mole', 'grams per mol', 'grams/mole', 'grams/mol', 'g per mol', 'g per mole']);
+spell('amu', ['amu', 'u', 'atomic mass units', 'atomic mass unit', 'Da', 'g/mol']);
+spell('mol', ['mol', 'mols', 'mole', 'moles']);
+spell('atoms', ['atoms', 'atom', 'particles', 'particle']);
+spell('molecules', ['molecules', 'molecule', 'particles', 'particle']);
+spell('formula units', ['formula units', 'formula unit', 'units', 'particles', 'particle']);
+spell('pct', ['%', 'percent', 'pct', 'per cent']);
+spell('atm', ['atm', 'atms', 'atmosphere', 'atmospheres']);
+spell('kPa', ['kPa', 'kilopascal', 'kilopascals']);
+spell('mmHg', ['mmHg', 'mm Hg', 'millimeters of mercury', 'millimetres of mercury', 'millimeter of mercury', 'torr']);
+spell('M', ['mol/L', 'mol L-1', 'mol L^-1', 'molar', 'moles per liter', 'moles per litre', 'mol per liter', 'mol per L', 'moles/L', 'mol/liter', 'mols/L', 'moles/liter', 'mol/dm3'], ['M']);
+spell('ve', ['valence electrons', 'valence electron', 'electrons', 'electron', 'e', 'e-', 'valence']);
+
+/* ------------------------------------------------ grading typed answers */
+// "V2 = 3.5 L", "[H+] = …", "pH = 4": a name and "=" in front are fine
+const LEAD_EQ = /^\s*(?:\[[^\]=]{1,12}\]|[A-Za-z][A-Za-z0-9]{0,5})\s*=\s*/;
+const escRe = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+function numOk(G, t) {
+  if (G.exact) return eqR(t.r, G.exact);
+  if (eqR(t.r, G.stated)) return true;
+  // more digits than asked for: right when within half a unit of the last
+  // stated digit of the true value (47.549 for a true 47.552 stated as 47.6)
+  if (t.place >= G.place) return false;
+  return leR(absR(sub(G.truth, t.r)), scale10(R(5), G.place - 1));
+}
+function gradeNum(q, raw) {
+  const G = q.grading;
+  const ask = G.unitKey ? 'Type a number and its unit.' : 'Type a number.';
+  let s = tidy(unSub(raw));
+  // "pH = 4", "[OH-] = 1 x 10^-5": a label is fine, but only the one asked for
+  const lab = s.match(/^\s*(p\s*OH|p\s*H|\[\s*OH[^\]]{0,6}\]|\[\s*H[^\]]{0,6}\])\s*=?\s*(?=[\d.\-−])/i);
+  if (lab) {
+    const key = (t) => t.toLowerCase().replace(/\s+/g, '').replace(/^\[h3o.*$/, '[h]').replace(/^\[(oh|h)[^\]]*\]$/, '[$1]');
+    if (G.label && key(lab[1]) !== key(G.label)) return { ok: false, why: `This asks for the ${G.label}, not the ${{ ph: 'pH', poh: 'pOH', '[h]': '[H⁺]', '[oh]': '[OH⁻]' }[key(lab[1])] || lab[1]}.` };
+    s = s.slice(lab[0].length);
+  }
+  s = s.replace(LEAD_EQ, '').replace(/^10\s*\^/, '1 × 10^');
+  const m = s.match(NUM_RE);
+  if (!m || !/\d/.test(m[1])) return { ok: false, why: ask };
+  let unitText = m[3].replace(/[.\s]+$/, '').trim();
+  // "g H2O", "molecules of CO2", "g of water": the substance may follow the unit
+  for (const f of G.subs || []) {
+    const re = new RegExp(`\\s*(?:of\\s+)?${escRe(f)}$`, /[A-Z]/.test(f) ? '' : 'i');
+    if (re.test(unitText) && unitText.replace(re, '').trim()) { unitText = unitText.replace(re, '').trim(); break; }
+  }
+  let t;
+  try { t = typedNumber(m[1], m[2]); } catch { return { ok: false, why: ask }; }
+  const right = numOk(G, t);
+  let tip = '';
+  if (G.unitKey) {
+    if (!unitText) tip = `Remember the unit: ${q.unit}.`;
+    else if (!unitOk(unitText, G.unitKey)) {
+      return { ok: false, why: right ? `The number is right, but "${unitText}" is the wrong unit — this asks for ${q.unitName}.` : `Check the unit too — this asks for ${q.unitName}.` };
+    }
+  } else if (unitText) return { ok: false, why: right ? `The number is right, but this answer has no unit — leave off "${unitText}".` : '' };
+  if (!right) {
+    if (!G.exact && t.place > G.place && leR(absR(sub(G.truth, t.r)), scale10(R(5), t.place - 1))) return { ok: false, why: `Close — but give it to ${G.howText}.` };
+    return { ok: false, why: '' };
+  }
+  return { ok: true, tip };
+}
+
+/* ------------------------------------------------ worked-solution pieces */
+/** The boxed answer; a long one (a name, a configuration) may wrap on a phone. */
+const ansBox = (...kids) => { const b = boxed(...kids); if (b.textContent.length > 18) b.classList.add('wrap'); return b; };
+const ln = (...kids) => el('div', { class: 'ln' }, ...kids);
+const lnF = (...kids) => el('div', { class: 'ln f' }, ...kids);
+const formulaBox = (...rows) => el('div', { class: 'lab-formula' }, ...rows);
+const richP = (s) => rich(s);
+/** A table of working (atoms, moles, counts), scrolling sideways on a phone. */
+function dataTable(head, rows, label) {
+  const t = el('table', { class: 'lab-table' },
+    el('thead', {}, el('tr', {}, ...head.map((h) => el('th', { scope: 'col' }, h)))),
+    el('tbody', {}, ...rows.map((r) => el('tr', {}, ...r.map((c, i) => (i === 0 ? el('th', { scope: 'row' }, c) : el('td', {}, c)))))));
+  if (label) t.setAttribute('aria-label', label);
+  return scroller(t);
+}
+/** "= 1.38745… rounded to 3 significant figures is [1.39 g]", or just the answer when it is exact. */
+function roundLine(a, answer) {
+  if (a.exact || eqR(a.truth, a.stated)) return P('So the answer is ', ansBox(...rich(answer)), '.');
+  const d = nextDigit(a.truth, a.place);
+  return el('div', { class: 'lab-round' },
+    P(...rich(longShow(a.truth)), ` to ${a.howText} is `, ansBox(...rich(answer)), '.'),
+    note(`The next digit is ${d}, ${d >= 5 ? 'which is 5 or more, so the last digit rounds up' : 'which is less than 5, so the last digit stays the same'}.`));
+}
+/** The picket fence for a chemistry conversion. Amounts may be in scientific
+    notation; units carry the substance ("g H₂O"). */
+function chemFence(given, factors, final) {
+  const g = { amt: supPow10(given.amt), unit: given.unit };
+  const fs = factors.map((f) => ({ top: { amt: supPow10(f.top.amt), unit: f.top.unit }, bot: { amt: supPow10(f.bot.amt), unit: f.bot.unit } }));
+  if (!final) return fenceNode(g, fs);
+  const top = factors.reduce((v, f) => mul(v, f.top.r), given.r);
+  const bot = factors.reduce((v, f) => mul(v, f.bot.r), R(1));
+  return fenceNode(g, fs, { result: { top: `${supPow10(longShow(top))} ${factors[factors.length - 1].top.unit}`, bot: supPow10(longShow(bot)), ans: final.ans } });
+}
+const NA = R(602n * p10(21));
+const NA_TXT = '6.02 × 10^23';
+/** fence factors — { top: {amt, r, unit}, bot: {…} } */
+const side2 = (amt, r, unit) => ({ amt, r, unit });
+const fac = (top, bot) => ({ top, bot });
+const mmFactor = (f, toGrams) => {
+  const mm = molarMass(f);
+  const g = side2(fx2(mm), mm, `g ${fm(f)}`), mol = side2('1', R(1), `mol ${fm(f)}`);
+  return toGrams ? fac(g, mol) : fac(mol, g);
+};
+const naFactor = (f, word, toParticles) => {
+  const n = side2(NA_TXT, NA, `${word} ${fm(f)}`), mol = side2('1', R(1), `mol ${fm(f)}`);
+  return toParticles ? fac(n, mol) : fac(mol, n);
+};
+/** Multiply across the top, divide by the bottom — the fence's arithmetic in words. */
+function fenceArith(given, factors) {
+  const tops = [given.amt, ...factors.map((f) => f.top.amt)].filter((x) => x !== '1');
+  const bots = factors.map((f) => f.bot.amt).filter((x) => x !== '1');
+  const top = factors.reduce((v, f) => mul(v, f.top.r), given.r);
+  const bot = factors.reduce((v, f) => mul(v, f.bot.r), R(1));
+  const topTxt = tops.length > 1 ? `${tops.join(' × ')} = ${longShow(top)}` : tops.length ? tops[0] : '1';
+  const q = longShow(div(top, bot));
+  return P(...rich(`Top: ${topTxt}. Bottom: ${bots.length ? `${bots.length > 1 ? `${bots.join(' × ')} = ` : ''}${longShow(bot)}` : '1'}. Top ÷ bottom = ${q}${q.endsWith('…') ? '' : '.'}`));
+}
+/** Build a written question for the new units: the answer, how it is graded, the worked solution. */
+function makeQ2(skill, o) {
+  const q = makeQ(skill, o);
+  if (o.gradeWith) {
+    q.gradeWith = (raw) => o.gradeWith(q, raw);
+    q.check = (raw) => q.gradeWith(raw).ok;
+  }
+  if (o.textWrong) q.textWrong = o.textWrong;
+  if (o.sciKeys) q.sciKeys = true;
+  if (o.extra) Object.assign(q, o.extra);
+  return q;
+}
+/** A numeric question: answer string, grading, accepted typings, wrong options. */
+function numQ(skill, o) {
+  const a = o.a;
+  const unit = o.unit || '';
+  const answer = `${a.str}${unit ? (unit === '%' ? '%' : ` ${unit}`) : ''}`;
+  const words = o.unitKey ? SPELL[o.unitKey].cs.concat(SPELL[o.unitKey].ci) : [];
+  const nums = [a.str.replace(/,/g, '')];
+  if (/×/.test(a.str)) nums.push(a.str.replace(' × 10^', 'e'), a.str.replace(' × ', ' x '));
+  const accept = o.accept || acceptList(nums, words.slice(0, 3));
+  const wrong = (o.wrong || []).map((w) => {
+    const wa = numAns(w.r, o.how);
+    if (o.fmt) wa.str = o.fmt(w.r);
+    return { str: `${wa.str}${unit ? (unit === '%' ? '%' : ` ${unit}`) : ''}`, val: toNum(wa.stated), why: w.why };
+  }).filter((w) => Number.isFinite(w.val) && w.val !== 0);
+  return makeQ2(skill, {
+    ...o, answer, accept, unit, unitName: o.unitName || unit,
+    value: toNum(a.stated), wrong,
+    grading: { label: o.label || '', unitKey: o.unitKey || '', exact: a.exact || null, stated: a.stated, truth: a.truth, place: a.place, howText: a.howText, subs: o.subs || [] },
+    gradeWith: gradeNum,
+  });
+}
+
+/* ------------------------------------------------ Unit 5: atomic structure */
+// Mass numbers of real isotopes, the most common first.
+const ISOTOPES = {
+  H: [1, 2, 3], He: [4, 3], Li: [7, 6], Be: [9], B: [11, 10], C: [12, 13, 14], N: [14, 15], O: [16, 17, 18], F: [19], Ne: [20, 22, 21],
+  Na: [23], Mg: [24, 25, 26], Al: [27], Si: [28, 29, 30], P: [31], S: [32, 34], Cl: [35, 37], Ar: [40, 36], K: [39, 41], Ca: [40, 44],
+  Sc: [45], Ti: [48, 46], V: [51], Cr: [52, 53], Mn: [55], Fe: [56, 54], Co: [59, 60], Ni: [58, 60], Cu: [63, 65], Zn: [64, 66],
+  Ga: [69, 71], Ge: [74, 72], As: [75], Se: [80, 78], Br: [79, 81], Kr: [84, 86], Rb: [85, 87], Sr: [88, 90], Ag: [107, 109],
+  Sn: [120, 118], I: [127, 131], Xe: [132, 129], Ba: [138, 137], Au: [197], Hg: [202, 200], Pb: [208, 206],
+};
+// Charges of the common monatomic ions.
+const ION_CHARGES = {
+  H: [1], Li: [1], Be: [2], N: [-3], O: [-2], F: [-1], Na: [1], Mg: [2], Al: [3], P: [-3], S: [-2], Cl: [-1], K: [1], Ca: [2],
+  Sc: [3], Cr: [3, 2], Mn: [2], Fe: [2, 3], Co: [2, 3], Ni: [2], Cu: [1, 2], Zn: [2], Ga: [3], Se: [-2], Br: [-1], Rb: [1], Sr: [2],
+  Ag: [1], Sn: [2, 4], I: [-1], Ba: [2], Au: [1, 3], Hg: [2], Pb: [2, 4],
+};
+const plural = (n, w) => `${n} ${w}${n === 1 ? '' : 's'}`;
+const pneText = (p, n, e) => `${plural(p, 'proton')}, ${plural(n, 'neutron')}, ${plural(e, 'electron')}`;
+/** "17, 18, 18", "p = 17, n = 18, e = 18", "17 protons 18 neutrons 18 electrons" → { p, n, e } */
+function readPNE(raw) {
+  // "34 p+ 44 n0 36 e-": the particle symbols' charge marks are labels, not
+  // numbers. Read the input as typed first, so "p1 n0 e1" (hydrogen-1) still
+  // means zero neutrons, and only then drop a 0 stuck to n.
+  return readPNE1(raw) || readPNE1(String(raw).replace(/(?<![a-z])n0(?![\d.])/gi, 'n '));
+}
+function readPNE1(raw) {
+  const s = String(raw).toLowerCase().replace(/[⁺⁻⁰]/g, ' ')
+    .replace(/protons?/g, ' p ').replace(/neutrons?/g, ' n ').replace(/electrons?/g, ' e ');
+  const toks = (s.match(/\d+|[a-z]+/g) || []).filter((t) => /^\d+$/.test(t) || /^[pne]$/.test(t));
+  if (!toks.length) return null;
+  const items = [];
+  if (/^[pne]$/.test(toks[0])) {
+    for (let i = 0; i < toks.length; i += 2) {
+      if (!/^[pne]$/.test(toks[i]) || !/^\d+$/.test(toks[i + 1] || '')) return null;
+      items.push({ v: Number(toks[i + 1]), lab: toks[i] });
+    }
+  } else {
+    for (const t of toks) {
+      if (/^\d+$/.test(t)) items.push({ v: Number(t), lab: null });
+      else { const last = items[items.length - 1]; if (!last || last.lab) return null; last.lab = t; }
+    }
+  }
+  if (items.length !== 3) return null;
+  if (items.every((x) => x.lab)) {
+    const by = Object.fromEntries(items.map((x) => [x.lab, x.v]));
+    return by.p != null && by.n != null && by.e != null ? by : null;
+  }
+  if (items.some((x) => x.lab)) return null;
+  return { p: items[0].v, n: items[1].v, e: items[2].v };
+}
+function gradePNE(q, raw) {
+  const r = readPNE(raw);
+  if (!r) return { ok: false, why: 'Type three numbers in order: protons, neutrons, electrons (like "p, n, e").' };
+  const { p, n, e, A, c } = q.pne;
+  if (r.p === p && r.n === n && r.e === e) return { ok: true };
+  if (r.p === p && r.n === A) return { ok: false, why: 'The mass number counts protons and neutrons together, so neutrons = mass number − protons.' };
+  if (r.p === p && r.n === n && c && r.e === p) return { ok: false, why: 'Protons and neutrons are right. The charge changes the electrons: + means electrons lost, − means electrons gained.' };
+  if (r.p === p && r.n === n && c && r.e === p + c) return { ok: false, why: `Protons and neutrons are right, but the charge goes the other way: a ${c > 0 ? 'positive ion has lost' : 'negative ion has gained'} electrons.` };
+  if (r.p === p && r.n === n) return { ok: false, why: 'Protons and neutrons are right — check the electrons.' };
+  return { ok: false, why: '' };
+}
+function genPne(lvl) {
+  const pool = Object.keys(ISOTOPES).filter((s) => (lvl === 1 ? ELEM[s].z <= 20 : lvl === 2 ? ELEM[s].z <= 38 : ELEM[s].z > 20));
+  const sym = pick(pool);
+  const E = ELEM[sym];
+  let c = 0;
+  if (lvl >= 2 && ION_CHARGES[sym] && chance(lvl === 2 ? .6 : .8)) c = pick(ION_CHARGES[sym]);
+  const A = lvl === 1 && chance(.6) ? ISOTOPES[sym][0] : pick(ISOTOPES[sym]);
+  const p = E.z, n = A - p, e = p - c;
+  const label = `${supText(A)}${sym}${c ? chargeText(c) : ''}`;
+  const named = !c && chance(.5);
+  const prompt = named
+    ? `How many protons, neutrons and electrons are in an atom of ${E.name}-${A}?`
+    : `How many protons, neutrons and electrons are in ${c ? 'the ion' : 'an atom of'} ${label}?`;
+  const answer = pneText(p, n, e);
+  const eLine = c === 0
+    ? 'A neutral atom has as many electrons as protons'
+    : c > 0 ? `A charge of ${c}+ means ${plural(c, 'electron')} lost` : `A charge of ${-c}− means ${plural(-c, 'electron')} gained`;
+  const work = (final) => {
+    const kids = [
+      P(`Protons = atomic number. ${cap1(E.name)} (${sym}) is element ${final ? E.z : 'number … (look it up on the periodic table)'}${final ? `, so ${plural(p, 'proton')}` : ''}.`),
+      P(`Neutrons = mass number − protons = ${A} − ${final ? `${p} = ${n}` : 'protons'}.`),
+      P(`Electrons: ${eLine}${final ? `: ${c === 0 ? `${p}` : c > 0 ? `${p} − ${c} = ${e}` : `${p} + ${-c} = ${e}`}` : ''}.`),
+    ];
+    if (final) kids.push(P('So: ', ansBox(answer), '.'));
+    else kids.push(note(named ? `The number after the name (${E.name}-${A}) is the mass number.` : `The small number in front (${supText(A)}) is the mass number${c ? ', and the one after the symbol is the charge' : ''}.`));
+    return el('div', { class: 'lab-work' }, ...kids);
+  };
+  const cands = [
+    { t: [p, n, p], why: 'ignored the charge' },
+    { t: [p, n, p + c], why: 'moved the electrons the wrong way for the charge' },
+    { t: [p, A, e], why: 'used the mass number for the neutrons' },
+    { t: [n, p, e], why: 'swapped protons and neutrons' },
+    { t: [p, A - e, e], why: 'subtracted electrons instead of protons' },
+    { t: [A, n, e], why: 'used the mass number for the protons' },
+    { t: [p, n, n], why: 'matched electrons to neutrons' },
+    { t: [p, n + 1, e], why: 'miscounted the neutrons' },
+  ];
+  const textWrong = cands.filter((w) => w.t.every((x) => x >= 0)).map((w) => ({ str: pneText(...w.t), why: w.why }));
+  return makeQ2('pne', {
+    level: lvl, prompt, answer,
+    note: 'Type three numbers in this order: protons, neutrons, electrons.',
+    accept: [`${p}, ${n}, ${e}`, `${p} ${n} ${e}`, `p = ${p}, n = ${n}, e = ${e}`, `${p}p ${n}n ${e}e`],
+    value: p,
+    brief: `Protons = atomic number = ${p}; neutrons = ${A} − ${p} = ${n}; electrons = ${c === 0 ? p : c > 0 ? `${p} − ${c}` : `${p} + ${-c}`} = ${e}.`,
+    textWrong, work, gradeWith: gradePNE, extra: { pne: { p, n, e, A, c } },
+  });
+}
+
+// Real isotope data: [mass in amu, percent abundance]
+const REAL_ISO = [
+  { el: 'Cl', iso: [['34.969', '75.78'], ['36.966', '24.22']] },
+  { el: 'Cu', iso: [['62.930', '69.15'], ['64.928', '30.85']] },
+  { el: 'B', iso: [['10.013', '19.9'], ['11.009', '80.1']] },
+  { el: 'Br', iso: [['78.918', '50.69'], ['80.916', '49.31']] },
+  { el: 'Ga', iso: [['68.926', '60.11'], ['70.925', '39.89']] },
+  { el: 'Li', iso: [['6.015', '7.59'], ['7.016', '92.41']] },
+  { el: 'Ag', iso: [['106.905', '51.84'], ['108.905', '48.16']] },
+  { el: 'Rb', iso: [['84.912', '72.17'], ['86.909', '27.83']] },
+  { el: 'N', iso: [['14.003', '99.63'], ['15.000', '0.37']] },
+  { el: 'Mg', iso: [['23.985', '78.99'], ['24.986', '10.00'], ['25.983', '11.01']] },
+  { el: 'Si', iso: [['27.977', '92.23'], ['28.976', '4.68'], ['29.974', '3.09']] },
+  { el: 'Ne', iso: [['19.992', '90.48'], ['20.994', '0.27'], ['21.991', '9.25']] },
+  { el: 'K', iso: [['38.964', '93.26'], ['39.964', '0.01'], ['40.962', '6.73']] },
+];
+function genAvgMass(lvl) {
+  let who, iso;
+  if (lvl === 1 || (lvl === 3 && chance(.35))) {
+    const n = lvl === 1 ? 2 : 3;
+    const masses = [ri(10, 120)];
+    while (masses.length < n) masses.push(masses[masses.length - 1] + ri(1, 2));
+    // abundances in whole percents (Warm-up) or tenths of a percent, adding up to 100
+    const unit = lvl === 1 ? 100 : 1000;
+    const parts = [];
+    let left = unit;
+    for (let i = 0; i < n - 1; i++) { const x = ri(unit / 20, left - (unit / 20) * (n - 1 - i)); parts.push(x); left -= x; }
+    parts.push(left);
+    who = 'Element X';
+    iso = masses.map((m, i) => [String(m), lvl === 1 ? String(parts[i]) : placePoint(B(parts[i]), 1, false)]);
+  } else {
+    const d = pick(REAL_ISO.filter((x) => (lvl === 2 ? x.iso.length === 2 : x.iso.length === 3 || chance(.3))));
+    who = cap1(ELEM[d.el].name);
+    iso = d.iso;
+  }
+  const dec = (a) => div(D(a), R(100));
+  const prods = iso.map(([m, a]) => mul(D(m), dec(a)));
+  const truth = prods.reduce(add, R(0));
+  const a = numAns(truth, { dp: 2 });
+  const words = ['two', 'three'][iso.length - 2];
+  const prompt = `${who} has ${words} isotopes: ${listJoin(iso.map(([m, x]) => `${m} amu (${x}%)`))}. What is its average atomic mass?`;
+  const answer = `${a.str} amu`;
+  const sumLine = iso.map(([m, x]) => `(${m} × ${fx(dec(x))})`).join(' + ');
+  const work = (final) => el('div', { class: 'lab-work' },
+    P('Change each percent to a decimal (divide by 100), multiply it by that isotope\'s mass, then add the results.'),
+    formulaBox(
+      lnF('average = Σ (mass × abundance)'),
+      ln(`= ${sumLine}`),
+      final ? ln(`= ${prods.map((x) => fx(x)).join(' + ')}`) : ln('= ?'),
+      final ? ln(...rich(`= ${longShow(truth, 9)}`)) : null),
+    final ? roundLine(a, answer) : note('The answer should land between the lightest and heaviest isotope, closest to the most common one.'));
+  const most = iso.reduce((b, x) => (Number(x[1]) > Number(b[1]) ? x : b), iso[0]);
+  const wrong = [
+    { r: div(iso.reduce((s, [m]) => add(s, D(m)), R(0)), R(iso.length)), why: 'averaged the masses without weighting them' },
+    { r: mul(truth, R(100)), why: 'forgot to change the percents to decimals' },
+    { r: D(most[0]), why: 'used only the most common isotope' },
+  ];
+  if (iso.length === 2) wrong.push({ r: add(mul(D(iso[0][0]), dec(iso[1][1])), mul(D(iso[1][0]), dec(iso[0][1]))), why: 'paired each mass with the other isotope\'s abundance' });
+  return numQ('avgmass', {
+    level: lvl, prompt, a, how: { dp: 2 }, unit: 'amu', unitKey: 'amu', unitName: 'amu (atomic mass units)',
+    note: 'Round to two decimal places.',
+    brief: `${sumLine} = ${longShow(truth, 9)} ≈ ${answer}`,
+    wrong, work,
+  });
+}
+
+/* ------------------------------------------------ Unit 6: electrons */
+const FILL = [['1s', 2], ['2s', 2], ['2p', 6], ['3s', 2], ['3p', 6], ['4s', 2], ['3d', 10], ['4p', 6], ['5s', 2], ['4d', 10], ['5p', 6], ['6s', 2], ['4f', 14], ['5d', 10], ['6p', 6]];
+const CAP = { s: 2, p: 6, d: 10, f: 14 };
+function configOf(z) {
+  const out = [];
+  let left = z;
+  for (const [s, cap] of FILL) { if (!left) break; const k = Math.min(cap, left); out.push([s, k]); left -= k; }
+  return out;
+}
+const shellOrder = (cfg) => cfg.slice().sort((a, b) => Number(a[0][0]) - Number(b[0][0]) || 'spdf'.indexOf(a[0][1]) - 'spdf'.indexOf(b[0][1]));
+const cfgPretty = (cfg) => cfg.map(([s, k]) => `${s}${supText(k)}`).join(' ');
+const cfgPlain = (cfg) => cfg.map(([s, k]) => `${s}${k}`).join(' ');
+const cfgKey = (cfg) => cfg.map(([s, k]) => `${s}${k}`).join(' ');
+const NOBLE = { 2: 'He', 10: 'Ne', 18: 'Ar', 36: 'Kr', 54: 'Xe' };
+function shorthandOf(z) {
+  const core = Math.max(...Object.keys(NOBLE).map(Number).filter((g) => g < z));
+  return { core, rest: configOf(z).slice(configOf(core).length) };
+}
+/** "1s2 2s2 2p6", "1s²2s²2p⁶", "1s^2 2s^2" (or run together) → [['1s', 2], …] */
+function readConfig(raw) {
+  const s = tidy(String(raw)).replace(/\^/g, '').replace(/[,;]/g, ' ').replace(/\s+/g, ' ').trim().toLowerCase();
+  if (/\[/.test(s)) return { core: true };
+  const parse = (i) => {
+    while (s[i] === ' ') i++;
+    if (i >= s.length) return [];
+    const m = /^([1-7])([spdf])/.exec(s.slice(i));
+    if (!m) return null;
+    const j = i + 2;
+    for (const len of [2, 1]) {
+      const d = s.slice(j, j + len);
+      if (d.length !== len || !/^\d+$/.test(d) || Number(d) > 14) continue;
+      const rest = parse(j + len);
+      if (rest) return [[m[1] + m[2], Number(d)], ...rest];
+    }
+    return null;
+  };
+  return parse(0);
+}
+function gradeConfig(q, raw) {
+  const r = readConfig(raw);
+  if (r && r.core) return { ok: false, why: 'Write it out in full — this asks for every sublevel, not the noble-gas shorthand.' };
+  if (!r || !r.length) return { ok: false, why: 'Write each sublevel as its number, letter and electrons: 1s2 2s2 2p6 …' };
+  const want = q.cfg;
+  if (cfgKey(r) === cfgKey(want) || cfgKey(r) === cfgKey(shellOrder(want))) return { ok: true };
+  const total = r.reduce((t, [, k]) => t + k, 0);
+  const over = r.find(([s, k]) => k > CAP[s[1]]);
+  if (over) return { ok: false, why: `A ${over[0][1]} sublevel holds at most ${CAP[over[0][1]]} electrons.` };
+  if (total !== q.z) return { ok: false, why: `That places ${total} electrons, but ${q.elName} has ${q.z}.` };
+  if (cfgKey(shellOrder(r)) === cfgKey(shellOrder(want))) return { ok: false, why: 'Right sublevels, but write them in filling order (1s 2s 2p 3s 3p 4s 3d …).' };
+  return { ok: false, why: 'Fill the sublevels in order, filling each one before starting the next.' };
+}
+function genConfig(lvl) {
+  const pool = [];
+  for (let z = lvl === 1 ? 1 : lvl === 2 ? 11 : 21; z <= (lvl === 1 ? 10 : lvl === 2 ? 20 : 36); z++) if (z !== 24 && z !== 29) pool.push(z);
+  const z = pick(pool);
+  const E = BY_Z[z];
+  const cfg = configOf(z);
+  const answer = cfgPretty(cfg);
+  const plainA = cfgPlain(cfg);
+  const accept = [plainA, cfg.map(([s, k]) => `${s}^${k}`).join(' ')];
+  if (cfgKey(shellOrder(cfg)) !== cfgKey(cfg)) accept.push(cfgPlain(shellOrder(cfg)));
+  let run = 0;
+  const steps = cfg.map(([s, k]) => { run += k; return { s, k, run }; });
+  const work = (final) => {
+    const kids = [P(`${cap1(E.name)} has ${z} electrons (its atomic number). Fill the sublevels in order — s holds 2, p holds 6, d holds 10 — until all ${z} are placed.`)];
+    if (final) {
+      kids.push(el('ol', { class: 'lab-fill', 'aria-label': 'Sublevels in filling order, with the running total' },
+        ...steps.map((x) => el('li', {}, el('b', {}, x.s, el('sup', {}, String(x.k))), el('small', {}, `${x.run}`)))));
+      if (z > 20) kids.push(note('4s fills before 3d: it is lower in energy, even though its shell number is higher.'));
+      kids.push(P('So: ', ansBox(answer)));
+    } else {
+      const need = FILL.slice(0, cfg.length + 1);
+      kids.push(el('ol', { class: 'lab-fill', 'aria-label': 'The filling order, with how many each sublevel holds' },
+        ...need.map(([s, cap]) => el('li', {}, el('b', {}, s), el('small', {}, `holds ${cap}`)))));
+      kids.push(note(`Keep a running total, and stop when it reaches ${z}: the last sublevel may be only partly full.`));
+    }
+    return el('div', { class: 'lab-work' }, ...kids);
+  };
+  const last = cfg.length - 1;
+  const tweak = (i, dk) => cfg.map(([s, k], j) => [s, j === i ? k + dk : k]).filter(([, k]) => k > 0);
+  const cands = [
+    { c: tweak(last, 1), why: 'one electron too many' },
+    { c: tweak(last, -1), why: 'one electron too few' },
+  ];
+  const sIdx = cfg.findIndex(([s]) => s === '4s'), dIdx = cfg.findIndex(([s]) => s === '3d');
+  if (sIdx >= 0 && dIdx >= 0) {
+    cands.push({ c: cfg.filter(([s]) => s !== '4s').map(([s, k]) => [s, s === '3d' ? Math.min(10, k + 2) : k]), why: 'put the 4s electrons in 3d' });
+    cands.push({ c: cfg.map(([s, k]) => [s === '3d' ? '4d' : s, k]), why: 'wrote 4d instead of 3d' });
+  }
+  if (cfg.length >= 3) cands.push({ c: [...cfg.slice(0, last - 1), [cfg[last - 1][0], cfg[last - 1][1] + cfg[last][1]]], why: 'overfilled a sublevel' });
+  if (sIdx >= 0 && dIdx < 0 && z >= 19) cands.push({ c: cfg.map(([s, k]) => [s === '4s' ? '3d' : s, k]), why: 'put 3d before 4s' });
+  const textWrong = cands.map((w) => ({ str: cfgPretty(w.c), plain: cfgPlain(w.c), why: w.why }));
+  return makeQ2('config', {
+    level: lvl, prompt: `Write the electron configuration of ${E.name} (${E.sym}).`,
+    note: 'Write it in full, not the noble-gas shorthand. Superscripts can be typed as plain numbers: 2p6.',
+    answer, accept, value: z,
+    brief: `${z} electrons, filling 1s 2s 2p 3s 3p 4s 3d 4p in order: ${answer}.`,
+    textWrong, work, gradeWith: gradeConfig, extra: { cfg, z, elName: E.name },
+  });
+}
+
+const MAIN_GROUP = { H: 1, He: 18, Li: 1, Be: 2, B: 13, C: 14, N: 15, O: 16, F: 17, Ne: 18, Na: 1, Mg: 2, Al: 13, Si: 14, P: 15, S: 16, Cl: 17, Ar: 18, K: 1, Ca: 2, Ga: 13, Ge: 14, As: 15, Se: 16, Br: 17, Kr: 18, Rb: 1, Sr: 2, Sn: 14, I: 17, Xe: 18, Ba: 2, Pb: 14 };
+const valenceOf = (sym) => (sym === 'He' ? 2 : MAIN_GROUP[sym] <= 2 ? MAIN_GROUP[sym] : MAIN_GROUP[sym] - 10);
+const periodOf = (z) => Math.max(...configOf(z).map(([s]) => Number(s[0])));
+function genValence(lvl) {
+  const pool = Object.keys(MAIN_GROUP).filter((s) => (lvl === 1 ? ELEM[s].z <= 20 : lvl === 2 ? ELEM[s].z <= 38 : ELEM[s].z > 10));
+  const sym = pick(pool);
+  const E = ELEM[sym], g = MAIN_GROUP[sym], v = valenceOf(sym), per = periodOf(E.z);
+  const a = numAns(R(v), { exact: true });
+  const sh = E.z > 2 ? shorthandOf(E.z) : { core: 0, rest: configOf(E.z) };
+  const outer = sh.rest.filter(([s]) => Number(s[0]) === per);
+  const shText = `${sh.core ? `[${NOBLE[sh.core]}] ` : ''}${cfgPretty(sh.rest)}`;
+  const work = (final) => {
+    const kids = [];
+    // before the answer, point to the group without naming it: for groups 1
+    // and 2 the group number is the answer
+    if (sym === 'He') kids.push(P(final ? 'Helium sits in group 18 but has only 2 electrons (1s²) — both are valence electrons.' : 'Helium is the exception in group 18: it has only one shell, so every electron it has is a valence electron. How many electrons does it have?'));
+    else if (!final) kids.push(P(`Find ${E.name}'s group on the periodic table. Groups 1 and 2 have as many valence electrons as the group number; for groups 13–18, valence electrons = group number − 10.`));
+    else if (g <= 2) kids.push(P(`${cap1(E.name)} is in group ${g}: groups 1 and 2 have ${v} valence electron${v === 1 ? '' : 's'}.`));
+    else kids.push(P(`${cap1(E.name)} is in group ${g}: for groups 13–18, valence electrons = group number − 10 = ${g} − 10 = ${v}.`));
+    if (final) {
+      kids.push(P(`Check with the electron configuration, ${shText}: the outermost shell is n = ${per}, holding ${outer.map(([s, k]) => `${s}${supText(k)}`).join(' + ')} = ${v}.`));
+      if (outer.length < sh.rest.length && sh.rest.some(([s]) => s[1] === 'd' || s[1] === 'f')) kids.push(note('Filled d and f sublevels are not in the outermost shell, so they don\'t count.'));
+      kids.push(P('So: ', ansBox(`${v}`), ' valence electrons.'));
+    } else kids.push(note('Valence electrons are the ones in the outermost shell (the highest n).'));
+    return el('div', { class: 'lab-work' }, ...kids);
+  };
+  const wrong = [
+    g >= 13 && sym !== 'He' ? { r: R(g), why: 'used the group number without subtracting 10' } : null,
+    { r: R(per), why: 'used the period number' },
+    { r: R(E.z), why: 'used the atomic number' },
+    v < 8 && v !== 4 ? { r: R(8 - v), why: 'counted the electrons needed to fill the shell' } : null,
+    sym === 'He' ? { r: R(8), why: 'gave helium a full octet' } : null,
+    { r: R(v + 2), why: 'counted the wrong sublevels' },
+  ].filter(Boolean);
+  return numQ('valence', {
+    level: lvl, prompt: `How many valence electrons does an atom of ${E.name} (${sym}) have?`,
+    a, how: { exact: true }, unit: '', unitKey: 've', unitName: 'valence electrons',
+    accept: [`${v}`, `${v} valence electrons`, `${v} electrons`],
+    brief: sym === 'He' ? 'Helium has 2 valence electrons (1s²).' : g <= 2 ? `Group ${g}: ${v} valence electron${v === 1 ? '' : 's'}.` : `Group ${g}: ${g} − 10 = ${v} valence electrons.`,
+    wrong, work,
+  });
+}
+function genNoble(lvl) {
+  const pool = [];
+  for (let z = lvl === 1 ? 3 : lvl === 2 ? 11 : 19; z <= (lvl === 1 ? 20 : lvl === 2 ? 36 : 38); z++) if (z !== 24 && z !== 29) pool.push(z);
+  const z = pick(pool);
+  const E = BY_Z[z];
+  const { core, rest } = shorthandOf(z);
+  const show = (c, r) => `[${NOBLE[c]}] ${cfgPretty(r)}`;
+  const answer = show(core, rest);
+  const cores = Object.keys(NOBLE).map(Number);
+  const prev = cores.filter((c) => c < core).pop();
+  const nextCore = cores.find((c) => c > core);
+  const last = rest.length - 1;
+  const cands = [];
+  if (prev) cands.push({ str: show(prev, rest), why: 'used the wrong noble gas (the electrons don\'t add up)' });
+  if (nextCore) cands.push({ str: show(nextCore, rest), why: 'used the noble gas after the element instead of before it' });
+  cands.push({ str: show(core, rest.map(([s, k], j) => [s, j === last ? k + 1 : k])), why: 'one electron too many' });
+  if (rest[last][1] > 1) cands.push({ str: show(core, rest.map(([s, k], j) => [s, j === last ? k - 1 : k])), why: 'one electron too few' });
+  else if (rest.length > 1) cands.push({ str: show(core, rest.slice(0, last)), why: 'left out the last electron' });
+  const d = rest.findIndex(([s]) => s[1] === 'd');
+  if (d >= 0) {
+    cands.push({ str: show(core, rest.map(([s, k]) => [s[1] === 'd' ? `${Number(s[0]) + 1}d` : s, k])), why: 'the d sublevel is one shell behind (3d, not 4d)' });
+    const s4 = rest.find(([s]) => s[1] === 's');
+    if (s4 && rest[d][1] + s4[1] <= 10) cands.push({ str: show(core, rest.filter(([s]) => s[1] !== 's').map(([s, k]) => [s, s[1] === 'd' ? k + s4[1] : k])), why: 'put the s electrons in the d sublevel' });
+  }
+  if (d < 0) cands.push({ str: show(core, rest.map(([s, k]) => [`${Number(s[0]) - 1}${s[1]}`, k])), why: 'used the noble gas\'s shell number for the next sublevels' });
+  const picked = uniqBy(shuffle(cands.filter((c) => c.str !== answer)), (c) => c.str).slice(0, 3);
+  const work = (final) => {
+    const kids = [
+      P(`${cap1(E.name)} has ${z} electrons. The noble gas before it is ${final ? `${BY_Z[core].name} (${NOBLE[core]}), with ${core}` : '…'}: its symbol in brackets stands for all of those electrons.`),
+    ];
+    if (final) {
+      kids.push(P(`That leaves ${z} − ${core} = ${z - core} electrons, filled in order after ${NOBLE[core]}: ${cfgPretty(rest)}.`));
+      kids.push(P('So: ', ansBox(answer)));
+    } else kids.push(note('Find the last noble gas before the element, then fill the electrons that are left in order (…4s, 3d, 4p…).'));
+    return el('div', { class: 'lab-work' }, ...kids);
+  };
+  return makeQ2('noble', {
+    level: lvl, type: 'mc', prompt: `Which is the noble-gas shorthand electron configuration of ${E.name} (${E.sym})?`,
+    answer, options: shuffle([answer, ...picked.map((c) => c.str)]), value: z,
+    brief: `${NOBLE[core]} holds ${core} electrons; the other ${z - core} go in ${cfgPretty(rest)}: ${answer}.`,
+    work, extra: { mistakes: picked.map((c) => ({ option: c.str, why: c.why })) },
+  });
+}
+
+/* ------------------------------------------------ Unit 8: naming and formulas */
+const CATIONS = [
+  { f: 'Li', name: 'lithium', c: 1 }, { f: 'Na', name: 'sodium', c: 1 }, { f: 'K', name: 'potassium', c: 1 }, { f: 'Rb', name: 'rubidium', c: 1 },
+  { f: 'Mg', name: 'magnesium', c: 2 }, { f: 'Ca', name: 'calcium', c: 2 }, { f: 'Sr', name: 'strontium', c: 2 }, { f: 'Ba', name: 'barium', c: 2 },
+  { f: 'Al', name: 'aluminum', c: 3 }, { f: 'Zn', name: 'zinc', c: 2 }, { f: 'Ag', name: 'silver', c: 1 },
+  { f: 'NH4', name: 'ammonium', c: 1, poly: true },
+];
+// Metals with more than one common charge: the name carries it as a Roman numeral.
+const MULTI = [
+  { f: 'Fe', name: 'iron', cs: [2, 3] }, { f: 'Cu', name: 'copper', cs: [1, 2] }, { f: 'Pb', name: 'lead', cs: [2, 4] },
+  { f: 'Sn', name: 'tin', cs: [2, 4] }, { f: 'Co', name: 'cobalt', cs: [2, 3] }, { f: 'Cr', name: 'chromium', cs: [2, 3] },
+  { f: 'Au', name: 'gold', cs: [1, 3] },
+];
+const ANIONS = [
+  { f: 'F', name: 'fluoride', c: -1 }, { f: 'Cl', name: 'chloride', c: -1 }, { f: 'Br', name: 'bromide', c: -1 }, { f: 'I', name: 'iodide', c: -1 },
+  { f: 'O', name: 'oxide', c: -2 }, { f: 'S', name: 'sulfide', c: -2 }, { f: 'N', name: 'nitride', c: -3 }, { f: 'P', name: 'phosphide', c: -3 },
+  { f: 'NO3', name: 'nitrate', c: -1, poly: true }, { f: 'NO2', name: 'nitrite', c: -1, poly: true },
+  { f: 'SO4', name: 'sulfate', c: -2, poly: true }, { f: 'SO3', name: 'sulfite', c: -2, poly: true },
+  { f: 'CO3', name: 'carbonate', c: -2, poly: true }, { f: 'HCO3', name: 'hydrogen carbonate', c: -1, poly: true },
+  { f: 'PO4', name: 'phosphate', c: -3, poly: true }, { f: 'OH', name: 'hydroxide', c: -1, poly: true },
+  { f: 'C2H3O2', name: 'acetate', c: -1, poly: true, alt: 'CH3COO' }, { f: 'MnO4', name: 'permanganate', c: -1, poly: true },
+  { f: 'CrO4', name: 'chromate', c: -2, poly: true }, { f: 'Cr2O7', name: 'dichromate', c: -2, poly: true },
+  { f: 'CN', name: 'cyanide', c: -1, poly: true }, { f: 'O2', name: 'peroxide', c: -2, poly: true },
+  { f: 'ClO3', name: 'chlorate', c: -1, poly: true },
+];
+const ANION_BY = Object.fromEntries(ANIONS.map((a) => [a.name, a]));
+// the same element with a different ending: the classic -ide / -ite / -ate mix-up
+const ENDING_SWAP = { nitrate: ['nitrite', 'nitride'], nitrite: ['nitrate'], sulfate: ['sulfite', 'sulfide'], sulfite: ['sulfate', 'sulfide'], sulfide: ['sulfate', 'sulfite'], chloride: ['chlorate'], chlorate: ['chloride'], phosphate: ['phosphide'], phosphide: ['phosphate'], nitride: ['nitrate', 'nitrite'], chromate: ['dichromate'], dichromate: ['chromate'], oxide: ['peroxide'], peroxide: ['oxide'] };
+const GROUP12 = ['Li', 'Na', 'K', 'Rb', 'Mg', 'Ca', 'Sr', 'Ba'];
+function pairOk(cat, an) {
+  if (an.f === 'O2') return GROUP12.includes(cat.f);            // peroxides of groups 1 and 2 only (PbO₂ is lead(IV) oxide)
+  if (cat.f === 'NH4' && ['O', 'N', 'P'].includes(an.f)) return false;
+  if (cat.f === 'Cr' && ['CrO4', 'Cr2O7', 'MnO4'].includes(an.f)) return false;
+  // leave out pairings no textbook would show: tin(IV) and lead(IV) and gold
+  // with oxoanions (tin(IV) permanganate, gold(III) sulfite …), cobalt(III)
+  // with the oxidisable or fragile ones
+  if (cat.multi && (cat.c === 4 || cat.f === 'Au') && an.poly && an.f !== 'CN') return false;
+  if (cat.f === 'Co' && cat.c === 3 && ['NO2', 'SO3', 'HCO3', 'CO3', 'C2H3O2', 'CN', 'MnO4', 'CrO4', 'Cr2O7', 'ClO3'].includes(an.f)) return false;
+  return true;
+}
+const ionPart = (ion, n, f = ion.f) => (n === 1 ? f : ion.poly ? `(${f})${n}` : `${f}${n}`);
+function ionic(cat, an) {
+  const a = cat.c, b = -an.c;
+  const L = (a * b) / gcdN(a, b);
+  const nc = L / a, na = L / b;
+  const formula = ionPart(cat, nc) + ionPart(an, na);
+  const formulas = [formula];
+  if (an.alt) formulas.push(ionPart(cat, nc) + ionPart(an, na, an.alt));
+  const catName = `${cat.name}${cat.multi ? `(${ROMAN[a]})` : ''}`;
+  return { kind: cat.multi ? 'tm' : cat.poly || an.poly ? 'poly' : 'binary', formula, formulas, name: `${catName} ${an.name}`, names: [`${catName} ${an.name}`], cat, an, nc, na, catName };
+}
+const MOLECULAR = ['CO', 'CO2', 'N2O', 'NO', 'NO2', 'N2O3', 'N2O4', 'N2O5', 'SO2', 'SO3', 'CCl4', 'CBr4', 'CS2', 'PCl3', 'PCl5', 'PBr3', 'P2O5', 'P4O10', 'P4S3', 'SF6', 'SCl2', 'S2Cl2', 'SiO2', 'SiCl4', 'SiF4', 'NF3', 'NCl3', 'BF3', 'BCl3', 'OF2', 'Cl2O', 'Cl2O7', 'ClF3', 'BrF3', 'BrF5', 'ICl', 'IF5', 'IF7', 'SeO2', 'As2O3', 'As2O5', 'B2H6'];
+const IDE = { O: 'oxide', S: 'sulfide', N: 'nitride', P: 'phosphide', F: 'fluoride', Cl: 'chloride', Br: 'bromide', I: 'iodide', H: 'hydride' };
+const PREFIX_N = ['', 'mono', 'di', 'tri', 'tetra', 'penta', 'hexa', 'hepta', 'octa', 'nona', 'deca'];
+/** "mono" + "oxide" → "monoxide"; the unshortened spelling is accepted too. */
+const withPrefix = (n, root, elide = true) => {
+  const pre = PREFIX_N[n];
+  return elide && /^o/.test(root) && /[ao]$/.test(pre) ? pre.slice(0, -1) + root : pre + root;
+};
+function molecular(formula) {
+  const m = formula.match(/^([A-Z][a-z]?)(\d*)([A-Z][a-z]?)(\d*)$/);
+  const x = m[1], nx = Number(m[2] || 1), y = m[3], ny = Number(m[4] || 1);
+  const first = `${nx > 1 ? PREFIX_N[nx] : ''}${ELEM[x].name}`;
+  const names = [...new Set([`${first} ${withPrefix(ny, IDE[y])}`, `${first} ${withPrefix(ny, IDE[y], false)}`])];
+  return { kind: 'cov', formula, formulas: [formula], name: names[0], names, x, nx, y, ny };
+}
+function pickCompound(lvl) {
+  const kinds = lvl === 1 ? ['binary', 'binary', 'binary', 'cov', 'cov'] : lvl === 2 ? ['poly', 'poly', 'poly', 'binary', 'cov', 'cov'] : ['tm', 'tm', 'tm', 'poly', 'cov'];
+  const kind = pick(kinds);
+  if (kind === 'cov') return molecular(pick(lvl === 1 ? MOLECULAR.filter((f) => !/\d{2}/.test(f) && f.length <= 4) : MOLECULAR));
+  for (let tries = 0; tries < 200; tries++) {
+    let cat, an;
+    if (kind === 'binary') { cat = pick(CATIONS.filter((c) => !c.poly)); an = pick(ANIONS.filter((a) => !a.poly)); }
+    else if (kind === 'poly') {
+      if (chance(.2)) { cat = CATIONS.find((c) => c.poly); an = pick(ANIONS); } else { cat = pick(CATIONS); an = pick(ANIONS.filter((a) => a.poly)); }
+    } else {
+      const mt = pick(MULTI);
+      const c = pick(mt.cs);
+      cat = { f: mt.f, name: mt.name, c, multi: mt, other: mt.cs.find((x) => x !== c) };
+      an = pick(ANIONS);
+    }
+    if (pairOk(cat, an)) return ionic(cat, an);
+  }
+  return ionic(CATIONS[1], ANIONS[1]);
+}
+/* grading formulas: capital letters matter (Co is cobalt, CO carbon monoxide) */
+const normFormula = (s) => unSub(String(s)).replace(/\s+/g, '').replace(/\.+$/, '').replace(/[[{]/g, '(').replace(/[\]}]/g, ')');
+function gradeFormula(q, raw) {
+  const t = normFormula(raw);
+  if (!t) return { ok: false, why: 'Type the formula.' };
+  const want = q.cmp.formulas;
+  if (want.includes(t)) return { ok: true };
+  if (want.some((f) => f.toLowerCase() === t.toLowerCase())) return { ok: false, why: 'Check the capital letters: every element symbol starts with a capital, and a second letter is small (Co is cobalt, but CO is carbon monoxide).' };
+  let same = false;
+  try { same = sameAtoms(atomsOf(t), atomsOf(q.cmp.formula)); } catch { /* not a formula */ }
+  if (same) {
+    return { ok: false, why: /\(/.test(t) && !/\(/.test(q.cmp.formula)
+      ? 'Right atoms, but brackets only go around a polyatomic ion when there is more than one of it.'
+      : 'Right atoms, but written differently: the cation goes first, and a polyatomic ion keeps its own formula — in brackets when there are two or more of it.' };
+  }
+  if (q.cmp.kind !== 'cov') {
+    try {
+      const at = atomsOf(t);
+      if (Object.keys(at).length && q.cmp.kind === 'tm' && at[q.cmp.cat.f]) return { ok: false, why: `The Roman numeral gives the charge: ${q.cmp.catName} is ${q.cmp.cat.f}${chargeText(q.cmp.cat.c)}. Balance that against ${fm(q.cmp.an.f)}${chargeText(q.cmp.an.c)}.` };
+    } catch { /* not a formula */ }
+  }
+  return { ok: false, why: '' };
+}
+/* grading names: capitals and spacing don't matter; spelling and numerals do */
+function normName(s) {
+  return String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
+    .replace(/[.!]+$/, '').replace(/sulph/g, 'sulf').replace(/aluminium/g, 'aluminum')
+    .replace(/\bbicarbonate\b/g, 'hydrogen carbonate').replace(/hydrogencarbonate/g, 'hydrogen carbonate').replace(/\bethanoate\b/g, 'acetate')
+    .replace(/\s*\(\s*/g, '(').replace(/\s*\)\s*/g, ') ').replace(/\s+/g, ' ').trim()
+    .replace(/\b([a-z]+) (iv|v?i{1,3}|v)\b(?= [a-z])/g, '$1($2)');
+}
+function gradeName(q, raw) {
+  const t = normName(raw);
+  if (!t) return { ok: false, why: 'Type the name.' };
+  if (q.cmp.names.map(normName).includes(t)) return { ok: true };
+  const c = q.cmp;
+  if (c.kind === 'tm' && t.startsWith(c.cat.name) && !/\(/.test(t)) return { ok: false, why: `${cap1(c.cat.name)} can form more than one ion, so the name needs a Roman numeral for its charge.` };
+  if (c.kind === 'tm' && /\(\d\)/.test(t)) return { ok: false, why: 'Write the charge as a Roman numeral, like (II) or (III).' };
+  if (c.kind !== 'cov' && c.kind !== 'tm' && /\(/.test(t)) return { ok: false, why: `${cap1(c.cat.name)} only forms one ion, so there's no Roman numeral.` };
+  if (c.kind !== 'cov' && /\b(mono|di|tri|tetra|penta|hexa)[a-z]/.test(t)) return { ok: false, why: 'Ionic compounds don\'t use prefixes: the charges already fix how many of each ion.' };
+  if (c.kind === 'cov' && t.startsWith('mono')) return { ok: false, why: '"Mono" is left off the first element.' };
+  if (c.kind === 'cov' && !/(mon|di|tri|tetr|pent|hex|hept|oct|non|dec)/.test(t)) return { ok: false, why: 'Molecular compounds use prefixes (mono-, di-, tri-, …) for how many of each atom.' };
+  return { ok: false, why: '' };
+}
+function ionicWork(c, final, toFormula) {
+  const catIon = `${fm(c.cat.f)}${chargeText(c.cat.c)}`, anIon = `${fm(c.an.f)}${chargeText(c.an.c)}`;
+  const kids = [];
+  if (toFormula) {
+    kids.push(P(c.kind === 'tm'
+      ? `The Roman numeral gives the metal's charge: ${c.catName} is ${catIon}.`
+      : `${cap1(c.cat.name)} is ${catIon}${c.cat.poly ? ' (a polyatomic ion)' : ''}.`),
+    P(`${cap1(c.an.name)} is ${anIon}${c.an.poly ? ' (a polyatomic ion)' : ''}.`));
+  } else {
+    // before the answer, name neither ion: which ions, and the anion's charge, is the method
+    kids.push(P(`${fm(c.formula)} is made of ${c.cat.poly ? 'the polyatomic ion ' : ''}${fm(c.cat.f)} and ${c.an.poly ? 'the polyatomic ion ' : ''}${fm(c.an.f)}: ${final ? `${c.an.name} is ` : 'the anion is '}${anIon}.`));
+    if (c.kind === 'tm') {
+      kids.push(P(`${cap1(c.cat.name)} can have more than one charge, so work it out from the anion: ${c.na} × (${pretty(String(c.an.c))}) = ${pretty(String(c.na * c.an.c))}${final ? `, shared by ${c.nc} ${c.cat.f} ion${c.nc === 1 ? '' : 's'}, so each is +${c.cat.c}: ${c.catName}` : `. The ${c.nc === 1 ? `${c.cat.f} ion must cancel` : `${c.nc} ${c.cat.f} ions must cancel`} that, so the total charge is zero.`}${final ? '.' : ''}`));
+    } else if (!final) {
+      kids.push(note(c.an.poly ? 'A polyatomic ion keeps its own name — look it up in the table of polyatomic ions.' : 'A single-element anion takes the element\'s name with the ending changed to -ide.'));
+    }
+  }
+  if (final || (!toFormula && c.kind !== 'tm')) {
+    kids.push(P(`The charges must add up to zero: ${c.nc} × (+${c.cat.c}) + ${c.na} × (${pretty(String(c.an.c))}) = 0.`));
+  } else if (!toFormula) kids.push(note('Share that total out among the metal ions: the charge on each one is the Roman numeral.'));
+  else kids.push(note('Find the smallest number of each ion that makes the total charge zero.'));
+  if (final && toFormula && ((c.cat.poly && c.nc > 1) || (c.an.poly && c.na > 1))) kids.push(note('A polyatomic ion keeps its own formula; put it in brackets when you need more than one of it.'));
+  return kids;
+}
+function covWork(c, final, toFormula) {
+  const kids = [P('Both elements are nonmetals, so this is a molecular (covalent) compound: the prefixes count the atoms.')];
+  if (final) {
+    kids.push(P(`${c.nx > 1 ? `${PREFIX_N[c.nx]}- = ${c.nx}` : 'no prefix on the first element = 1'} ${ELEM[c.x].name} (${c.x}); ${PREFIX_N[c.ny]}- = ${c.ny} ${ELEM[c.y].name} (${c.y}).`));
+  } else kids.push(note('mono = 1, di = 2, tri = 3, tetra = 4, penta = 5, hexa = 6, hepta = 7, octa = 8, nona = 9, deca = 10. No prefix on the first element means 1.'));
+  if (!toFormula) kids.push(note('"Mono" is left off the first element, and the second element ends in -ide.'));
+  return kids;
+}
+function genFormula(lvl) {
+  const c = pickCompound(lvl);
+  const answer = fm(c.formula);
+  const work = (final) => el('div', { class: 'lab-work' },
+    ...(c.kind === 'cov' ? covWork(c, final, true) : ionicWork(c, final, true)),
+    final ? P('So: ', ansBox(answer)) : null);
+  const w = [];
+  if (c.kind === 'cov') {
+    if (c.nx !== c.ny) w.push({ f: `${c.x}${c.ny > 1 ? c.ny : ''}${c.y}${c.nx > 1 ? c.nx : ''}`, why: 'swapped the subscripts' });
+    w.push({ f: `${c.x}${c.y}${c.ny > 1 ? c.ny : ''}`.replace(/^([A-Z][a-z]?)(?=[A-Z])/, '$1'), why: 'dropped the first prefix' });
+    for (const d of [1, -1, 2]) if (c.ny + d >= 1 && c.ny + d <= 10) w.push({ f: `${c.x}${c.nx > 1 ? c.nx : ''}${c.y}${c.ny + d > 1 ? c.ny + d : ''}`, why: 'mixed up the prefixes' });
+    w.push({ f: `${c.x}${c.nx + 1}${c.y}${c.ny > 1 ? c.ny : ''}`, why: 'mixed up the prefixes' });
+  } else {
+    const { cat, an, nc, na } = c;
+    if (nc !== 1 || na !== 1) w.push({ f: ionPart(cat, 1) + ionPart(an, 1), why: 'charges not balanced' });
+    if (nc !== na) w.push({ f: ionPart(cat, na) + ionPart(an, nc), why: 'swapped the numbers of each ion' });
+    if ((cat.poly && nc > 1) || (an.poly && na > 1)) w.push({ f: `${cat.f}${nc > 1 ? nc : ''}${an.f}${na > 1 ? na : ''}`, why: 'left out the brackets' });
+    if (cat.c === -an.c && cat.c > 1) w.push({ f: ionPart(cat, cat.c) + ionPart(an, -an.c), why: 'did not reduce to the lowest ratio' });
+    if (c.kind === 'tm') w.push({ f: ionic({ ...cat, c: cat.other }, an).formula, why: 'used the wrong charge for the metal' });
+    for (const nm of ENDING_SWAP[an.name] || []) {
+      const other = ANION_BY[nm];
+      if (other) w.push({ f: ionic(cat, other).formula, why: 'mixed up -ide, -ite and -ate' });
+    }
+    w.push({ f: ionPart(cat, nc + 1) + ionPart(an, na), why: 'charges not balanced' });
+  }
+  const textWrong = uniqBy(w.filter((x) => x.f !== c.formula), (x) => x.f).map((x) => ({ str: fm(x.f), plain: x.f, why: x.why }));
+  return makeQ2('formula', {
+    level: lvl, prompt: `Write the formula for ${c.name}.`,
+    note: 'Type subscripts as plain numbers (H2O). Capital letters matter.',
+    answer, accept: c.formulas, value: 1,
+    brief: c.kind === 'cov' ? `The prefixes give the subscripts: ${c.name} is ${answer}.` : `${c.catName} is ${fm(c.cat.f)}${chargeText(c.cat.c)}, ${c.an.name} is ${fm(c.an.f)}${chargeText(c.an.c)}; balancing the charges gives ${answer}.`,
+    textWrong, work, gradeWith: gradeFormula, extra: { cmp: c },
+  });
+}
+function genNaming(lvl) {
+  const c = pickCompound(lvl);
+  const answer = c.name;
+  const work = (final) => el('div', { class: 'lab-work' },
+    ...(c.kind === 'cov' ? covWork(c, final, false) : ionicWork(c, final, false)),
+    final ? P('So: ', ansBox(answer)) : (c.kind === 'cov' ? null : note(c.kind === 'tm' ? 'Name the metal, its charge as a Roman numeral in brackets, then the anion.' : 'Name the cation, then the anion. Ionic names use no prefixes.')));
+  const w = [];
+  if (c.kind === 'cov') {
+    w.push({ n: `${ELEM[c.x].name} ${IDE[c.y]}`, why: 'left out the prefixes' });
+    if (c.nx === 1) w.push({ n: `mono${ELEM[c.x].name} ${withPrefix(c.ny, IDE[c.y])}`, why: 'put mono on the first element' });
+    for (const d of [1, -1]) if (c.ny + d >= 1 && c.ny + d <= 10) w.push({ n: `${c.nx > 1 ? PREFIX_N[c.nx] : ''}${ELEM[c.x].name} ${withPrefix(c.ny + d, IDE[c.y])}`, why: 'used the wrong prefix' });
+    if (c.nx !== c.ny) w.push({ n: `${c.ny > 1 ? PREFIX_N[c.ny] : ''}${ELEM[c.x].name} ${withPrefix(c.nx, IDE[c.y])}`, why: 'swapped the prefixes' });
+  } else {
+    const { cat, an, nc, na } = c;
+    if (c.kind === 'tm') {
+      w.push({ n: `${cat.name} ${an.name}`, why: 'left out the Roman numeral' });
+      w.push({ n: `${cat.name}(${ROMAN[cat.other]}) ${an.name}`, why: 'wrong charge in the Roman numeral' });
+      if (na !== cat.c) w.push({ n: `${cat.name}(${ROMAN[na]}) ${an.name}`, why: 'used the anion\'s subscript as the charge' });
+    } else if (!cat.poly) w.push({ n: `${cat.name}(${ROMAN[cat.c]}) ${an.name}`, why: 'added a Roman numeral the metal does not need' });
+    if (nc > 1 || na > 1) w.push({ n: `${nc > 1 ? PREFIX_N[nc] : ''}${c.catName} ${na > 1 ? withPrefix(na, an.name) : an.name}`, why: 'used prefixes on an ionic compound' });
+    for (const nm of ENDING_SWAP[an.name] || []) w.push({ n: `${c.catName} ${nm}`, why: 'mixed up -ide, -ite and -ate' });
+    if (!an.poly && !ENDING_SWAP[an.name]) w.push({ n: `${c.catName} ${an.name.replace(/ide$/, 'ate')}`, why: 'mixed up -ide and -ate' });
+    w.push({ n: `${c.catName} ${ELEM[an.f] ? ELEM[an.f].name : an.name}`, why: 'kept the element name instead of the -ide ending' });
+  }
+  const accepted = new Set(c.names.map(normName));
+  const textWrong = uniqBy(w.filter((x) => !accepted.has(normName(x.n))), (x) => normName(x.n)).map((x) => ({ str: x.n, why: x.why }));
+  return makeQ2('naming', {
+    level: lvl, prompt: `Name the compound ${fm(c.formula)}.`,
+    note: c.kind === 'tm' || (lvl === 3 && c.kind !== 'cov') ? 'Write any Roman numeral in brackets, like iron(II).' : '',
+    answer, accept: c.names, value: 1,
+    brief: c.kind === 'cov' ? `Molecular compound — prefixes count the atoms: ${answer}.` : c.kind === 'tm' ? `${c.na} × (${pretty(String(c.an.c))}) = ${pretty(String(c.na * c.an.c))}, so each ${c.cat.f} is +${c.cat.c}: ${answer}.` : `Cation then anion, no prefixes: ${answer}.`,
+    textWrong, work, gradeWith: gradeName, extra: { cmp: c },
+  });
+}
+
+/* ------------------------------------------------ Unit 9: chemical reactions */
+// Real reactions with their lowest whole-number coefficients, their type, and
+// any other type they could fairly be called (never offered as a wrong option).
+const REACTIONS = [
+  ['2 H2 + O2 -> 2 H2O', 'synthesis', ['combustion']],
+  ['N2 + 3 H2 -> 2 NH3', 'synthesis'],
+  ['2 Na + Cl2 -> 2 NaCl', 'synthesis'],
+  ['4 Fe + 3 O2 -> 2 Fe2O3', 'synthesis', ['combustion']],
+  ['2 Mg + O2 -> 2 MgO', 'synthesis', ['combustion']],
+  ['4 Al + 3 O2 -> 2 Al2O3', 'synthesis', ['combustion']],
+  ['2 Al + 3 Cl2 -> 2 AlCl3', 'synthesis'],
+  ['CaO + H2O -> Ca(OH)2', 'synthesis'],
+  ['2 K + Br2 -> 2 KBr', 'synthesis'],
+  ['2 SO2 + O2 -> 2 SO3', 'synthesis', ['combustion']],
+  ['P4 + 5 O2 -> P4O10', 'synthesis', ['combustion']],
+  ['2 Ca + O2 -> 2 CaO', 'synthesis', ['combustion']],
+  ['3 Mg + N2 -> Mg3N2', 'synthesis'],
+  ['2 Fe + 3 Cl2 -> 2 FeCl3', 'synthesis'],
+  ['H2 + Cl2 -> 2 HCl', 'synthesis'],
+  ['4 Na + O2 -> 2 Na2O', 'synthesis', ['combustion']],
+  ['2 NO + O2 -> 2 NO2', 'synthesis', ['combustion']],
+  ['2 Cu + O2 -> 2 CuO', 'synthesis', ['combustion']],
+  ['CO2 + H2O -> H2CO3', 'synthesis'],
+  ['SO3 + H2O -> H2SO4', 'synthesis'],
+  ['2 H2O -> 2 H2 + O2', 'decomposition'],
+  ['2 H2O2 -> 2 H2O + O2', 'decomposition'],
+  ['2 KClO3 -> 2 KCl + 3 O2', 'decomposition'],
+  ['CaCO3 -> CaO + CO2', 'decomposition'],
+  ['MgCO3 -> MgO + CO2', 'decomposition'],
+  ['2 NaCl -> 2 Na + Cl2', 'decomposition'],
+  ['2 HgO -> 2 Hg + O2', 'decomposition'],
+  ['2 Cu(NO3)2 -> 2 CuO + 4 NO2 + O2', 'decomposition'],
+  ['2 Al2O3 -> 4 Al + 3 O2', 'decomposition'],
+  ['NH4NO3 -> N2O + 2 H2O', 'decomposition'],
+  ['2 NaHCO3 -> Na2CO3 + H2O + CO2', 'decomposition'],
+  ['2 KNO3 -> 2 KNO2 + O2', 'decomposition'],
+  ['2 Ag2O -> 4 Ag + O2', 'decomposition'],
+  ['(NH4)2CO3 -> 2 NH3 + H2O + CO2', 'decomposition'],
+  ['2 NH3 -> N2 + 3 H2', 'decomposition'],
+  ['Cu(OH)2 -> CuO + H2O', 'decomposition'],
+  ['2 PbO2 -> 2 PbO + O2', 'decomposition'],
+  ['Zn + 2 HCl -> ZnCl2 + H2', 'single replacement'],
+  ['2 Na + 2 H2O -> 2 NaOH + H2', 'single replacement'],
+  ['Fe + CuSO4 -> FeSO4 + Cu', 'single replacement'],
+  ['Cu + 2 AgNO3 -> Cu(NO3)2 + 2 Ag', 'single replacement'],
+  ['Cl2 + 2 KBr -> 2 KCl + Br2', 'single replacement'],
+  ['2 Al + 3 CuCl2 -> 2 AlCl3 + 3 Cu', 'single replacement'],
+  ['Mg + 2 HCl -> MgCl2 + H2', 'single replacement'],
+  ['2 Al + 6 HCl -> 2 AlCl3 + 3 H2', 'single replacement'],
+  ['2 K + 2 H2O -> 2 KOH + H2', 'single replacement'],
+  ['Ca + 2 H2O -> Ca(OH)2 + H2', 'single replacement'],
+  ['Zn + CuSO4 -> ZnSO4 + Cu', 'single replacement'],
+  ['2 Al + Fe2O3 -> Al2O3 + 2 Fe', 'single replacement'],
+  ['Br2 + 2 NaI -> 2 NaBr + I2', 'single replacement'],
+  ['Mg + 2 AgNO3 -> Mg(NO3)2 + 2 Ag', 'single replacement'],
+  ['3 Mg + 2 FeCl3 -> 3 MgCl2 + 2 Fe', 'single replacement'],
+  ['Fe + 2 HCl -> FeCl2 + H2', 'single replacement'],
+  ['2 Li + 2 H2O -> 2 LiOH + H2', 'single replacement'],
+  ['Zn + 2 AgNO3 -> Zn(NO3)2 + 2 Ag', 'single replacement'],
+  ['AgNO3 + NaCl -> AgCl + NaNO3', 'double replacement'],
+  ['BaCl2 + Na2SO4 -> BaSO4 + 2 NaCl', 'double replacement'],
+  ['Pb(NO3)2 + 2 KI -> PbI2 + 2 KNO3', 'double replacement'],
+  ['HCl + NaOH -> NaCl + H2O', 'double replacement'],
+  ['H2SO4 + 2 NaOH -> Na2SO4 + 2 H2O', 'double replacement'],
+  ['CaCl2 + Na2CO3 -> CaCO3 + 2 NaCl', 'double replacement'],
+  ['FeCl3 + 3 NaOH -> Fe(OH)3 + 3 NaCl', 'double replacement'],
+  ['2 HCl + Ca(OH)2 -> CaCl2 + 2 H2O', 'double replacement'],
+  ['CuSO4 + 2 NaOH -> Cu(OH)2 + Na2SO4', 'double replacement'],
+  ['2 AgNO3 + CuCl2 -> 2 AgCl + Cu(NO3)2', 'double replacement'],
+  ['3 CaCl2 + 2 Na3PO4 -> Ca3(PO4)2 + 6 NaCl', 'double replacement'],
+  ['H3PO4 + 3 KOH -> K3PO4 + 3 H2O', 'double replacement'],
+  ['2 HNO3 + Mg(OH)2 -> Mg(NO3)2 + 2 H2O', 'double replacement'],
+  ['Na2S + 2 HCl -> 2 NaCl + H2S', 'double replacement'],
+  ['AlCl3 + 3 AgNO3 -> Al(NO3)3 + 3 AgCl', 'double replacement'],
+  ['Pb(NO3)2 + Na2SO4 -> PbSO4 + 2 NaNO3', 'double replacement'],
+  ['2 KOH + H2SO4 -> K2SO4 + 2 H2O', 'double replacement'],
+  ['BaCl2 + 2 AgNO3 -> 2 AgCl + Ba(NO3)2', 'double replacement'],
+  ['CH4 + 2 O2 -> CO2 + 2 H2O', 'combustion'],
+  ['C3H8 + 5 O2 -> 3 CO2 + 4 H2O', 'combustion'],
+  ['2 C2H6 + 7 O2 -> 4 CO2 + 6 H2O', 'combustion'],
+  ['C2H4 + 3 O2 -> 2 CO2 + 2 H2O', 'combustion'],
+  ['2 C4H10 + 13 O2 -> 8 CO2 + 10 H2O', 'combustion'],
+  ['C6H12O6 + 6 O2 -> 6 CO2 + 6 H2O', 'combustion'],
+  ['C2H5OH + 3 O2 -> 2 CO2 + 3 H2O', 'combustion'],
+  ['2 CH3OH + 3 O2 -> 2 CO2 + 4 H2O', 'combustion'],
+  ['2 C2H2 + 5 O2 -> 4 CO2 + 2 H2O', 'combustion'],
+  ['C5H12 + 8 O2 -> 5 CO2 + 6 H2O', 'combustion'],
+  ['2 C8H18 + 25 O2 -> 16 CO2 + 18 H2O', 'combustion'],
+  ['2 C3H6 + 9 O2 -> 6 CO2 + 6 H2O', 'combustion'],
+  ['C12H22O11 + 12 O2 -> 12 CO2 + 11 H2O', 'combustion'],
+  ['2 C6H6 + 15 O2 -> 12 CO2 + 6 H2O', 'combustion'],
+];
+const RX = REACTIONS.map(([s, type, also = []]) => {
+  const side = (t) => t.split(' + ').map((x) => { const m = x.trim().match(/^(\d+)?\s*(\S+)$/); return { c: Number(m[1] || 1), f: m[2] }; });
+  const [l, r] = s.split(' -> ');
+  return { src: s, type, also, r: side(l), p: side(r) };
+});
+const allSpecies = (rx) => [...rx.r, ...rx.p];
+const eqPretty = (rx, coefs = true) => `${rx.r.map((x) => `${coefs && x.c !== 1 ? `${x.c} ` : ''}${fm(x.f)}`).join(' + ')} → ${rx.p.map((x) => `${coefs && x.c !== 1 ? `${x.c} ` : ''}${fm(x.f)}`).join(' + ')}`;
+const sideCount = (sp, cs, e) => sp.reduce((t, x, i) => t + cs[i] * (atomsOf(x.f)[e] || 0), 0);
+const rxElements = (rx) => [...new Set(allSpecies(rx).flatMap((x) => Object.keys(atomsOf(x.f))))];
+function balances(rx, cs) {
+  const cl = cs.slice(0, rx.r.length), cr = cs.slice(rx.r.length);
+  return rxElements(rx).every((e) => sideCount(rx.r, cl, e) === sideCount(rx.p, cr, e));
+}
+function gradeCoeffs(q, raw) {
+  const rx = q.rx;
+  const n = allSpecies(rx).length;
+  const s = String(raw).trim().replace(/[.]+$/, '');
+  if (/[a-z]/i.test(s)) return { ok: false, why: `Type just the ${n} coefficients, in order, separated by commas.` };
+  const nums = s.split(/[\s,;:]+/).filter(Boolean);
+  if (!nums.length || nums.some((x) => !/^\d+$/.test(x))) return { ok: false, why: `Type ${n} whole numbers, separated by commas.` };
+  const cs = nums.map(Number);
+  const want = allSpecies(rx).map((x) => x.c);
+  if (cs.length !== n) {
+    const ones = want.filter((c) => c === 1).length;
+    return { ok: false, why: cs.length === n - ones ? 'Write every coefficient — including the 1s.' : `This equation has ${n} substances, so type ${n} coefficients.` };
+  }
+  if (cs.every((c, i) => c === want[i])) return { ok: true };
+  if (cs.some((c) => c === 0)) return { ok: false, why: 'A coefficient can\'t be 0 — every substance is there.' };
+  const k = cs[0] / want[0];
+  if (Number.isInteger(k) && k > 1 && cs.every((c, i) => c === want[i] * k)) return { ok: false, why: `Balanced, but not the lowest whole numbers — divide them all by ${k}.` };
+  const cl = cs.slice(0, rx.r.length), cr = cs.slice(rx.r.length);
+  const off = rxElements(rx).find((e) => sideCount(rx.r, cl, e) !== sideCount(rx.p, cr, e));
+  return { ok: false, why: off ? `Not balanced: that gives ${sideCount(rx.r, cl, off)} ${off} on the left but ${sideCount(rx.p, cr, off)} on the right.` : '' };
+}
+function countTable(rx, cs, label) {
+  const cl = cs.slice(0, rx.r.length), cr = cs.slice(rx.r.length);
+  const expr = (sp, cc, e) => sp.map((x, i) => [cc[i], atomsOf(x.f)[e] || 0]).filter(([, a]) => a).map(([c, a]) => (c === 1 ? `${a}` : `${c} × ${a}`)).join(' + ');
+  return dataTable(['Atom', 'Left', 'Right'],
+    rxElements(rx).map((e) => {
+      const L = sideCount(rx.r, cl, e), Rr = sideCount(rx.p, cr, e);
+      const le = expr(rx.r, cl, e), re = expr(rx.p, cr, e);
+      return [e, /[×+]/.test(le) ? `${le} = ${L}` : `${L}`, `${/[×+]/.test(re) ? `${re} = ${Rr}` : `${Rr}`} ${L === Rr ? '✓' : '✗'}`];
+    }), label);
+}
+function genBalance(lvl) {
+  const usable = RX.filter((r) => allSpecies(r).some((x) => x.c !== 1));
+  const maxC = (r) => Math.max(...allSpecies(r).map((x) => x.c));
+  const easy = usable.filter((r) => allSpecies(r).length <= 3 && maxC(r) <= 3);
+  const mid = usable.filter((r) => !easy.includes(r) && maxC(r) <= 6 && r.type !== 'combustion');
+  const hard = usable.filter((r) => !easy.includes(r) && !mid.includes(r));
+  const rx = pick(lvl === 1 ? easy : lvl === 2 ? mid : chance(.7) ? hard : mid);
+  const sp = allSpecies(rx);
+  const n = sp.length;
+  const want = sp.map((x) => x.c);
+  const answer = want.join(', ');
+  const ones = sp.map(() => 1);
+  const work = (final) => {
+    const kids = [P('Count each kind of atom on both sides. Change only the coefficients (the big numbers in front) — never the subscripts.')];
+    if (final) {
+      kids.push(countTable(rx, want, 'Atoms on each side of the balanced equation'));
+      kids.push(P('Balanced: ', el('span', { class: 'lab-nowrap' }, eqPretty(rx)), '.'));
+      kids.push(P('Coefficients in order: ', ansBox(answer), '.'));
+      if (want.includes(1)) kids.push(note('A coefficient of 1 is not written in the equation, but it still counts.'));
+    } else {
+      kids.push(countTable(rx, ones, 'Atoms on each side before balancing'));
+      kids.push(note(rx.type === 'combustion'
+        ? 'Balance C first, then H, then O last. If O₂ needs a half, double every coefficient.'
+        : 'Start with an element that appears in only one substance on each side; leave H and O (and elements on their own) for last. A polyatomic ion found on both sides can be balanced as one unit.'));
+    }
+    return el('div', { class: 'lab-work' }, ...kids);
+  };
+  const cands = [];
+  if (!want.every((c) => c === 1)) cands.push({ cs: ones, why: 'left it unbalanced' });
+  for (let i = 0; i < n; i++) for (const d of [1, -1]) if (want[i] + d >= 1) cands.push({ cs: want.map((c, j) => (j === i ? c + d : c)), why: 'one coefficient off' });
+  for (let i = 0; i < n; i++) for (let j = i + 1; j < n; j++) if (want[i] !== want[j]) cands.push({ cs: want.map((c, k) => (k === i ? want[j] : k === j ? want[i] : c)), why: 'coefficients in the wrong order' });
+  const textWrong = uniqBy(shuffle(cands).filter((c) => !balances(rx, c.cs)), (c) => c.cs.join()).map((c) => ({ str: c.cs.join(', '), why: c.why }));
+  return makeQ2('balance', {
+    level: lvl, prompt: `Balance the equation: ${eqPretty(rx, false)}`,
+    note: `Type the ${n} coefficients in order, separated by commas. Use the lowest whole numbers, and write any 1s.`,
+    answer, accept: [want.join(' '), want.join(','), want.join(', ')], value: want[0],
+    brief: `${eqPretty(rx)}: coefficients ${answer}.`,
+    textWrong, work, gradeWith: gradeCoeffs, extra: { rx },
+  });
+}
+const RX_TYPES = ['synthesis', 'decomposition', 'single replacement', 'double replacement', 'combustion'];
+const isElement = (f) => /^[A-Z][a-z]?\d*$/.test(f);
+function genRxType(lvl) {
+  const pool = RX.filter((r) => (lvl === 1 ? ['synthesis', 'decomposition', 'combustion'].includes(r.type) || chance(.3) : true));
+  const rx = pick(pool);
+  const answer = cap1(rx.type);
+  const confuse = { synthesis: ['decomposition', 'combustion'], decomposition: ['synthesis'], 'single replacement': ['double replacement'], 'double replacement': ['single replacement'], combustion: ['synthesis', 'decomposition'] };
+  const others = RX_TYPES.filter((t) => t !== rx.type && !rx.also.includes(t));
+  const first = (confuse[rx.type] || []).filter((t) => others.includes(t));
+  const wrongs = [...first, ...shuffle(others.filter((t) => !first.includes(t)))].slice(0, 3);
+  const el1 = rx.r.find((x) => isElement(x.f));
+  const why = {
+    synthesis: `${rx.r.length} reactants combine into one product (${fm(rx.p[0].f)}): A + B → AB.`,
+    decomposition: `One reactant (${fm(rx.r[0].f)}) breaks down into ${rx.p.length} products: AB → A + B.`,
+    'single replacement': `An element (${el1 ? fm(el1.f) : ''}) takes the place of an element in a compound: A + BC → AC + B.`,
+    'double replacement': 'Two compounds swap partners: AB + CD → AD + CB.',
+    combustion: `A fuel made of carbon and hydrogen${/O/.test(rx.r.find((x) => /C/.test(x.f))?.f || '') ? ' (and oxygen)' : ''} burns in O₂, making CO₂ and H₂O.`,
+  }[rx.type];
+  const work = (final) => el('div', { class: 'lab-work' },
+    P('Look at the pattern of the reactants and products:'),
+    el('ul', { class: 'lab-steps' },
+      el('li', {}, 'Synthesis: A + B → AB'), el('li', {}, 'Decomposition: AB → A + B'), el('li', {}, 'Single replacement: A + BC → AC + B'),
+      el('li', {}, 'Double replacement: AB + CD → AD + CB'), el('li', {}, 'Combustion: fuel (C, H) + O₂ → CO₂ + H₂O')),
+    final ? P(why) : null,
+    final && rx.also.length ? note(`Reacting a substance with oxygen is sometimes also called ${rx.also.join(' or ')}, so that is not one of the choices here.`) : null,
+    final ? P('So: ', ansBox(answer), '.') : note('Count the reactants and products, and check which are elements and which are compounds.'));
+  return makeQ2('rxntype', {
+    level: lvl, type: 'mc', prompt: `What type of reaction is this? ${eqPretty(rx)}`,
+    answer, options: shuffle([answer, ...wrongs.map(cap1)]), value: 1,
+    brief: `${why} It is ${rx.type}.`, work,
+  });
+}
+
+/* ------------------------------------------------ Unit 10: the mole */
+const SUBSTANCES = [
+  ['H2O', 'water', 'molecules'], ['CO2', 'carbon dioxide', 'molecules'], ['NH3', 'ammonia', 'molecules'], ['CH4', 'methane', 'molecules'],
+  ['C6H12O6', 'glucose', 'molecules'], ['C12H22O11', 'sucrose', 'molecules'], ['C2H5OH', 'ethanol', 'molecules'], ['C3H8', 'propane', 'molecules'],
+  ['O2', 'oxygen gas', 'molecules'], ['N2', 'nitrogen gas', 'molecules'], ['Cl2', 'chlorine gas', 'molecules'], ['H2SO4', 'sulfuric acid', 'molecules'],
+  ['HCl', 'hydrogen chloride', 'molecules'], ['HNO3', 'nitric acid', 'molecules'], ['H3PO4', 'phosphoric acid', 'molecules'], ['SO2', 'sulfur dioxide', 'molecules'],
+  ['NaCl', 'sodium chloride'], ['CaCO3', 'calcium carbonate'], ['NaOH', 'sodium hydroxide'], ['Ca(OH)2', 'calcium hydroxide'], ['Mg(OH)2', 'magnesium hydroxide'],
+  ['Al2(SO4)3', 'aluminum sulfate'], ['(NH4)3PO4', 'ammonium phosphate'], ['Ca3(PO4)2', 'calcium phosphate'], ['KMnO4', 'potassium permanganate'],
+  ['NaHCO3', 'sodium hydrogen carbonate'], ['Fe2O3', 'iron(III) oxide'], ['CuSO4', 'copper(II) sulfate'], ['AgNO3', 'silver nitrate'], ['Ca(NO3)2', 'calcium nitrate'],
+  ['MgCl2', 'magnesium chloride'], ['KCl', 'potassium chloride'], ['Na2CO3', 'sodium carbonate'], ['Pb(NO3)2', 'lead(II) nitrate'], ['K2Cr2O7', 'potassium dichromate'],
+  ['NaC2H3O2', 'sodium acetate'], ['KNO3', 'potassium nitrate'], ['CaCl2', 'calcium chloride'], ['Na2SO4', 'sodium sulfate'], ['(NH4)2SO4', 'ammonium sulfate'],
+  ['Fe', 'iron', 'atoms'], ['Cu', 'copper', 'atoms'], ['Al', 'aluminum', 'atoms'], ['C', 'carbon', 'atoms'], ['Mg', 'magnesium', 'atoms'], ['Ag', 'silver', 'atoms'],
+  ['Au', 'gold', 'atoms'], ['Zn', 'zinc', 'atoms'], ['He', 'helium', 'atoms'], ['Na', 'sodium', 'atoms'], ['S', 'sulfur', 'atoms'],
+].map(([f, name, kind = 'formula units']) => ({ f, name, kind }));
+const SUB_BY = Object.fromEntries(SUBSTANCES.map((s) => [s.f, s]));
+const nElems = (f) => Object.keys(atomsOf(f)).length;
+const massOfCounts = (counts) => Object.entries(counts).reduce((t, [e, c]) => add(t, mul(ELEM[e].m, R(c))), R(0));
+/** "2 × 1.01 + 16.00" — the molar mass as a sum. */
+const mmSum = (f) => Object.entries(atomsOf(f)).map(([e, c]) => (c === 1 ? ELEM[e].mass : `${c} × ${ELEM[e].mass}`)).join(' + ');
+const mmLine = (f) => {
+  const at = Object.values(atomsOf(f));
+  // one atom of one element: its atomic mass is the molar mass, no sum to show
+  return P(`Molar mass of ${fm(f)}: ${at.length === 1 && at[0] === 1 ? '' : `${mmSum(f)} = `}${fx2(molarMass(f))} g/mol.`);
+};
+function genMolar(lvl) {
+  let f, name;
+  const comp = SUBSTANCES.filter((s) => s.kind !== 'atoms');
+  if (lvl === 3 && chance(.5)) {
+    for (let i = 0; i < 60 && !f; i++) { const c = pickCompound(chance(.5) ? 2 : 3); if (c.kind !== 'cov' && /\(/.test(c.formula)) ({ formula: f, name } = c); }
+  }
+  if (!f) {
+    const s = pick(lvl === 1 ? comp.filter((x) => nElems(x.f) <= 2 && !/\(/.test(x.f)) : lvl === 2 ? comp.filter((x) => nElems(x.f) >= 3 && !/\(/.test(x.f)) : comp.filter((x) => /\(/.test(x.f)));
+    ({ f, name } = s);
+  }
+  const at = atomsOf(f);
+  const mm = molarMass(f);
+  const a = numAns(mm, { exact: true });
+  a.str = fx2(mm);
+  const answer = `${a.str} g/mol`;
+  const rows = (final) => Object.entries(at).map(([e, c]) => [e, `${c} × ${ELEM[e].mass}`, final ? fx2(mul(ELEM[e].m, R(c))) : '?']);
+  const work = (final) => el('div', { class: 'lab-work' },
+    P(`Count the atoms of each element in ${fm(f)}${/\(/.test(f) ? ' — a number after a bracket multiplies everything inside it' : ''}, multiply by the atomic mass, and add.`),
+    dataTable(['Element', 'Atoms × atomic mass', 'g/mol'], rows(final), `Molar mass of ${f}`),
+    final ? P(`Add them: ${Object.entries(at).map(([e, c]) => fx2(mul(ELEM[e].m, R(c)))).join(' + ')} = `, ansBox(answer), '.') : note('Add up the last column. Molar mass is in g/mol.'));
+  const wrong = [];
+  const counts = (ff) => { try { return atomsOf(ff); } catch { return null; } };
+  if (/\(/.test(f)) {
+    const ignore = counts(f.replace(/\(([^()]+)\)(\d+)/g, '$1'));
+    if (ignore) wrong.push({ r: massOfCounts(ignore), why: 'ignored the number after the bracket' });
+    const lastOnly = counts(f.replace(/\(([^()]+)\)(\d+)/g, (_, g, m) => g.replace(/(\d*)$/, (d) => String((Number(d) || 1) * Number(m)))));
+    if (lastOnly) wrong.push({ r: massOfCounts(lastOnly), why: 'multiplied only the last element by the number after the bracket' });
+  }
+  wrong.push({ r: massOfCounts(Object.fromEntries(Object.keys(at).map((e) => [e, 1]))), why: 'left out the subscripts' });
+  const els = Object.keys(at);
+  if (els.length >= 2) wrong.push({ r: massOfCounts(Object.fromEntries(els.map((e, i) => [e, at[els[(i + 1) % els.length]]]))), why: 'put the subscripts on the wrong elements' });
+  wrong.push({ r: Object.entries(at).reduce((t, [e, c]) => add(t, R(ELEM[e].z * c)), R(0)), why: 'added atomic numbers instead of atomic masses' });
+  return numQ('molar', {
+    level: lvl, prompt: `What is the molar mass of ${name}, ${fm(f)}?`,
+    note: massNote([f]), a, how: { exact: true }, fmt: fx2, unit: 'g/mol', unitKey: 'gmol', unitName: 'g/mol',
+    accept: acceptList([a.str.replace(/,/g, ''), fx(mm).replace(/,/g, '')], ['g/mol', 'g mol-1', 'grams per mole']),
+    brief: `${mmSum(f)} = ${answer}`, wrong, work,
+  });
+}
+function genMoles(lvl) {
+  const kind = pick(lvl === 1 ? ['g2mol', 'mol2g'] : lvl === 2 ? ['g2mol', 'mol2g', 'mol2p', 'p2mol'] : ['g2p', 'p2g', 'mol2p', 'p2mol']);
+  const S = pick(lvl === 1 ? SUBSTANCES.filter((s) => s.f.length <= 5) : SUBSTANCES);
+  const F = fm(S.f), word = S.kind, SN = `${S.name}, ${F}`;
+  const gram = () => given3(0, 2), mole = () => given3(-1, 0), parts = () => given3(21, 24);
+  let g, factors, prompt, unit, unitKey;
+  if (kind === 'g2mol') { g = { ...gram(), unit: `g ${F}` }; factors = [mmFactor(S.f, false)]; prompt = `How many moles are in ${g.s} g of ${SN}?`; unit = 'mol'; }
+  else if (kind === 'mol2g') { g = { ...mole(), unit: `mol ${F}` }; factors = [mmFactor(S.f, true)]; prompt = `What is the mass of ${g.s} mol of ${SN}?`; unit = 'g'; }
+  else if (kind === 'mol2p') { g = { ...mole(), unit: `mol ${F}` }; factors = [naFactor(S.f, word, true)]; prompt = `How many ${word} are in ${g.s} mol of ${SN}?`; unit = word; }
+  else if (kind === 'p2mol') { g = { ...parts(), unit: `${word} ${F}` }; factors = [naFactor(S.f, word, false)]; prompt = `How many moles is ${g.s} ${word} of ${SN}?`; unit = 'mol'; }
+  else if (kind === 'g2p') { g = { ...gram(), unit: `g ${F}` }; factors = [mmFactor(S.f, false), naFactor(S.f, word, true)]; prompt = `How many ${word} are in ${g.s} g of ${SN}?`; unit = word; }
+  else { g = { ...parts(), unit: `${word} ${F}` }; factors = [naFactor(S.f, word, false), mmFactor(S.f, true)]; prompt = `What is the mass of ${g.s} ${word} of ${SN}?`; unit = 'g'; }
+  unitKey = unit;
+  const given = { amt: g.s, r: g.r, unit: g.unit };
+  const truth = factors.reduce((v, f) => mul(v, div(f.top.r, f.bot.r)), g.r);
+  const a = numAns(truth, SF3);
+  const answer = `${a.str} ${unit}`;
+  const usesMass = /g/.test(kind), usesNA = /p/.test(kind);
+  const how = {
+    g2mol: 'Grams → moles: divide by the molar mass (grams on the bottom so they cancel).',
+    mol2g: 'Moles → grams: multiply by the molar mass (moles on the bottom so they cancel).',
+    mol2p: `Moles → ${word}: 1 mol = 6.02 × 10²³ ${word}.`,
+    p2mol: `${cap1(word)} → moles: 1 mol = 6.02 × 10²³ ${word} (${word} on the bottom so they cancel).`,
+    g2p: `Grams → moles → ${word}: two factors, the molar mass then Avogadro's number.`,
+    p2g: `${cap1(word)} → moles → grams: two factors, Avogadro's number then the molar mass.`,
+  }[kind];
+  const work = (final) => el('div', { class: 'lab-work' },
+    P(how),
+    usesMass ? mmLine(S.f) : null,
+    chemFence(given, factors, final ? { ans: supPow10(answer) } : null),
+    final ? fenceArith(given, factors) : note('Multiply across the top, multiply across the bottom, then divide.'),
+    final ? roundLine(a, answer) : null);
+  const x = (k) => mul(truth, k);
+  const mm = molarMass(S.f);
+  const wrong = {
+    g2mol: [{ r: mul(g.r, mm), why: 'multiplied by the molar mass instead of dividing' }, { r: div(g.r, mul(mm, R(2))), why: 'miscounted the molar mass' }],
+    mol2g: [{ r: div(g.r, mm), why: 'divided by the molar mass instead of multiplying' }],
+    mol2p: [{ r: div(g.r, NA), why: 'divided by Avogadro\'s number instead of multiplying' }, { r: x(R(1, 10)), why: 'used 10²² instead of 10²³' }],
+    p2mol: [{ r: mul(g.r, NA), why: 'multiplied by Avogadro\'s number instead of dividing' }, { r: x(R(10)), why: 'used 10²² instead of 10²³' }],
+    g2p: [{ r: mul(mul(g.r, mm), NA), why: 'multiplied by the molar mass instead of dividing' }, { r: mul(g.r, NA), why: 'skipped the molar mass' }],
+    p2g: [{ r: div(div(g.r, NA), mm), why: 'divided by the molar mass instead of multiplying' }, { r: div(g.r, NA), why: 'stopped at moles' }],
+  }[kind].concat([{ r: x(R(10)), why: 'off by a power of ten' }, { r: x(R(1, 10)), why: 'off by a power of ten' }]);
+  return numQ('moles', {
+    level: lvl, prompt, a, how: SF3, unit, unitKey, unitName: unit,
+    note: `${usesMass ? `${massNote([S.f])} ` : ''}${usesNA ? `1 mol = 6.02 × 10²³ ${word}. ` : ''}Round to 3 significant figures.`,
+    subs: [S.f, F, S.name], sciKeys: usesNA,
+    brief: `${supPow10(given.amt)} ${given.unit} × ${factors.map((f) => `(${supPow10(f.top.amt)} ${f.top.unit} / ${supPow10(f.bot.amt)} ${f.bot.unit})`).join(' × ')} = ${answer}`,
+    wrong, work,
+  });
+}
+function genPcomp(lvl) {
+  const pool = SUBSTANCES.filter((s) => s.kind !== 'atoms' && nElems(s.f) >= 2 && (lvl === 1 ? nElems(s.f) === 2 : lvl === 2 ? !/\(/.test(s.f) : nElems(s.f) >= 3));
+  const S = pick(pool);
+  const at = atomsOf(S.f);
+  const e = pick(Object.keys(at));
+  const part = mul(ELEM[e].m, R(at[e]));
+  const mm = molarMass(S.f);
+  const truth = mul(div(part, mm), R(100));
+  const a = numAns(truth, SF3);
+  const answer = `${a.str}%`;
+  const work = (final) => el('div', { class: 'lab-work' },
+    P(`Percent by mass = (mass of ${ELEM[e].name} in one mole ÷ molar mass) × 100.`),
+    formulaBox(
+      ln(`mass of ${e} = ${at[e] === 1 ? ELEM[e].mass : `${at[e]} × ${ELEM[e].mass}`} = ${fx2(part)} g`),
+      ln(`molar mass of ${fm(S.f)} = ${mmSum(S.f)} = ${fx2(mm)} g/mol`),
+      final ? ln(`% ${e} = (`, frac(fx2(part), fx2(mm)), ...rich(`) × 100 = ${longShow(truth)}%`)) : ln(`% ${e} = ?`)),
+    final ? roundLine(a, answer) : note('Divide the part by the whole, then multiply by 100.'));
+  const totalAtoms = Object.values(at).reduce((x, y) => x + y, 0);
+  const wrong = [
+    { r: mul(R(at[e], totalAtoms), R(100)), why: 'counted atoms instead of using their masses' },
+    { r: sub(R(100), truth), why: 'found the percent of everything else' },
+    { r: div(truth, R(100)), why: 'forgot to multiply by 100' },
+  ];
+  if (at[e] > 1) wrong.push({ r: mul(div(ELEM[e].m, mm), R(100)), why: 'forgot the subscript' });
+  return numQ('pcomp', {
+    level: lvl, prompt: `What is the percent by mass of ${ELEM[e].name} in ${S.name}, ${fm(S.f)}?`,
+    note: `${massNote([S.f])} Round to 3 significant figures.`, a, how: SF3, unit: '%', unitKey: 'pct', unitName: 'a percent (%)',
+    accept: acceptList([a.str.replace(/,/g, '')], ['%', 'percent']),
+    brief: `(${fx2(part)} ÷ ${fx2(mm)}) × 100 = ${answer}`, wrong, work,
+  });
+}
+const EMP_BANK = ['CH2O', 'CH2', 'CH', 'CH4', 'C2H6O', 'C3H8', 'C2H5', 'C3H4O3', 'C4H5N2O', 'NO2', 'N2O', 'N2O5', 'P2O5', 'SO3', 'Fe2O3', 'Fe3O4', 'Al2O3', 'Cu2O', 'CuO', 'MgO', 'CaCl2', 'Na2SO4', 'KMnO4', 'K2Cr2O7', 'Na2CO3', 'C5H4', 'CH3O', 'C2H3O2', 'CH2Cl', 'C3H5O2', 'NaHCO3', 'KClO3', 'C6H5', 'C3H4', 'CH2O2', 'N2H4', 'NH2'];
+const countsFormula = (counts) => counts.map(([e, n]) => `${e}${n > 1 ? n : ''}`).join('');
+/** Percent composition (1 decimal) → mole ratio → whole numbers, as the notes do it. */
+function empiricalFrom(pcts) {
+  const mol = pcts.map(([e, p]) => [e, div(p, ELEM[e].m)]);
+  const min = mol.reduce((m, [, x]) => (leR(x, m) ? x : m), mol[0][1]);
+  const ratio = mol.map(([e, x]) => [e, div(x, min)]);
+  for (let k = 1; k <= 6; k++) {
+    const ints = ratio.map(([e, x]) => { const v = mul(x, R(k)); return [e, v, roundPlace(v, 0)]; });
+    if (ints.every(([, v, n]) => leR(absR(sub(v, n)), R(1, 10)))) return { k, mol, ratio, counts: ints.map(([e, , n]) => [e, Number(n.p)]) };
+  }
+  return null;
+}
+function genEmpirical(lvl) {
+  for (let tries = 0; tries < 50; tries++) {
+    const f = pick(EMP_BANK.filter((x) => (lvl === 1 ? nElems(x) === 2 && !/[3-9]/.test(x.replace(/^[A-Z][a-z]?\d?[A-Z][a-z]?/, '')) : lvl === 2 ? nElems(x) <= 3 : true)));
+    const at = atomsOf(f);
+    const els = Object.keys(at);
+    const mm = molarMass(f);
+    const pcts = els.map((e) => [e, roundDp(mul(div(mul(ELEM[e].m, R(at[e])), mm), R(100)), 1)]);
+    pcts[pcts.length - 1][1] = sub(R(100), pcts.slice(0, -1).reduce((t, [, p]) => add(t, p), R(0)));
+    if (pcts.some(([, p]) => !(p.p > 0n))) continue;
+    const got = empiricalFrom(pcts);
+    if (!got || countsFormula(got.counts) !== f) continue;
+    const p1 = (r) => placePoint((r.p * 10n) / r.q, 1, false);
+    const answer = fm(f);
+    const cands = [];
+    const byPct = (() => {
+      const min = pcts.reduce((m, [, p]) => (leR(p, m) ? p : m), pcts[0][1]);
+      return pcts.map(([e, p]) => [e, Number(roundPlace(div(p, min), 0).p) || 1]);
+    })();
+    const gg = byPct.reduce((x, [, n]) => gcdN(x, n), 0) || 1;
+    cands.push({ f: countsFormula(byPct.map(([e, n]) => [e, n / gg])), why: 'divided the percentages without changing them to moles' });
+    if (got.k > 1) {
+      cands.push({ f: countsFormula(got.ratio.map(([e, x]) => [e, Math.max(1, Number(roundPlace(x, 0).p))])), why: 'rounded the mole ratio instead of multiplying to whole numbers' });
+    }
+    cands.push({ f: countsFormula(got.counts.map(([e, n]) => [e, n * 2])), why: 'did not reduce to the simplest ratio' });
+    const cs = got.counts;
+    for (let i = 0; i < cs.length; i++) for (let j = i + 1; j < cs.length; j++) if (cs[i][1] !== cs[j][1]) cands.push({ f: countsFormula(cs.map(([e, n], k) => [e, k === i ? cs[j][1] : k === j ? cs[i][1] : n])), why: 'swapped the subscripts' });
+    for (let i = 0; i < cs.length; i++) cands.push({ f: countsFormula(cs.map(([e, n], k) => [e, k === i ? n + 1 : n])), why: 'miscounted one element' });
+    const ratioKey = (ff) => { const a2 = atomsOf(ff); const g2 = Object.values(a2).reduce(gcdN, 0); return els.map((e) => (a2[e] || 0) / g2).join(':'); };
+    const picked = [];
+    for (const c of cands) {
+      if (c.f === f || picked.some((x) => x.f === c.f)) continue;
+      if (ratioKey(c.f) === ratioKey(f) && c.why !== 'did not reduce to the simplest ratio') continue;
+      picked.push(c);
+    }
+    const three = [picked.find((c) => c.why.startsWith('divided')), ...shuffle(picked.filter((c) => !c.why.startsWith('divided')))].filter(Boolean).slice(0, 3);
+    if (three.length < 3) continue;
+    const pctText = listJoin(pcts.map(([e, p]) => `${p1(p)}% ${ELEM[e].name}`));
+    const kCol = got.k > 1;
+    const work = (final) => el('div', { class: 'lab-work' },
+      P('Assume 100 g, so each percent becomes grams. Change grams to moles, divide by the smallest, and make whole numbers.'),
+      el('ol', { class: 'lab-steps lab-emp' }, ...els.map((e, i) => el('li', {},
+        el('b', {}, `${e}: `), `${p1(pcts[i][1])} g ÷ ${ELEM[e].mass} = ${final ? `${longShow(got.mol[i][1], 4)} mol` : '? mol'}`,
+        final ? `; ÷ smallest = ${longShow(got.ratio[i][1], 3)}${kCol ? `; × ${got.k} = ${got.counts[i][1]}` : ''}` : ''))),
+      final && kCol ? note(`The ratios are not all whole numbers, so multiply them all by ${got.k}.`) : null,
+      final ? P('So the empirical formula is ', ansBox(answer), '.') : note('If a ratio ends in about .5, .33 or .25, multiply every ratio by 2, 3 or 4.'));
+    return makeQ2('empirical', {
+      level: lvl, type: 'mc', prompt: `A compound is ${pctText} by mass. What is its empirical formula?`,
+      note: massNote([f]), answer, options: shuffle([answer, ...three.map((c) => fm(c.f))]), value: 1,
+      brief: `Moles in 100 g, divided by the smallest${got.k > 1 ? `, times ${got.k}` : ''}: ${answer}.`,
+      work, extra: { mistakes: three.map((c) => ({ option: fm(c.f), why: c.why })) },
+    });
+  }
+  throw new Error('could not build an empirical-formula problem');
+}
+const ratioFactor = (B2, A2) => fac(side2(`${B2.c}`, R(B2.c), `mol ${fm(B2.f)}`), side2(`${A2.c}`, R(A2.c), `mol ${fm(A2.f)}`));
+function stoichSetup(lvl) {
+  const rx = pick(RX.filter((r) => allSpecies(r).length >= 2));
+  const sp = allSpecies(rx).map((x, i) => ({ ...x, side: i < rx.r.length ? 'r' : 'p' }));
+  const roll = Math.random();
+  let A, Bs;
+  const reac = sp.filter((x) => x.side === 'r'), prod = sp.filter((x) => x.side === 'p');
+  if (roll < .7 || reac.length < 2) { A = pick(reac); Bs = pick(prod); }
+  else if (roll < .85) { [A, Bs] = shuffle(reac); }
+  else { A = pick(prod); Bs = pick(reac); }
+  if (A.f === Bs.f) return null;
+  const verb = A.side === 'r' && Bs.side === 'p' ? 'can be produced from' : A.side === 'r' ? 'react with' : 'are needed to produce';
+  return { rx, A, B: Bs, verb };
+}
+function genStoich(lvl) {
+  let s = null;
+  while (!s) s = stoichSetup(lvl);
+  const { rx, A, B: Bs, verb } = s;
+  const moleOnly = lvl === 1;
+  const g = moleOnly ? given3(-1, 0) : given3(0, 2);
+  const given = { amt: g.s, r: g.r, unit: `${moleOnly ? 'mol' : 'g'} ${fm(A.f)}` };
+  const factors = moleOnly ? [ratioFactor(Bs, A)] : [mmFactor(A.f, false), ratioFactor(Bs, A), mmFactor(Bs.f, true)];
+  const truth = factors.reduce((v, f) => mul(v, div(f.top.r, f.bot.r)), g.r);
+  const a = numAns(truth, SF3);
+  const unit = moleOnly ? 'mol' : 'g';
+  const answer = `${a.str} ${unit}`;
+  const prompt = `For the reaction ${eqPretty(rx)}, how many ${moleOnly ? 'moles' : 'grams'} of ${fm(Bs.f)} ${verb} ${g.s} ${moleOnly ? 'mol' : 'g'} of ${fm(A.f)}?`;
+  const work = (final) => el('div', { class: 'lab-work' },
+    P(moleOnly ? `Use the mole ratio from the coefficients: ${Bs.c} mol ${fm(Bs.f)} for every ${A.c} mol ${fm(A.f)}.`
+      : `Grams of ${fm(A.f)} → moles of ${fm(A.f)} → moles of ${fm(Bs.f)} (the mole ratio from the coefficients) → grams of ${fm(Bs.f)}.`),
+    moleOnly ? null : mmLine(A.f), moleOnly ? null : mmLine(Bs.f),
+    chemFence(given, factors, final ? { ans: answer } : null),
+    final ? fenceArith(given, factors) : note('The mole ratio has the substance you want on top and the one you have on the bottom.'),
+    final ? roundLine(a, answer) : null);
+  const wrong = [{ r: mul(truth, R(10)), why: 'off by a power of ten' }, { r: mul(truth, R(1, 10)), why: 'off by a power of ten' }];
+  if (A.c !== Bs.c) wrong.unshift({ r: mul(truth, R(A.c, Bs.c)), why: 'skipped the mole ratio' }, { r: mul(truth, R(A.c * A.c, Bs.c * Bs.c)), why: 'flipped the mole ratio' });
+  if (!moleOnly) wrong.unshift({ r: div(truth, molarMass(Bs.f)), why: `stopped at moles of ${fm(Bs.f)}` }, { r: mul(g.r, R(Bs.c, A.c)), why: 'used the mole ratio on grams' });
+  return numQ('stoich', {
+    level: lvl, prompt, a, how: SF3, unit, unitKey: unit, unitName: unit,
+    note: `${moleOnly ? '' : `${massNote([A.f, Bs.f])} `}Round to 3 significant figures.`,
+    subs: [Bs.f, fm(Bs.f)],
+    brief: `${given.amt} ${given.unit} × ${factors.map((f) => `(${f.top.amt} ${f.top.unit} / ${f.bot.amt} ${f.bot.unit})`).join(' × ')} = ${answer}`,
+    wrong, work,
+  });
+}
+function genLimiting(lvl) {
+  for (let tries = 0; tries < 80; tries++) {
+    const rx = pick(RX.filter((r) => r.r.length === 2));
+    const [A, Bx] = rx.r;
+    const Pp = pick(rx.p);
+    const moleOnly = lvl === 1;
+    const nA = given3(-1, 0).r;
+    const t = chance(.5) ? R(ri(45, 85), 100) : R(ri(120, 220), 100);
+    const nB = roundSig(mul(mul(nA, R(Bx.c, A.c)), t), 3);
+    const amtA = moleOnly ? nA : roundSig(mul(nA, molarMass(A.f)), 3);
+    const amtB = moleOnly ? nB : roundSig(mul(nB, molarMass(Bx.f)), 3);
+    const molOf = (x, amt) => (moleOnly ? amt : div(amt, molarMass(x.f)));
+    const yieldOf = (x, amt) => { const n = mul(molOf(x, amt), R(Pp.c, x.c)); return moleOnly ? n : mul(n, molarMass(Pp.f)); };
+    const yA = yieldOf(A, amtA), yB = yieldOf(Bx, amtB);
+    const ratio = div(yA, yB);
+    if (leR(R(9, 10), ratio) && leR(ratio, R(11, 10))) continue;
+    const [L, E, yL, yE] = leR(yA, yB) ? [A, Bx, yA, yB] : [Bx, A, yB, yA];
+    const unit = moleOnly ? 'mol' : 'g';
+    const opt = (x, y) => `${fm(x.f)} is limiting; ${sfShow(y, 3)} ${unit} ${fm(Pp.f)}`;
+    const answer = opt(L, yL);
+    const amtL = L === A ? amtA : amtB;
+    const noRatio = moleOnly ? molOf(L, amtL) : mul(molOf(L, amtL), molarMass(Pp.f));
+    const cands = [
+      { x: E, y: yE, why: 'picked the reactant that makes more product' },
+      { x: L, y: noRatio, why: 'skipped the mole ratio' },
+      { x: E, y: yL, why: 'right amount, but named the wrong reactant' },
+      { x: L, y: yE, why: 'used the excess reactant to find the amount' },
+    ];
+    const smallMass = leR(amtA, amtB) ? A : Bx;
+    if (smallMass !== L) cands.unshift({ x: smallMass, y: yieldOf(smallMass, smallMass === A ? amtA : amtB), why: 'compared the masses instead of the moles' });
+    const opts = [{ x: L, y: yL, s: answer }];
+    const picked = [];
+    for (const c of cands) {
+      const s2 = opt(c.x, c.y);
+      if (opts.some((o) => o.s === s2 || (o.x === c.x && close(toNum(roundSig(o.y, 3)), toNum(roundSig(c.y, 3)))))) continue;
+      opts.push({ x: c.x, y: c.y, s: s2 }); picked.push({ option: s2, why: c.why });
+      if (picked.length === 3) break;
+    }
+    if (picked.length < 3) continue;
+    const amtTxt = (x, amt) => `${sfShow(amt, 3)} ${unit} of ${fm(x.f)}`;
+    const toP = (x, amt) => {
+      const factors = moleOnly ? [ratioFactor(Pp, x)] : [mmFactor(x.f, false), ratioFactor(Pp, x), mmFactor(Pp.f, true)];
+      return { given: { amt: sfShow(amt, 3), r: amt, unit: `${unit} ${fm(x.f)}` }, factors };
+    };
+    const work = (final) => {
+      const fa = toP(A, amtA), fb = toP(Bx, amtB);
+      return el('div', { class: 'lab-work' },
+        P(`Work out how much ${fm(Pp.f)} each reactant could make. The one that makes less runs out first — it is the limiting reactant.`),
+        chemFence(fa.given, fa.factors, final ? { ans: `${sfShow(yA, 3)} ${unit} ${fm(Pp.f)}` } : null),
+        chemFence(fb.given, fb.factors, final ? { ans: `${sfShow(yB, 3)} ${unit} ${fm(Pp.f)}` } : null),
+        final ? P(`${fm(L.f)} makes less ${fm(Pp.f)}, so ${fm(L.f)} is limiting and ${fm(E.f)} is in excess. The most ${fm(Pp.f)} that can form is ${sfShow(yL, 3)} ${unit}.`) : note('Compare the two amounts of product, not the amounts of reactant.'),
+        final ? P('So: ', ansBox(answer), '.') : null);
+    };
+    return makeQ2('limiting', {
+      level: lvl, type: 'mc',
+      prompt: `For the reaction ${eqPretty(rx)}, ${amtTxt(A, amtA)} reacts with ${amtTxt(Bx, amtB)}. Which reactant is limiting, and how much ${fm(Pp.f)} can form?`,
+      note: `${moleOnly ? '' : `${massNote([A.f, Bx.f, Pp.f])} `}Amounts are rounded to 3 significant figures.`,
+      answer, options: shuffle([answer, ...picked.map((p) => p.option)]), value: toNum(roundSig(yL, 3)),
+      brief: `${fm(A.f)} could make ${sfShow(yA, 3)} ${unit} and ${fm(Bx.f)} ${sfShow(yB, 3)} ${unit} of ${fm(Pp.f)}: ${answer}.`,
+      work, extra: { mistakes: picked },
+    });
+  }
+  throw new Error('could not build a limiting-reactant problem');
+}
+function genYield(lvl) {
+  for (let tries = 0; tries < 80; tries++) {
+    let T, prompt, pre = null, noteTxt = '';
+    const pct = R(ri(550, 985), 1000);
+    if (lvl <= 2) {
+      const S = pick(SUBSTANCES.filter((s) => s.kind !== 'atoms'));
+      const t = given3(0, 2);
+      T = t.r;
+      const act = roundSig(mul(T, pct), 3);
+      if (!leR(act, T) || eqR(act, T)) continue;
+      pre = { S, act, Tshow: t.s };
+      prompt = `The theoretical yield of ${S.name}, ${fm(S.f)}, is ${t.s} g, but only ${sfShow(act, 3)} g is collected. What is the percent yield?`;
+      noteTxt = 'Round to 3 significant figures.';
+    } else {
+      const rx = pick(RX.filter((r) => r.p.some((x) => !isElement(x.f) || true)));
+      const A = pick(rx.r), Pp = pick(rx.p);
+      if (A.f === Pp.f) continue;
+      const g = given3(0, 2);
+      const factors = [mmFactor(A.f, false), ratioFactor(Pp, A), mmFactor(Pp.f, true)];
+      T = factors.reduce((v, f) => mul(v, div(f.top.r, f.bot.r)), g.r);
+      const act = roundSig(mul(T, pct), 3);
+      // a student who rounds the theoretical yield to 3 figures first must get the same answer
+      if (!eqR(roundSig(mul(div(act, T), R(100)), 3), roundSig(mul(div(act, roundSig(T, 3)), R(100)), 3))) continue;
+      pre = { rx, A, Pp, g, factors, act };
+      prompt = `For the reaction ${eqPretty(rx)}, ${g.s} g of ${fm(A.f)} reacts completely and ${sfShow(act, 3)} g of ${fm(Pp.f)} is collected. What is the percent yield?`;
+      noteTxt = `${massNote([A.f, Pp.f])} Round to 3 significant figures.`;
+    }
+    const act = pre.act;
+    const truth = mul(div(act, T), R(100));
+    const a = numAns(truth, SF3);
+    const answer = `${a.str}%`;
+    const work = (final) => {
+      const kids = [P('Percent yield = (actual yield ÷ theoretical yield) × 100.')];
+      if (pre.rx) {
+        kids.push(P(`First the theoretical yield: the most ${fm(pre.Pp.f)} that ${pre.g.s} g of ${fm(pre.A.f)} can make.`));
+        const given = { amt: pre.g.s, r: pre.g.r, unit: `g ${fm(pre.A.f)}` };
+        kids.push(chemFence(given, pre.factors, final ? { ans: `${longShow(T, 5)} g ${fm(pre.Pp.f)}` } : null));
+      }
+      kids.push(formulaBox(
+        lnF('percent yield = (actual ÷ theoretical) × 100'),
+        final ? ln('= (', frac(`${sfShow(act, 3)} g`, `${pre.rx ? longShow(T, 5) : pre.Tshow} g`), ...rich(`) × 100 = ${longShow(truth)}%`)) : ln('= ?')));
+      if (final) kids.push(roundLine(a, answer));
+      else kids.push(note('The actual yield is what was collected; it goes on top.'));
+      return el('div', { class: 'lab-work' }, ...kids);
+    };
+    const wrong = [
+      { r: mul(div(T, act), R(100)), why: 'divided the wrong way' },
+      { r: div(act, T), why: 'forgot to multiply by 100' },
+    ];
+    if (pre.rx) wrong.push({ r: mul(div(act, pre.g.r), R(100)), why: 'used the reactant\'s mass as the theoretical yield' });
+    wrong.push({ r: sub(R(100), truth), why: 'found the percent lost' });
+    return numQ('yield', {
+      level: lvl, prompt, note: noteTxt, a, how: SF3, unit: '%', unitKey: 'pct', unitName: 'a percent (%)',
+      accept: acceptList([a.str.replace(/,/g, '')], ['%', 'percent']),
+      brief: `(${sfShow(act, 3)} ÷ ${longShow(T, 5)}) × 100 = ${answer}`, wrong, work,
+    });
+  }
+  throw new Error('could not build a percent-yield problem');
+}
+
+/* ------------------------------------------------ Unit 11: gases */
+// 1 atm = 101.3 kPa = 760 mmHg
+const PRESS = { atm: { s: '1', r: R(1) }, kPa: { s: '101.3', r: D('101.3') }, mmHg: { s: '760', r: R(760) } };
+const PRESS_NOTE = '1 atm = 101.3 kPa = 760 mmHg.';
+const pressGiven = (u) => (u === 'atm' ? given3(-1, 0) : u === 'kPa' ? given3(1, 2) : given3(2, 3));
+function genPressure(lvl) {
+  const units = ['atm', 'kPa', 'mmHg'];
+  let from, to;
+  if (lvl === 1) { const other = pick(['kPa', 'mmHg']); [from, to] = chance(.5) ? ['atm', other] : [other, 'atm']; }
+  else if (lvl === 2) [from, to] = shuffle(units).slice(0, 2);
+  else [from, to] = chance(.6) ? shuffle(['kPa', 'mmHg']) : shuffle(units).slice(0, 2);
+  const g = pressGiven(from);
+  const factor = fac(side2(PRESS[to].s, PRESS[to].r, to), side2(PRESS[from].s, PRESS[from].r, from));
+  const given = { amt: g.s, r: g.r, unit: from };
+  const truth = div(mul(g.r, PRESS[to].r), PRESS[from].r);
+  const a = numAns(truth, SF3);
+  const answer = `${a.str} ${to}`;
+  const work = (final) => el('div', { class: 'lab-work' },
+    P(`Use ${PRESS[from].s} ${from} = ${PRESS[to].s} ${to} as the factor, with ${from} on the bottom so it cancels.`),
+    chemFence(given, [factor], final ? { ans: answer } : null),
+    final ? fenceArith(given, [factor]) : note('Multiply by the top, divide by the bottom.'),
+    final ? roundLine(a, answer) : null);
+  const wrongOther = units.find((u) => u !== from && u !== to);
+  const wrong = [
+    { r: div(mul(g.r, PRESS[from].r), PRESS[to].r), why: 'flipped the conversion factor' },
+    { r: div(mul(g.r, PRESS[wrongOther].r), PRESS[from].r), why: `used the ${wrongOther} number by mistake` },
+    { r: mul(truth, R(10)), why: 'off by a power of ten' }, { r: mul(truth, R(1, 10)), why: 'off by a power of ten' },
+  ];
+  return numQ('pressure', {
+    level: lvl, prompt: chance(.5) ? `Convert ${g.s} ${from} to ${to}.` : `What is a pressure of ${g.s} ${from} in ${to}?`,
+    note: `${PRESS_NOTE} Round to 3 significant figures.`, a, how: SF3, unit: to, unitKey: to, unitName: to,
+    brief: `${g.s} ${from} × (${PRESS[to].s} ${to} / ${PRESS[from].s} ${from}) = ${answer}`, wrong, work,
+  });
+}
+/** A second amount 0.4–2.5 times the first (never almost the same), to 3 significant figures. */
+function nearG(g, lo = 40, hi = 250) {
+  for (;;) {
+    const f = ri(lo, hi);
+    if (f >= 90 && f <= 110) continue;
+    const r = roundSig(mul(g.r, R(f, 100)), 3);
+    return { r, s: sfShow(r, 3) };
+  }
+}
+/** A second temperature 20–130 degrees away from the first, in the same scale. */
+function tempNear(t, useC) {
+  const dk = (chance(.5) ? 1 : -1) * ri(20, 130);
+  if (useC) {
+    let c = t.c + dk;
+    if (c < -40 || c > 250) c = t.c - dk;
+    return { c, k: R(c + 273), s: `${pretty(String(c))} °C` };
+  }
+  let k = Number(t.k.p) + dk;
+  if (k < 200 || k > 600) k = Number(t.k.p) - dk;
+  return { c: null, k: R(k), s: `${k} K` };
+}
+/** A temperature as given: whole °C or kelvin. */
+function tempGiven(useC) {
+  if (useC) { const c = ri(-30, 180); return { c, k: R(c + 273), s: `${pretty(String(c))} °C` }; }
+  const k = ri(240, 470);
+  return { c: null, k: R(k), s: `${k} K` };
+}
+const kLine = (label, t) => (t.c == null ? null : ln(`${label} = ${pretty(String(t.c))} + 273 = ${fx(t.k)} K`));
+function genGasLaw(lvl) {
+  for (let tries = 0; tries < 60; tries++) {
+    const kinds = lvl === 1 ? ['boyleV', 'boyleP', 'charlesV'] : lvl === 2 ? ['boyleV', 'charlesV', 'charlesT', 'gayP', 'gayT'] : ['combV', 'combP', 'charlesT', 'gayT', 'combV'];
+    const kind = pick(kinds);
+    const useC = lvl === 1 ? false : lvl === 2 ? chance(.7) : chance(.85);
+    const pu = lvl === 1 ? 'atm' : pick(['atm', 'atm', 'atm', 'kPa', 'mmHg']);
+    const Pg = () => pressGiven(pu);
+    const Vg = () => given3(0, 1);
+    let prompt, truth, unit, unitKey, law, solve, sub1, T1 = null, T2 = null, cWrong = null, flip;
+    if (kind === 'boyleV' || kind === 'boyleP') {
+      const P1 = Pg(), V1 = Vg();
+      law = 'P₁V₁ = P₂V₂';
+      if (kind === 'boyleV') {
+        const P2 = nearG(P1);
+        truth = div(mul(P1.r, V1.r), P2.r); unit = 'L';
+        prompt = `A gas occupies ${V1.s} L at ${P1.s} ${pu}. What volume does it occupy at ${P2.s} ${pu}, if the temperature stays the same?`;
+        solve = 'V₂ = P₁V₁ ÷ P₂'; sub1 = ['V₂ = ', frac(`${P1.s} ${pu} × ${V1.s} L`, `${P2.s} ${pu}`)];
+        flip = div(mul(P2.r, V1.r), P1.r);
+      } else {
+        const V2 = nearG(V1, 30, 85);
+        truth = div(mul(P1.r, V1.r), V2.r); unit = pu;
+        prompt = `A gas at ${P1.s} ${pu} is compressed from ${V1.s} L to ${V2.s} L at constant temperature. What is its new pressure?`;
+        solve = 'P₂ = P₁V₁ ÷ V₂'; sub1 = ['P₂ = ', frac(`${P1.s} ${pu} × ${V1.s} L`, `${V2.s} L`)];
+        flip = div(mul(P1.r, V2.r), V1.r);
+      }
+    } else if (kind === 'charlesV' || kind === 'charlesT') {
+      const V1 = Vg();
+      T1 = tempGiven(useC);
+      law = 'V₁ ÷ T₁ = V₂ ÷ T₂';
+      if (kind === 'charlesV') {
+        T2 = tempNear(T1, useC);
+        truth = div(mul(V1.r, T2.k), T1.k); unit = 'L';
+        prompt = `A balloon holds ${V1.s} L of gas at ${T1.s}. What is its volume at ${T2.s}, if the pressure stays the same?`;
+        solve = 'V₂ = V₁ × T₂ ÷ T₁'; sub1 = ['V₂ = ', frac(`${V1.s} L × ${fx(T2.k)} K`, `${fx(T1.k)} K`)];
+        flip = div(mul(V1.r, T1.k), T2.k);
+        if (T1.c && T2.c) cWrong = R(V1.r.p * B(T2.c), V1.r.q * B(T1.c));
+      } else {
+        const V2 = nearG(V1);
+        truth = div(mul(V2.r, T1.k), V1.r); unit = 'K';
+        prompt = `A gas occupies ${V1.s} L at ${T1.s}. At what temperature, in kelvin, does it occupy ${V2.s} L at the same pressure?`;
+        solve = 'T₂ = T₁ × V₂ ÷ V₁'; sub1 = ['T₂ = ', frac(`${fx(T1.k)} K × ${V2.s} L`, `${V1.s} L`)];
+        flip = div(mul(V1.r, T1.k), V2.r);
+        if (T1.c) cWrong = mul(R(T1.c), div(V2.r, V1.r));
+      }
+    } else if (kind === 'gayP' || kind === 'gayT') {
+      const P1 = Pg();
+      T1 = tempGiven(useC);
+      law = 'P₁ ÷ T₁ = P₂ ÷ T₂';
+      if (kind === 'gayP') {
+        T2 = tempNear(T1, useC);
+        truth = div(mul(P1.r, T2.k), T1.k); unit = pu;
+        prompt = `A sealed container of gas is at ${P1.s} ${pu} and ${T1.s}. What is its pressure at ${T2.s}?`;
+        solve = 'P₂ = P₁ × T₂ ÷ T₁'; sub1 = ['P₂ = ', frac(`${P1.s} ${pu} × ${fx(T2.k)} K`, `${fx(T1.k)} K`)];
+        flip = div(mul(P1.r, T1.k), T2.k);
+        if (T1.c && T2.c) cWrong = R(P1.r.p * B(T2.c), P1.r.q * B(T1.c));
+      } else {
+        const P2 = nearG(P1);
+        truth = div(mul(P2.r, T1.k), P1.r); unit = 'K';
+        prompt = `A sealed container of gas is at ${P1.s} ${pu} and ${T1.s}. At what temperature, in kelvin, will its pressure be ${P2.s} ${pu}?`;
+        solve = 'T₂ = T₁ × P₂ ÷ P₁'; sub1 = ['T₂ = ', frac(`${fx(T1.k)} K × ${P2.s} ${pu}`, `${P1.s} ${pu}`)];
+        flip = div(mul(P1.r, T1.k), P2.r);
+        if (T1.c) cWrong = mul(R(T1.c), div(P2.r, P1.r));
+      }
+    } else {
+      const P1 = Pg(), V1 = Vg();
+      T1 = tempGiven(useC); T2 = tempNear(T1, useC);
+      law = 'P₁V₁ ÷ T₁ = P₂V₂ ÷ T₂';
+      if (kind === 'combV') {
+        const P2 = nearG(P1);
+        truth = div(mul(mul(P1.r, V1.r), T2.k), mul(P2.r, T1.k)); unit = 'L';
+        prompt = `A gas has a volume of ${V1.s} L at ${P1.s} ${pu} and ${T1.s}. What is its volume at ${P2.s} ${pu} and ${T2.s}?`;
+        solve = 'V₂ = P₁V₁T₂ ÷ (P₂T₁)'; sub1 = ['V₂ = ', frac(`${P1.s} ${pu} × ${V1.s} L × ${fx(T2.k)} K`, `${P2.s} ${pu} × ${fx(T1.k)} K`)];
+        flip = div(mul(mul(P2.r, V1.r), T1.k), mul(P1.r, T2.k));
+        if (T1.c && T2.c) cWrong = div(mul(mul(P1.r, V1.r), R(T2.c)), mul(P2.r, R(T1.c)));
+      } else {
+        const V2 = nearG(V1);
+        truth = div(mul(mul(P1.r, V1.r), T2.k), mul(V2.r, T1.k)); unit = pu;
+        prompt = `${cap1(aN(V1.s))} L sample of gas at ${P1.s} ${pu} and ${T1.s} is moved to ${aN(V2.s)} L container at ${T2.s}. What is its new pressure?`;
+        solve = 'P₂ = P₁V₁T₂ ÷ (V₂T₁)'; sub1 = ['P₂ = ', frac(`${P1.s} ${pu} × ${V1.s} L × ${fx(T2.k)} K`, `${V2.s} L × ${fx(T1.k)} K`)];
+        flip = div(mul(mul(P1.r, V2.r), T1.k), mul(V1.r, T2.k));
+        if (T1.c && T2.c) cWrong = div(mul(mul(P1.r, V1.r), R(T2.c)), mul(V2.r, R(T1.c)));
+      }
+    }
+    unitKey = unit;
+    const a = numAns(truth, SF3);
+    if (unit === 'K' && !(toNum(truth) >= 150 && toNum(truth) <= 900)) continue;
+    const answer = `${a.str} ${unit}`;
+    const hasC = (T1 && T1.c != null) || (T2 && T2.c != null);
+    const work = (final) => {
+      const rows = [lnF(law)];
+      if (hasC) rows.push(lnF('In kelvin: K = °C + 273'), kLine('T₁', T1), T2 ? kLine('T₂', T2) : null);
+      rows.push(lnF(solve));
+      rows.push(ln(...sub1));
+      rows.push(final ? ln(...rich(`${solve.split(' = ')[0]} = ${longShow(truth)} ${unit}`)) : ln(`${solve.split(' = ')[0]} = ?`));
+      return el('div', { class: 'lab-work' },
+        P(`${{ boyle: 'Boyle\'s law (constant temperature)', charles: 'Charles\'s law (constant pressure)', gay: 'Gay-Lussac\'s law (constant volume)', comb: 'The combined gas law' }[kind.replace(/[A-Z]$/, '')]}: rearrange it for the unknown, then substitute.`),
+        formulaBox(...rows.filter(Boolean)),
+        final ? roundLine(a, answer) : note(hasC ? 'Convert every °C temperature to kelvin before you substitute.' : 'Check the units cancel, leaving the unit you want.'));
+    };
+    const wrong = [
+      { r: flip, why: 'flipped the ratio' },
+      { r: mul(truth, R(10)), why: 'off by a power of ten' }, { r: mul(truth, R(1, 10)), why: 'off by a power of ten' },
+    ];
+    if (cWrong && toNum(cWrong) > 0) wrong.unshift({ r: cWrong, why: 'used °C instead of kelvin' });
+    return numQ('gaslaw', {
+      level: lvl, prompt, a, how: SF3, unit, unitKey, unitName: unit,
+      note: `${hasC ? 'Use K = °C + 273. ' : ''}Round to 3 significant figures.`,
+      brief: `${law}; ${solve}: ${answer}`, wrong, work,
+    });
+  }
+  throw new Error('could not build a gas-law problem');
+}
+const RGAS = D('0.0821');
+function genIdeal(lvl) {
+  for (let tries = 0; tries < 60; tries++) {
+    const kind = pick(lvl === 1 ? ['P', 'V'] : lvl === 2 ? ['P', 'V', 'n'] : ['n', 'T', 'P', 'V']);
+    const useC = lvl === 1 ? false : chance(.7);
+    const n = given3(-1, 0), V = given3(0, 1), Pp = given3(-1, 0);
+    const T = tempGiven(useC);
+    let truth, unit, prompt, solve, sub1, cWrong = null;
+    if (kind === 'P') {
+      truth = div(mul(mul(n.r, RGAS), T.k), V.r); unit = 'atm';
+      prompt = `What is the pressure of ${n.s} mol of gas in ${aN(V.s)} L container at ${T.s}?`;
+      solve = 'P = nRT ÷ V'; sub1 = ['P = ', frac(`${n.s} mol × 0.0821 × ${fx(T.k)} K`, `${V.s} L`)];
+      if (T.c) cWrong = div(mul(mul(n.r, RGAS), R(T.c)), V.r);
+    } else if (kind === 'V') {
+      truth = div(mul(mul(n.r, RGAS), T.k), Pp.r); unit = 'L';
+      prompt = `What volume does ${n.s} mol of gas occupy at ${Pp.s} atm and ${T.s}?`;
+      solve = 'V = nRT ÷ P'; sub1 = ['V = ', frac(`${n.s} mol × 0.0821 × ${fx(T.k)} K`, `${Pp.s} atm`)];
+      if (T.c) cWrong = div(mul(mul(n.r, RGAS), R(T.c)), Pp.r);
+    } else if (kind === 'n') {
+      truth = div(mul(Pp.r, V.r), mul(RGAS, T.k)); unit = 'mol';
+      prompt = `How many moles of gas are in ${aN(V.s)} L container at ${Pp.s} atm and ${T.s}?`;
+      solve = 'n = PV ÷ RT'; sub1 = ['n = ', frac(`${Pp.s} atm × ${V.s} L`, `0.0821 × ${fx(T.k)} K`)];
+      if (T.c) cWrong = div(mul(Pp.r, V.r), mul(RGAS, R(T.c)));
+    } else {
+      truth = div(mul(Pp.r, V.r), mul(n.r, RGAS)); unit = 'K';
+      prompt = `At what temperature, in kelvin, does ${n.s} mol of gas occupy ${V.s} L at ${Pp.s} atm?`;
+      solve = 'T = PV ÷ nR'; sub1 = ['T = ', frac(`${Pp.s} atm × ${V.s} L`, `${n.s} mol × 0.0821`)];
+      const tk = toNum(truth);
+      if (tk < 200 || tk > 700) continue;
+    }
+    const tv = toNum(truth);
+    if (!(tv > 0)) continue;
+    const a = numAns(truth, SF3);
+    const answer = `${a.str} ${unit}`;
+    const work = (final) => el('div', { class: 'lab-work' },
+      P('The ideal gas law: PV = nRT, with R = 0.0821 L·atm/(mol·K). Rearrange it for the unknown, then substitute.'),
+      formulaBox(
+        lnF('PV = nRT'),
+        T.c != null && kind !== 'T' ? lnF('In kelvin: K = °C + 273') : null,
+        kind !== 'T' ? kLine('T', T) : null,
+        lnF(solve), ln(...sub1),
+        final ? ln(...rich(`${kind} = ${longShow(truth)} ${unit}`)) : ln(`${kind} = ?`)),
+      final ? roundLine(a, answer) : note('R = 0.0821 uses atm, L, mol and K — so the temperature has to be in kelvin.'));
+    const wrong = [
+      { r: mul(truth, R(10)), why: 'off by a power of ten' }, { r: mul(truth, R(1, 10)), why: 'off by a power of ten' },
+    ];
+    if (cWrong && toNum(cWrong) > 0) wrong.unshift({ r: cWrong, why: 'used °C instead of kelvin' });
+    const r831 = D('8.31');
+    wrong.unshift({ r: kind === 'P' || kind === 'V' ? div(mul(truth, r831), RGAS) : div(mul(truth, RGAS), r831), why: 'used R = 8.31 (the value for kPa)' });
+    return numQ('ideal', {
+      level: lvl, prompt, a, how: SF3, unit, unitKey: unit, unitName: unit,
+      note: `Use R = 0.0821 L·atm/(mol·K)${T.c != null && kind !== 'T' ? ' and K = °C + 273' : ''}. Round to 3 significant figures.`,
+      brief: `PV = nRT, so ${solve}: ${answer}`, wrong, work,
+    });
+  }
+  throw new Error('could not build an ideal-gas problem');
+}
+
+/* ------------------------------------------------ Unit 12: solutions, acids and bases */
+const SOLUTES = ['NaCl', 'KCl', 'NaOH', 'KNO3', 'CaCl2', 'MgCl2', 'C6H12O6', 'C12H22O11', 'HCl', 'HNO3', 'H2SO4', 'AgNO3', 'CuSO4', 'KMnO4', 'NaHCO3', 'Na2CO3', 'Ca(NO3)2', 'NaC2H3O2', 'Na2SO4'];
+const ML_CHOICES = [50, 75, 100, 125, 150, 200, 250, 300, 400, 500, 750];
+function volGiven() {
+  if (chance(.7)) { const ml = pick(ML_CHOICES); return { ml: true, r: R(ml), L: R(ml, 1000), amt: String(ml), s: `${ml} mL` }; }
+  const g = given3(-1, 0);
+  return { ml: false, r: g.r, L: g.r, amt: g.s, s: `${g.s} L` };
+}
+const toLitres = (v) => fac(side2('1', R(1), 'L'), side2('1000', R(1000), 'mL'));
+function genMolarity(lvl) {
+  const kind = pick(lvl === 1 ? ['mol2M', 'M2mol'] : lvl === 2 ? ['mol2M', 'M2mol', 'mol2M', 'g2M'] : ['g2M', 'M2g', 'M2mol']);
+  const S = SUB_BY[pick(SOLUTES)];
+  const F = fm(S.f), SN = `${S.name} (${F})`;
+  const V = volGiven();
+  const mm = molarMass(S.f);
+  let truth, unit, prompt, work;
+  const vGiven = { amt: V.amt, r: V.r, unit: V.ml ? 'mL' : 'L' };
+  const mlFence = (final) => (V.ml ? chemFence(vGiven, [toLitres()], final ? { ans: `${fx(V.L)} L` } : null) : null);
+  let wrong = [];
+  if (kind === 'mol2M' || kind === 'g2M') {
+    const amt = kind === 'mol2M' ? given3(-2, 0) : given3(0, 2);
+    const mol = kind === 'mol2M' ? amt.r : div(amt.r, mm);
+    truth = div(mol, V.L); unit = 'M';
+    prompt = `What is the molarity of a solution made by dissolving ${amt.s} ${kind === 'mol2M' ? 'mol' : 'g'} of ${SN} in enough water to make ${V.s} of solution?`;
+    work = (final) => el('div', { class: 'lab-work' },
+      P('Molarity = moles of solute ÷ liters of solution.'),
+      kind === 'g2M' ? mmLine(S.f) : null,
+      kind === 'g2M' ? chemFence({ amt: amt.s, r: amt.r, unit: `g ${F}` }, [mmFactor(S.f, false)], final ? { ans: `${longShow(mol)} mol ${F}` } : null) : null,
+      V.ml ? P('Change mL to L first:') : null, mlFence(final),
+      formulaBox(lnF('M = mol ÷ L'), final ? ln('M = ', frac(`${kind === 'g2M' ? longShow(mol) : amt.s} mol`, `${fx(V.L)} L`), ...rich(` = ${longShow(truth)} M`)) : ln('M = ?')),
+      final ? roundLine(numAns(truth, SF3), `${numAns(truth, SF3).str} M`) : note('Liters, not milliliters, go on the bottom.'));
+    wrong = [
+      { r: div(V.L, mol), why: 'divided the wrong way' },
+      { r: mul(truth, R(10)), why: 'off by a power of ten' },
+    ];
+    if (V.ml) wrong.unshift({ r: div(mol, V.r), why: 'forgot to change mL to L' });
+    if (kind === 'g2M') wrong.unshift({ r: div(amt.r, V.L), why: 'used grams instead of moles' });
+  } else {
+    const M = given3(-1, 0);
+    const factors = [...(V.ml ? [toLitres()] : []), fac(side2(M.s, M.r, `mol ${F}`), side2('1', R(1), 'L')), ...(kind === 'M2g' ? [mmFactor(S.f, true)] : [])];
+    truth = factors.reduce((v, f) => mul(v, div(f.top.r, f.bot.r)), V.r); unit = kind === 'M2g' ? 'g' : 'mol';
+    prompt = `How many ${kind === 'M2g' ? 'grams' : 'moles'} of ${SN} are in ${V.s} of ${aN(M.s)} M solution?`;
+    const answerT = `${numAns(truth, SF3).str} ${unit}`;
+    work = (final) => el('div', { class: 'lab-work' },
+      P(`${M.s} M means ${M.s} mol of ${F} in every 1 L of solution — use it as a conversion factor${V.ml ? ', after changing mL to L' : ''}.`),
+      kind === 'M2g' ? mmLine(S.f) : null,
+      chemFence(vGiven, factors, final ? { ans: answerT } : null),
+      final ? fenceArith(vGiven, factors) : note('Put L on the bottom of the molarity factor so it cancels.'),
+      final ? roundLine(numAns(truth, SF3), answerT) : null);
+    wrong = [
+      { r: div(V.L, M.r), why: 'divided instead of multiplying' },
+      { r: mul(truth, R(10)), why: 'off by a power of ten' },
+    ];
+    if (V.ml) wrong.unshift({ r: mul(truth, R(1000)), why: 'forgot to change mL to L' });
+    if (kind === 'M2g') wrong.unshift({ r: div(truth, mm), why: 'stopped at moles' });
+  }
+  const a = numAns(truth, SF3);
+  return numQ('molarity', {
+    level: lvl, prompt, a, how: SF3, unit, unitKey: unit, unitName: unit === 'M' ? 'M (mol/L)' : unit,
+    note: `${/g/.test(kind) ? `${massNote([S.f])} ` : ''}Round to 3 significant figures.`,
+    subs: [S.f, F, S.name],
+    brief: kind === 'mol2M' || kind === 'g2M' ? `M = mol ÷ L = ${a.str} M` : `${V.s} × ${/M2/.test(kind) ? 'molarity' : ''} = ${a.str} ${unit}`,
+    wrong, work,
+  });
+}
+const DIL_SOLUTES = ['HCl', 'NaOH', 'H2SO4', 'NaCl', 'HNO3', 'KCl', 'CuSO4', 'NH3', 'KOH'];
+function genDilution(lvl) {
+  for (let tries = 0; tries < 60; tries++) {
+    const kind = pick(lvl === 1 ? ['M2'] : lvl === 2 ? ['V1', 'M2'] : ['V2', 'M1', 'V1']);
+    const F = fm(pick(DIL_SOLUTES));
+    const M1 = given3(0, 0), V1 = given3(1, 2);
+    const V2 = roundSig(mul(V1.r, R(ri(15, 80), 10)), 3);
+    const M2 = roundSig(div(mul(M1.r, V1.r), V2), 3);
+    if (!leR(V1.r, V2) || eqR(V1.r, V2)) continue;
+    const s = (r) => sfShow(r, 3);
+    let truth, unit, prompt, solve, sub1, wrong;
+    if (kind === 'V1') {
+      truth = div(mul(M2, V2), M1.r); unit = 'mL';
+      prompt = `How many mL of ${M1.s} M ${F} are needed to make ${s(V2)} mL of ${s(M2)} M ${F}?`;
+      solve = 'V₁ = M₂V₂ ÷ M₁'; sub1 = ['V₁ = ', frac(`${s(M2)} M × ${s(V2)} mL`, `${M1.s} M`)];
+      wrong = [{ r: div(mul(M1.r, V2), M2), why: 'flipped the ratio' }];
+    } else if (kind === 'M2') {
+      truth = div(mul(M1.r, V1.r), V2); unit = 'M';
+      prompt = `${V1.s} mL of ${M1.s} M ${F} is diluted to ${s(V2)} mL. What is the new concentration?`;
+      solve = 'M₂ = M₁V₁ ÷ V₂'; sub1 = ['M₂ = ', frac(`${M1.s} M × ${V1.s} mL`, `${s(V2)} mL`)];
+      wrong = [{ r: div(mul(M1.r, V2), V1.r), why: 'flipped the ratio' }];
+    } else if (kind === 'V2') {
+      truth = div(mul(M1.r, V1.r), M2); unit = 'mL';
+      prompt = `To what total volume must ${V1.s} mL of ${M1.s} M ${F} be diluted to make it ${s(M2)} M?`;
+      solve = 'V₂ = M₁V₁ ÷ M₂'; sub1 = ['V₂ = ', frac(`${M1.s} M × ${V1.s} mL`, `${s(M2)} M`)];
+      wrong = [{ r: div(mul(M2, V1.r), M1.r), why: 'flipped the ratio' }, { r: sub(truth, V1.r), why: 'found the water to add, not the total volume' }];
+    } else {
+      truth = div(mul(M2, V2), V1.r); unit = 'M';
+      prompt = `A student dilutes ${V1.s} mL of a solution of ${F} to ${s(V2)} mL. The new concentration is ${s(M2)} M. What was the original concentration?`;
+      solve = 'M₁ = M₂V₂ ÷ V₁'; sub1 = ['M₁ = ', frac(`${s(M2)} M × ${s(V2)} mL`, `${V1.s} mL`)];
+      wrong = [{ r: div(mul(M2, V1.r), V2), why: 'flipped the ratio' }];
+    }
+    wrong.push({ r: mul(truth, R(10)), why: 'off by a power of ten' }, { r: mul(truth, R(1, 10)), why: 'off by a power of ten' });
+    const a = numAns(truth, SF3);
+    const answer = `${a.str} ${unit}`;
+    const work = (final) => el('div', { class: 'lab-work' },
+      P('Diluting adds water but not solute, so the moles stay the same: M₁V₁ = M₂V₂. Both volumes can stay in mL — the units cancel.'),
+      formulaBox(lnF('M₁V₁ = M₂V₂'), lnF(solve), ln(...sub1), final ? ln(...rich(`${solve.split(' = ')[0]} = ${longShow(truth)} ${unit}`)) : ln(`${solve.split(' = ')[0]} = ?`)),
+      final ? roundLine(a, answer) : note('The concentrated solution (bigger M) has the smaller volume.'));
+    return numQ('dilution', {
+      level: lvl, prompt, a, how: SF3, unit, unitKey: unit, unitName: unit === 'M' ? 'M (mol/L)' : unit,
+      note: 'Round to 3 significant figures.',
+      brief: `M₁V₁ = M₂V₂, so ${solve}: ${answer}`, wrong, work,
+    });
+  }
+  throw new Error('could not build a dilution problem');
+}
+const PH_NOTE = 'pH = −log[H⁺], and pH + pOH = 14.';
+const sciOne = (n) => `1 × 10^-${n}`;
+function genPh(lvl) {
+  const kind = pick(lvl === 1 ? ['h2ph', 'ph2h'] : lvl === 2 ? ['h2ph', 'ph2h', 'ph2poh', 'poh2ph'] : ['oh2ph', 'h2poh', 'ph2oh', 'ph2poh', 'poh2ph']);
+  const n = ri(1, 13);
+  const x = lvl === 1 ? R(n) : R(ri(5, 135), 10);
+  let prompt, truth, sciAns = false, lines, wrong, unitKey = '', unit = '';
+  const pw = (e) => R(1, p10(e));
+  if (kind === 'h2ph') {
+    prompt = `A solution has [H⁺] = ${sciOne(n)} M. What is its pH?`; truth = R(n);
+    lines = [lnF('pH = −log[H⁺]'), ln(...rich(`pH = −log(${sciOne(n)})`))];
+    wrong = [{ r: R(-n), why: 'dropped the minus sign in −log' }, { r: R(14 - n), why: 'found the pOH instead' }, { r: R(n + 1), why: 'miscounted the exponent' }];
+  } else if (kind === 'ph2h') {
+    prompt = `A solution has a pH of ${n}. What is its [H⁺]?`; truth = pw(n); sciAns = true;
+    lines = [lnF('[H⁺] = ', pow10('−pH')), ln(...rich(`[H⁺] = 10^-${n}`))];
+    wrong = [{ r: R(p10(n)), why: 'lost the minus sign on the exponent' }, { r: pw(14 - n), why: 'found [OH⁻] instead' }, { r: pw(n + 1), why: 'miscounted the exponent' }];
+  } else if (kind === 'ph2poh' || kind === 'poh2ph') {
+    const [from, to] = kind === 'ph2poh' ? ['pH', 'pOH'] : ['pOH', 'pH'];
+    prompt = `A solution has a ${from} of ${fx(x)}. What is its ${to}?`; truth = sub(R(14), x);
+    lines = [lnF('pH + pOH = 14'), ln(`${to} = 14 − ${fx(x)}`)];
+    wrong = [{ r: add(R(14), x), why: 'added instead of subtracting' }, { r: x, why: `copied the ${from}` }, { r: sub(x, R(14)), why: 'subtracted the wrong way round' }];
+  } else if (kind === 'oh2ph') {
+    prompt = `A solution has [OH⁻] = ${sciOne(n)} M. What is its pH?`; truth = R(14 - n);
+    lines = [lnF('pOH = −log[OH⁻]'), ln(...rich(`pOH = −log(${sciOne(n)}) = ${n}`)), lnF('pH = 14 − pOH'), ln(`pH = 14 − ${n}`)];
+    wrong = [{ r: R(n), why: 'stopped at the pOH' }, { r: R(14 + n), why: 'added instead of subtracting' }, { r: R(-n), why: 'dropped the minus sign in −log' }];
+  } else if (kind === 'h2poh') {
+    prompt = `A solution has [H⁺] = ${sciOne(n)} M. What is its pOH?`; truth = R(14 - n);
+    lines = [lnF('pH = −log[H⁺]'), ln(...rich(`pH = −log(${sciOne(n)}) = ${n}`)), lnF('pOH = 14 − pH'), ln(`pOH = 14 − ${n}`)];
+    wrong = [{ r: R(n), why: 'stopped at the pH' }, { r: R(14 + n), why: 'added instead of subtracting' }, { r: R(-n), why: 'dropped the minus sign in −log' }];
+  } else {
+    prompt = `A solution has a pH of ${n}. What is its [OH⁻]?`; truth = pw(14 - n); sciAns = true;
+    lines = [lnF('pOH = 14 − pH'), ln(`pOH = 14 − ${n} = ${14 - n}`), lnF('[OH⁻] = ', pow10('−pOH')), ln(...rich(`[OH⁻] = 10^-${14 - n}`))];
+    wrong = [{ r: pw(n), why: 'found [H⁺] instead' }, { r: R(p10(14 - n)), why: 'lost the minus sign on the exponent' }, { r: pw(15 - n), why: 'miscounted the exponent' }];
+  }
+  if (sciAns) { unitKey = 'M'; unit = 'M'; }
+  const pow1 = (r) => `1 × 10^${expOf(r)}`;
+  const e = sciAns ? -expOf(truth) : 0;
+  const a = sciAns ? { str: pow1(truth), stated: truth, exact: truth, truth, place: null, howText: '' } : numAns(truth, { exact: true });
+  const answer = `${a.str}${unit ? ` ${unit}` : ''}`;
+  const lhs = kind.endsWith('poh') ? 'pOH' : kind.endsWith('ph') ? 'pH' : kind === 'ph2h' ? '[H⁺]' : '[OH⁻]';
+  const work = (final) => el('div', { class: 'lab-work' },
+    P(...(kind === 'ph2h' ? ['For a whole-number pH, [H⁺] = 1 × ', pow10('−pH'), ': the exponent is the pH with a minus sign.']
+      : kind === 'ph2oh' ? ['First find the pOH, since pH + pOH = 14. Then [OH⁻] = 1 × ', pow10('−pOH'), ': the exponent is the pOH with a minus sign.']
+      : /^(h2|oh2)/.test(kind) ? ['For [H⁺] = 1 × 10⁻ⁿ, the pH is just n: −log of 10⁻ⁿ is n. The same goes for [OH⁻] and pOH.']
+        : ['pH and pOH always add up to 14 (at 25 °C).'])),
+    formulaBox(...lines, final ? ln(...rich(`${lhs} = ${answer}`)) : ln(`${lhs} = ?`)),
+    final ? P('So the answer is ', ansBox(...rich(answer)), '.') : note('Below 7 is acidic, 7 is neutral, above 7 is basic — a quick check on your answer.'));
+  const q = numQ('ph', {
+    level: lvl, prompt, note: PH_NOTE, a, how: { exact: true }, unit, unitKey, unitName: unit ? 'M (mol/L)' : '', label: lhs,
+    accept: sciAns ? [`1 x 10^-${e} M`, `1e-${e} M`, `10^-${e} M`, `1 × 10^-${e}`, `${plain(truth)} M`] : [fx(truth)],
+    sciKeys: sciAns,
+    brief: `${lhs} = ${answer}`,
+    wrong: sciAns ? [] : wrong, work,
+  });
+  if (sciAns) q.wrong = wrong.map((w) => ({ str: `${pow1(w.r)} M`, val: toNum(w.r), why: w.why }));
+  return q;
+}
+const CLASS_OF = (ph) => (ph < 7 ? 'acidic' : ph > 7 ? 'basic' : 'neutral');
+function genAcidBase(lvl) {
+  const kind = pick(lvl === 1 ? ['h', 'h', 'oh'] : ['h', 'oh', 'poh']);
+  let n = ri(1, 13);
+  if (n === 7 && kind === 'poh') n = 6;
+  if (kind !== 'poh' && chance(.12)) n = 7;
+  const ph = kind === 'h' ? n : 14 - n;
+  const given = kind === 'h' ? `[H⁺] = ${sciOne(n)} M` : kind === 'oh' ? `[OH⁻] = ${sciOne(n)} M` : `a pOH of ${n}`;
+  const opt = (p, c) => `pH ${pretty(String(p))} — ${c}`;
+  const answer = opt(ph, CLASS_OF(ph));
+  const other = (c) => (c === 'acidic' ? 'basic' : 'acidic');
+  const cands = ph === 7
+    ? [opt(7, 'acidic'), opt(7, 'basic'), opt(-7, 'neutral'), opt(14, 'neutral')]
+    : [opt(ph, other(CLASS_OF(ph))), opt(14 - ph, CLASS_OF(14 - ph)), opt(14 - ph, other(CLASS_OF(14 - ph)))];
+  const options = shuffle([answer, ...cands.filter((o) => o !== answer).slice(0, 3)]);
+  const work = (final) => el('div', { class: 'lab-work' },
+    P(kind === 'h' ? `pH = −log[H⁺] = −log(1 × 10${supText(-n)}) = ${final ? ph : '?'}.`
+      : kind === 'oh' ? `pOH = −log[OH⁻] = ${n}, and pH = 14 − pOH = ${final ? `14 − ${n} = ${ph}` : '?'}.`
+        : `pH + pOH = 14, so pH = 14 − ${n}${final ? ` = ${ph}` : ''}.`),
+    P('Below 7 is acidic, exactly 7 is neutral, above 7 is basic.'),
+    final ? P('So: ', ansBox(answer), '.') : null);
+  return makeQ2('acidbase', {
+    level: lvl, type: 'mc', prompt: `A solution has ${given}. What is its pH, and is it acidic, basic or neutral?`,
+    answer, options, value: ph, note: PH_NOTE,
+    brief: `pH ${ph}: ${CLASS_OF(ph)}.`, work,
+  });
+}
+
+const NEW_GENERATORS = {
+  pne: genPne, avgmass: genAvgMass, config: genConfig, valence: genValence, noble: genNoble,
+  formula: genFormula, naming: genNaming, balance: genBalance, rxntype: genRxType,
+  molar: genMolar, moles: genMoles, pcomp: genPcomp, empirical: genEmpirical, stoich: genStoich, limiting: genLimiting, yield: genYield,
+  pressure: genPressure, gaslaw: genGasLaw, ideal: genIdeal,
+  molarity: genMolarity, dilution: genDilution, ph: genPh, acidbase: genAcidBase,
+};
+
+const GENERATORS = { prefix: genPrefix, temp: genTemp, avg: genAvg, sci: genSci, std: genStd, factor: genFactor, dim: genDim, ...NEW_GENERATORS };
 function levelOf(opt) {
   const d = opt && opt.difficulty;
   if (d === 'easy' || d === 'warm-up') return 1;
@@ -1052,10 +3042,30 @@ function generateMC(skillId, opt = {}) {
   for (let tries = 0; tries < 40; tries++) {
     const q = generate(skillId, { difficulty: lvl });
     if (q.type === 'mc') { q.figure = undefined; q.figureAlt = undefined; q.explanation = q.brief; return q; }
+    if (q.textWrong) {
+      // written answers that aren't numbers (formulas, names, configurations):
+      // wrong options are the classic mistakes, never one the grader accepts
+      const picked = [];
+      for (const w of shuffle(q.textWrong)) {
+        if (w.str === q.answer || picked.some((p) => p.str === w.str) || q.gradeWith(w.plain ?? w.str).ok) continue;
+        // "NaN₃" (sodium nitride with its numbers swapped) would read as a bug, not a mistake
+        if (/\b(NaN|Infinity|undefined|null)\b/.test(w.str)) continue;
+        picked.push(w);
+        if (picked.length === 3) break;
+      }
+      if (picked.length < 3) continue;
+      return {
+        ...q, type: 'mc', ask: 'Choose the answer',
+        options: shuffle([q.answer, ...picked.map((p) => p.str)]),
+        explanation: q.brief, figure: undefined, figureAlt: undefined,
+        mistakes: picked.map((p) => ({ option: p.str, why: p.why })),
+      };
+    }
     const rights = [q.value, ...q.alts];
     const picked = [];
     for (const w of q.wrong) {
       if (!Number.isFinite(w.val) || rights.some((r) => close(r, w.val))) continue;
+      if (q.gradeWith && q.gradeWith(w.str).ok) continue;
       if (picked.some((p) => p.str === w.str || close(p.val, w.val)) || w.str === q.answer) continue;
       picked.push(w);
       if (picked.length === 3) break;
@@ -1070,11 +3080,13 @@ function generateMC(skillId, opt = {}) {
   }
   throw new Error(`could not build a multiple-choice ${skillId} problem`);
 }
-const labSetOk = (set) => set && ['c2', 'c3', 'chem-all'].includes(set.id);
+const LAB_SETS = new Set(SKILLS.map((s) => s.setId));
+const labSetOk = (set) => !!set && (LAB_SETS.has(set.id) || set.id === 'chem-all');
 function gameQuestions(setOrId) {
   const set = typeof setOrId === 'string' ? CQ.getSet(setOrId) : setOrId;
   if (!labSetOk(set)) return [];
-  const here = SKILLS.filter((s) => set.id === 'chem-all' || s.setId === set.id);
+  // every unit's skills take turns in All of Chemistry
+  const here = set.id === 'chem-all' ? shuffle(SKILLS) : SKILLS.filter((s) => s.setId === set.id);
   const out = [];
   for (let i = 0; i < 12; i++) {
     const s = here[i % here.length];
@@ -1130,6 +3142,7 @@ function numberRight(q, t) {
 /** Grade a typed answer: the number (exactly), the unit (case-aware for M/m
     prefixes) and the form the skill is about. */
 function grade(q, raw) {
+  if (q.gradeWith) return q.gradeWith(raw);
   const s = tidy(raw);
   const m = s.match(NUM_RE);
   if (!m || !/\d/.test(m[1])) return { ok: false, why: 'Type a number (and its unit).' };
@@ -1190,7 +3203,7 @@ function renderLab(set) {
   }
   function drawChips() {
     chips.innerHTML = '';
-    const groups = set.id === 'chem-all' ? [['c2', 'Concept 2'], ['c3', 'Concept 3']] : [[set.id, '']];
+    const groups = set.id === 'chem-all' ? [...LAB_SETS].map((sid) => [sid, (CQ.getSet(sid) || {}).short || sid]) : [[set.id, '']];
     for (const [sid, title] of groups) {
       const row = el('div', { class: 'lab-chip-row', role: 'group', 'aria-label': title ? `${title} skills` : 'Skills' },
         title ? el('span', { class: 'lab-group' }, title) : null);
@@ -1262,7 +3275,7 @@ function renderLab(set) {
       hintBtn.textContent = open ? 'Hide the method' : '💡 Show me how';
       if (open && !hintBox.childElementCount) {
         st.assisted = true;
-        hintBox.append(el('p', { class: 'lab-assisted' }, el('span', { 'aria-hidden': 'true' }, '💡 '), 'Assisted — this problem won\'t count toward mastery. Finish it yourself, then try the next one on your own.'), q.hint());
+        hintBox.append(el('p', { class: 'lab-assisted' }, el('span', { 'aria-hidden': 'true' }, '💡 '), 'Assisted — this problem won\'t count toward mastery. Finish it yourself, then try the next one on your own.'), keepUnitsIn(q.hint()));
       }
     } }, '💡 Show me how');
     const head = el('div', { class: 'lab-card-head' },
@@ -1275,6 +3288,7 @@ function renderLab(set) {
       card = CQ.questionCard(q, { onAnswer: (ok) => settle(ok, ok ? '' : 'x', null), showTag: true, instant: true });
       card.classList.add('lab-card');
       card.querySelector('.q-tag')?.replaceWith(head);
+      if (q.note) card.querySelector('.q-prompt')?.after(el('p', { class: 'lab-note' }, q.note));
       // the options are fractions: draw them stacked, as in the notes
       for (const b of card.querySelectorAll('.opt')) {
         const span = b.lastElementChild;
@@ -1288,13 +3302,13 @@ function renderLab(set) {
       if (q.figure) card.append(el('div', { class: 'q-figure', role: 'img', 'aria-label': q.figureAlt || '' }, q.figure));
       card.append(el('div', { class: 'q-prompt' }, ...rich(q.prompt)));
       if (q.note) card.append(el('p', { class: 'lab-note' }, q.note));
-      const inp = el('input', { class: 'input', type: 'text', placeholder: PLACEHOLDER[q.skill] || 'Type your answer…', autocomplete: 'off', autocapitalize: 'off', spellcheck: 'false', enterkeyhint: 'done', 'aria-label': 'Your answer' });
+      const inp = el('input', { class: 'input', type: 'text', placeholder: (q.skill === 'ph' && q.unit ? PLACEHOLDER.phConc : PLACEHOLDER[q.skill]) || 'Type your answer…', autocomplete: 'off', autocapitalize: 'off', spellcheck: 'false', enterkeyhint: 'done', 'aria-label': 'Your answer' });
       const answerBtn = el('button', { type: 'button', class: 'btn primary', onclick: () => submit(false) }, 'Answer');
       const skipBtn = el('button', { type: 'button', class: 'btn ghost', onclick: () => submit(true) }, 'Don\'t know');
       inp.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); submit(false); } });
       card.append(el('div', { class: 'written' }, inp, answerBtn, skipBtn));
       const extras = el('div', { class: 'row lab-actions' }, hintBtn);
-      if (q.skill === 'sci') {
+      if (q.skill === 'sci' || q.sciKeys) {
         const ins = (t) => { const a = inp.selectionStart ?? inp.value.length, b = inp.selectionEnd ?? a; inp.value = inp.value.slice(0, a) + t + inp.value.slice(b); inp.focus(); inp.setSelectionRange(a + t.length, a + t.length); };
         extras.append(el('button', { type: 'button', class: 'btn sm ghost', 'aria-label': 'Insert times ten to the power', onclick: () => ins(' × 10^') }, '× 10^'),
           el('button', { type: 'button', class: 'btn sm ghost', 'aria-label': 'Insert minus sign', onclick: () => ins('-') }, '−'));
@@ -1309,15 +3323,16 @@ function renderLab(set) {
         inp.disabled = true; answerBtn.disabled = true; skipBtn.disabled = true;
         const g = dontKnow ? { ok: false, why: '' } : grade(q, raw);
         const fb = el('div', { class: `feedback ${g.ok ? 'good' : 'bad'}`, role: 'status', 'aria-live': 'polite' },
-          el('b', { class: 'title' }, g.ok ? `✓ ${pick(['Correct!', 'Nice!', 'You got it!', 'Exactly right.'])}` : dontKnow ? ['Here\'s how it works. The answer is ', el('span', { class: 'lab-nowrap' }, ...rich(q.answer))] : ['✗ Not quite — the answer is ', el('span', { class: 'lab-nowrap' }, ...rich(q.answer))]),
+          el('b', { class: 'title' }, g.ok ? `✓ ${pick(['Correct!', 'Nice!', 'You got it!', 'Exactly right.'])}` : dontKnow ? ['Here\'s how it works. The answer is ', el('span', { class: q.answer.length > 24 ? '' : 'lab-nowrap' }, ...rich(q.answer))] : ['✗ Not quite — the answer is ', el('span', { class: q.answer.length > 24 ? '' : 'lab-nowrap' }, ...rich(q.answer))]),
           g.why ? el('p', { class: 'lab-why' }, g.why) : null,
           g.tip ? el('p', { class: 'lab-why' }, g.tip) : null,
-          el('div', { class: 'exp' }, q.work(true)),
+          keepUnitsIn(el('div', { class: 'exp' }, q.work(true))),
           el('div', { class: 'src' }, q.source));
         card.append(fb);
         settle(g.ok, raw, fb);
       }
     }
+    keepUnitsIn(card);
     st.card = card;
     stage.append(card);
 
@@ -1381,7 +3396,7 @@ function renderLab(set) {
 /* ========================================================== registration */
 CQ.registerMode({
   id: 'lab', name: 'Problem Lab', ico: '🧮', color: '#10b981', before: 'match',
-  desc: 'Endless new calculation problems — prefixes, temperature, scientific notation, dimensional analysis — each with a worked solution.',
+  desc: 'Endless new practice problems — calculations, formulas and equations — each with a worked solution.',
   available: labSetOk,
   render: renderLab,
 });
@@ -1396,7 +3411,7 @@ const supPow = (t) => String(t).replace(/10\^(-?\d+)/g, (_, e) => `10${[...e].ma
 function forCoreCard(q) {
   return {
     ...q,
-    prompt: supPow(q.note ? `${q.prompt} ${q.note}` : q.prompt),
+    prompt: keepUnits(supPow(q.note ? `${q.prompt} ${q.note}` : q.prompt)),
     answer: supPow(q.answer),
     options: q.options.map(supPow),
     explanation: typeof q.explanation === 'string' ? supPow(q.explanation) : q.explanation,
@@ -1415,6 +3430,9 @@ const CQLab = window.CQLab = {
   gameQuestions,
   grade,
   forCoreCard,
+  // the tables the Units 5–12 problems are built from, for tools/verify-lab.mjs
+  // to check against its own copy
+  data: { elements: PT_ROWS, cations: CATIONS, multi: MULTI, anions: ANIONS, isotopes: ISOTOPES, ionCharges: ION_CHARGES, reactions: REACTIONS, molecular: MOLECULAR },
   current: null,
   show: null,
 };

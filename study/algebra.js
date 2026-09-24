@@ -234,8 +234,12 @@ function subst(disp, vals) {
 
 /* ================================================= reading typed answers */
 const SUP_IN = { '⁰': '0', '¹': '1', '²': '2', '³': '3', '⁴': '4', '⁵': '5', '⁶': '6', '⁷': '7', '⁸': '8', '⁹': '9', '⁻': '-' };
+const VULGAR = { '½': '1/2', '⅓': '1/3', '⅔': '2/3', '¼': '1/4', '¾': '3/4', '⅕': '1/5', '⅖': '2/5', '⅗': '3/5', '⅘': '4/5', '⅙': '1/6', '⅚': '5/6', '⅛': '1/8', '⅜': '3/8', '⅝': '5/8', '⅞': '7/8' };
 function prep(s) {
   return String(s ?? '').toLowerCase()
+    // "1½" is the mixed number 1 1/2; a lone "½" is (1/2), so "½(x + 6)²" reads as a coefficient.
+    .replace(/(\d)\s*([½⅓⅔¼¾⅕⅖⅗⅘⅙⅚⅛⅜⅝⅞])/g, (m, d, v) => `${d} ${VULGAR[v]}`)
+    .replace(/[½⅓⅔¼¾⅕⅖⅗⅘⅙⅚⅛⅜⅝⅞]/g, (v) => `(${VULGAR[v]})`)
     .replace(/[−‒–—﹣－]/g, '-')
     .replace(/[×·•∙⋅✕]/g, '*').replace(/÷/g, '/')
     .replace(/[⁻⁰¹²³⁴⁵⁶⁷⁸⁹]+/g, (m) => '^' + (m.length > 1 ? `(${[...m].map((c) => SUP_IN[c]).join('')})` : SUP_IN[m]))
@@ -406,13 +410,18 @@ function readNum(s, { v = null, percent = false, money = false } = {}) {
 }
 const no = (note) => ({ ok: false, note });
 const terminates = (t) => near(Math.round(t * 1e6) / 1e6, t);
-/** Exact value, or a decimal of 2+ places correctly rounded from a repeating one. */
+/** Exact value, or a decimal of 2+ places correctly rounded from a repeating one.
+    With { exact: true } (a prompt that never asks for rounding) only the exact value
+    passes; a correctly rounded decimal gets a note asking for the fraction. */
 function chkNum(target, opts = {}) {
   return (input) => {
     const r = readNum(input, opts);
     if (!r) return no(opts.say || 'Type a single number.');
     if (near(r.v, target)) return true;
-    if (r.dec && r.places >= 2 && !terminates(target) && Math.abs(r.v - target) <= 0.5 * 10 ** -r.places + 1e-12) return true;
+    if (r.dec && !terminates(target) && Math.abs(r.v - target) <= 0.5 * 10 ** -r.places + 1e-12) {
+      if (opts.exact) return no('Close, but that decimal is rounded. Give the exact value as a fraction.');
+      if (r.places >= 2) return true;
+    }
     return false;
   };
 }
@@ -2669,8 +2678,8 @@ skill('line-fit', 12, 'Scatter plots & lines of fit', 'Read a scatter plot or us
       S('A line of fit gives an estimate — real data points scatter around it', ''),
     ];
     return {
-      type: 'written', text, fmt: 'Type a number.', answer: numStr(y), check: chkNum(y), num: y, fmtAlt: (v) => numStr(clean(v)),
-      alt: [numStr(clean(m + x + b)), numStr(clean(m * x)), numStr(clean(m * (x + b))), numStr(clean(m * x - b))],
+      type: 'written', text, fmt: 'Type a number.', answer: fmtN(y), check: chkNum(y), num: y, fmtAlt: fmtN,
+      alt: [fmtN(m + x + b), fmtN(m * x), fmtN(m * (x + b)), fmtN(m * x - b)],
       steps, data: { value: y, m, b, x },
     };
   }
@@ -2704,6 +2713,1535 @@ skill('line-fit', 12, 'Scatter plots & lines of fit', 'Read a scatter plot or us
   };
 });
 
+/* ======================================================================
+   Graphs on a coordinate grid — units 4, 5, 6, 10 and 13.
+   gridSvg draws exact pictures: a curve is a list of math points mapped at a
+   whole number of pixels per unit, so a lattice point sits exactly on a grid
+   crossing and nothing needs a "not drawn to scale" label. The classes carry
+   the geometry for tools/verify-algebra.mjs, which reads the picture back:
+   tick labels (.alg-gx / .alg-gy, each placed exactly on its tick), curves
+   (.alg-curve polylines), endpoint dots (.alg-dot.closed / .open), arrowheads
+   (.alg-arrow, tip first: the curve keeps going) and marked points (.alg-mark).
+   ====================================================================== */
+const GU = 20;                                     // pixels per unit
+const GM = 18;                                     // margin around the grid
+const WIN = [-8, 8, -8, 8];
+const px3 = (v) => String(Math.round(v * 1000) / 1000);
+const P2 = (x, y) => `(${fmtN(x)}, ${fmtN(y)})`;
+function arrowHead(tx, ty, fx, fy, cls) {
+  const L = Math.hypot(tx - fx, ty - fy) || 1, ux = (tx - fx) / L, uy = (ty - fy) / L;
+  const bx = tx - 13 * ux, by = ty - 13 * uy;
+  return `<path class="alg-arrow ${cls}" d="M${px3(tx)} ${px3(ty)} L${px3(bx - 6 * uy)} ${px3(by + 6 * ux)} L${px3(bx + 6 * uy)} ${px3(by - 6 * ux)} Z"/>`;
+}
+/**
+ * curves: [{ pts: [[x, y], …], cls: 'c1' | 'c2', ends: [start, end] }] where an
+ * end is 'arrow', 'closed', 'open' or null; marks: [[x, y], …] highlighted points.
+ */
+function gridSvg({ win = WIN, curves = [], marks = [], step = 2 } = {}) {
+  const [x0, x1, y0, y1] = win;
+  const W = (x1 - x0) * GU + 2 * GM, H = (y1 - y0) * GU + 2 * GM;
+  const X = (x) => GM + (x - x0) * GU, Y = (y) => GM + (y1 - y) * GU;
+  const o = [`<svg class="alg-grid" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">`];
+  for (let i = x0; i <= x1; i++) if (i) o.push(`<line class="alg-gl${i % step ? '' : ' major'}" x1="${X(i)}" y1="${Y(y0)}" x2="${X(i)}" y2="${Y(y1)}"/>`);
+  for (let j = y0; j <= y1; j++) if (j) o.push(`<line class="alg-gl${j % step ? '' : ' major'}" x1="${X(x0)}" y1="${Y(j)}" x2="${X(x1)}" y2="${Y(j)}"/>`);
+  const ax0 = X(x0) - 12, ax1 = X(x1) + 12, ay0 = Y(y0) + 12, ay1 = Y(y1) - 12;
+  o.push(`<line class="alg-gaxis" x1="${ax0}" y1="${Y(0)}" x2="${ax1}" y2="${Y(0)}"/><line class="alg-gaxis" x1="${X(0)}" y1="${ay0}" x2="${X(0)}" y2="${ay1}"/>`);
+  o.push(`<path class="alg-gaxis-end" d="M${ax1} ${Y(0)} l-9 -5 v10 z M${ax0} ${Y(0)} l9 -5 v10 z M${X(0)} ${ay1} l-5 9 h10 z M${X(0)} ${ay0} l-5 -9 h10 z"/>`);
+  o.push(`<text class="alg-gname" x="${ax1 - 2}" y="${Y(0) - 9}" text-anchor="end">x</text><text class="alg-gname" x="${X(0) + 9}" y="${ay1 + 8}">y</text>`);
+  for (let i = x0; i <= x1; i++) if (i && !(i % step)) o.push(`<text class="alg-gx" x="${X(i)}" y="${Y(0) + 16}" text-anchor="middle">${fmtN(i)}</text>`);
+  for (let j = y0; j <= y1; j++) if (j && !(j % step)) o.push(`<text class="alg-gy" x="${X(0) - 6}" y="${Y(j)}" text-anchor="end" dominant-baseline="central">${fmtN(j)}</text>`);
+  o.push(`<text class="alg-g0" x="${X(0) - 6}" y="${Y(0) + 16}" text-anchor="end">0</text>`);
+  for (const c of curves) o.push(`<polyline class="alg-curve ${c.cls || 'c1'}" points="${c.pts.map(([x, y]) => `${px3(X(x))},${px3(Y(y))}`).join(' ')}"/>`);
+  for (const c of curves) {
+    const n = c.pts.length, cls = c.cls || 'c1';
+    [[0, 1], [n - 1, n - 2]].forEach(([i, j], e) => {
+      const t = (c.ends || [])[e];
+      const [x, y] = c.pts[i];
+      if (t === 'arrow') o.push(arrowHead(X(x), Y(y), X(c.pts[j][0]), Y(c.pts[j][1]), cls));
+      else if (t === 'open' || t === 'closed') o.push(`<circle class="alg-dot ${t} ${cls}" cx="${px3(X(x))}" cy="${px3(Y(y))}" r="5.5"/>`);
+    });
+  }
+  for (const [x, y] of marks) o.push(`<circle class="alg-mark" cx="${px3(X(x))}" cy="${px3(Y(y))}" r="5"/>`);
+  return o.join('') + '</svg>';
+}
+/** The part of the line y = m·x + b inside the window, pulled in so its arrowheads fit. */
+function clipLine(m, b, win = WIN, inset = 0.4) {
+  const [x0, x1, y0, y1] = win;
+  let lo = x0 + inset, hi = x1 - inset;
+  if (m) {
+    const xa = (y0 + inset - b) / m, xb = (y1 - inset - b) / m;
+    lo = Math.max(lo, Math.min(xa, xb)); hi = Math.min(hi, Math.max(xa, xb));
+  }
+  return [lo, hi];
+}
+/** A straight line with arrows at both ends, through the given lattice points. */
+function lineCurve(m, b, through = [], cls = 'c1') {
+  const [lo, hi] = clipLine(m, b);
+  const pts = [[lo, m * lo + b], ...through.filter(([x]) => x > lo + 0.05 && x < hi - 0.05), [hi, m * hi + b]];
+  pts.sort((p, q) => p[0] - q[0]);
+  return { pts: pts.filter((p, i) => !i || Math.abs(p[0] - pts[i - 1][0]) > 1e-9), cls, ends: ['arrow', 'arrow'] };
+}
+/**
+ * Samples f every dx on [lo, hi] and keeps the run that contains `anchor`
+ * and stays inside the window; each end of the run is extended to where the
+ * curve leaves the window (found by bisection).
+ */
+function sampleFn(f, { lo = WIN[0] + 0.4, hi = WIN[1] - 0.4, dx = 0.25, anchor = 0, win = WIN, inset = 0.4 } = {}) {
+  const inY = (y) => Number.isFinite(y) && y >= win[2] + inset && y <= win[3] - inset;
+  const xs = [];
+  for (let i = Math.ceil(lo / dx); i * dx <= hi + 1e-9; i++) xs.push(i * dx);
+  let k = xs.findIndex((x) => x >= anchor - 1e-9);
+  if (k < 0 || !inY(f(xs[k]))) throw RETRY;
+  let a = k, b = k;
+  while (a > 0 && inY(f(xs[a - 1]))) a--;
+  while (b < xs.length - 1 && inY(f(xs[b + 1]))) b++;
+  const pts = xs.slice(a, b + 1).map((x) => [x, f(x)]);
+  const edge = (xin, xout) => {
+    if (xout < lo - 1e-9 || xout > hi + 1e-9) return null;
+    let p = xin, q = xout;
+    for (let i = 0; i < 50; i++) { const m = (p + q) / 2; if (inY(f(m))) p = m; else q = m; }
+    return [p, f(p)];
+  };
+  const L = a > 0 ? edge(xs[a], xs[a - 1]) : null, Rr = b < xs.length - 1 ? edge(xs[b], xs[b + 1]) : null;
+  if (L && xs[a] - L[0] > 0.02) pts.unshift(L);
+  if (Rr && Rr[0] - xs[b] > 0.02) pts.push(Rr);
+  return pts;
+}
+/** Samples x = g(y) (a curve that opens sideways) the same way, in y. */
+function sampleSide(g, opts = {}) {
+  const pts = sampleFn(g, { ...opts, lo: WIN[2] + 0.4, hi: WIN[3] - 0.4 });
+  return pts.map(([y, x]) => [x, y]);
+}
+const onGrid = (x, y, r = 7) => Math.abs(x) <= r && Math.abs(y) <= r;
+/** Lattice points (x₀ + k·run, y₀ + k·rise) inside ±r, excluding k = 0 unless asked. */
+function latticeOn(x0, y0, run, rise, r = 7, withBase = false) {
+  const out = [];
+  for (let k = -16; k <= 16; k++) {
+    if (!k && !withBase) continue;
+    const x = x0 + k * run, y = y0 + k * rise;
+    if (onGrid(x, y, r)) out.push([x, y]);
+  }
+  return out;
+}
+/** "(−2, 1), (0, 3) and (4, −1)" */
+const listPts = (ps) => { const s = ps.map(([x, y]) => P2(x, y)); return s.length > 1 ? `${s.slice(0, -1).join(', ')} and ${s[s.length - 1]}` : s[0]; };
+/** Points of a sampled curve at whole-number (or half) coordinates, for alt text. */
+function niceSamples(f, xs) { return xs.map((x) => [x, clean(f(x))]).filter(([x, y]) => onGrid(x, y, 7.5) && isInt(y * 2)); }
+
+/* ---------------- Unit 4 · domain and range from a graph ---------------- */
+const INF = '∞';
+/** { lo, hi, loIn, hiIn }, null for an unbounded side. */
+function intervalStr(I) {
+  if (I.lo == null && I.hi == null) return `(${M}${INF}, ${INF})`;
+  return `${I.lo == null || !I.loIn ? '(' : '['}${I.lo == null ? M + INF : fmtN(I.lo)}, ${I.hi == null ? INF : fmtN(I.hi)}${I.hi == null || !I.hiIn ? ')' : ']'}`;
+}
+function ineqStrOf(I, v) {
+  if (I.lo == null && I.hi == null) return 'all real numbers';
+  if (I.lo == null) return `${v} ${I.hiIn ? '≤' : '<'} ${fmtN(I.hi)}`;
+  if (I.hi == null) return `${v} ${I.loIn ? '≥' : '>'} ${fmtN(I.lo)}`;
+  return `${fmtN(I.lo)} ${I.loIn ? '≤' : '<'} ${v} ${I.hiIn ? '≤' : '<'} ${fmtN(I.hi)}`;
+}
+const sameI = (a, b) => a.lo === b.lo && a.hi === b.hi && (a.lo == null || a.loIn === b.loIn) && (a.hi == null || a.hiIn === b.hiIn);
+/** Range of a polyline through vertices vs with end types; arrows continue the end segment. */
+function polyRange(vs, ends) {
+  const n = vs.length;
+  const open = (i) => (i === 0 && ends[0] === 'open') || (i === n - 1 && ends[1] === 'open');
+  const ys = vs.map((v) => v[1]);
+  const attained = (y) => vs.some((v, i) => v[1] === y && !open(i)) || vs.some((v, i) => i < n - 1 && v[1] === y && vs[i + 1][1] === y);
+  let lo = Math.min(...ys), hi = Math.max(...ys);
+  const R = { lo, hi, loIn: attained(lo), hiIn: attained(hi) };
+  [[0, 1], [n - 1, n - 2]].forEach(([i, j], e) => {
+    if (ends[e] !== 'arrow') return;
+    const dy = vs[i][1] - vs[j][1];
+    if (dy > 0) R.hi = null; else if (dy < 0) R.lo = null;
+  });
+  return R;
+}
+skill('graph-domain-range', 4, 'Domain & range from a graph', 'Read the domain and range of a graphed function', (d) => {
+  const form = d === 1 ? 'seg' : d === 2 ? pick(['seg', 'seg', 'ray', 'parab']) : pick(['seg', 'ray', 'parab', 'piece']);
+  let curve, D, Rg, endsY = null, desc, keyPts;
+  const dotWord = (t) => (t === 'closed' ? 'a closed dot' : 'an open dot');
+  if (form === 'seg' || form === 'ray') {
+    const n = form === 'seg' ? (d === 1 ? ri(2, 3) : ri(3, 4)) : ri(2, 3);
+    const xs = [ri(-7, -2)];
+    for (let i = 1; i < n; i++) xs.push(xs[i - 1] + ri(2, 4));
+    need(xs[n - 1] <= 7);
+    const ys = xs.map(() => ri(-6, 6));
+    need(ys.every((y, i) => !i || y !== ys[i - 1] || coin(0.3)));
+    let vs = xs.map((x, i) => [x, ys[i]]);
+    let ends;
+    if (form === 'seg') ends = d === 1 ? [pick(['closed', 'closed', 'open']), pick(['closed', 'closed', 'open'])] : [pick(['closed', 'open']), pick(['closed', 'open'])];
+    else {
+      ends = [pick(['closed', 'open']), 'arrow'];
+      const last = vs[n - 1], prev = vs[n - 2];
+      need(last[1] !== prev[1] || coin(0.3));
+    }
+    if (form === 'ray' && coin()) { vs = vs.map(([x, y]) => [-x, y]).reverse(); ends = ends.slice().reverse(); }
+    D = { lo: ends[0] === 'arrow' ? null : vs[0][0], hi: ends[1] === 'arrow' ? null : vs[n - 1][0], loIn: ends[0] === 'closed', hiIn: ends[1] === 'closed' };
+    Rg = polyRange(vs, ends);
+    keyPts = vs;
+    need(Rg.lo == null || Rg.hi == null || Rg.lo < Rg.hi);
+    // The classic slip reads the range off the two ends; make that differ.
+    if (form === 'seg') {
+      const yA = vs[0][1], yB = vs[n - 1][1];
+      endsY = { lo: Math.min(yA, yB), hi: Math.max(yA, yB), loIn: (yA < yB ? ends[0] : yA > yB ? ends[1] : 'closed') === 'closed', hiIn: (yA > yB ? ends[0] : yA < yB ? ends[1] : 'closed') === 'closed' };
+      need(d === 1 || !sameI(endsY, Rg));
+    }
+    // An arrow keeps going along its last segment to the edge of the grid.
+    const pts = vs.slice();
+    [[0, 1], [n - 1, n - 2]].forEach(([i, j], e) => {
+      if (ends[e] !== 'arrow') return;
+      const [ax, ay] = vs[i], dx = ax - vs[j][0], dy = ay - vs[j][1];
+      const lim = (v, dv, b0, b1) => (dv > 0 ? (b1 - 0.4 - v) / dv : dv < 0 ? (b0 + 0.4 - v) / dv : Infinity);
+      const t = Math.min(lim(ax, dx, WIN[0], WIN[1]), lim(ay, dy, WIN[2], WIN[3]));
+      need(t > 0.3);
+      const ext = [ax + t * dx, ay + t * dy];
+      if (e === 0) pts.unshift(ext); else pts.push(ext);
+    });
+    curve = { pts, cls: 'c1', ends };
+    const endTxt = (e, i) => (ends[e] === 'arrow' ? `an arrow ${pts[i][0] < pts[e ? i - 1 : i + 1][0] ? 'pointing left' : 'pointing right'}` : `${dotWord(ends[e])} at ${P2(...vs[e ? n - 1 : 0])}`);
+    desc = `A graph made of straight segments through ${listPts(vs)}, with ${endTxt(0, 0)} on the left end and ${endTxt(1, pts.length - 1)} on the right end.`;
+  } else {
+    const a = pick([1, -1, 0.5, -0.5]), h = ri(-3, 3);
+    const k = a > 0 ? ri(-6, 2) : ri(-2, 6);
+    const f = (x) => a * (x - h) ** 2 + k;
+    if (form === 'parab') {
+      curve = { pts: sampleFn(f, { anchor: h }), cls: 'c1', ends: ['arrow', 'arrow'] };
+      D = { lo: null, hi: null };
+      Rg = a > 0 ? { lo: k, hi: null, loIn: true } : { lo: null, hi: k, hiIn: true };
+      keyPts = [[h, k]];
+      desc = `A parabola that opens ${a > 0 ? 'up' : 'down'}, with arrows at both ends, through ${listPts(niceSamples(f, [h - 2, h - 1, h, h + 1, h + 2]))}.`;
+    } else {
+      const p = h - ri(1, 3), q = h + ri(1, 4);
+      need(p >= -7 && q <= 7 && Math.abs(f(p)) <= 7 && Math.abs(f(q)) <= 7 && f(p) !== f(q));
+      const ends = [pick(['closed', 'open']), pick(['closed', 'open'])];
+      const pts = [];
+      for (let i = p * 4; i <= q * 4; i++) pts.push([i / 4, f(i / 4)]);
+      curve = { pts, cls: 'c1', ends };
+      D = { lo: p, hi: q, loIn: ends[0] === 'closed', hiIn: ends[1] === 'closed' };
+      const far = Math.abs(f(p) - k) > Math.abs(f(q) - k) ? 0 : 1;
+      const yf = far ? f(q) : f(p), inF = ends[far] === 'closed';
+      Rg = a > 0 ? { lo: k, hi: yf, loIn: true, hiIn: inF } : { lo: yf, hi: k, loIn: inF, hiIn: true };
+      keyPts = [[p, f(p)], [h, k], [q, f(q)]];
+      endsY = { lo: Math.min(f(p), f(q)), hi: Math.max(f(p), f(q)), loIn: ends[f(p) < f(q) ? 0 : 1] === 'closed', hiIn: ends[f(p) > f(q) ? 0 : 1] === 'closed' };
+      need(isInt(f(p)) && isInt(f(q)));
+      desc = `A piece of a parabola that opens ${a > 0 ? 'up' : 'down'}, from ${dotWord(ends[0])} at ${P2(p, f(p))} to ${dotWord(ends[1])} at ${P2(q, f(q))}, turning at ${P2(h, k)}.`;
+    }
+  }
+  const notation = pick(['interval', 'inequality']);
+  const fD = (I) => (notation === 'interval' ? intervalStr(I) : ineqStrOf(I, 'x'));
+  const fR = (I) => (notation === 'interval' ? intervalStr(I) : ineqStrOf(I, 'y'));
+  const opt = (Di, Ri) => `Domain: ${fD(Di)}; range: ${fR(Ri)}`;
+  const answer = opt(D, Rg);
+  const flip = (I, side) => (I[side] == null ? null : { ...I, [`${side}In`]: !I[`${side}In`] });
+  const cands = [opt(Rg, D)];
+  if (endsY && endsY.lo === endsY.hi) endsY = null;              // both ends at one height: no such slip to show
+  if (endsY && !sameI(endsY, Rg)) cands.push(opt(D, endsY));
+  for (const side of ['lo', 'hi']) { const w = flip(D, side); if (w) cands.push(opt(w, Rg)); const v = flip(Rg, side); if (v) cands.push(opt(D, v)); }
+  if (D.lo == null && D.hi == null) cands.push(opt(D, { lo: null, hi: null }), opt(Rg.lo != null ? { lo: Rg.lo, hi: null, loIn: true } : { lo: null, hi: Rg.hi, hiIn: true }, Rg));
+  else if (D.lo == null || D.hi == null) cands.push(opt({ lo: null, hi: null }, Rg));
+  const wrong = shuffle([...new Set(cands)].filter((w) => w !== answer));
+  // Prefer the real mistakes (swapped, range from the ends) over bracket slips.
+  const options = [answer, ...[...new Set([cands[0], ...(endsY && !sameI(endsY, Rg) ? [cands[1]] : []), ...wrong])].filter((w) => w !== answer).slice(0, 3)];
+  need(options.length === 4 && new Set(options).size === 4);
+  const endNote = (e, x) => (e === 'arrow' ? 'an arrow: the graph keeps going' : e === 'closed' ? `a closed dot: x = ${fmtN(x)} is included` : `an open dot: x = ${fmtN(x)} is not included`);
+  const xs0 = curve.pts[0][0], xs1 = curve.pts[curve.pts.length - 1][0];
+  const lowPt = keyPts.find((p) => p[1] === Rg.lo), highPt = keyPts.find((p) => p[1] === Rg.hi);
+  const steps = [
+    S('The domain is every x-value the graph covers — read it from left to right', form === 'parab' ? 'Arrows at both ends: the parabola keeps going left and right forever' : `Left end: ${endNote(curve.ends[0], D.lo ?? xs0)}; right end: ${endNote(curve.ends[1], D.hi ?? xs1)}`, `Domain: ${fD(D)}`),
+    S('The range is every y-value the graph covers — read it from bottom to top',
+      [Rg.lo == null ? 'An arrow points down, so the y-values go down forever' : `Lowest point ${P2(...lowPt)}${Rg.loIn ? '' : ' is an open dot, so y = ' + fmtN(Rg.lo) + ' is not included'}`,
+        Rg.hi == null ? 'an arrow points up, so the y-values go up forever' : `highest point ${P2(...highPt)}${Rg.hiIn ? '' : ' is an open dot, so y = ' + fmtN(Rg.hi) + ' is not included'}`].join('; '),
+      `Range: ${fR(Rg)}`),
+    S('Put the two together', answer),
+  ];
+  return {
+    type: 'mc', text: `What are the domain and range of the function graphed? (${notation === 'interval' ? 'Interval' : 'Inequality'} notation.)`, answer, options,
+    figure: gridSvg({ curves: [curve] }), figureAlt: desc, steps,
+    hint: S('Domain: read the x-values from left to right. Range: read the y-values from bottom to top', 'A closed dot is included, an open dot is not, and an arrow means the graph keeps going'),
+    data: { domain: D, range: Rg, notation },
+  };
+});
+
+/* ---------------- Unit 4 · the vertical line test ---------------- */
+const VLT_YES = 'Yes — no vertical line crosses the graph more than once';
+const VLT_NO = (a) => `No — the vertical line x = ${fmtN(a)} crosses the graph more than once`;
+skill('vertical-line', 4, 'Vertical line test', 'Use the vertical line test on a graph', (d) => {
+  const fnKinds = ['parab', 'vee', 'zig', 'sqrt', 'jumpfn'], notKinds = ['side', 'circle', 'vline', 'sidev', 'jump2', 'cshape'];
+  const isFn = coin();
+  const kind = isFn ? pick(d === 1 ? ['parab', 'vee', 'zig'] : fnKinds) : pick(d === 1 ? ['side', 'circle', 'vline'] : notKinds);
+  let curves, xLine = null, yLine = null, cross = null, desc, detail = null, straightish = false;
+  const pa = pick([1, -1, 0.5, -0.5]);
+  const h = ri(-3, 3), k = ri(-3, 3);
+  if (kind === 'parab') {
+    const f = (x) => pa * (x - h) ** 2 + k;
+    curves = [{ pts: sampleFn(f, { anchor: h }), cls: 'c1', ends: ['arrow', 'arrow'] }];
+    yLine = k + 4 * pa;
+    desc = `A parabola that opens ${pa > 0 ? 'up' : 'down'}, turning at ${P2(h, k)}, with arrows at both ends.`;
+  } else if (kind === 'vee') {
+    const a = pick([1, -1, 2, -2]);
+    const f = (x) => a * Math.abs(x - h) + k;
+    curves = [{ pts: sampleFn(f, { anchor: h, dx: 0.5 }), cls: 'c1', ends: ['arrow', 'arrow'] }];
+    yLine = k + 2 * a;
+    desc = `A V-shaped graph with its corner at ${P2(h, k)}, opening ${a > 0 ? 'up' : 'down'}, with arrows at both ends.`;
+  } else if (kind === 'zig') {
+    const xs = [ri(-7, -4)];
+    for (let i = 1; i < 5; i++) xs.push(xs[i - 1] + ri(2, 3));
+    need(xs[4] <= 7);
+    const vs = xs.map((x) => [x, ri(-6, 6)]);
+    need(vs.every((v, i) => !i || v[1] !== vs[i - 1][1]));
+    curves = [{ pts: vs, cls: 'c1', ends: ['closed', 'closed'] }];
+    const ys = vs.map((v) => v[1]);
+    for (let y = -5; y <= 5 && yLine == null; y++) {
+      let c = 0;
+      for (let i = 0; i < 4; i++) { const [a, b] = [ys[i], ys[i + 1]]; if ((y - a) * (y - b) < 0) c++; }
+      if (c >= 2 && !ys.includes(y)) yLine = y;
+    }
+    desc = `A zigzag of straight segments through ${listPts(vs)}, with closed dots at both ends.`;
+  } else if (kind === 'sqrt') {
+    const a = pick([1, 2, -1, -2]), hh = ri(-7, -3);
+    const pts = [];
+    for (let t = 0; t <= 4.2; t += 0.1) { const x = hh + t * t, y = k + a * t; if (x > 7.6 || Math.abs(y) > 7.6) break; pts.push([clean(x), clean(y)]); }
+    need(pts.length > 12);
+    curves = [{ pts, cls: 'c1', ends: ['closed', 'arrow'] }];
+    desc = `A curve that starts at a closed dot at ${P2(hh, k)} and bends to the right and ${a > 0 ? 'up' : 'down'}, passing through ${P2(hh + 1, k + a)} and ${P2(hh + 4, k + 2 * a)}, with an arrow.`;
+  } else if (kind === 'jumpfn' || kind === 'jump2') {
+    const c = ri(-2, 2), m1 = nz(-2, 2), m2 = nz(-2, 2), y1 = ri(-4, 4);
+    let y2 = y1; while (y2 === y1) y2 = ri(-4, 4);
+    const left = lineCurve(m1, y1 - m1 * c).pts.filter(([x]) => x < c);
+    const right = lineCurve(m2, y2 - m2 * c).pts.filter(([x]) => x > c);
+    need(left.length && right.length);
+    const closedLeft = coin();
+    const eL = kind === 'jump2' || closedLeft ? 'closed' : 'open', eR = kind === 'jump2' || !closedLeft ? 'closed' : 'open';
+    curves = [{ pts: [...left, [c, y1]], cls: 'c1', ends: ['arrow', eL] }, { pts: [[c, y2], ...right], cls: 'c1', ends: [eR, 'arrow'] }];
+    if (kind === 'jump2') { xLine = c; cross = [y1, y2]; }
+    else detail = `At x = ${fmtN(c)} the ${closedLeft ? 'left' : 'right'} piece has a closed dot ${P2(c, closedLeft ? y1 : y2)} and the other piece has an open dot ${P2(c, closedLeft ? y2 : y1)}, which is not on the graph — so even there the line crosses only once`;
+    desc = `Two rays. One comes from the left with an arrow and ends at ${eL === 'closed' ? 'a closed' : 'an open'} dot at ${P2(c, y1)}; the other starts at ${eR === 'closed' ? 'a closed' : 'an open'} dot at ${P2(c, y2)} and goes right with an arrow.`;
+    straightish = true;
+  } else if (kind === 'side') {
+    const g = (y) => pa * (y - k) ** 2 + h;
+    curves = [{ pts: sampleSide(g, { anchor: k }), cls: 'c1', ends: ['arrow', 'arrow'] }];
+    xLine = h + 4 * pa; cross = [k - 2, k + 2];
+    desc = `A parabola that opens to the ${pa > 0 ? 'right' : 'left'}, turning at ${P2(h, k)}, with arrows at both ends.`;
+  } else if (kind === 'circle') {
+    const r = ri(2, 4), cx = ri(-7 + r, 7 - r), cy = ri(-7 + r, 7 - r);
+    const pts = [];
+    for (let i = 0; i <= 72; i++) { const t = (i / 72) * 2 * Math.PI; pts.push([clean(cx + r * Math.cos(t)), clean(cy + r * Math.sin(t))]); }
+    curves = [{ pts, cls: 'c1', ends: [null, null] }];
+    xLine = cx; cross = [cy - r, cy + r];
+    desc = `A circle with center ${P2(cx, cy)} and radius ${r}.`;
+  } else if (kind === 'vline') {
+    const c = nz(-6, 6);
+    curves = [{ pts: [[c, -7.6], [c, 7.6]], cls: 'c1', ends: ['arrow', 'arrow'] }];
+    xLine = c; const y1 = ri(-5, 0); cross = [y1, y1 + ri(2, 5)];
+    desc = `A straight vertical line through ${P2(c, 0)}, with arrows at both ends.`;
+    straightish = true;
+  } else if (kind === 'sidev') {
+    const a = pick([1, -1, 2, -2]);
+    const g = (y) => a * Math.abs(y - k) + h;
+    curves = [{ pts: sampleSide(g, { anchor: k, dx: 0.5 }), cls: 'c1', ends: ['arrow', 'arrow'] }];
+    xLine = h + 2 * a; cross = [k - 2, k + 2];
+    desc = `A V shape lying on its side, with its corner at ${P2(h, k)}, opening to the ${a > 0 ? 'right' : 'left'}, with arrows at both ends.`;
+  } else {
+    // cshape: goes right, then back to the left.
+    const A = [ri(-6, -3), ri(-6, -3)], B = [ri(2, 6), ri(-1, 2)], C = [ri(-6, -2), ri(3, 6)];
+    curves = [{ pts: [A, B, C], cls: 'c1', ends: ['closed', 'closed'] }];
+    xLine = Math.max(A[0], C[0]) + 1;
+    need(xLine < B[0]);
+    const at = (P, Q) => P[1] + ((Q[1] - P[1]) * (xLine - P[0])) / (Q[0] - P[0]);
+    cross = [at(A, B), at(B, C)];
+    need(isInt(cross[0] * 2) && isInt(cross[1] * 2) && cross[0] !== cross[1]);
+    desc = `Two straight segments: from a closed dot at ${P2(...A)} to ${P2(...B)}, then back to the left to a closed dot at ${P2(...C)}.`;
+  }
+  for (const c of curves) need(c.pts.every(([x, y]) => Math.abs(x) <= 7.65 && Math.abs(y) <= 7.65));
+  if (xLine != null) need(Math.abs(xLine) <= 7 && isInt(xLine));
+  let options, answer;
+  if (isFn) {
+    answer = VLT_YES;
+    let b = ri(-6, 6);
+    const noV = VLT_NO(b);
+    const pool = [noV];
+    if (yLine != null && Math.abs(yLine) <= 7 && isInt(yLine)) pool.push(`No — the horizontal line y = ${fmtN(yLine)} crosses the graph more than once`);
+    if (kind === 'jumpfn') pool.push('No — the graph has a break in it');
+    if (kind === 'sqrt') pool.push('No — the graph stops at an endpoint');
+    if (!straightish) pool.push('No — the graph is not a straight line');
+    pool.push('No — the graph does not pass through the origin');
+    options = [answer, ...pool.slice(0, 3)];
+  } else {
+    answer = VLT_NO(xLine);
+    options = [answer, VLT_YES, 'Yes — no horizontal line crosses the graph more than once', 'Yes — every x-value on the graph has at least one y-value'];
+  }
+  need(new Set(options).size === 4);
+  const steps = [
+    S('Vertical line test: a graph is a function when no vertical line crosses it more than once', 'Picture a vertical line sliding across the graph from left to right'),
+    isFn ? S(detail || 'Wherever the line is, it meets the graph at most once', 'Every x-value has only one y-value')
+      : S(`The vertical line x = ${fmtN(xLine)} crosses the graph at ${P2(xLine, cross[0])} and ${P2(xLine, cross[1])}`, `x = ${fmtN(xLine)} is paired with two different y-values`),
+    S(isFn ? 'It passes the vertical line test, so it is a function' : 'It fails the vertical line test, so it is not a function', answer),
+  ];
+  return {
+    type: 'mc', text: 'Is this graph the graph of a function?', answer, options,
+    figure: gridSvg({ curves }), figureAlt: desc, steps,
+    hint: S('Use the vertical line test', 'Picture a vertical line sliding across the graph: does it ever touch the graph at two points at once?'),
+    data: { isFn, kind, xLine },
+  };
+});
+
+/* ---------------- Unit 5 · reading a line from its graph ---------------- */
+function chkSlopeRead(m, vertical) {
+  return (input) => {
+    const t = prep(input).replace(/^(m|slope)\s*(=|is)\s*/, '').trim();
+    if (UNDEF.test(t)) return vertical ? true : no('This line is not vertical — the run is not zero, so the slope is a number.');
+    if (vertical) return readNum(t) ? no('The run (change in x) is 0, and you cannot divide by 0 — the slope of a vertical line is undefined.') : false;
+    if (!readNum(t)) return no('Type a number or a fraction like −3/4.');
+    const r = chkNum(fVal(m), { exact: true })(t);
+    if (r === true) return true;
+    const v = readNum(t).v;
+    if (m.n && near(v, m.d / m.n)) return no('That is run over rise — slope is rise over run (the change in y on top).');
+    if (m.n && near(v, -fVal(m))) return no('Check the sign: a line that goes up from left to right has a positive slope, down has a negative slope.');
+    return r;
+  };
+}
+/** A random rational slope for graph problems. */
+function graphSlope(d) {
+  if (d === 1) return F(pick([1, 2, 3, -1, -2, 3, 1, 2]));
+  const q = d === 2 ? pick([1, 2, 3]) : pick([1, 2, 3, 4]);
+  let p = nz(-4, 4);
+  const m = F(p, q);
+  need(Math.abs(fVal(m)) <= 4);
+  return m;
+}
+skill('graph-slope', 5, 'Slope from a graph', 'Find the slope of a graphed line', (d) => {
+  const special = d === 3 && coin(0.2) ? pick(['vertical', 'horizontal']) : null;
+  let m = null, curve, A, B;
+  if (special === 'vertical') {
+    const c = nz(-6, 6), y1 = ri(-6, 1), y2 = y1 + ri(2, 6);
+    A = [c, y1]; B = [c, y2];
+    curve = { pts: [[c, -7.6], A, B, [c, 7.6]], cls: 'c1', ends: ['arrow', 'arrow'] };
+  } else {
+    m = special === 'horizontal' ? F(0) : graphSlope(d);
+    const x0 = ri(-4, 4), y0 = special === 'horizontal' ? nz(-5, 5) : ri(-4, 4);
+    const run = m.d, rise = m.n;
+    const pts = latticeOn(x0, y0, run, rise, 6, true);
+    need(pts.length >= 2);
+    const i = ri(0, pts.length - 2), j = ri(i + 1, Math.min(pts.length - 1, i + (run === 1 ? 3 : 2)));
+    A = pts[i]; B = pts[j];
+    need(B[0] - A[0] >= (special ? 2 : 1) && (special || Math.abs(B[0] - A[0]) + Math.abs(B[1] - A[1]) >= 3));
+    curve = lineCurve(fVal(m), y0 - fVal(m) * x0, [A, B]);
+  }
+  const vertical = m == null;
+  const run = B[0] - A[0], rise = B[1] - A[1];
+  const answer = vertical ? 'undefined' : fStr(m);
+  const steps = [
+    S('Choose two points where the line crosses grid corners exactly', `${P2(...A)} and ${P2(...B)}`),
+    S(vertical ? 'Count from the lower point to the upper point: the run is the change in x, the rise is the change in y' : 'Count from the left point to the right point: the run is the change in x, the rise is the change in y (down is negative)', `run = ${fmtN(run)}, rise = ${fmtN(rise)}`),
+    vertical ? S('Slope = rise ÷ run, but the run is 0 and you cannot divide by 0', `m = ${fmtN(rise)}/0`, 'The slope of a vertical line is undefined')
+      : rise === 0 ? S('Slope = rise ÷ run: the rise is 0, so the line is horizontal', `m = 0/${run}`, 'm = 0')
+        : S('Slope = rise ÷ run', `m = ${fmtN(rise)}/${fmtN(run)}`, `m = ${fStr(m)}`),
+  ];
+  const alt = vertical ? ['0', fmtN(rise), fmtN(-rise), `1/${rise}`]
+    : [rise ? fStr(F(run, rise)) : null, fStr(F(-rise, run)), rise ? fStr(F(-run, rise)) : null, fmtN(rise), rise === 0 ? 'undefined' : null, fStr(F(rise + run, run))];
+  return {
+    gap: 0.02, type: 'written', text: 'What is the slope of the line?', fmt: 'Type a number or a fraction like −3/4, or "undefined".',
+    answer, check: chkSlopeRead(m, vertical), alt: alt.filter((w) => w && w !== answer), num: vertical ? undefined : fVal(m), fmtAlt: vertical ? undefined : ratStr, steps,
+    figure: gridSvg({ curves: [curve], marks: [A, B] }), figureAlt: `A straight line on a coordinate grid with arrows at both ends, passing through the marked points ${P2(...A)} and ${P2(...B)}.`,
+    hint: S('Slope is rise over run', 'Pick two points where the line crosses grid corners, then count how far up or down (rise) and how far right (run) you move from one to the other'),
+    data: { slope: vertical ? null : fVal(m), vertical, points: [A, B] },
+  };
+});
+
+skill('graph-y-int', 5, 'y-intercept from a graph', 'Find the y-intercept of a graphed line', (d) => {
+  const m = graphSlope(d), b = nz(-6, 6);
+  const mv = fVal(m);
+  need(mv !== 0);
+  const xint = F(-b * m.d, m.n);
+  need(!(xint.d === 1 && xint.n === b));
+  const pts = latticeOn(0, b, m.d, m.n, 7);
+  need(pts.length >= 2);
+  const ch = shuffle(pts).slice(0, 2).sort((p, q) => p[0] - q[0]);
+  const curve = lineCurve(mv, b, ch);
+  const answer = P2(0, b);
+  const check = (input) => {
+    const t = prep(input).replace(/^(the\s+)?(y-?\s*intercept|b)\s*(=|is|:)?\s*(at\s+)?/, '').replace(/\.$/, '');
+    const p = readPair(t);
+    if (p) {
+      if (near(p[0], 0) && near(p[1], b)) return true;
+      if (near(p[0], b) && near(p[1], 0)) return no('On the y-axis x = 0, so the y-intercept is written (0, y) — the y-value goes second.');
+      return false;
+    }
+    const r = readNum(t, { v: 'y' });
+    if (!r) return no('Type a point like (0, 3), or just the y-value.');
+    return near(r.v, b);
+  };
+  const near1 = ch[0];
+  const steps = [
+    S('The y-intercept is where the line crosses the y-axis — the vertical axis, where x = 0', `x = 0, y = ${fmtN(b)}`, answer),
+    S(`Check with another point on the line: from ${answer}, move ${near1[0] > 0 ? 'right' : 'left'} ${Math.abs(near1[0])} and ${near1[1] - b > 0 ? 'up' : near1[1] - b < 0 ? 'down' : 'up'} ${Math.abs(near1[1] - b)} to reach the marked point`, P2(...near1)),
+  ];
+  return {
+    type: 'written', text: 'What is the y-intercept of the line?', fmt: 'Type a point like (0, 3), or just the y-value.',
+    answer, check, alt: [P2(b, 0), P2(0, -b), xint.d === 1 ? P2(0, xint.n) : P2(0, b + 1), P2(0, b + (b > 0 ? -1 : 1))], steps,
+    figure: gridSvg({ curves: [curve], marks: ch }), figureAlt: `A straight line on a coordinate grid with arrows at both ends, passing through the marked points ${P2(...ch[0])} and ${P2(...ch[1])}.`,
+    hint: S('Look where the line crosses the y-axis (the vertical axis)', 'Every point on the y-axis has x = 0 — read the y-value there'),
+    data: { b, m: mv },
+  };
+});
+
+skill('graph-line-eq', 5, 'Equation from a graph', 'Write the equation of a graphed line', (d) => {
+  const m = graphSlope(d), b = ri(-6, 6);
+  const mv = fVal(m);
+  const pts = latticeOn(0, b, m.d, m.n, 7, true);
+  need(pts.length >= 2);
+  const i = ri(0, pts.length - 2), j = Math.min(pts.length - 1, i + ri(1, 2));
+  const A = pts[i], B = pts[j];
+  need(B[0] - A[0] >= 2 || m.d === 1);
+  const curve = lineCurve(mv, b, [A, B]);
+  const answer = lineStr(m, F(b));
+  const run = B[0] - A[0], rise = B[1] - A[1];
+  const raw = riseRun(rise, run);
+  const steps = [
+    S('Slope-intercept form is y = mx + b. Read b where the line crosses the y-axis', `b = ${fmtN(b)}`),
+    S(`Find the slope from two points on the line, ${P2(...A)} and ${P2(...B)}: rise over run`, `m = (${fmtN(B[1])} ${M} ${pn(A[1])})/(${fmtN(B[0])} ${M} ${pn(A[0])})${raw ? ` = ${raw}` : ''}`, `m = ${fStr(m)}`),
+    S('Substitute m and b into y = mx + b', answer),
+  ];
+  const alt = [lineStr(m, F(-b)), lineStr(F(-m.n, m.d), F(b)), m.n ? lineStr(F(m.d, m.n), F(b)) : null, lineStr(m, F(b + 1)), lineStr(F(b), m.d === 1 ? F(m.n) : F(b + 2))];
+  return {
+    type: 'written', text: 'Write the equation of the line in slope-intercept form.', fmt: 'Type it like y = 2x − 3.',
+    answer, check: chkSlopeInt(mv, b), alt: alt.filter((w) => w && w !== answer), steps,
+    figure: gridSvg({ curves: [curve], marks: [A, B] }), figureAlt: `A straight line on a coordinate grid with arrows at both ends, passing through the marked points ${P2(...A)} and ${P2(...B)}.`,
+    hint: S('Slope-intercept form is y = mx + b', 'Read b where the line crosses the y-axis, then count rise over run between two points for m'),
+    data: { m: mv, b },
+  };
+});
+
+/* ---------------- Unit 6 · solving a system from its graph ---------------- */
+/* m·x + b with the x-value put in: "−3 × (−2) − 2", "(1/2) × 4 + 1", "0 × (−1) − 5" (a horizontal line still shows its x). */
+const subLine = (m, b, x) => `${m.n !== 0 && x !== 0 && m.n === m.d ? pn(x) : m.n !== 0 && x !== 0 && m.n === -m.d ? `${M}${pn(x)}` : `${m.d === 1 ? fmtN(m.n) : `(${fStr(m)})`} × ${pn(x)}`}${b.n ? ` ${b.n < 0 ? M : '+'} ${fStr(F(Math.abs(b.n), b.d))}` : ''}`;
+skill('graph-system', 6, 'Systems from a graph', 'Solve a system of equations from its graph', (d) => {
+  const x0 = ri(-5, 5), y0 = ri(-5, 5);
+  const pool = d === 1 ? [F(1), F(2), F(-1), F(-2), F(3), F(-3), F(0)] : [F(1), F(2), F(-1), F(-2), F(3), F(-3), F(0), F(1, 2), F(-1, 2), F(2, 3), F(-2, 3), F(3, 2), F(-3, 2), F(1, 3), F(-1, 3)];
+  const m1 = pick(pool);
+  let m2 = pick(pool);
+  need(fVal(m1) !== fVal(m2));
+  const lines = [m1, m2].map((m, i) => {
+    const pts = latticeOn(x0, y0, m.d, m.n, 7);
+    need(pts.length >= 2);
+    const ch = shuffle(pts).slice(0, 2).sort((p, q) => p[0] - q[0]);
+    const b = fAdd(F(y0), fMul(m, F(-x0)));
+    return { m, b, ch, curve: lineCurve(fVal(m), fVal(b), ch, i ? 'c2' : 'c1') };
+  });
+  const answer = P2(x0, y0);
+  const name = ['purple', 'pink'];
+  const steps = [
+    S('A solution of a system lies on both lines — it is the point where they cross', 'Find the crossing point on the grid'),
+    S('Read its coordinates: x first, then y', answer),
+    ...lines.map((L, i) => S(`Check it on the ${name[i]} line. Through ${P2(...L.ch[0])} and ${P2(...L.ch[1])}, its equation is ${lineStr(L.m, L.b)}. Substitute x = ${fmtN(x0)}`,
+      `${fmtN(y0)} = ${subLine(L.m, L.b, x0)} ✓`)),
+  ];
+  const b1 = lines[0].b;
+  const alt = [P2(y0, x0), P2(x0, -y0), P2(-x0, y0), b1.d === 1 ? P2(0, b1.n) : P2(x0 + 1, y0), P2(x0, y0 + 1)];
+  return {
+    type: 'written', text: 'The graph shows a system of two linear equations. What is its solution?', fmt: 'Type an ordered pair like (2, −1).',
+    answer, check: chkPair(x0, y0), alt: alt.filter((w) => w !== answer), steps,
+    figure: gridSvg({ curves: lines.map((L) => L.curve), marks: lines.flatMap((L) => L.ch) }),
+    figureAlt: `Two straight lines on a coordinate grid: a purple line through the marked points ${P2(...lines[0].ch[0])} and ${P2(...lines[0].ch[1])}, and a pink line through the marked points ${P2(...lines[1].ch[0])} and ${P2(...lines[1].ch[1])}.`,
+    hint: S('The solution of a system is the point that lies on both lines', 'Find where the two lines cross, then read the x-coordinate first and the y-coordinate second'),
+    data: { x: x0, y: y0 },
+  };
+});
+
+/* ---------------- Unit 10 · a parabola's features from its graph ---------------- */
+const NO_ZEROS = /^(no (real )?(zeros?|roots?|x-?intercepts?|solutions?)|none|there are none)$/;
+function chkZeros(rs) {
+  const inner = chkRoots(rs, { example: 'x = −1, x = 3' });
+  return (input) => {
+    const t = prep(input).replace(/\.$/, '').replace(/^(the\s+)?(zeros?|roots?|x-?\s*intercepts?|solutions?)\s*(are|is|=|:)?\s*/, '');
+    if (NO_ZEROS.test(t)) return rs.length ? no('This parabola does cross the x-axis — look again.') : true;
+    if (/\(\s*[^,()]+,\s*[^0\s][^,()]*\)/.test(t)) return no('A zero is where y = 0 — type the x-values, or points like (3, 0).');
+    return inner(t.replace(/\(\s*([^,()]+?)\s*,\s*0\s*\)/g, '$1'));
+  };
+}
+function chkAxis(h) {
+  return (input) => {
+    const t = prep(input);
+    if (/^y\s*=/.test(t)) return no('The axis of symmetry is a vertical line, so its equation starts x = …');
+    const r = readNum(t, { v: 'x' });
+    if (!r) return no('Type the equation of the line, like x = 2.');
+    return near(r.v, h);
+  };
+}
+skill('graph-parabola', 10, 'Parabola from a graph', 'Read the vertex, axis of symmetry or zeros of a graphed parabola', (d) => {
+  const ask = d === 1 ? pick(['vertex', 'zeros']) : pick(['vertex', 'axis', 'zeros', 'zeros']);
+  const special = ask === 'zeros' && d === 3 ? (coin(0.12) ? 'none' : coin(0.1) ? 'double' : null) : null;
+  let a, h, k, w = null;
+  if (special === 'none' || (ask !== 'zeros' && coin(0.3))) {
+    a = pick([1, -1, 0.5, -0.5, 2, -2]); h = ri(-4, 4);
+    k = special === 'none' ? Math.sign(a) * ri(1, 5) : ri(-6, 6);
+  } else if (special === 'double') {
+    a = pick([1, -1, 0.5, -0.5]); h = ri(-5, 5); k = 0; w = 0;
+  } else {
+    [a, w] = pick([[1, 1], [1, 2], [1, 3], [-1, 1], [-1, 2], [-1, 3], [2, 1], [-2, 1], [0.5, 2], [-0.5, 2]]);
+    h = ri(-7 + w, 7 - w); k = -a * w * w;
+  }
+  const f = (x) => a * (x - h) ** 2 + k;
+  const curve = { pts: sampleFn(f, { anchor: h }), cls: 'c1', ends: ['arrow', 'arrow'] };
+  need(Math.abs(k) <= 7);
+  const up = a > 0;
+  const zeros = w == null ? [] : w === 0 ? [h] : [h - w, h + w];
+  const offs = shuffle([-3, -2, -1, 1, 2, 3, 4, -4]).filter((o) => w == null || Math.abs(o) !== w);
+  const alts = niceSamples(f, offs.map((o) => h + o)).filter(([x, y]) => y !== 0).slice(0, 3).sort((p, q) => p[0] - q[0]);
+  need(alts.length === 3);
+  const figureAlt = `A parabola on a coordinate grid that opens ${up ? 'up' : 'down'}, with arrows at both ends, passing through ${listPts(alts)}.`;
+  const sym = [h - 1, h + 1].map((x) => [x, clean(f(x))]);
+  const symStep = S('Check the symmetry: points the same distance left and right of the vertex are at the same height', `${P2(...sym[0])} and ${P2(...sym[1])}`);
+  let answer, check, alt, steps, fmt, text, hint;
+  if (ask === 'vertex') {
+    text = 'What is the vertex of the parabola?'; fmt = 'Type an ordered pair like (2, −1).';
+    answer = P2(h, k); check = chkPair(h, k);
+    alt = [P2(k, h), P2(-h, k), P2(h, -k), P2(h, k + (k > 0 ? -1 : 1))];
+    steps = [S(`The parabola opens ${up ? 'up' : 'down'}, so its vertex is its ${up ? 'lowest' : 'highest'} point — where it turns around`, 'Find the turning point'), S('Read its coordinates: x first, then y', answer), symStep];
+    hint = S('The vertex is the turning point of the parabola', 'Find its lowest point if it opens up, or its highest point if it opens down');
+  } else if (ask === 'axis') {
+    text = 'What is the equation of the axis of symmetry of the parabola?'; fmt = 'Type an equation like x = 2.';
+    answer = `x = ${fmtN(h)}`; check = chkAxis(h);
+    alt = [`y = ${fmtN(k)}`, h !== k ? `x = ${fmtN(k)}` : `x = ${fmtN(h + 2)}`, h ? `x = ${fmtN(-h)}` : `x = ${fmtN(h + 1)}`, `y = ${fmtN(h)}`];
+    steps = [S('The axis of symmetry is the vertical line through the vertex', `The vertex is ${P2(h, k)}`), S('A vertical line through that point has the equation', answer), symStep];
+    hint = S('The axis of symmetry is the vertical line through the vertex', 'Find the vertex first: the axis is x = (its x-coordinate)');
+  } else {
+    text = 'What are the zeros of the function graphed?';
+    fmt = special === 'none' ? 'Type the zeros like x = −1, x = 3, or "no zeros".' : 'Type the zeros like x = −1, x = 3.';
+    check = chkZeros(zeros);
+    if (!zeros.length) {
+      answer = 'No zeros';
+      alt = [`x = ${fmtN(h)}`, `x = ${fmtN(k)}`, rootsAns([F(h - 1), F(h + 1)])];
+      steps = [S('The zeros are the x-values where the graph crosses the x-axis (where y = 0)', `The parabola opens ${up ? 'up' : 'down'} and its ${up ? 'lowest' : 'highest'} point ${P2(h, k)} is ${up ? 'above' : 'below'} the x-axis`), S('It never reaches the x-axis', answer)];
+    } else {
+      answer = rootsAns(zeros.map((z) => F(z)));
+      steps = [
+        S('The zeros are the x-values where the graph crosses the x-axis (where y = 0)', zeros.length === 1 ? `It touches the x-axis only at ${P2(h, 0)}` : `It crosses at ${P2(zeros[0], 0)} and ${P2(zeros[1], 0)}`),
+        S('So the zeros are', answer),
+      ];
+      if (zeros.length === 2) steps.push(S('Check: the vertex lies halfway between the zeros', `(${fmtN(zeros[0])} + ${pn(zeros[1])})/2 = ${fmtN(h)}`));
+      alt = [rootsAns(zeros.map((z) => F(-z))), `x = ${fmtN(h)}`, zeros.length === 2 ? `x = ${fmtN(zeros[1])}` : `x = ${fmtN(k || h + 1)}`, rootsAns([F(k), F(h)]), 'No zeros'];
+    }
+    hint = S('Zeros are where the graph crosses the x-axis', 'Read the x-coordinate of each point where the parabola meets the x-axis (y = 0 there)');
+  }
+  return {
+    type: 'written', text, fmt, answer, check, alt: alt.filter((x) => x && x !== answer), steps,
+    figure: gridSvg({ curves: [curve] }), figureAlt, hint, data: { a, h, k, zeros, ask },
+  };
+});
+
+/* ======================================================================
+   Unit 13 · Function families and transformations
+   ====================================================================== */
+const FAM = {
+  linear: { name: 'Linear (y = x)', f: (x) => x },
+  quad: { name: 'Quadratic (y = x²)', parent: 'y = x²', f: (x) => x * x },
+  abs: { name: 'Absolute value (y = |x|)', parent: 'y = |x|', f: Math.abs },
+  sqrt: { name: 'Square root (y = √x)', parent: 'y = √x', f: (x) => (x < 0 ? NaN : Math.sqrt(x)) },
+  exp: { name: 'Exponential (y = 2ˣ)', parent: 'y = 2ˣ', f: (x) => 2 ** x },
+};
+/** y = a·f(x − h) + k printed: "y = −2(x − 3)² + 1", "y = |x + 4|", "y = (1/2)√(x − 2) − 5", "y = 2^(x − 1) + 3". */
+function famEq(fam, a, h, k) {
+  const inner = h ? lin(1, -h) : 'x';
+  const body = fam === 'quad' ? (h ? `(${inner})²` : 'x²') : fam === 'abs' ? `|${inner}|` : fam === 'sqrt' ? (h ? `√(${inner})` : '√x') : (h ? `2^(${inner})` : '2ˣ');
+  const af = F(Math.round(a * 2), 2);
+  const coef = coefStr(af);
+  return `y = ${coef}${body}${k ? ` ${k < 0 ? M : '+'} ${Math.abs(k)}` : ''}`;
+}
+/** "Reflect over the x-axis, vertical stretch by a factor of 2, left 1, down 4" */
+function famDesc(a, h, k) {
+  const parts = [];
+  if (a < 0) parts.push('reflect over the x-axis');
+  const A = Math.abs(a);
+  if (A > 1) parts.push(`vertical stretch by a factor of ${fmtN(A)}`);
+  if (A < 1) parts.push(`vertical shrink by a factor of ${fStr(F(Math.round(A * 2), 2))}`);
+  if (h) parts.push(`${h > 0 ? 'right' : 'left'} ${Math.abs(h)}`);
+  if (k) parts.push(`${k > 0 ? 'up' : 'down'} ${Math.abs(k)}`);
+  const s = parts.join(', ');
+  return s[0].toUpperCase() + s.slice(1);
+}
+
+/* ---------------- parent function from a graph ---------------- */
+skill('parent-func', 13, 'Parent functions', 'Name the parent function of a graph', (d) => {
+  const fam = pick(['linear', 'quad', 'abs', 'sqrt', 'exp']);
+  let curve, desc, shape;
+  if (fam === 'linear') {
+    const m = pick([F(1, 2), F(-1, 2), F(1), F(-1), F(2), F(-2), F(3), F(-3), F(2, 3), F(-3, 2)]), b = ri(-4, 4);
+    const lat = latticeOn(0, b, m.d, m.n, 7, true);
+    need(lat.length >= 3);
+    const show = shuffle(lat).slice(0, 3).sort((p, q) => p[0] - q[0]);
+    curve = lineCurve(fVal(m), b, show);
+    desc = `A graph on a coordinate grid with arrows at both ends, passing through ${listPts(show)}.`;
+    shape = 'It is a straight line: it rises or falls at the same rate everywhere';
+  } else if (fam === 'sqrt') {
+    const a = pick([1, 2, -1, -2, 3]), h = ri(-7, -1), k = ri(-5, 4);
+    const pts = [];
+    for (let i = 0; i <= 45; i++) { const t = i / 10, x = h + t * t, y = k + a * t; if (x > 7.6 || Math.abs(y) > 7.6) break; pts.push([clean(x), clean(y)]); }
+    need(pts.length > 14 && onGrid(h + 4, k + 2 * a));
+    curve = { pts, cls: 'c1', ends: ['closed', 'arrow'] };
+    desc = `A graph on a coordinate grid that starts at a closed dot at ${P2(h, k)}, passes through ${P2(h + 1, k + a)} and ${P2(h + 4, k + 2 * a)}, and ends in an arrow.`;
+    shape = `It starts at the endpoint ${P2(h, k)} and bends ${a > 0 ? 'upward' : 'downward'} more and more slowly — half of a parabola lying on its side`;
+  } else {
+    const a = fam === 'exp' ? pick([1, -1]) : pick([1, -1, 2, -2, 0.5, -0.5]);
+    const h = ri(-3, 3), k = fam === 'exp' ? (a > 0 ? ri(-5, 1) : ri(-1, 5)) : ri(-4, 4);
+    const base = fam === 'exp' ? pick([2, 2, 3, 0.5]) : null;
+    const f = fam === 'quad' ? (x) => a * (x - h) ** 2 + k : fam === 'abs' ? (x) => a * Math.abs(x - h) + k : (x) => a * base ** (x - h) + k;
+    curve = { pts: sampleFn(f, { anchor: fam === 'exp' ? (base > 1 ? -7 : 7) : h, lo: -7.6, hi: 7.6, dx: fam === 'abs' ? 0.5 : 0.25 }), cls: 'c1', ends: ['arrow', 'arrow'] };
+    const xs = curve.pts.map((p) => p[0]);
+    const span = Math.max(...xs) - Math.min(...xs);
+    need(span >= 5);
+    const cand = [-4, -3, -2, -1, 0, 1, 2, 3, 4].map((o) => h + o).filter((x) => x >= Math.min(...xs) && x <= Math.max(...xs));
+    const nice = niceSamples(f, cand);
+    need(nice.length >= 3);
+    const show = fam === 'exp' ? nice.slice(-4) : nice.filter((p, i) => i % 2 === 0).slice(0, 4);
+    need(show.length >= 3);
+    desc = `A graph on a coordinate grid with arrows at both ends, passing through ${listPts(show)}.`;
+    shape = fam === 'quad' ? `A U shape (a parabola) that turns around at ${P2(h, k)} and is symmetric about a vertical line`
+      : fam === 'abs' ? `A V shape with a sharp corner at ${P2(h, k)}, made of two straight pieces`
+        : `Almost flat on one side, hugging the horizontal line y = ${fmtN(k)}, and steeper and steeper on the other side`;
+  }
+  const answer = FAM[fam].name;
+  const CONF = { linear: ['abs', 'exp', 'sqrt'], quad: ['abs', 'exp', 'sqrt'], abs: ['quad', 'linear', 'sqrt'], sqrt: ['exp', 'quad', 'linear'], exp: ['quad', 'sqrt', 'linear'] };
+  const options = [answer, ...CONF[fam].map((f) => FAM[f].name)];
+  const steps = [
+    S('Shifts, stretches and reflections move a graph, but they keep its basic shape — look only at the shape', shape),
+    S('That shape belongs to this family of functions', answer),
+  ];
+  return {
+    type: 'mc', text: 'Which parent function does this graph belong to?', answer, options,
+    figure: gridSvg({ curves: [curve] }), figureAlt: desc, steps,
+    hint: S('Ignore where the graph sits — look at its shape', 'A straight line, a U, a V, half of a sideways U that starts at a point, or a curve that is flat on one side and steep on the other?'),
+    data: { fam },
+  };
+});
+
+/* ---------------- describe a transformation from its equation ---------------- */
+function famPick(d) {
+  const a = d === 1 ? 1 : d === 2 ? pick([1, 1, -1, 2, 3]) : pick([-1, 2, 3, -2, -3, 0.5, -0.5]);
+  const h = ri(-6, 6), k = ri(-6, 6);
+  need(d === 1 ? h && k : h || k);
+  return { a, h, k };
+}
+skill('transform-desc', 13, 'Describe a transformation', 'Describe how an equation transforms its parent graph', (d) => {
+  const fam = pick(['quad', 'abs', 'sqrt']);
+  const { a, h, k } = famPick(d);
+  const eq = famEq(fam, a, h, k);
+  const answer = famDesc(a, h, k);
+  const cands = [];
+  if (h) cands.push([a, -h, k]);
+  if (k) cands.push([a, h, -k]);
+  if (h && k && h !== k) cands.push([a, k, h]);
+  if (!h) cands.push([a, k, 0]);
+  if (a !== 1) cands.push([-a, h, k]);
+  if (Math.abs(a) !== 1) cands.push([Math.sign(a) / Math.abs(a), h, k]);
+  if (a === 1) cands.push([-1, h, k]);
+  if (h && k) cands.push([a, -h, -k]);
+  const wrong = [];
+  for (const [aa, hh, kk] of cands) { if (!hh && !kk && aa === 1) continue; const s = famDesc(aa, hh, kk); if (s !== answer && !wrong.includes(s)) wrong.push(s); }
+  const options = [answer, ...wrong.slice(0, 1), ...shuffle(wrong.slice(1)).slice(0, 2)];
+  need(options.length === 4);
+  const steps = [S(`Compare with y = a·f(x − h) + k, where the parent is ${FAM[fam].parent}`, `a = ${fStr(F(Math.round(a * 2), 2))}, h = ${fmtN(h)}, k = ${fmtN(k)}`)];
+  if (a < 0) steps.push(S('a is negative, so the graph is flipped upside down', 'Reflect over the x-axis'));
+  if (Math.abs(a) !== 1) steps.push(S(Math.abs(a) > 1 ? `|a| = ${fmtN(Math.abs(a))} is greater than 1: every y-value is multiplied by it` : `|a| = ${fStr(F(1, 2))} is between 0 and 1: every y-value is multiplied by it`, Math.abs(a) > 1 ? `Vertical stretch by a factor of ${fmtN(Math.abs(a))}` : `Vertical shrink by a factor of ${fStr(F(1, 2))}`));
+  if (h) steps.push(S(`Inside, x ${h > 0 ? M : '+'} ${Math.abs(h)} means h = ${fmtN(h)} — the graph moves the opposite way to the sign you see`, `${h > 0 ? 'Right' : 'Left'} ${Math.abs(h)}`));
+  if (k) steps.push(S(`Outside, ${k > 0 ? '+' : M} ${Math.abs(k)} means k = ${fmtN(k)} — the graph moves ${k > 0 ? 'up' : 'down'}`, `${k > 0 ? 'Up' : 'Down'} ${Math.abs(k)}`));
+  steps.push(S('All together', answer));
+  return {
+    type: 'mc', text: `How is the graph of ${eq} related to the graph of its parent function, ${FAM[fam].parent}?`, answer, options, steps,
+    hint: S('Match the equation to y = a·f(x − h) + k', 'h moves the graph left or right (opposite to the sign inside), k moves it up or down, a negative a reflects it over the x-axis, and |a| stretches or shrinks it'),
+    data: { fam, a, h, k },
+  };
+});
+
+/* ---------------- write the equation of a transformation ---------------- */
+/**
+ * A typed function of x → an evaluator (throws on bad input). Knows "y =" /
+ * "f(x) =", |…|, abs(), sqrt()/√/root, ^ and ², and implicit multiplication:
+ * 2|x + 1|, −3(x − 2)^2, 2^(x − 1), 5 − 2√(x + 3).
+ */
+function parseFn(str) {
+  let s = prep(str).replace(/ˣ/g, '^x');
+  const eqs = s.split('=');
+  if (eqs.length > 2) throw new Error('Use one equals sign, like y = |x − 2| + 1.');
+  if (eqs.length === 2) {
+    const l = eqs[0].trim(), r = eqs[1].trim();
+    if (/^(y|[a-z]\s*\(\s*x\s*\))$/.test(l)) s = r;
+    else if (/^(y|[a-z]\s*\(\s*x\s*\))$/.test(r)) s = l;
+    else throw new Error('Start with y =, like y = |x − 2| + 1.');
+  }
+  s = s.replace(/squareroot|sqrt|root|√/g, '√').replace(/abs/g, 'A');
+  const toks = [];
+  for (let i = 0; i < s.length;) {
+    const c = s[i];
+    if (c === ' ') { i++; continue; }
+    const m = /^(\d+\.?\d*|\.\d+)/.exec(s.slice(i));
+    if (m) { toks.push({ t: 'n', v: parseFloat(m[1]) }); i += m[1].length; continue; }
+    if (c === 'x' || c === 'A' || c === '√' || c === '|' || '+-*/^()'.includes(c)) { toks.push({ t: c }); i++; continue; }
+    if ('[{'.includes(c)) { toks.push({ t: '(' }); i++; continue; }
+    if (']}'.includes(c)) { toks.push({ t: ')' }); i++; continue; }
+    throw new Error(/[a-z]/.test(c) ? 'Use x as the variable, like y = (x − 3)^2 + 2.' : `Unexpected "${c}".`);
+  }
+  let p = 0, bars = 0;
+  const is = (t) => toks[p] && toks[p].t === t;
+  const startsAtom = () => is('n') || is('x') || is('(') || is('√') || is('A') || (is('|') && !bars);
+  function expr() {
+    let f = term();
+    for (;;) {
+      if (is('+')) { p++; const a = f, b = term(); f = (x) => a(x) + b(x); }
+      else if (is('-')) { p++; const a = f, b = term(); f = (x) => a(x) - b(x); }
+      else return f;
+    }
+  }
+  function term() {
+    let f = unary();
+    for (;;) {
+      if (is('*')) { p++; const a = f, b = unary(); f = (x) => a(x) * b(x); }
+      else if (is('/')) { p++; const a = f, b = unary(); f = (x) => a(x) / b(x); }
+      else if (startsAtom()) { const a = f, b = power(); f = (x) => a(x) * b(x); }
+      else return f;
+    }
+  }
+  function unary() {
+    if (is('-')) { p++; const a = unary(); return (x) => -a(x); }
+    if (is('+')) { p++; return unary(); }
+    return power();
+  }
+  function power() {
+    const b = atom();
+    if (is('^')) { p++; const e = unary(); return (x) => b(x) ** e(x); }
+    return b;
+  }
+  function atom() {
+    const k = toks[p++];
+    if (!k) throw new Error('It ends too soon.');
+    if (k.t === 'n') return () => k.v;
+    if (k.t === 'x') return (x) => x;
+    if (k.t === '(') { const f = expr(); if (!is(')')) throw new Error('A parenthesis is missing.'); p++; return f; }
+    if (k.t === '|') { bars++; const f = expr(); bars--; if (!is('|')) throw new Error('An absolute-value bar is missing.'); p++; return (x) => Math.abs(f(x)); }
+    if (k.t === '√') { const f = atom(); return (x) => Math.sqrt(f(x)); }
+    if (k.t === 'A') { if (!is('(')) throw new Error('Write abs(…) with parentheses.'); const f = atom(); return (x) => Math.abs(f(x)); }
+    throw new Error('Something is out of place.');
+  }
+  const f = expr();
+  if (p !== toks.length) throw new Error('Something is out of place.');
+  return f;
+}
+const FN_XS = Array.from({ length: 49 }, (_, i) => -12 + i * 0.5 + 0.0371).concat([-8, -3, 0, 1, 2, 5, 9]);
+/** Do f and g agree (as functions, domain included) on the sample points? */
+function sameFn(f, g) {
+  return FN_XS.every((x) => {
+    let a = f(x), b = g(x);
+    if (!Number.isFinite(a)) a = NaN;
+    if (!Number.isFinite(b)) b = NaN;
+    if (Number.isNaN(a) || Number.isNaN(b)) return Number.isNaN(a) && Number.isNaN(b);
+    return Math.abs(a - b) <= 1e-9 * Math.max(1, Math.abs(b));
+  });
+}
+/** Checks a typed equation by equivalence with target; `near` = [[fn, note], …] for common slips. */
+function chkFn(target, slips = [], example = 'y = (x − 3)^2 + 2') {
+  return (input) => {
+    let f;
+    try { f = parseFn(input); } catch (e) { return no(e.message && /^[A-Z]/.test(e.message) ? e.message : `Type an equation like ${example}.`); }
+    if (sameFn(f, target)) return true;
+    for (const [g, note] of slips) if (sameFn(f, g)) return no(note);
+    return false;
+  };
+}
+const famFn = (fam, a, h, k) => (x) => a * FAM[fam].f(x - h) + k;
+function famPhrase(a, h, k) {
+  const pre = [];
+  if (a < 0) pre.push('reflected over the x-axis');
+  const A = Math.abs(a);
+  if (A > 1) pre.push(`stretched vertically by a factor of ${fmtN(A)}`);
+  if (A < 1) pre.push(`shrunk vertically by a factor of ${fStr(F(1, 2))}`);
+  const sh = [];
+  if (h) sh.push(`${h > 0 ? 'right' : 'left'} ${Math.abs(h)}`);
+  if (k) sh.push(`${k > 0 ? 'up' : 'down'} ${Math.abs(k)}`);
+  const shift = sh.length ? `shifted ${sh.join(' and ')}` : '';
+  return pre.length ? `${pre.join(' and ')}${shift ? `, then ${shift}` : ''}` : shift;
+}
+skill('transform-write', 13, 'Write a transformation', 'Write the equation of a transformed parent function', (d) => {
+  const fam = pick(d === 1 ? ['quad', 'abs'] : ['quad', 'abs', 'sqrt', 'exp']);
+  let { a, h, k } = famPick(d);
+  if (fam === 'exp' && Math.abs(a) !== 1) a = Math.sign(a);
+  const answer = famEq(fam, a, h, k);
+  const text = `The graph of ${FAM[fam].parent} is ${famPhrase(a, h, k)}. Write an equation for the new graph.`;
+  const target = famFn(fam, a, h, k);
+  const slips = [];
+  if (h) slips.push([famFn(fam, a, -h, k), `Check the horizontal shift: x ${M} ${Math.abs(h)} inside moves the graph right, x + ${Math.abs(h)} moves it left.`]);
+  if (k) slips.push([famFn(fam, a, h, -k), 'Check the vertical shift: add to move up, subtract to move down.']);
+  if (a < 0) slips.push([famFn(fam, -a, h, k), 'Almost — a reflection over the x-axis puts a negative sign in front of the function.']);
+  if (a !== 1) slips.push([(x) => FAM[fam].f(x - h) + k, `Include the ${a < 0 ? 'reflection' : 'stretch or shrink'}: multiply the parent function by a = ${fStr(F(Math.round(a * 2), 2))}.`]);
+  if (a !== 1 && k) slips.push([(x) => a * (FAM[fam].f(x - h) + k), `Shift after you ${a < 0 ? 'reflect' : 'stretch'}: the + k goes outside, y = a·f(x − h) + k.`]);
+  if (fam !== 'abs' && fam !== 'exp' && h) slips.push([(x) => a * FAM[fam].f(x) - a * FAM[fam].f(h) + k, 'Put the shift inside the function: replace x with (x − h).']);
+  const steps = [S('Start from the parent function', FAM[fam].parent)];
+  let cur;
+  if (a !== 1) {
+    cur = famEq(fam, a, 0, 0);
+    steps.push(S(a < 0 && Math.abs(a) === 1 ? 'A reflection over the x-axis multiplies the whole function by −1' : `Multiply the whole function by a = ${fStr(F(Math.round(a * 2), 2))}${a < 0 ? ' (the negative sign reflects it)' : ''}`, cur));
+  }
+  if (h) { cur = famEq(fam, a, h, 0); steps.push(S(`To shift ${h > 0 ? 'right' : 'left'} ${Math.abs(h)}, replace x with (x ${h > 0 ? M : '+'} ${Math.abs(h)})`, cur)); }
+  if (k) { cur = famEq(fam, a, h, k); steps.push(S(`To shift ${k > 0 ? 'up' : 'down'} ${Math.abs(k)}, ${k > 0 ? 'add' : 'subtract'} ${Math.abs(k)} at the end`, cur)); }
+  steps.push(S('The equation', answer));
+  const alt = [h ? famEq(fam, a, -h, k) : null, k ? famEq(fam, a, h, -k) : null, a !== 1 ? famEq(fam, 1, h, k) : famEq(fam, -1, h, k), famEq(fam, a, -h, -k), famEq(fam, a, k, h)];
+  return {
+    type: 'written', text, fmt: fam === 'abs' ? 'Type it like y = |x + 1| − 4 (abs(x + 1) works too).' : fam === 'sqrt' ? 'Type it like y = √(x − 2) + 1 (sqrt(x − 2) works too).' : fam === 'exp' ? 'Type it like y = 2^(x − 1) + 3.' : 'Type it like y = (x − 3)^2 + 2.',
+    answer, check: chkFn(target, slips), alt: [...new Set(alt)].filter((w) => w && w !== answer), steps,
+    hint: S('Build it as y = a·f(x − h) + k', 'Stretches and reflections multiply the parent by a; a shift right h replaces x with (x − h); a shift up k adds k at the end'),
+    data: { fam, a, h, k },
+  };
+});
+
+/* ---------------- vertex of y = a|x − h| + k ---------------- */
+skill('abs-vertex', 13, 'Vertex of an absolute-value graph', 'Find the vertex of y = a|x − h| + k', (d) => {
+  const a = d === 1 ? 1 : d === 2 ? pick([1, -1, 2, 3, -2]) : pick([0.5, -0.5, 2, -3, 3, -2]);
+  const h = ri(-7, 7), k = ri(-9, 9);
+  need(h || k);
+  need(d === 1 ? h && k : h !== k);
+  const flip = d === 3 && k && coin(0.35);
+  const af = F(Math.round(a * 2), 2);
+  const inner = h ? lin(1, -h) : 'x';
+  const absT = `${coefStr(F(Math.abs(af.n), af.d))}|${inner}|`;
+  const eq = flip ? `y = ${fmtN(k)} ${a < 0 ? M : '+'} ${absT}` : `y = ${coefStr(af)}|${inner}|${k ? ` ${k < 0 ? M : '+'} ${Math.abs(k)}` : ''}`;
+  const answer = P2(h, k);
+  const std = `y = ${coefStr(af)}|x ${M} ${pn(h)}| + ${pn(k)}`;
+  const steps = [];
+  if (flip) steps.push(S('Reorder the terms so the constant is last', famEq('abs', a, h, k)));
+  steps.push(
+    S('Match it to y = a|x − h| + k, whose vertex is (h, k)', std),
+    S(h < 0 ? `Read h and k — careful: x + ${Math.abs(h)} is x − (${fmtN(h)}), so h is negative` : h === 0 ? 'Read h and k — |x| is |x − 0|, so h = 0' : 'Read h and k', `h = ${fmtN(h)}, k = ${fmtN(k)}`),
+    S('The vertex is (h, k)', answer),
+  );
+  return {
+    type: 'written', text: `What is the vertex of the graph of ${eq}?`, fmt: 'Type an ordered pair like (3, −2).',
+    answer, check: chkPair(h, k), alt: [P2(-h, k), P2(k, h), P2(h, -k), P2(-h, -k)].filter((w) => w !== answer), steps,
+    hint: S('Write the equation in the form y = a|x − h| + k — the vertex is (h, k)', 'Watch the sign inside the bars: a plus inside means h is negative'),
+    data: { a, h, k },
+  };
+});
+
+/* ---------------- evaluate a piecewise function ---------------- */
+function pieceExpr(d) {
+  const form = pick(d === 1 ? ['lin', 'lin', 'const'] : ['lin', 'lin', 'const', 'quad']);
+  const tail = (c) => (c ? ` ${c < 0 ? M : '+'} ${Math.abs(c)}` : '');
+  if (form === 'const') { const c = ri(-9, 9); return { s: fmtN(c), f: () => c, sub: () => fmtN(c) }; }
+  if (form === 'quad') { const s = pick([1, -1]), c = ri(-6, 6); return { s: tms([[s, 'x²'], [c, '']]), f: (x) => s * x * x + c, sub: (x) => `${s < 0 ? `${M}(${fmtN(x)})` : pn(x)}²${tail(c)}` }; }
+  const m = nz(-4, 4), b = ri(-7, 7);
+  return { s: lin(m, b), f: (x) => m * x + b, sub: (x) => `${m === 1 ? pn(x) : m === -1 ? (x > 0 ? `${M}${x}` : `${M}(${fmtN(x)})`) : `${fmtN(m)} × ${pn(x)}`}${tail(b)}` };
+}
+skill('piecewise', 13, 'Piecewise functions', 'Evaluate a piecewise function', (d) => {
+  const three = d === 3 && coin(0.6);
+  const pieces = [];
+  let bnds;
+  if (!three) {
+    const c = ri(-3, 3), leftIn = coin();
+    pieces.push({ cond: `x ${leftIn ? '≤' : '<'} ${fmtN(c)}`, has: (x) => (leftIn ? x <= c : x < c) }, { cond: `x ${leftIn ? '>' : '≥'} ${fmtN(c)}`, has: (x) => (leftIn ? x > c : x >= c) });
+    bnds = [c];
+  } else {
+    const c1 = ri(-4, 0), c2 = c1 + ri(2, 4), in1 = coin(), in2 = coin();
+    pieces.push(
+      { cond: `x ${in1 ? '<' : '≤'} ${fmtN(c1)}`, has: (x) => (in1 ? x < c1 : x <= c1) },
+      { cond: `${fmtN(c1)} ${in1 ? '≤' : '<'} x ${in2 ? '≤' : '<'} ${fmtN(c2)}`, has: (x) => (in1 ? x >= c1 : x > c1) && (in2 ? x <= c2 : x < c2) },
+      { cond: `x ${in2 ? '>' : '≥'} ${fmtN(c2)}`, has: (x) => (in2 ? x > c2 : x >= c2) },
+    );
+    bnds = [c1, c2];
+  }
+  for (const pc of pieces) Object.assign(pc, pieceExpr(d));
+  need(new Set(pieces.map((pc) => pc.s)).size === pieces.length);
+  const x = coin(0.45) ? pick(bnds) : ri(bnds[0] - 4, bnds[bnds.length - 1] + 4);
+  const i = pieces.findIndex((pc) => pc.has(x));
+  const pc = pieces[i];
+  const v = pc.f(x);
+  need(Math.abs(v) <= 60);
+  const others = pieces.filter((q) => q !== pc).map((q) => q.f(x)).filter((w) => w !== v);
+  const text = `f(x) = ${pieces.map((q) => `${q.s} if ${q.cond}`).join('; ')}. Find f(${fmtN(x)}).`;
+  const holdsTxt = pc.cond.replace(/x/, fmtN(x));
+  const onBoundary = bnds.includes(x);
+  const steps = [
+    S(`Find the piece whose condition is true when x = ${fmtN(x)}${onBoundary ? ` — x = ${fmtN(x)} is a boundary, so check which condition includes it (≤ or ≥ include it; < or > do not)` : ''}`, holdsTxt),
+    /x/.test(pc.s) ? S(`Use only that piece: f(x) = ${pc.s}`, `f(${fmtN(x)}) = ${pc.sub(x)}`, `f(${fmtN(x)}) = ${fmtN(v)}`)
+      : S(`That piece is the constant ${pc.s}: f(x) = ${pc.s} for every x it covers`, `f(${fmtN(x)}) = ${fmtN(v)}`),
+  ];
+  return {
+    gap: 0.02, type: 'written', text, fmt: 'Type a number.', answer: fmtN(v), check: chkNum(v, { exact: true }), num: v, fmtAlt: fmtN,
+    alt: [...others.map(fmtN), fmtN(-v)], steps,
+    pw: { name: 'f(x)', rows: pieces.map((q) => [q.s, q.cond]), ask: `Find f(${fmtN(x)}).` },
+    hint: S('First decide which piece applies', `Test x = ${fmtN(x)} in each condition — use only the piece whose condition is true`),
+    data: { value: v, x },
+  };
+});
+
+/* ---------------- the greatest integer (floor) function ---------------- */
+const tenth = (n) => { const a = Math.abs(n); return (n < 0 ? M : '') + (a % 10 ? `${Math.floor(a / 10)}.${a % 10}` : String(a / 10)); };
+const floorDiv = (a, b) => Math.floor(a / b);
+skill('step-func', 13, 'Greatest integer function', 'Evaluate the greatest integer (step) function', (d) => {
+  const form = d === 1 ? 'plain' : d === 2 ? pick(['plain', 'shift', 'scale']) : pick(['shift', 'scale', 'inner', 'plain']);
+  let n = nz(-99, 99);
+  if (d === 1) n = ri(1, 99) * (coin(0.35) ? -1 : 1);
+  if (coin(0.12)) n = 10 * nz(-9, 9);                          // a whole number: ⌊4⌋ = 4
+  const xs = tenth(n), fl = floorDiv(n, 10);
+  const DEF = '⌊x⌋ is the greatest integer less than or equal to x';
+  const chain = (t, f) => (n % 10 || form === 'inner' ? `${fmtN(f)} ≤ ${t} < ${fmtN(f + 1)}` : `${t} is already an integer`);
+  let text, v, steps, alt;
+  const near_ = Math.round(n / 10), trunc = Math.trunc(n / 10), ceil = Math.ceil(n / 10);
+  if (form === 'plain') {
+    v = fl;
+    text = `Evaluate ⌊${xs}⌋, where ${DEF}.`;
+    steps = [S(`Find the integers on either side of ${xs}: ${DEF}`, chain(xs, fl)), S(n < 0 && n % 10 ? 'For a negative number, stepping down moves away from 0' : 'Take the lower one', `⌊${xs}⌋ = ${fmtN(fl)}`)];
+    alt = [near_, trunc, ceil, fl - 1].map(fmtN);
+  } else if (form === 'shift') {
+    const k = nz(-6, 6);
+    v = fl + k;
+    text = `f(x) = ⌊x⌋ ${k < 0 ? M : '+'} ${Math.abs(k)}, where ${DEF}. Find f(${xs}).`;
+    steps = [S('Find ⌊x⌋ first', chain(xs, fl), `⌊${xs}⌋ = ${fmtN(fl)}`), S(`Then ${k > 0 ? 'add' : 'subtract'} ${Math.abs(k)}`, `${fmtN(fl)} ${k < 0 ? M : '+'} ${Math.abs(k)} = ${fmtN(v)}`)];
+    alt = [near_ + k, trunc + k, ceil + k, fl - k].map(fmtN);
+  } else if (form === 'scale') {
+    const a = pick([2, 3, 4, -2]);
+    v = a * fl;
+    text = `f(x) = ${fmtN(a)}⌊x⌋, where ${DEF}. Find f(${xs}).`;
+    steps = [S('Find ⌊x⌋ first', chain(xs, fl), `⌊${xs}⌋ = ${fmtN(fl)}`), S(`Then multiply by ${fmtN(a)}`, `${fmtN(a)} × ${pn(fl)} = ${fmtN(v)}`)];
+    alt = [floorDiv(a * n, 10), a * near_, a * ceil, a * trunc].map(fmtN);
+  } else {
+    const a = pick([2, 3]);
+    const an = a * n;
+    v = floorDiv(an, 10);
+    text = `f(x) = ⌊${a}x⌋, where ${DEF}. Find f(${xs}).`;
+    steps = [S('Multiply inside the brackets first', `${a} × ${pn(n / 10)} = ${tenth(an)}`), S(`Then take the greatest integer less than or equal to ${tenth(an)}`, chain(tenth(an), v), `⌊${tenth(an)}⌋ = ${fmtN(v)}`)];
+    alt = [a * fl, Math.round(an / 10), Math.ceil(an / 10), Math.trunc(an / 10)].map(fmtN);
+  }
+  return {
+    gap: 0.02, type: 'written', text, fmt: 'Type a whole number.', answer: fmtN(v), check: chkNum(v), num: v, fmtAlt: fmtN, alt, steps,
+    hint: S(DEF, 'Picture the number on a number line and step down to the integer at it or just to its left'),
+    data: { value: v, form },
+  };
+});
+
+/* ---------------- average rate of change ---------------- */
+function tableHtml(xs, ys, name = 'f(x)') {
+  return `<div class="alg-table-wrap"><table class="alg-table"><tr><th scope="row">x</th>${xs.map((x) => `<td>${fmtN(x)}</td>`).join('')}</tr><tr><th scope="row">${name}</th>${ys.map((y) => `<td>${fmtN(y)}</td>`).join('')}</tr></table></div>`;
+}
+skill('avg-rate', 13, 'Average rate of change', 'Find the average rate of change over an interval', (d) => {
+  const form = d === 1 ? pick(['table', 'quad']) : pick(['table', 'quad', 'exp']);
+  let text, f, disp = null, figure = null, figureAlt = null, p, q, show;
+  if (form === 'table') {
+    const x0 = ri(-3, 2), stp = d === 3 && coin() ? 2 : 1;
+    const xs = [0, 1, 2, 3, 4].map((i) => x0 + i * stp);
+    const ys = xs.map(() => ri(-12, 30));
+    const i = ri(0, 3), j = ri(i + 1, 4);
+    p = xs[i]; q = xs[j];
+    f = (x) => ys[xs.indexOf(x)];
+    text = `The table shows some values of a function f. Find the average rate of change of f from x = ${fmtN(p)} to x = ${fmtN(q)}.`;
+    figure = tableHtml(xs, ys);
+    figureAlt = `A table of values: when x is ${xs.map(fmtN).join(', ')}, f(x) is ${ys.map(fmtN).join(', ')}.`;
+    show = (x) => `f(${fmtN(x)}) = ${fmtN(f(x))}`;
+  } else if (form === 'quad') {
+    const a = pick([1, -1, 2, 1]), b = ri(-5, 5), c = ri(-9, 9);
+    f = (x) => a * x * x + b * x + c;
+    disp = poly([c, b, a]);
+    p = ri(-3, 3); q = p + ri(1, 4);
+    text = `Find the average rate of change of f(x) = ${disp} from x = ${fmtN(p)} to x = ${fmtN(q)}.`;
+    show = (x) => `f(${fmtN(x)}) = ${a === 1 ? pn(x) : a === -1 ? `${M}(${fmtN(x)})` : `${a} × ${pn(x)}`}²${b ? ` ${b < 0 ? M : '+'} ${Math.abs(b) === 1 ? '' : `${Math.abs(b)} × `}${pn(x)}` : ''}${c ? ` ${c < 0 ? M : '+'} ${Math.abs(c)}` : ''} = ${fmtN(f(x))}`;
+  } else {
+    const a = pick([1, 1, 2, 3, 5]), base = pick([2, 2, 3]);
+    f = (x) => a * base ** x;
+    disp = `${a === 1 ? '' : `${a} · `}${base}ˣ`;
+    p = ri(0, 3); q = p + ri(1, 3);
+    need(f(q) <= 2000);
+    text = `Find the average rate of change of f(x) = ${disp} from x = ${fmtN(p)} to x = ${fmtN(q)}.`;
+    show = (x) => `f(${fmtN(x)}) = ${a === 1 ? '' : `${a} · `}${base}${sup(x)} = ${fmtN(f(x))}`;
+  }
+  const fp = f(p), fq = f(q);
+  const rate = F(fq - fp, q - p);
+  const v = fVal(rate);
+  const steps = [
+    S('Average rate of change = (change in f) ÷ (change in x) = (f(b) − f(a))/(b − a)', `from x = ${fmtN(p)} to x = ${fmtN(q)}`),
+    S(form === 'table' ? 'Read the two outputs from the table' : 'Find the two outputs', `${show(q)}; ${show(p)}`),
+    S('Divide the change in f by the change in x', `(${fmtN(fq)} ${M} ${pn(fp)})/(${fmtN(q)} ${M} ${pn(p)})${q - p === 1 ? '' : ` = ${fmtN(fq - fp)}/${fmtN(q - p)}`}`, fStr(rate)),
+  ];
+  const alt = [fmtN(fq - fp), fq !== fp ? fStr(F(q - p, fq - fp)) : null, fStr(F(fq + fp, 2)), fStr(F(fp - fq, q - p)), fStr(F(fq - fp, q - p + 1))];
+  return {
+    gap: 0.02, type: 'written', text, fmt: 'Type a number or a fraction like 7/2.', answer: fStr(rate), check: chkNum(v, { exact: true }), num: v, fmtAlt: ratStr,
+    alt: alt.filter(Boolean), steps, ...(figure ? { figure, figureAlt } : {}),
+    hint: S('Average rate of change = (f(b) − f(a))/(b − a)', 'Find the value of f at each end of the interval, then divide the change in f by the change in x'),
+    data: { value: v, form, p, q },
+  };
+});
+
+/* ---------------- linear, quadratic or exponential from a table ---------------- */
+const MODEL = {
+  lin: 'Linear — the first differences are constant',
+  quad: 'Quadratic — the second differences are constant',
+  exp: 'Exponential — consecutive y-values have a constant ratio',
+  none: 'None of these — no differences or ratios are constant',
+};
+skill('table-model', 13, 'Linear, quadratic or exponential?', 'Decide whether a table is linear, quadratic or exponential', (d) => {
+  const kind = pick(['lin', 'quad', 'exp']);
+  const x0 = kind === 'exp' ? ri(0, 1) : ri(-2, 1);
+  const xs = [0, 1, 2, 3, 4].map((i) => x0 + i);
+  let ys;
+  if (kind === 'lin') { const m = nz(-6, 6), b = ri(-9, 9); ys = xs.map((x) => m * x + b); }
+  else if (kind === 'quad') { const a = d === 1 ? pick([1, 2, -1]) : nz(-3, 3), b = ri(-5, 5), c = ri(-9, 9); ys = xs.map((x) => a * x * x + b * x + c); }
+  else {
+    const r = d === 1 ? pick([2, 3]) : pick([2, 3, 0.5, 4, 1.5]);
+    const a = r === 0.5 ? pick([16, 32, 48]) * (x0 ? 2 : 1) : r === 1.5 ? 16 : pick([1, 2, 3, 5]) * (coin(0.2) ? -1 : 1);
+    ys = xs.map((x) => a * r ** x);
+    need(ys.every(isInt) && ys.every((y) => Math.abs(y) <= 800));
+  }
+  const d1 = ys.slice(1).map((y, i) => y - ys[i]);
+  const d2 = d1.slice(1).map((y, i) => y - d1[i]);
+  const con = (a) => a.every((v) => v === a[0]);
+  const ratiosOk = ys.every((y) => y !== 0);
+  const ratios = ratiosOk ? ys.slice(1).map((y, i) => y / ys[i]) : null;
+  const isExp = !!ratios && ratios.every((v) => near(v, ratios[0]));
+  need(kind === 'lin' ? con(d1) : kind === 'quad' ? !con(d1) && con(d2) && !isExp : !con(d1) && !con(d2) && isExp);
+  const answer = MODEL[kind];
+  const diffTxt = (arr, src) => arr.map((v, i) => `${fmtN(src[i + 1])} ${M} ${pn(src[i])} = ${fmtN(v)}`).join(', ');
+  const steps = [
+    S('The x-values go up by 1 each time, so compare consecutive y-values', `y: ${ys.map(fmtN).join(', ')}`),
+    S(`First differences${con(d1) ? ' — all the same, so the function is linear' : ' — not all the same, so it is not linear'}`, diffTxt(d1, ys)),
+  ];
+  if (kind !== 'lin') steps.push(S(`Second differences (differences of the first differences)${con(d2) ? ' — all the same, so the function is quadratic' : ' — not all the same, so it is not quadratic'}`, diffTxt(d2, d1)));
+  if (kind === 'exp') steps.push(S('Ratios of consecutive y-values — all the same, so the function is exponential', ys.slice(1).map((y, i) => `${fmtN(y)} ÷ ${pn(ys[i])} = ${fmtN(ratios[i])}`).join(', ')));
+  steps.push(S('Conclusion', answer));
+  return {
+    type: 'mc', text: 'Which kind of function does the table show?', answer, options: [MODEL.lin, MODEL.quad, MODEL.exp, MODEL.none], steps,
+    figure: tableHtml(xs, ys, 'y'), figureAlt: `A table of values: when x is ${xs.map(fmtN).join(', ')}, y is ${ys.map(fmtN).join(', ')}.`,
+    hint: S('Compare consecutive y-values', 'Linear: the differences are equal. Quadratic: the differences of the differences are equal. Exponential: the ratios are equal'),
+    data: { kind, xs, ys },
+  };
+});
+
+/* ======================================================================
+   Unit 14 · Rational expressions and equations
+   ====================================================================== */
+/** "(x + 2)" or "x" for a monic linear factor. */
+const fac = (c) => (c ? `(${lin(1, c)})` : 'x');
+/** Is there a + or − outside every bracket (not counting a leading sign)? */
+function topPM(s) {
+  let dep = 0;
+  for (let i = 0; i < s.length; i++) {
+    const c = s[i];
+    if (c === '(' || c === '[') dep++;
+    else if (c === ')' || c === ']') dep--;
+    else if (!dep && i > 0 && (c === '+' || c === '−' || c === '-')) return true;
+  }
+  return false;
+}
+/** A numerator for "n/d": a sum goes in parentheses; a product needs none. */
+const grpN = (s) => (topPM(s) ? `(${s})` : s);
+/** A denominator for "n/d": a sum in (…), a product of factors in […], a monomial like 3x in (…). */
+const grpD = (s) => (topPM(s) ? `(${s})` : /^\([^()]*\)$/.test(s) ? s : /\(/.test(s) ? `[${s}]` : /[a-z]/.test(s) && /\d/.test(s) ? `(${s})` : s);
+const ratS = (n, d) => `${grpN(n)}/${grpD(d)}`;
+
+/* ---------------- inverse variation ---------------- */
+skill('inverse-var', 14, 'Inverse variation', 'Solve an inverse variation problem', (d) => {
+  const askK = coin(d === 1 ? 0.3 : 0.4);
+  const x1 = d === 3 ? nz(-9, 12) : ri(2, 12), y1 = d === 3 ? nz(-9, 12) : ri(2, 12);
+  const k = x1 * y1;
+  let text, v, steps, alt, vName, answer;
+  const kStep = S('Inverse variation means y = k/x, so the product x · y is always k', `k = ${fmtN(x1)} × ${pn(y1)} = ${fmtN(k)}`);
+  if (askK) {
+    v = k; vName = 'k'; answer = fmtN(k);
+    text = `y varies inversely with x, and y = ${fmtN(y1)} when x = ${fmtN(x1)}. What is the constant of variation, k?`;
+    steps = [kStep, S('The constant of variation is that product, so the equation is', `y = ${fmtN(k)}/x`)];
+    alt = [fStr(F(y1, x1)), fStr(F(x1, y1)), fmtN(x1 + y1), fmtN(-k)];
+  } else {
+    let x2 = d === 3 ? nz(-12, 12) : ri(2, 16);
+    need(x2 !== x1);
+    const y2 = F(k, x2);
+    need(d === 3 || y2.d === 1);
+    need(y2.d <= 6);
+    v = fVal(y2); vName = 'y'; answer = fStr(y2);
+    text = `y varies inversely with x, and y = ${fmtN(y1)} when x = ${fmtN(x1)}. Find y when x = ${fmtN(x2)}.`;
+    steps = [kStep, S(`Use y = k/x with the new x = ${fmtN(x2)}`, `${fmtN(k)} ÷ ${pn(x2)} = ${fStr(y2)}`, `y = ${fStr(y2)}`)];
+    alt = [fStr(F(y1 * x2, x1)), fStr(F(x2, k)), fmtN(k * x2), fStr(F(y1 * x1 - x2, 1))];
+  }
+  return {
+    gap: 0.02, type: 'written', text, fmt: askK ? 'Type a number.' : 'Type a number or a fraction like 9/2.', answer, check: chkNum(v, { v: vName, exact: true }), num: v, fmtAlt: ratStr,
+    alt, steps,
+    hint: S('Inverse variation: y = k/x, so x · y = k stays the same', askK ? 'Multiply the x and y you are given' : 'Find k from the pair you are given, then divide k by the new x'),
+    data: { value: v, k, askK },
+  };
+});
+
+/* ---------------- excluded values ---------------- */
+function readExcl(s) {
+  const t = prep(s).replace(/≠|!=|=\/=|<>|\b(cannot|can not|can't|cant) (be|equal)\b|\bis not\b/g, '=');
+  return readRoots(t);
+}
+function chkExcl(vals, numZeros = []) {
+  const want = [...new Set(vals)];
+  return (input) => {
+    const got = readExcl(input);
+    if (!got || !got.length) return no('Type the excluded values separated by a comma, like x ≠ 3, x ≠ −4 (or just 3, −4).');
+    const uniq = [...new Set(got.map((g) => clean(g.v)))];
+    const allIn = uniq.every((g) => want.some((w) => near(g, w)));
+    const covers = want.every((w) => uniq.some((g) => near(g, w)));
+    if (allIn && covers) return true;
+    if (uniq.some((g) => numZeros.some((z) => near(g, z)) && !want.some((w) => near(g, w)))) return no('A value that makes only the numerator 0 is allowed — the expression is just 0 there. Excluded values come from the denominator.');
+    if (allIn) return no(`That is only part of it — find every value that makes the denominator 0 (there are ${want.length}).`);
+    if (want.length === uniq.length && uniq.every((g) => want.some((w) => near(-g, w)))) return no('Check the signs: if x + 3 = 0, then x = −3.');
+    return false;
+  };
+}
+skill('excluded', 14, 'Excluded values', 'Find the excluded values of a rational expression', (d) => {
+  const form = d === 1 ? pick(['lin', 'kx']) : d === 2 ? pick(['prod', 'dos', 'xfac', 'kx']) : pick(['tri', 'tri', 'shared', 'dos', 'prod']);
+  let Dn, roots, factored = null, num, numZeros = [];
+  const r = nz(-9, 9);
+  let s = nz(-9, 9);
+  if (form === 'lin') { Dn = lin(1, -r); roots = [r]; }
+  else if (form === 'kx') { const k = ri(2, 6); Dn = lin(k, -k * r); roots = [r]; factored = `${k}${fac(-r)}`; }
+  else if (form === 'prod') { need(r !== s); Dn = `${fac(-r)}${fac(-s)}`; roots = [r, s]; }
+  else if (form === 'dos') { const a = ri(1, 9); Dn = poly([-a * a, 0, 1]); roots = [-a, a]; factored = `${fac(a)}${fac(-a)}`; }
+  else if (form === 'xfac') { Dn = poly([0, -r, 1]); roots = [0, r]; factored = `x${fac(-r)}`; }
+  else { need(r !== s); Dn = poly([r * s, -(r + s), 1]); roots = [r, s]; factored = `${fac(-r)}${fac(-s)}`; }
+  if (form === 'shared') {
+    num = lin(1, -r);
+  } else {
+    const nForm = pick(['const', 'lin', 'lin']);
+    if (nForm === 'const') num = String(nz(-9, 9)).replace('-', M);
+    else { const z = nz(-9, 9); need(!roots.includes(z)); num = lin(1, -z); numZeros = [z]; }
+  }
+  const text = `Find all excluded values for ${ratS(num, Dn)}.`;
+  const sorted = [...new Set(roots)].sort((p, q) => p - q);
+  const answer = sorted.map((v) => `x ≠ ${fmtN(v)}`).join(', ');
+  const steps = [S('An excluded value makes the denominator 0 (you cannot divide by 0). Set the denominator equal to 0 — the numerator does not matter', `${Dn} = 0`)];
+  if (factored) steps.push(S('Factor', `${factored} = 0`));
+  if (form === 'lin') steps.push(S(r > 0 ? `Add ${r} to both sides` : `Subtract ${-r} from both sides`, `x = ${fmtN(r)}`));
+  else if (form === 'kx') steps.push(S('Solve', `x = ${fmtN(r)}`));
+  else steps.push(S('Set each factor equal to 0 and solve', sorted.map((v) => `x = ${fmtN(v)}`).join(' or ')));
+  if (form === 'shared') steps.push(S(`x = ${fmtN(r)} is still excluded, even though ${fac(-r)} is also a factor of the numerator — the original expression divides by 0 there`, `x ≠ ${fmtN(r)}`));
+  steps.push(S('The excluded values', answer));
+  const excl = (vs) => vs.map((v) => `x ≠ ${fmtN(v)}`).join(', ');
+  const alt = [excl(sorted.map((v) => -v)), numZeros.length ? excl(numZeros) : null, sorted.length > 1 ? excl([sorted[0]]) : excl([sorted[0] + 1]), numZeros.length ? excl([...sorted, ...numZeros]) : excl([...sorted, 0].filter((v, i, a) => a.indexOf(v) === i))];
+  return {
+    type: 'written', text, fmt: 'Type every excluded value, like x ≠ 3, x ≠ −4 (or just 3, −4).',
+    answer, check: chkExcl(sorted, numZeros), alt: alt.filter((w) => w && w !== answer), steps,
+    hint: S('Excluded values make the denominator equal 0', 'Set only the denominator equal to 0 and solve — factor it first if you need to'),
+    data: { roots: sorted },
+  };
+});
+
+/* ---------------- simplify a rational expression (multiple choice) ---------------- */
+/** A monic factor list [c, …] → "(x + c)(x + d)"; 1 when empty. */
+const facs = (cs) => cs.map(fac).join('') || '1';
+/** k·(x + c) printed: "3(x + 2)", "(x + 2)", "−(x + 2)", "4x", "x". */
+const kFac = (k, c) => (c ? `${k === 1 ? '' : k === -1 ? M : fmtN(k)}${fac(c)}` : mono(k, 'x'));
+skill('rat-simplify', 14, 'Simplify rational expressions', 'Simplify a rational expression by factoring', (d) => {
+  const form = d === 1 ? pick(['tri', 'gcf', 'mono']) : d === 2 ? pick(['tri', 'tri', 'gcf', 'mono']) : pick(['tri', 'neg', 'neg', 'gcf']);
+  let text, answer, wrong, steps;
+  if (form === 'tri' || form === 'gcf') {
+    const a = nz(-7, 7), c = nz(-7, 7);
+    const b = form === 'gcf' ? null : nz(-7, 7);
+    need(a !== c && (b == null || (b !== a && b !== c)));
+    const k = form === 'gcf' ? ri(2, 6) : 1;
+    const N = form === 'gcf' ? [k * a, k] : pmul([a, 1], [b, 1]);
+    const D = pmul([a, 1], [c, 1]);
+    text = `Simplify: ${ratS(poly(N), poly(D))}`;
+    const top = form === 'gcf' ? String(k) : lin(1, b);
+    answer = ratS(top, lin(1, c));
+    const Nf = form === 'gcf' ? `${k}${fac(a)}` : `${fac(a)}${fac(b)}`;
+    steps = [
+      S('Factor the numerator and the denominator completely', ratS(Nf, `${fac(a)}${fac(c)}`)),
+      S(`Cancel the common factor ${fac(a)} — it multiplies the whole top and the whole bottom`, answer, `x ≠ ${fmtN(-a)}, x ≠ ${fmtN(-c)}`),
+    ];
+    wrong = [];
+    if (form === 'tri') {
+      if (N[1] && D[1]) wrong.push(ratS(lin(N[1], N[0]), lin(D[1], D[0])));      // cancelled the x² terms
+      wrong.push(fStr(F(b, c)));                                                 // "cancelled" the x's
+      wrong.push(ratS(lin(1, -b), lin(1, -c)));                                  // sign slip in factoring
+      wrong.push(ratS(lin(1, a), lin(1, c)), ratS(lin(1, b), lin(1, a)));
+    } else {
+      wrong.push(fStr(F(k, c)), ratS(String(k), lin(1, -c)), ratS(lin(k, 0), lin(1, c)), ratS(String(k), lin(1, a)));
+    }
+  } else if (form === 'mono') {
+    const r = ri(2, 6), p = r * nz(-4, 5), q = r * nz(-5, 5);
+    need(Math.abs(p) !== r && p !== q);
+    text = `Simplify: ${ratS(tms([[p, 'x²'], [q, 'x']]), mono(r, 'x'))}`;
+    answer = lin(p / r, q / r);
+    steps = [
+      S(`Factor ${mono(r, 'x')} out of the numerator`, ratS(`${mono(r, 'x')}(${lin(p / r, q / r)})`, mono(r, 'x'))),
+      S(`Cancel the common factor ${mono(r, 'x')}`, answer, 'x ≠ 0'),
+    ];
+    wrong = [lin(p / r, q), tms([[p / r, 'x²'], [q / r, 'x']]), lin(p, q / r), lin(q / r, p / r)];
+  } else {
+    const a = nz(-8, 8);
+    if (coin()) {
+      text = `Simplify: ${ratS(poly([-a * a, 0, 1]), lin(-1, a))}`;
+      answer = lin(-1, -a);
+      steps = [
+        S('Factor the numerator as a difference of squares, and factor −1 out of the denominator', ratS(`${fac(-a)}${fac(a)}`, `${M}1${fac(-a)}`)),
+        S(`Cancel ${fac(-a)}: what is left is divided by −1`, `${fac(a)}/(${M}1)`, answer),
+      ];
+      wrong = [lin(1, a), lin(1, -a), lin(-1, a)];
+    } else {
+      text = `Simplify: ${ratS(lin(-1, a), poly([-a * a, 0, 1]))}`;
+      answer = `${M}1/${fac(a)}`;
+      steps = [
+        S('Factor −1 out of the numerator, and factor the denominator as a difference of squares', ratS(`${M}1${fac(-a)}`, `${fac(-a)}${fac(a)}`)),
+        S(`Cancel ${fac(-a)}`, answer),
+      ];
+      wrong = [`1/${fac(a)}`, `${M}1/${fac(-a)}`, `1/${fac(-a)}`];
+    }
+  }
+  const options = [answer, ...shuffle([...new Set(wrong)].filter((w) => w !== answer)).slice(0, 3)];
+  need(options.length === 4);
+  return {
+    type: 'mc', text, answer, options, steps,
+    hint: S('Factor the numerator and the denominator first', 'Then cancel only common FACTORS — never single terms that are added or subtracted'),
+    data: { form },
+  };
+});
+
+/* ---------------- multiply and divide rational expressions (multiple choice) ---------------- */
+skill('rat-muldiv', 14, 'Multiply & divide rational expressions', 'Multiply or divide rational expressions', (d) => {
+  const div = d === 1 ? false : coin(d === 2 ? 0.5 : 0.65);
+  const a = nz(-6, 6), b = nz(-6, 6), c = nz(-6, 6), e = nz(-6, 6);
+  need(new Set([a, b, c, e]).size === 4);
+  const k = d === 1 ? 1 : pick([1, 2, 3]);
+  const N1 = pmul([a, 1], [b, 1]), D1 = [c, 1], N2 = [k * c, k], D2 = pmul([a, 1], [e, 1]);
+  const f1 = ratS(poly(N1), poly(D1));
+  const f2 = div ? ratS(poly(D2), poly(N2)) : ratS(poly(N2), poly(D2));
+  // Brackets keep the division unambiguous: A/B ÷ C/D read left to right would be ((A/B) ÷ C)/D.
+  const text = div ? `Divide: [${f1}] ÷ [${f2}]` : `Multiply: ${f1} · ${f2}`;
+  const kf = (s) => (k === 1 ? s : `${k}${s}`);
+  const answer = ratS(kf(fac(b)), lin(1, e));
+  const steps = [];
+  if (div) steps.push(S('Dividing by a fraction is multiplying by its reciprocal — flip the second fraction', `${f1} · ${ratS(poly(N2), poly(D2))}`));
+  steps.push(
+    S('Factor every numerator and denominator', `${ratS(`${fac(a)}${fac(b)}`, fac(c))} · ${ratS(kf(fac(c)), `${fac(a)}${fac(e)}`)}`),
+    S(`Cancel the common factors ${fac(a)} and ${fac(c)}`, answer),
+  );
+  const wrong = [
+    ratS(fac(e), kf(fac(b))),                                    // upside down
+    ratS(kf(fac(-b)), lin(1, -e)),                              // sign slips
+    div ? ratS(kf(fac(b)), lin(1, c)) : ratS(kf(fac(a)), lin(1, e)),
+    k > 1 ? ratS(fac(b), lin(1, e)) : ratS(`2${fac(b)}`, lin(1, e)),
+    ratS(kf(fac(b)), lin(1, a)),
+  ];
+  const options = [answer, ...shuffle([...new Set(wrong)].filter((w) => w !== answer)).slice(0, 3)];
+  need(options.length === 4);
+  return {
+    type: 'mc', text, answer, options, steps,
+    hint: S(div ? 'Flip the second fraction and multiply' : 'Multiply the fractions: factor first, then cancel', 'Factor every numerator and denominator, then cancel factors that appear on the top and on the bottom'),
+    data: { div },
+  };
+});
+
+/* ---------------- add and subtract rational expressions (multiple choice) ---------------- */
+skill('rat-addsub', 14, 'Add & subtract rational expressions', 'Add or subtract rational expressions', (d) => {
+  const like = d === 1 ? true : d === 2 ? coin(0.4) : coin(0.25);
+  const minus = d === 1 ? coin(0.3) : coin(0.55);
+  const sg = minus ? -1 : 1, op = minus ? M : '+';
+  let text, answer, wrong, steps;
+  if (like) {
+    const c = nz(-7, 7);
+    const p1 = ri(1, 5), q1 = ri(-9, 9), p2 = d === 1 ? 0 : ri(0, 4), q2 = p2 ? nz(-9, 9) : ri(1, 9);
+    const P = p1 + sg * p2, Q = q1 + sg * q2;
+    need(P !== 0 || Q !== 0);
+    need(P * -c + Q !== 0);                                   // does not simplify away
+    need(!(P === 0 && Q === 0));
+    const n1 = lin(p1, q1), n2 = p2 ? lin(p2, q2) : fmtN(q2), den = lin(1, c);
+    text = `${minus ? 'Subtract' : 'Add'}: ${ratS(n1, den)} ${op} ${ratS(n2, den)}`;
+    answer = ratS(lin(P, Q), den);
+    steps = [
+      S(`The denominators are the same, so ${minus ? 'subtract' : 'add'} the numerators and keep the denominator${minus ? ' — subtract the WHOLE second numerator' : ''}`, ratS(`${n1} ${op} ${grpN(n2)}`, den)),
+      S('Combine like terms in the numerator', answer),
+    ];
+    wrong = [ratS(lin(P, Q), lin(2, 2 * c)), minus && p2 ? ratS(lin(P, q1 + q2), den) : ratS(lin(P, Q + 1), den), minus ? ratS(lin(p1 + p2, q1 + q2), den) : ratS(lin(P, Q), lin(1, -c)), ratS(lin(P, Q), lin(1, -c))];
+  } else {
+    const a = nz(-6, 7), b = ri(1, 7);
+    const c = d === 2 && coin(0.4) ? 0 : nz(-6, 6);
+    let e = nz(-6, 6);
+    need(c !== e);
+    // a/(x + c) ± b/(x + e) = (a(x + e) ± b(x + c)) / ((x + c)(x + e))
+    const P = a + sg * b, Q = a * e + sg * b * c;
+    need(P !== 0 || Q !== 0);
+    need(P * -c + Q !== 0 && P * -e + Q !== 0);
+    need(a + sg * b !== 0);
+    text = `${minus ? 'Subtract' : 'Add'}: ${fmtN(a)}/${fac(c)} ${op} ${b}/${fac(e)}`;
+    const Dd = `${fac(c)}${fac(e)}`;
+    answer = ratS(lin(P, Q), Dd);
+    steps = [
+      S(`The common denominator is ${Dd}. Rewrite each fraction over it`, `${ratS(kFac(a, e), Dd)} ${op} ${ratS(kFac(b, c), Dd)}`),
+      S(`${minus ? 'Subtract' : 'Add'} the numerators and multiply them out`, ratS(`${tms([[a, 'x'], [a * e, '']])} ${op} ${grpN(tms([[b, 'x'], [b * c, '']]))}`, Dd)),
+      S('Combine like terms in the numerator', answer),
+    ];
+    const Qs = a * e - sg * b * c;                            // distributed the minus only to the x-term
+    wrong = [
+      ratS(fmtN(a + sg * b), lin(2, c + e)),                       // added the tops and the bottoms
+      ratS(fmtN(a + sg * b), Dd),                                  // kept the numerators as they were
+      ...(Qs !== Q ? [ratS(lin(P, Qs), Dd)] : []),
+      ratS(lin(P, a * c + sg * b * e), Dd),                        // multiplied by the wrong factors
+      ratS(lin(P, Q), lin(1, c + e)),
+    ];
+  }
+  const options = [answer, ...shuffle([...new Set(wrong)].filter((w) => w !== answer)).slice(0, 3)];
+  need(options.length === 4);
+  return {
+    type: 'mc', text, answer, options, steps,
+    hint: like ? S('The denominators are already the same', `${minus ? 'Subtract' : 'Add'} the numerators and keep the denominator`) : S('Find a common denominator first', 'Multiply each fraction, top and bottom, by the factor its denominator is missing — then combine the numerators'),
+    data: { like, minus },
+  };
+});
+
+/* ---------------- solve a rational equation ---------------- */
+function chkRatEq(valid, extraneous = []) {
+  const inner = chkRoots(valid, { example: 'x = 4' });
+  return (input) => {
+    const got = readRoots(input);
+    if (got && got.length && extraneous.some((e) => got.some((g) => near(g.v, e)))) {
+      const e = extraneous.find((z) => got.some((g) => near(g.v, z)));
+      return no(`x = ${fmtN(e)} makes a denominator 0, so it is extraneous — it is not a solution.`);
+    }
+    return inner(input);
+  };
+}
+skill('rat-eq', 14, 'Rational equations', 'Solve a rational equation (and reject extraneous solutions)', (d) => {
+  const form = d === 1 ? 'prop' : d === 2 ? pick(['prop', 'ext', 'two']) : pick(['ext', 'ext', 'two', 'none', 'prop']);
+  let text, valid, ext = [], steps;
+  const cm = (a, c) => (a === 1 ? (c ? lin(1, c) : 'x') : a === -1 ? `${M}${fac(c)}` : `${fmtN(a)}${fac(c)}`);
+  if (form === 'prop') {
+    const xs = nz(-8, 8), p = ri(-6, 6), q = ri(-6, 6);
+    need(p !== q && xs + p !== 0 && xs + q !== 0);
+    const u = xs + q, v = xs + p;
+    const g = gcd(u, v), t = pick([1, 1, 2, -1]);
+    const a = (v / g) * t, b = (u / g) * t;
+    need(Math.abs(a) <= 12 && Math.abs(b) <= 12 && a !== b);
+    text = `Solve: ${fmtN(a)}/${fac(p)} = ${fmtN(b)}/${fac(q)}`;
+    const L = distribute([{ a, p: 1, q }]), R = distribute([{ a: b, p: 1, q: p }]);
+    steps = [
+      S(`Note the excluded values: x ≠ ${fmtN(-p)} and x ≠ ${fmtN(-q)}. Cross-multiply`, `${cm(a, q)} = ${cm(b, p)}`),
+      S('Distribute', `${lin(L.X, L.K)} = ${lin(R.X, R.K)}`),
+      ...linSolve(L.X, L.K, R.X, R.K).steps,
+      S(`Check: x = ${fmtN(xs)} does not make either denominator 0, so it is the solution`, `x = ${fmtN(xs)}`),
+    ];
+    valid = [xs];
+  } else if (form === 'ext') {
+    const r = nz(-7, 7), s = nz(-7, 7);
+    need(r !== s);
+    const B = r + s, C = -r * s;
+    text = `Solve: x²/${fac(-r)} = ${grpN(lin(B, C))}/${fac(-r)}`;
+    steps = [
+      S(`The denominator is ${lin(1, -r)}, so x ≠ ${fmtN(r)}. Multiply both sides by ${fac(-r)}`, `x² = ${lin(B, C)}`),
+      S('Move every term to one side', `${poly([r * s, -B, 1])} = 0`),
+      S('Factor', `${fac(-r)}${fac(-s)} = 0`),
+      S('Set each factor equal to 0', `x = ${fmtN(r)} or x = ${fmtN(s)}`),
+      S(`x = ${fmtN(r)} makes the denominator ${lin(1, -r)} equal 0, so it is an extraneous solution — reject it`, `x = ${fmtN(s)}`),
+    ];
+    valid = [s]; ext = [r];
+  } else if (form === 'two') {
+    const r = nz(-6, 6), s = nz(-6, 6);
+    need(r !== s && r !== -s);
+    const a = r * s, b = r + s;
+    text = `Solve: x ${a < 0 ? M : '+'} ${Math.abs(a)}/x = ${fmtN(b)}`;
+    steps = [
+      S('x is in a denominator, so x ≠ 0. Multiply every term by x', `x² ${a < 0 ? M : '+'} ${Math.abs(a)} = ${mono(b, 'x')}`),
+      S('Move every term to one side', `${poly([a, -b, 1])} = 0`),
+      S('Factor', `${fac(-r)}${fac(-s)} = 0`),
+      S('Set each factor equal to 0 — neither answer is 0, so both are solutions', rootsAns([F(r), F(s)])),
+    ];
+    valid = [r, s];
+  } else {
+    const r = nz(-6, 6), k = ri(1, 3);
+    text = `Solve: x/${fac(-r)} + ${k} = ${fmtN(r)}/${fac(-r)}`;
+    steps = [
+      S(`The denominator is ${lin(1, -r)}, so x ≠ ${fmtN(r)}. Multiply every term by ${fac(-r)}`, `x + ${k}${fac(-r)} = ${fmtN(r)}`),
+      S('Distribute and combine like terms', `${lin(1 + k, -k * r)} = ${fmtN(r)}`),
+      S(`${-k * r > 0 ? 'Subtract' : 'Add'} ${Math.abs(k * r)} ${-k * r > 0 ? 'from' : 'to'} both sides, then divide by ${1 + k}`, `x = ${fmtN(r)}`),
+      S(`But x = ${fmtN(r)} makes the denominator 0 — it is extraneous. Nothing else works`, 'No solution'),
+    ];
+    valid = []; ext = [r];
+  }
+  const answer = valid.length ? rootsAns(valid.map((v) => F(v))) : 'No solution';
+  const alt = [];
+  if (ext.length) alt.push(rootsAns([...valid, ...ext].map((v) => F(v))), valid.length ? `x = ${fmtN(ext[0])}` : `x = ${fmtN(-ext[0])}`);
+  if (valid.length) { alt.push(rootsAns(valid.map((v) => F(-v)))); if (!ext.length) alt.push('No solution'); if (valid.length === 2) alt.push(`x = ${fmtN(valid[1])}`); }
+  alt.push(valid.length ? `x = ${fmtN(valid[0] + 1)}` : 'x = 0');
+  return {
+    type: 'written', text, fmt: 'Type the solution like x = 4 (separate two with a comma), or "no solution".',
+    answer, check: chkRatEq(valid, ext), alt: [...new Set(alt)].filter((w) => w !== answer), steps,
+    hint: S('Clear the fractions: multiply both sides by the denominator(s)', 'Solve the equation you get, then check every answer in the original — a value that makes a denominator 0 is extraneous'),
+    data: { roots: valid, extraneous: ext, form },
+  };
+});
+
+/* ---------------- work-rate problems ---------------- */
+/* [first worker, second worker, the pair mid-sentence, the second one later on, the job, the unit] */
+const WORKERS = [
+  ['Pipe A', 'Pipe B', 'Pipe A and Pipe B', 'Pipe B', 'fill the tank', 'hours'], ['Ana', 'Ben', 'Ana and Ben', 'Ben', 'paint the fence', 'hours'],
+  ['A large printer', 'A small printer', 'a large printer and a small printer', 'the small printer', 'print the flyers', 'minutes'],
+  ['Kai', 'Rosa', 'Kai and Rosa', 'Rosa', 'mow the lawn', 'minutes'], ['One hose', 'Another hose', 'two hoses', 'the second hose', 'fill the pool', 'hours'],
+  ['Priya', 'Tomas', 'Priya and Tomas', 'Tomas', 'wash the cars', 'hours'],
+];
+const UNIT_WORDS = { hours: /^(hours?|hrs?|h)\.?$/, minutes: /^(minutes?|mins?|m)\.?$/ };
+function chkWork(T, unit) {
+  const other = unit === 'hours' ? 'minutes' : 'hours';
+  return (input) => {
+    // "it takes about 1.71 hours", "≈ 1.71", "~1.71 hours", "t ≈ 12/7"
+    let t = prep(input);
+    for (let was = ''; was !== t;) { was = t; t = t.replace(/^((it|they) (would )?takes?|together|about|approximately|approx\.?|roughly|≈|~|t\s*[=≈])\s*/, '').trim(); }
+    const m = /^(.*?[\d)])\s*([a-z]+\.?)$/.exec(t);
+    if (m) {
+      if (UNIT_WORDS[other].test(m[2])) return no(`That is in ${other} — the question asks for ${unit}.`);
+      if (!UNIT_WORDS[unit].test(m[2])) return no(`Type a number of ${unit}, like 12/7 or 1.71.`);
+      t = m[1].trim();
+    }
+    const r = readNum(t);
+    if (!r) return no(`Type a number of ${unit}, like 12/7 or 1.71.`);
+    if (near(r.v, T)) return true;
+    if (r.dec && !terminates(T)) {
+      if (r.places >= 2 && Math.abs(r.v - T) <= 0.5 * 10 ** -r.places + 1e-12) return true;
+      if (r.places < 2 && Math.abs(r.v - T) < 0.06) return no('Close — round to the nearest hundredth (two decimal places), or give the exact fraction.');
+    }
+    return false;
+  };
+}
+skill('work-rate', 14, 'Work-rate problems', 'Solve a work-rate ("working together") problem', (d) => {
+  const [A, B, both, B2, task, unit] = pick(WORKERS);
+  const form = d === 1 ? 'together' : d === 2 ? pick(['together', 'together', 'alone']) : pick(['together', 'alone']);
+  const per = unit === 'hours' ? 'hour' : 'minute';
+  let a, b, T, text, steps, v, alt;
+  if (form === 'together') {
+    if (d === 1) [a, b] = pick([[3, 6], [4, 12], [6, 12], [10, 15], [12, 24], [6, 3], [5, 20], [20, 30], [4, 4], [8, 8], [12, 6]]);
+    else { a = ri(2, 15); b = ri(2, 15); need(a !== b); }
+    T = F(a * b, a + b);
+    v = fVal(T);
+    text = `${A} can ${task} alone in ${a} ${unit}. ${B} can ${task} alone in ${b} ${unit}. Working together at these rates, how long will it take them to ${task}? Answer in ${unit}${T.d === 1 ? '' : ', as a fraction or a decimal rounded to the nearest hundredth'}.`;
+    const sum = fAdd(F(1, a), F(1, b)), L = lcm(a, b);
+    steps = [
+      S(`Rates add: a job done in n ${unit} is 1/n of the job per ${per}`, `1/${a} + 1/${b} = ${L === a && L === b ? '' : `${L / a}/${L} + ${L / b}/${L} = `}${fStr(sum)}`),
+      S(`Time together = 1 ÷ (combined rate), with t in ${unit}`, `t = 1 ÷ ${sum.d === 1 ? fStr(sum) : `(${fStr(sum)})`} = ${fStr(T)}`),
+    ];
+    if (!terminates(v)) steps.push(S('As a decimal, rounded to the nearest hundredth', `t ≈ ${v.toFixed(2)}`));
+    else if (T.d !== 1) steps.push(S('As a decimal', `t = ${numStr(v)}`));
+    alt = [a + b, (a + b) / 2, Math.abs(a - b) || a + 1, fVal(F(a * b, Math.abs(a - b) || 1))].map((w) => `${ratStr(w)} ${unit}`);
+  } else {
+    [a, b] = pick([[3, 6], [4, 12], [6, 12], [10, 15], [12, 24], [5, 20], [20, 30], [6, 4], [15, 10], [6, 3], [12, 4], [9, 18], [24, 8]]);
+    T = F(a * b, a + b);
+    need(terminates(fVal(T)));
+    v = b;
+    const Ts = numStr(fVal(T));
+    text = `Working together, ${both} can ${task} in ${Ts} ${unit}. ${A} alone takes ${a} ${unit}. How long would ${B2} take to ${task} alone? Answer in ${unit}.`;
+    const rest = fAdd(fPow(T, -1), F(-1, a));
+    steps = [
+      S('Rates add: 1/(first time) + 1/(second time) = 1/(time together)', `1/${a} + 1/t = 1/${Ts}`),
+      S(`Subtract 1/${a} from both sides`, `1/t = 1/${Ts} ${M} 1/${a} = ${fStr(rest)}`),
+      S('Flip both sides', `t = ${fStr(F(rest.d, rest.n))}`),
+    ];
+    const Tv = fVal(T);
+    alt = [a - Tv, 2 * Tv, a + Tv, (a * Tv) / (a + Tv)].map((w) => `${ratStr(clean(w))} ${unit}`);
+  }
+  const answer = `${form === 'together' ? fStr(T) : fmtN(b)} ${unit}`;
+  return {
+    gap: 0.02, type: 'written', text, fmt: `Type a number of ${unit}, like 12/7 or 1.71.`, answer, check: chkWork(v, unit), num: v, fmtAlt: (w) => `${ratStr(w)} ${unit}`,
+    alt: alt.filter((w) => w !== answer), steps,
+    hint: S(`Add the work rates: a job done in n ${unit} is 1/n of the job per ${per}`, form === 'together' ? 'Add the two rates, then time together = 1 ÷ combined rate' : 'Rate together − known rate = unknown rate; then flip it to get the time'),
+    data: { value: v, form, a, b, unit },
+  };
+});
+
 /* ======================================================= question objects */
 const DIFF = { easy: 1, medium: 2, hard: 3 };
 const DIFF_NAME = { 1: 'easy', 2: 'medium', 3: 'hard' };
@@ -2719,6 +4257,7 @@ function toMCSpec(spec) {
   for (const w of cands) {
     if (out.length === 3) break;
     const k = squash(w);
+    if (spec.gap && spec.num != null) { const r = readNum(String(w).replace(/\s*[a-z]+$/i, '')); if (r && Math.abs(r.v - spec.num) <= spec.gap * Math.max(Math.abs(spec.num), 1e-9)) continue; }
     if (seen.has(k) || /NaN|Infinity|undefined/.test(k) && k !== 'undefined') continue;
     let r;
     try { r = spec.check(w); } catch { r = false; }
@@ -2734,7 +4273,7 @@ function build(sk, spec, d) {
     id: `alg:${sk.id}`, skill: sk.id, difficulty: DIFF_NAME[d], type: spec.type,
     ask: spec.type === 'mc' ? 'Choose the best answer' : 'Type your answer',
     text: spec.text, answer: spec.answer, data: spec.data || {}, steps: spec.steps,
-    hint: spec.steps[0], source: `Algebra Lab · ${sk.name}`, setId: sk.setId,
+    hint: spec.hint || spec.steps[0], source: `Algebra Lab · ${sk.name}`, setId: sk.setId,
   };
   if (spec.figure) { q.figure = spec.figure; q.figureAlt = spec.figureAlt; }
   q.explanation = stepsNode(spec.steps);
@@ -2743,7 +4282,12 @@ function build(sk, spec, d) {
     q.options = shuffle(spec.options);
     q.prompt = spec.text;
   } else {
-    const main = spec.eqs ? el('span', {}, 'Solve the system:', el('span', { class: 'alg-sys' }, ...spec.eqs.map((e) => el('span', {}, e)))) : spec.text;
+    const main = spec.eqs ? el('span', {}, 'Solve the system:', el('span', { class: 'alg-sys' }, ...spec.eqs.map((e) => el('span', {}, e))))
+      : spec.pw ? el('span', { class: 'alg-pwq' }, el('span', { class: 'sr-only' }, spec.text),
+        el('span', { class: 'alg-pw', 'aria-hidden': 'true' }, el('span', { class: 'alg-pw-name' }, `${spec.pw.name} =`),
+          el('span', { class: 'alg-pw-rows' }, ...spec.pw.rows.map(([e, c]) => el('span', { class: 'alg-pw-row' }, el('span', {}, e), el('span', { class: 'alg-pw-cond' }, `if ${c}`))))),
+        el('span', { 'aria-hidden': 'true' }, spec.pw.ask))
+        : spec.text;
     q.prompt = el('span', { class: 'alg-prompt' }, main, spec.fmt ? el('span', { class: 'alg-fmt' }, spec.fmt) : null);
     q.format = spec.fmt || '';
     q.note = '';
@@ -2777,7 +4321,7 @@ const API = window.CQAlgebra = {
 };
 
 /* =========================================================== integration */
-const UNIT_TITLES = ['Foundations of Algebra', 'Solving Equations', 'Inequalities', 'Functions', 'Linear Equations & Graphs', 'Systems of Equations', 'Exponents & Exponential Functions', 'Polynomials', 'Factoring', 'Quadratic Equations', 'Radicals & the Pythagorean Theorem', 'Statistics'];
+const UNIT_TITLES = ['Foundations of Algebra', 'Solving Equations', 'Inequalities', 'Functions', 'Linear Equations & Graphs', 'Systems of Equations', 'Exponents & Exponential Functions', 'Polynomials', 'Factoring', 'Quadratic Equations', 'Radicals & the Pythagorean Theorem', 'Statistics', 'Function Families & Transformations', 'Rational Expressions & Equations'];
 const unitTitle = (u) => (CQ.getSet(`alg1-u${u}`) || {}).title || UNIT_TITLES[u - 1];
 const isAlg = (set) => !!set && set.subject === 'alg1';
 const skillsFor = (set) => (set.isAll ? SK : SK.filter((s) => s.setId === set.id));
@@ -2822,7 +4366,7 @@ function renderLab(set) {
   let q = null, sk = null, card = null, assisted = false, answered = false, lastSkill = null, keyPick = null;
 
   const view = el('div', { class: 'view alg' });
-  view.append(CQ.panelHead(set, 'algebra', 'Endless practice problems, made fresh every time, each with a worked solution. Pick your skills and a difficulty, then go — "Show a hint" reveals the first step (a hinted problem does not count toward mastery).'));
+  view.append(CQ.panelHead(set, 'algebra', 'Endless practice problems, made fresh every time, each with a worked solution. Pick your skills and a difficulty, then go — "Show a hint" gives you the method or the first step (a hinted problem does not count toward mastery).'));
 
   /* ---- toolbar: back, difficulty ---- */
   const diffBtns = DIFFS.map(([k, label]) => el('button', { type: 'button', class: prefs.difficulty === k ? 'on' : '', 'aria-pressed': String(prefs.difficulty === k), onclick: () => setDifficulty(k) }, label));
@@ -2954,7 +4498,7 @@ function renderLab(set) {
     assisted = true;
     const h = q.hint;
     box.append(...[
-      el('b', {}, '💡 First step: '), h.why,
+      el('b', {}, '💡 Hint: '), h.why,
       h.math ? el('span', { class: 'alg-math' }, h.math) : null,
       h.res ? el('span', { class: 'alg-res' }, el('span', { 'aria-hidden': 'true' }, '→ '), h.res) : null,
       el('span', { class: 'note' }, 'Hint used — this problem won’t count toward mastery.'),
@@ -3019,7 +4563,7 @@ function renderLab(set) {
 CQ.registerMode({
   id: 'algebra', name: 'Algebra Lab', ico: '🧮', color: '#7c5cff', before: 'match',
   desc: 'Unlimited practice problems for every Algebra 1 skill, each with a step-by-step worked solution.',
-  // a unit with no generated skills yet (units 13–14) keeps its other modes
+  // only a set with generated skills offers the Lab (every Algebra 1 unit has some now)
   available: (set) => isAlg(set) && skillsFor(set).length > 0,
   render: renderLab,
 });

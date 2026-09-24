@@ -2,7 +2,7 @@
  * Checks every Algebra Lab skill (study/algebra.js) against math written
  * separately, here.
  *
- *   node tools/verify-algebra.mjs [baseUrl] [--n=150]
+ *   node tools/verify-algebra.mjs [baseUrl] [--n=150] [--skills=id,id…]
  *
  * With no baseUrl the page is opened from disk (file://), so no server is
  * needed. For each skill and each difficulty it generates --n problems (450+
@@ -45,6 +45,7 @@ try { ({ chromium } = await import('playwright')); } catch {
 const args = process.argv.slice(2);
 const N = Number((args.find((a) => a.startsWith('--n=')) || '--n=150').slice(4));
 const base = args.find((a) => !a.startsWith('--'));
+const ONLY = (args.find((a) => a.startsWith('--skills=')) || '').slice(9).split(',').filter(Boolean);
 const STUDY = base ? `${base.replace(/\/$/, '')}/study/` : pathToFileURL(fileURLToPath(new URL('../study/index.html', import.meta.url))).href;
 
 /* ================================================== independent math */
@@ -54,6 +55,7 @@ function tokenize(src) {
     .replace(/[−–]/g, '-').replace(/[×·*]/g, '*').replace(/÷/g, '/')
     .replace(/[⁻⁰¹²³⁴⁵⁶⁷⁸⁹]+/g, (m) => `^(${[...m].map((c) => SUPD[c]).join('')})`)
     .replace(/ˣ/g, '^(x)')
+    .replace(/[½¼¾⅓⅔]/g, (c) => `(${{ '½': '1/2', '¼': '1/4', '¾': '3/4', '⅓': '1/3', '⅔': '2/3' }[c]})`)
     .replace(/squareroot|sqrt|root/g, '√');
   const out = [];
   for (let i = 0; i < s.length;) {
@@ -62,7 +64,9 @@ function tokenize(src) {
     const m = /^(\d+\.?\d*|\.\d+)/.exec(s.slice(i));
     if (m) { out.push({ t: 'n', v: parseFloat(m[1]) }); i += m[1].length; continue; }
     if (/[a-z]/.test(c)) { out.push({ t: 'v', v: c }); i++; continue; }
-    if ('+-*/^()√|'.includes(c)) { out.push({ t: c }); i++; continue; }
+    if ('+-*/^()√|⌊⌋'.includes(c)) { out.push({ t: c }); i++; continue; }
+    if (c === '[') { out.push({ t: '(' }); i++; continue; }
+    if (c === ']') { out.push({ t: ')' }); i++; continue; }
     throw new Error(`cannot read "${c}" in ${src}`);
   }
   return out;
@@ -77,7 +81,7 @@ function ev(src, vars = {}) {
     let v = unary();
     for (;;) {
       if (is('*')) { p++; v *= unary(); } else if (is('/')) { p++; v /= unary(); }
-      else if (is('v') || is('(') || is('√') || (is('|') && !absDepth)) v *= power();
+      else if (is('v') || is('(') || is('√') || is('⌊') || (is('|') && !absDepth)) v *= power();
       else return v;
     }
   }
@@ -91,6 +95,7 @@ function ev(src, vars = {}) {
     if (k.t === '(') { const v = expr(); if (!is(')')) throw new Error(`missing ) in ${src}`); p++; return v; }
     if (k.t === '√') return Math.sqrt(atom());
     if (k.t === '|') { absDepth++; const v = expr(); absDepth--; if (!is('|')) throw new Error(`missing | in ${src}`); p++; return Math.abs(v); }
+    if (k.t === '⌊') { const v = expr(); if (!is('⌋')) throw new Error(`missing ⌋ in ${src}`); p++; return Math.floor(v + 1e-12); }
     throw new Error(`unexpected ${k.t} in ${src}`);
   }
   const v = expr();
@@ -241,20 +246,24 @@ function mixedText(v) {
 }
 /** A decimal correctly rounded to 2 places, for a value that does not terminate. */
 const rounded2 = (v) => (terminating(v) ? null : v.toFixed(2));
-const numForms = (v, prefix = '') => {
+/** Equivalent typings of v. With exact (a prompt that never asks for rounding) a rounded decimal is NOT one of them. */
+const numForms = (v, prefix = '', exact = false) => {
   const out = [String(v), `${prefix}${fracText(v)}`, ` ${fracText(v)} `];
   if (!Number.isInteger(v) && terminating(v)) out.push(String(+v.toFixed(6)));
   if (mixedText(v)) out.push(`${prefix}${mixedText(v)}`);
-  if (rounded2(v)) out.push(`${prefix}${rounded2(v)}`);
+  if (rounded2(v) && !exact) out.push(`${prefix}${rounded2(v)}`);
   return out;
 };
+/** For an exact answer: the rounded decimals a student might type, which must be refused with a note. */
+const roundedWrong = (v) => (rounded2(v) ? [rounded2(v), rounded2(v).replace(/^(-?)0\./, '$1.'), v.toFixed(3)] : []);
 const numWrong = (v, prefix = '') => [`${prefix}${fracText(v + 1)}`, `${prefix}${fracText(v - 1)}`, ...(v ? [`${prefix}${fracText(-v)}`] : [])];
-function numJudge(v, { prefix = '', xform = true } = {}) {
+function numJudge(v, { prefix = '', xform = true, exact = false } = {}) {
+  const rw = exact ? roundedWrong(v) : [];
   return {
     value: v,
     right: (s) => close(num(s), v),
-    eq: [...numForms(v), ...(xform ? numForms(v, 'x = ').slice(1).concat([`x=${fracText(v)}`]) : []), ...(prefix ? [`${prefix}${fracText(v)}`] : [])],
-    wrong: numWrong(v, prefix),
+    eq: [...numForms(v, '', exact), ...(xform ? numForms(v, 'x = ', exact).slice(1).concat([`x=${fracText(v)}`]) : []), ...(prefix ? [`${prefix}${fracText(v)}`] : [])],
+    wrong: [...numWrong(v, prefix), ...rw], mustNote: rw,
   };
 }
 function eqJudge(text) {
@@ -1013,20 +1022,629 @@ Object.assign(CTX, {
   'mono-mult': exprCtx('Multiply: ', ['x']), 'factor-group': exprCtx(/^Factor .*?: /, ['x']), 'add-radicals': valueCtx,
 });
 
+const fmtNum = (v) => String(v).replace('-', '−');
+/* ======================================================================
+   Judges for the graph skills and units 13–14, written here from scratch.
+   The graph judges READ THE PICTURE: the pixel ↔ number mapping comes from
+   the tick labels, every curve from its polyline, and whether an end is
+   included, excluded or continues from the dots and arrowheads drawn on it.
+   ====================================================================== */
+const attr = (tag, name) => { const m = new RegExp(`\\s${name}="([^"]*)"`).exec(tag); return m ? m[1] : null; };
+/** Reads an Algebra Lab grid SVG back into math: { curves: [{ cls, pts, ends }], marks }. */
+function readGraph(svg) {
+  if (!/class="alg-grid"/.test(svg || '')) throw new Error('no coordinate grid in the figure');
+  const labels = (cls, axis) => [...svg.matchAll(new RegExp(`<text class="${cls}"[^>]*>([^<]+)</text>`, 'g'))].map((m) => [Number(attr(m[0], axis)), num(m[1])]);
+  const fitAxis = (ls) => {
+    if (ls.length < 2) throw new Error('fewer than two tick labels on an axis');
+    const [[p0, v0], [p1, v1]] = [ls[0], ls[ls.length - 1]];
+    const k = (v1 - v0) / (p1 - p0);
+    for (const [p, v] of ls) if (!close(v0 + (p - p0) * k, v)) throw new Error('tick labels are not evenly spaced');
+    return (p) => v0 + (p - p0) * k;
+  };
+  const toX = fitAxis(labels('alg-gx', 'x')), toY = fitAxis(labels('alg-gy', 'y'));
+  const rd = (v) => Math.round(v * 1e4) / 1e4;
+  const curves = [...svg.matchAll(/<polyline class="alg-curve ([^"]*)" points="([^"]+)"\/>/g)].map((m) => ({
+    cls: m[1], ends: [null, null],
+    pts: m[2].trim().split(/\s+/).map((pr) => { const [a, b] = pr.split(',').map(Number); return [rd(toX(a)), rd(toY(b))]; }),
+  }));
+  const near_ = (P, Q) => Math.hypot(P[0] - Q[0], P[1] - Q[1]) < 0.02;
+  const attach = (P, type, dir) => {
+    for (const c of curves) {
+      const n = c.pts.length;
+      for (const [e, i, j] of [[0, 0, 1], [1, n - 1, n - 2]]) {
+        if (!near_(c.pts[i], P) || c.ends[e]) continue;
+        if (dir) { const [dx, dy] = [c.pts[i][0] - c.pts[j][0], c.pts[i][1] - c.pts[j][1]]; if (dx * dir[0] + dy * dir[1] <= 0) continue; }
+        c.ends[e] = type; return true;
+      }
+    }
+    return false;
+  };
+  for (const m of svg.matchAll(/<circle class="alg-dot (open|closed)[^"]*"[^>]*\/>/g)) {
+    const P = [rd(toX(+attr(m[0], 'cx'))), rd(toY(+attr(m[0], 'cy')))];
+    if (!attach(P, m[1])) throw new Error(`a ${m[1]} dot at (${P}) is not at the end of a curve`);
+  }
+  for (const m of svg.matchAll(/<path class="alg-arrow[^"]*" d="M([\d.]+) ([\d.]+) L([\d.]+) ([\d.]+) L([\d.]+) ([\d.]+) Z"\/>/g)) {
+    const [tx, ty, ax, ay, bx, by] = m.slice(1).map(Number);
+    const tip = [toX(tx), toY(ty)], base = [(toX(ax) + toX(bx)) / 2, (toY(ay) + toY(by)) / 2];
+    if (!attach(tip.map(rd), 'arrow', [tip[0] - base[0], tip[1] - base[1]])) throw new Error('an arrowhead is not at the end of a curve');
+  }
+  const marks = [...svg.matchAll(/<circle class="alg-mark"[^>]*\/>/g)].map((m) => [rd(toX(+attr(m[0], 'cx'))), rd(toY(+attr(m[0], 'cy')))]);
+  return { curves, marks };
+}
+const isLattice = ([x, y]) => Math.abs(x - Math.round(x)) < 1e-6 && Math.abs(y - Math.round(y)) < 1e-6;
+/** Distance from a point to the drawn curves (in units). */
+function distToGraph(G, [x, y]) {
+  let best = Infinity;
+  for (const c of G.curves) for (let i = 0; i + 1 < c.pts.length; i++) {
+    const [ax, ay] = c.pts[i], [bx, by] = c.pts[i + 1];
+    const L2 = (bx - ax) ** 2 + (by - ay) ** 2;
+    const t = L2 ? Math.max(0, Math.min(1, ((x - ax) * (bx - ax) + (y - ay) * (by - ay)) / L2)) : 0;
+    best = Math.min(best, Math.hypot(x - (ax + t * (bx - ax)), y - (ay + t * (by - ay))));
+  }
+  return best;
+}
+/** A straight curve's slope and intercept, from its lattice points; checks every drawn point is on it. */
+function readLine(c) {
+  const lat = c.pts.filter(isLattice);
+  if (lat.length < 2) throw new Error('a line with fewer than two lattice points');
+  const A = lat[0], B = lat[lat.length - 1];
+  if (A[0] === B[0]) {
+    if (!c.pts.every((p) => Math.abs(p[0] - A[0]) < 1e-3)) throw new Error('the drawn points are not on one vertical line');
+    return { vertical: true, x: A[0] };
+  }
+  const m = (B[1] - A[1]) / (B[0] - A[0]), b = A[1] - m * A[0];
+  if (!c.pts.every(([x, y]) => Math.abs(m * x + b - y) < 2e-3)) throw new Error('the drawn points are not on one straight line');
+  return { m, b, lat };
+}
+/** How many distinct points of the graph lie on the vertical line x = a (Infinity along a vertical piece). */
+function crossings(G, a) {
+  const ys = [];
+  for (const c of G.curves) {
+    for (let i = 0; i + 1 < c.pts.length; i++) {
+      const [ax, ay] = c.pts[i], [bx, by] = c.pts[i + 1];
+      if (Math.abs(ax - bx) < 1e-9) { if (Math.abs(ax - a) < 1e-6) return Infinity; continue; }
+      if (a < Math.min(ax, bx) - 1e-9 || a > Math.max(ax, bx) + 1e-9) continue;
+      ys.push({ y: ay + ((by - ay) * (a - ax)) / (bx - ax), c, i });
+    }
+  }
+  const open = [];
+  for (const c of G.curves) c.ends.forEach((t, e) => { if (t === 'open') open.push(c.pts[e ? c.pts.length - 1 : 0]); });
+  const kept = ys.filter(({ y }) => !open.some(([ox, oy]) => Math.abs(ox - a) < 1e-6 && Math.abs(oy - y) < 1e-3) || ys.some((o) => Math.abs(o.y - y) < 1e-3 && !open.some(([ox, oy]) => Math.abs(ox - a) < 1e-6 && Math.abs(oy - o.y) < 1e-3)));
+  const uniq = [];
+  for (const { y } of kept) if (!uniq.some((u) => Math.abs(u - y) < 1e-3)) uniq.push(y);
+  return uniq.length;
+}
+function isFunctionGraph(G) {
+  const xs = new Set();
+  for (let i = -800; i <= 800; i++) xs.add(i / 100);
+  for (const c of G.curves) for (const [x] of c.pts) { xs.add(x); xs.add(x - 1e-4); xs.add(x + 1e-4); }
+  return [...xs].every((x) => crossings(G, x) <= 1);
+}
+/** Domain and range of a one-curve function graph: { lo, hi, loIn, hiIn } each, null = unbounded. */
+function graphDomainRange(G) {
+  if (G.curves.length !== 1) throw new Error('expected one curve');
+  const c = G.curves[0], P = c.pts, n = P.length;
+  const endAt = (e) => ({ t: c.ends[e], p: P[e ? n - 1 : 0], q: P[e ? n - 2 : 1] });
+  const E = [endAt(0), endAt(1)];
+  const dirOf = (E_) => [E_.p[0] - E_.q[0], E_.p[1] - E_.q[1]];
+  const xs = P.map((p) => p[0]), ys = P.map((p) => p[1]);
+  const D = { lo: Math.min(...xs), hi: Math.max(...xs) };
+  for (const [side, val] of [['lo', D.lo], ['hi', D.hi]]) {
+    const e = E.find((E_) => Math.abs(E_.p[0] - val) < 1e-6);
+    if (!e) { D[`${side}In`] = true; continue; }
+    if (e.t === 'arrow' && (side === 'lo' ? dirOf(e)[0] < 0 : dirOf(e)[0] > 0)) D[side] = null;
+    else D[`${side}In`] = e.t !== 'open';
+  }
+  const R = { lo: Math.min(...ys), hi: Math.max(...ys) };
+  for (const e of E) if (e.t === 'arrow') { const dy = dirOf(e)[1]; if (dy < -1e-9) R.lo = null; if (dy > 1e-9) R.hi = null; }
+  const isOpenEnd = (i) => (i === 0 && c.ends[0] === 'open') || (i === n - 1 && c.ends[1] === 'open');
+  const attained = (v) => P.some((p, i) => Math.abs(p[1] - v) < 1e-6 && !isOpenEnd(i)) || P.some((p, i) => i + 1 < n && Math.abs(p[1] - v) < 1e-6 && Math.abs(P[i + 1][1] - v) < 1e-6);
+  if (R.lo != null) R.loIn = attained(R.lo);
+  if (R.hi != null) R.hiIn = attained(R.hi);
+  for (const k of ['lo', 'hi']) if (D[k] != null) D[k] = Math.round(D[k] * 1e6) / 1e6;
+  for (const k of ['lo', 'hi']) if (R[k] != null) R[k] = Math.round(R[k] * 1e6) / 1e6;
+  return [D, R];
+}
+/** "[−4, 3)", "(−∞, 2]", "−4 ≤ x < 3", "y ≥ 2", "all real numbers" → { lo, hi, loIn, hiIn }. */
+function readSet(s, v) {
+  const t = s.trim().replace(/−/g, '-');
+  if (/^all real numbers$/i.test(t)) return { lo: null, hi: null };
+  let m = /^([[(])(-?∞|[-\d./]+), (∞|[-\d./]+)([\])])$/.exec(t);
+  if (m) {
+    const lo = m[2] === '-∞' ? null : num(m[2]), hi = m[3] === '∞' ? null : num(m[3]);
+    if ((lo == null && m[1] === '[') || (hi == null && m[4] === ']')) return null;
+    return { lo, hi, loIn: m[1] === '[', hiIn: m[4] === ']' };
+  }
+  m = new RegExp(`^([-\\d./]+) (≤|<) ${v} (≤|<) ([-\\d./]+)$`).exec(t);
+  if (m) return { lo: num(m[1]), hi: num(m[4]), loIn: m[2] === '≤', hiIn: m[3] === '≤' };
+  m = new RegExp(`^${v} (≤|<|≥|>) ([-\\d./]+)$`).exec(t);
+  if (m) return m[1] === '≤' || m[1] === '<' ? { lo: null, hi: num(m[2]), hiIn: m[1] === '≤' } : { lo: num(m[2]), hi: null, loIn: m[1] === '≥' };
+  return null;
+}
+const sameSetI = (a, b) => !!a && !!b && ['lo', 'hi'].every((k) => (a[k] == null ? b[k] == null : b[k] != null && close(a[k], b[k]) && a[`${k}In`] === b[`${k}In`]));
+
+/** Classifies one drawn curve into a parent family, from its shape alone. */
+function classifyCurve(G) {
+  const c = G.curves[0], P = c.pts;
+  const fits = [];
+  // linear: every point on the line through the ends
+  const [A, B] = [P[0], P[P.length - 1]];
+  const lineAt = (x) => A[1] + ((B[1] - A[1]) * (x - A[0])) / (B[0] - A[0]);
+  if (B[0] !== A[0] && P.every(([x, y]) => Math.abs(lineAt(x) - y) < 2e-3)) fits.push('linear');
+  // absolute value: one corner, straight on both sides, slopes opposite
+  const turn = P.findIndex((p, i) => i > 0 && i < P.length - 1 && Math.abs((P[i + 1][1] - p[1]) / (P[i + 1][0] - p[0]) - (p[1] - P[i - 1][1]) / (p[0] - P[i - 1][0])) > 1e-3);
+  if (turn > 0) {
+    const L = P.slice(0, turn + 1), Rr = P.slice(turn);
+    const sl = (Q) => (Q[Q.length - 1][1] - Q[0][1]) / (Q[Q.length - 1][0] - Q[0][0]);
+    const straight = (Q) => Q.every(([x, y]) => Math.abs(Q[0][1] + sl(Q) * (x - Q[0][0]) - y) < 2e-3);
+    if (straight(L) && straight(Rr) && close(sl(L), -sl(Rr))) fits.push('abs');
+  }
+  // quadratic: the parabola through three points passes through them all
+  const [p0, p1, p2] = [P[0], P[Math.floor(P.length / 2)], P[P.length - 1]];
+  const q = (x) => p0[1] * ((x - p1[0]) * (x - p2[0])) / ((p0[0] - p1[0]) * (p0[0] - p2[0])) + p1[1] * ((x - p0[0]) * (x - p2[0])) / ((p1[0] - p0[0]) * (p1[0] - p2[0])) + p2[1] * ((x - p0[0]) * (x - p1[0])) / ((p2[0] - p0[0]) * (p2[0] - p1[0]));
+  if (!fits.includes('linear') && P.every(([x, y]) => Math.abs(q(x) - y) < 3e-3)) fits.push('quad');
+  // square root: starts at a closed dot (h, k); (y − k)² is proportional to x − h
+  if (c.ends[0] === 'closed') {
+    const [h, k] = P[0];
+    const ratio = P.slice(1).map(([x, y]) => (y - k) ** 2 / (x - h));
+    const sgn = P.slice(1).map(([, y]) => Math.sign(y - k));
+    if (ratio.every((r) => Math.abs(r - ratio[ratio.length - 1]) < 5e-3 * Math.max(1, ratio[ratio.length - 1])) && sgn.every((s) => s === sgn[0])) fits.push('sqrt');
+  }
+  // exponential: at equal x-steps, consecutive differences have a constant ratio ≠ 1
+  const grid = P.filter(([x]) => Math.abs(x * 4 - Math.round(x * 4)) < 1e-6);
+  const d1 = grid.slice(1).map((p, i) => p[1] - grid[i][1]).filter((v, i) => Math.abs(grid[i + 1][0] - grid[i][0] - 0.25) < 1e-6 && Math.abs(v) > 0.05);
+  if (d1.length >= 4 && grid.slice(1).every((p, i) => Math.abs(p[0] - grid[i][0] - 0.25) < 1e-6)) {
+    const big = grid.slice(1).map((p, i) => [p[1] - grid[i][1], i]).filter(([v]) => Math.abs(v) > 0.2);
+    const rs = big.slice(1).filter(([, i], j) => i === big[j][1] + 1).map(([v], j) => v / big[j][0]);
+    if (rs.length >= 3 && rs.every((r) => Math.abs(r - rs[0]) < 0.02) && Math.abs(rs[0] - 1) > 0.05) fits.push('exp');
+  }
+  return fits;
+}
+const FAMNAME = { linear: 'Linear (y = x)', quad: 'Quadratic (y = x²)', abs: 'Absolute value (y = |x|)', sqrt: 'Square root (y = √x)', exp: 'Exponential (y = 2ˣ)' };
+const PARENT = { 'x²': (x) => x * x, '|x|': Math.abs, '√x': (x) => (x < 0 ? NaN : Math.sqrt(x)), '2ˣ': (x) => 2 ** x };
+/** "Reflect over the x-axis, vertical stretch by a factor of 2, left 1, down 4" → { a, h, k }, or null. */
+function readDesc(s) {
+  let a = 1, h = 0, k = 0;
+  for (const part of s.toLowerCase().split(', ')) {
+    let m;
+    if (part === 'reflect over the x-axis') a = -a;
+    else if ((m = /^vertical (stretch|shrink) by a factor of (\S+)$/.exec(part))) { const f = num(m[2]); if ((m[1] === 'stretch') !== (f > 1)) return null; a *= f; }
+    else if ((m = /^(right|left|up|down) (\d+)$/.exec(part))) { const v = +m[2]; if (m[1] === 'right') h += v; else if (m[1] === 'left') h -= v; else if (m[1] === 'up') k += v; else k -= v; }
+    else return null;
+  }
+  return { a, h, k };
+}
+/** "reflected over the x-axis and stretched vertically by a factor of 3, then shifted right 4 and up 6" → { a, h, k }. */
+function readPhrase(s) {
+  let a = 1, h = 0, k = 0;
+  const [pre, post] = s.includes(', then ') ? s.split(', then ') : /^shifted/.test(s) ? ['', s] : [s, ''];
+  for (const part of pre ? pre.split(' and ') : []) {
+    let m;
+    if (part === 'reflected over the x-axis') a = -a;
+    else if ((m = /^(stretched|shrunk) vertically by a factor of (\S+)$/.exec(part))) a *= num(m[2]);
+    else throw new Error(`cannot read "${part}"`);
+  }
+  if (post) {
+    const m = /^shifted (.+)$/.exec(post);
+    if (!m) throw new Error(`cannot read "${post}"`);
+    for (const part of m[1].split(' and ')) {
+      const w = /^(right|left|up|down) (\d+)$/.exec(part);
+      if (!w) throw new Error(`cannot read "${part}"`);
+      const v = +w[2];
+      if (w[1] === 'right') h += v; else if (w[1] === 'left') h -= v; else if (w[1] === 'up') k += v; else k -= v;
+    }
+  }
+  return { a, h, k };
+}
+/** Same function on a spread of points (NaN where either is undefined must match). */
+function sameFunc(f, g) {
+  for (let i = -48; i <= 48; i++) {
+    const x = i / 4 + 0.0137;
+    let a, b;
+    try { a = f(x); } catch { a = NaN; }
+    try { b = g(x); } catch { b = NaN; }
+    const fa = Number.isFinite(a), fb = Number.isFinite(b);
+    if (fa !== fb) return false;
+    if (fa && Math.abs(a - b) > 1e-7 * Math.max(1, Math.abs(b))) return false;
+  }
+  return true;
+}
+/** An equation "y = …" (or "f(x) = …") as a function of x, read with ev. */
+const eqFn = (s) => { const t = String(s).replace(/^\s*(y|[a-z]\(x\))\s*=\s*/, ''); ev(t, { x: 0.5 }); return (x) => ev(t, { x }); };
+/** ASCII forms of y = a·f(x − h) + k for the typed-equivalence tests. */
+function famAscii(parent, a, h, k, style = 0) {
+  const inner = h ? `x ${h > 0 ? '-' : '+'} ${Math.abs(h)}` : 'x';
+  const tight = inner.replace(/\s+/g, '');
+  const body = parent === 'x²' ? (h ? [`(${inner})^2`, `(${tight})²`, `(${inner})**2`][style % 3] : ['x^2', 'x²', 'x**2'][style % 3])
+    : parent === '|x|' ? [`|${inner}|`, `abs(${tight})`, `| ${inner} |`][style % 3]
+      : parent === '√x' ? [`sqrt(${inner})`, `√(${tight})`, `sqrt(${tight})`][style % 3]
+        : `2^(${inner})`;
+  const A = a === 1 ? '' : a === -1 ? '-' : Number.isInteger(a) ? String(a) : `(${fracText(a)})`;
+  const K = k ? ` ${k < 0 ? '-' : '+'} ${Math.abs(k)}` : '';
+  return { std: `y = ${A}${body}${K}`, kFirst: k ? `y = ${k} + ${a === -1 ? '-' : A}${body}`.replace('+ -', '- ') : `y = ${A}${body}` };
+}
+/** Real roots (≤ degree 2) of a polynomial given low → high. */
+function polyRoots(c) {
+  const t = c.slice(); while (t.length > 1 && Math.abs(t[t.length - 1]) < 1e-7) t.pop();
+  if (t.length === 1) return Math.abs(t[0]) < 1e-9 ? null : [];
+  if (t.length === 2) return [-t[0] / t[1]];
+  if (t.length === 3) { const [C, B, A] = t; const D = B * B - 4 * A * C; if (D < -1e-9) return []; const s = Math.sqrt(Math.max(0, D)); return [...new Set([(-B - s) / (2 * A), (-B + s) / (2 * A)].map((v) => Math.round(v * 1e9) / 1e9))]; }
+  throw new Error(`degree ${t.length - 1} is too high`);
+}
+/** Polynomial coefficients through samples at chosen xs (exact solve). */
+function fitAt(f, xs) {
+  const deg = xs.length - 1;
+  const A = xs.map((x) => [...Array.from({ length: deg + 1 }, (_, k) => x ** k), f(x)]);
+  for (let c = 0; c <= deg; c++) {
+    let piv = c; for (let r = c + 1; r <= deg; r++) if (Math.abs(A[r][c]) > Math.abs(A[piv][c])) piv = r;
+    [A[c], A[piv]] = [A[piv], A[c]];
+    for (let r = 0; r <= deg; r++) if (r !== c) { const k = A[r][c] / A[c][c]; for (let j = c; j <= deg + 1; j++) A[r][j] -= k * A[c][j]; }
+  }
+  return A.map((row, i) => row[deg + 1] / row[i]).map((v) => (Math.abs(v - Math.round(v)) < 1e-6 ? Math.round(v) : v));
+}
+/** The cells of an Algebra Lab table figure: { xs, ys }. */
+function readTable(html) {
+  const rows = [...String(html).matchAll(/<tr>(.*?)<\/tr>/g)].map((m) => [...m[1].matchAll(/<td>([^<]*)<\/td>/g)].map((c) => num(c[1])));
+  if (rows.length !== 2 || rows[0].length !== rows[1].length || rows[0].some((v) => !Number.isFinite(v))) throw new Error('cannot read the table');
+  return { xs: rows[0], ys: rows[1] };
+}
+/** Splits "A/B" at its top-level slash. */
+function splitFrac(s) {
+  let dep = 0;
+  for (let i = 0; i < s.length; i++) { const c = s[i]; if ('([|'.includes(c)) dep++; else if (')]'.includes(c)) dep--; else if (c === '/' && !dep) return [s.slice(0, i), s.slice(i + 1)]; }
+  return null;
+}
+/** A graph judge's extra: every point "(a, b)" named in the worked steps lies on the drawn graph. */
+function graphPointCheck(G) {
+  return (stepList) => {
+    let n = 0; const bad = [];
+    // (interval notation such as "Range: (−3, 4)" is a set, not a point)
+    for (const st of stepList) for (const f of st) for (const m of String(f).replace(/(Domain|[Rr]ange): [^;]*/g, '').matchAll(/\((−?[\d.]+), (−?[\d.]+)\)/g)) {
+      const P = [num(m[1]), num(m[2])];
+      n++;
+      if (distToGraph(G, P) > 0.01) bad.push(`the worked steps name ${m[0]}, which is not on the graph`);
+    }
+    return [n, bad];
+  };
+}
+
+Object.assign(J, {
+  'graph-domain-range': (q) => {
+    const G = readGraph(q.figure);
+    const [D, R] = graphDomainRange(G);
+    const read = (s) => { const m = /^Domain: (.+); range: (.+)$/.exec(s); return m ? [readSet(m[1], 'x'), readSet(m[2], 'y')] : [null, null]; };
+    const pc = graphPointCheck(G);
+    return {
+      right: (s) => { const [a, b] = read(s); return sameSetI(a, D) && sameSetI(b, R); },
+      ctx: { mode: 'numeric' },
+      extra: (steps) => {
+        const [n, bad] = pc(steps);
+        // the two result lines must be this graph's domain and range
+        const dl = steps.find(([, , r]) => /^Domain: /.test(r)), rl = steps.find(([, , r]) => /^Range: /.test(r));
+        if (!dl || !sameSetI(readSet(dl[2].slice(8), 'x'), D)) bad.push(`the domain step "${dl && dl[2]}" is not the graph's domain`);
+        if (!rl || !sameSetI(readSet(rl[2].slice(7), 'y'), R)) bad.push(`the range step "${rl && rl[2]}" is not the graph's range`);
+        return [n + 2, bad];
+      },
+    };
+  },
+  'vertical-line': (q) => {
+    const G = readGraph(q.figure);
+    const fn = isFunctionGraph(G);
+    return {
+      right: (s) => {
+        if (/^Yes — /.test(s)) return fn && /no vertical line crosses/.test(s);
+        const m = /^No — the vertical line x = (\S+) crosses the graph more than once$/.exec(s);
+        return !fn && !!m && crossings(G, num(m[1])) >= 2;
+      },
+      ctx: { mode: 'numeric' }, extra: graphPointCheck(G),
+    };
+  },
+  'graph-slope': (q) => {
+    const G = readGraph(q.figure);
+    const L = readLine(G.curves[0]);
+    if (!G.marks.every((p) => distToGraph(G, p) < 1e-3 && isLattice(p))) throw new Error('a marked point is off the line or off the grid');
+    if (L.vertical) return { right: (s) => isUndef(s), eq: ['undefined', 'Undefined', 'no slope', 'm = undefined', 'the slope is undefined'], wrong: ['0', '1', 'infinity'], ctx: { mode: 'numeric' }, extra: graphPointCheck(G) };
+    const v = Math.round(L.m * 1e9) / 1e9;
+    return {
+      right: (s) => !isUndef(s) && close(num(s), v),
+      eq: [...numForms(v, '', true), `m = ${fracText(v)}`, `slope = ${fracText(v)}`, ...(v === 0 ? ['zero'] : [])],
+      wrong: [...numWrong(v), ...(v ? [fracText(1 / v)] : []), 'undefined', ...roundedWrong(v)], mustNote: [...(v ? [fracText(1 / v)].filter((w) => !close(1 / v, v)) : []), ...roundedWrong(v)],
+      ctx: { mode: 'numeric', vars: { m: v } }, extra: graphPointCheck(G),
+    };
+  },
+  'graph-y-int': (q) => {
+    const G = readGraph(q.figure);
+    const { m, b } = readLine(G.curves[0]);
+    const right = (s0) => { const s = s0.replace(/^\s*(the )?y-intercept (is |= |: |is at )?/i, ''); const p = pair(s); if (p) return close(p[0], 0) && close(p[1], b); return close(num(s.replace(/^\s*(b|y)\s*=\s*/, '')), b) && !/^\s*x\s*=/.test(s); };
+    return {
+      right,
+      eq: [`(0, ${b})`, `(0,${b})`, ` ( 0 , ${fracText(b).replace('-', '−')} ) `, String(b), `b = ${b}`, `y = ${b}`, `y-intercept = ${b}`, `the y-intercept is (0, ${b})`, `y-intercept is ${b}`, `y-intercept: ${b}`, `The y-intercept is at (0, ${b}).`],
+      wrong: [`(${b}, 0)`, `(0, ${b + 1})`, String(-b), `x = ${b}`, `(0, ${fracText(-b / m)})`].filter((w) => !right(w)),
+      mustNote: [`(${b}, 0)`],
+      ctx: { mode: 'solve', free: ['x', 'y'], sols: [{ x: 0, y: b }], isSol: (a) => close(a.x, 0) && close(a.y, b) }, extra: graphPointCheck(G),
+    };
+  },
+  'graph-line-eq': (q) => {
+    const G = readGraph(q.figure);
+    const { m, b } = readLine(G.curves[0]);
+    const j = lineJudge(m, b);
+    const mt = fracText(m), mx = m === 1 ? 'x' : m === -1 ? '-x' : Number.isInteger(m) ? `${m}x` : `(${mt})x`;
+    j.eq.push(`y = ${mx}${b ? ` ${b < 0 ? '−' : '+'} ${Math.abs(b)}` : ''}`, `f(x) = ${mx} + ${b}`.replace('+ -', '- '));
+    if (!Number.isInteger(m)) j.eq.push(`y = ${mt}x + ${b}`.replace('+ -', '- '), `y=${mt}*x+${b}`.replace('+-', '-'));
+    j.wrong.push(`y = ${fracText(-m)}x + ${b}`.replace('+ -', '- '), `y = ${mx} + ${b + 1}`.replace('+ -', '- '), `y - ${b} = ${mt}(x - 0)`.replace('- -', '+ '));
+    j.mustNote = [`y = (${mt})(x - 1) + ${fracText(m + b)}`];
+    j.wrong.push(j.mustNote[0]);
+    j.ctx = { mode: 'solve', free: ['x', 'y'], vars: { m, b }, sols: [-3, 0, 2].map((x) => ({ x, y: m * x + b })), isSol: (a) => close(a.y, m * a.x + b), allSols: true };
+    j.extra = graphPointCheck(G);
+    return j;
+  },
+  'graph-system': (q) => {
+    const G = readGraph(q.figure);
+    if (G.curves.length !== 2) throw new Error('expected two lines');
+    const [L1, L2] = G.curves.map(readLine);
+    let x, y;
+    if (L1.vertical || L2.vertical) { const V = L1.vertical ? L1 : L2, O = L1.vertical ? L2 : L1; x = V.x; y = O.m * x + O.b; }
+    else { x = (L2.b - L1.b) / (L1.m - L2.m); y = L1.m * x + L1.b; }
+    x = Math.round(x * 1e9) / 1e9; y = Math.round(y * 1e9) / 1e9;
+    return {
+      right: (s) => { const p = pair(s); return !!p && close(p[0], x) && close(p[1], y); },
+      eq: [`(${x},${y})`, `( ${x} , ${y} )`, `x = ${x}, y = ${y}`, `x=${x} y=${y}`, `(${String(x).replace('-', '−')}, ${String(y).replace('-', '−')})`],
+      wrong: [...(x !== y ? [`(${y}, ${x})`] : []), `(${x}, ${y + 1})`, ...(y ? [`(${x}, ${-y})`] : [])], mustNote: x !== y ? [`(${y}, ${x})`] : [],
+      ctx: { mode: 'solve', free: ['x', 'y'], sols: [{ x, y }], isSol: (a) => close(a.x, x) && close(a.y, y) },
+      extra: (steps) => {
+        const [n, bad] = graphPointCheck(G)(steps);
+        // A "Substitute x = a" step must actually put a in for x: its right side is
+        // "c × a + b", "a + b" or "−a + b" — never "0 × 0" when a is not 0.
+        let k = 0;
+        for (const [w, mth] of steps) {
+          const s = /Substitute x = (\S+)$/.exec(w);
+          if (!s) continue;
+          k++;
+          const tok = s[1].startsWith('−') ? `(${s[1]})` : s[1];
+          const rhs = String(mth).replace(/ ✓$/, '').split(' = ').slice(1).join(' = ');
+          if (!new RegExp(`^(?:.+ × |−)?${esc(tok)}(?: [+−] [\\d/]+)?$`).test(rhs)) bad.push(`"${w}" is followed by "${mth}", which does not put x = ${s[1]} in`);
+        }
+        if (k !== 2) bad.push(`expected a substitution check on each line, found ${k}`);
+        return [n + k, bad];
+      },
+    };
+  },
+  'graph-parabola': (q) => {
+    const G = readGraph(q.figure);
+    const P = G.curves[0].pts.filter(isLattice);
+    if (P.length < 3) throw new Error('a parabola with fewer than three lattice points');
+    const [c0, c1, c2] = fitAt((x) => P.find((p) => p[0] === x)[1], [P[0][0], P[Math.floor(P.length / 2)][0], P[P.length - 1][0]]);
+    if (!G.curves[0].pts.every(([x, y]) => Math.abs(c0 + c1 * x + c2 * x * x - y) < 3e-3)) throw new Error('the curve is not one parabola');
+    const h = -c1 / (2 * c2), k = c0 + c1 * h + c2 * h * h, D = c1 * c1 - 4 * c2 * c0;
+    const pc = graphPointCheck(G);
+    const ctx = { mode: 'numeric' };
+    if (/vertex/.test(q.text)) return { right: (s) => { const p = pair(s); return !!p && close(p[0], h) && close(p[1], k); }, eq: [`(${h},${k})`, `( ${h} , ${k} )`, `x = ${h}, y = ${k}`], wrong: [`(${k}, ${h})`, `(${-h || 1}, ${k})`, `(${h}, ${k + 1})`], ctx, extra: pc };
+    if (/axis of symmetry/.test(q.text)) return { right: (s) => { const m = /^x = (\S+)$/.exec(s); return !!m && close(num(m[1]), h); }, eq: [`x = ${h}`, `x=${h}`, String(h), ` x = ${String(h).replace('-', '−')} `], wrong: [`y = ${h}`, `x = ${h + 1}`, `x = ${k === h ? h - 1 : k}`], mustNote: [`y = ${h}`], ctx, extra: pc };
+    const rs = D < -1e-9 ? [] : [...new Set([(-c1 - Math.sqrt(Math.max(0, D))) / (2 * c2), (-c1 + Math.sqrt(Math.max(0, D))) / (2 * c2)].map((v) => Math.round(v * 1e9) / 1e9))].sort((a, b) => a - b);
+    const j = rootsJudge(rs, (x) => c0 + c1 * x + c2 * x * x);
+    if (!rs.length) j.right = (s) => /^\s*no (real )?(zeros|solutions?)\s*$/i.test(s);
+    else { const r0 = j.right; j.right = (s) => r0(s.replace(/^\s*(the )?(zeros|x-intercepts)( are|:)\s*/i, '').replace(/\.$/, '')); }
+    if (rs.length) j.eq.push(rs.map((r) => `(${r}, 0)`).join(', '), rs.map((r) => `(${r},0)`).join(' and '), `x-intercepts: ${rs.join(', ')}`, `The zeros are ${rs.join(' and ')}.`);
+    else j.eq.push('no zeros', 'No real zeros', 'there are none');
+    if (rs.length && rs[0]) { j.wrong.push(`(0, ${rs[0]})`); j.mustNote.push(`(0, ${rs[0]})`); }
+    j.ctx = ctx; j.extra = pc;
+    return j;
+  },
+  'parent-func': (q) => {
+    const G = readGraph(q.figure);
+    if (G.curves.length !== 1) throw new Error('expected one curve');
+    const fits = classifyCurve(G);
+    if (fits.length !== 1) throw new Error(`the curve fits ${fits.length ? fits.join(' and ') : 'no family'}`);
+    return { right: (s) => s === FAMNAME[fits[0]], ctx: { mode: 'numeric' }, extra: graphPointCheck(G) };
+  },
+  'transform-desc': (q) => {
+    const m = /^How is the graph of y = (.+) related to the graph of its parent function, y = (.+)\?$/.exec(q.text);
+    const f = PARENT[m[2]], target = (x) => ev(m[1], { x });
+    const right = (s) => { const d = readDesc(s); return !!d && sameFunc((x) => d.a * f(x - d.h) + d.k, target); };
+    // a, h and k of the equation, found from the function itself.
+    let h;
+    if (m[2] === '√x') { h = -20; while (!Number.isFinite(target(h + 1e-9)) && h < 20) h += 1; }
+    else if (m[2] === 'x²') { const [, b1, a2] = fit((x) => target(x), 2); h = -b1 / (2 * a2); }
+    else { for (h = -20; h <= 20; h++) if (Math.abs(target(h - 1) + target(h + 1) - 2 * target(h)) > 1e-9) break; }
+    const k = target(h), a = (target(h + 1) - k) / f(1);
+    return { right, ctx: { mode: 'numeric', vars: { a, h, k } } };
+  },
+  'transform-write': (q) => {
+    const m = /^The graph of y = (.+?) is (.+)\. Write an equation for the new graph\.$/.exec(q.text);
+    const f = PARENT[m[1]];
+    const { a, h, k } = readPhrase(m[2]);
+    const target = (x) => a * f(x - h) + k;
+    const right = (s) => { try { return sameFunc(eqFn(s.replace(/ˣ/g, '^(x)')), target); } catch { return false; } };
+    const eq = [0, 1, 2].flatMap((st) => { const F_ = famAscii(m[1], a, h, k, st); return [F_.std, F_.kFirst]; });
+    eq.push(q.answer.replace(/−/g, '-').replace(/\s+/g, ''), q.answer.replace(/^y = /, 'f(x) = '), q.answer.replace(/^y = /, ''));
+    if (Math.abs(a) === 0.5) eq.push(famAscii(m[1], a, h, k).std.replace('(-1/2)', '-½').replace('(1/2)', '½'));
+    const wrong = [];
+    const mustNote = [];
+    if (h) { const w = famAscii(m[1], a, -h, k).std; wrong.push(w); mustNote.push(w); }
+    if (k) { const w = famAscii(m[1], a, h, -k).std; wrong.push(w); mustNote.push(w); }
+    if (a !== 1) { const w = famAscii(m[1], 1, h, k).std; wrong.push(w); mustNote.push(w); }
+    wrong.push(famAscii(m[1], a, h, k + 1).std, 'y = x');
+    return {
+      right, eq, wrong, mustNote, ctx: { mode: 'numeric' },
+      extra: (steps) => { const last = steps[steps.length - 1][1]; let ok = false; try { ok = sameFunc(eqFn(last), target); } catch { ok = false; } return [1, ok ? [] : [`the final step "${last}" is not the described graph`]]; },
+    };
+  },
+  'abs-vertex': (q) => {
+    const e = /^What is the vertex of the graph of y = (.+)\?$/.exec(q.text)[1];
+    const f = (x) => ev(e, { x });
+    let h = null;
+    for (let x = -20; x <= 20; x += 0.5) if (Math.abs(f(x - 0.5) + f(x + 0.5) - 2 * f(x)) > 1e-9) { h = x; break; }
+    if (h == null) throw new Error('no corner found');
+    const k = f(h);
+    return {
+      right: (s) => { const p = pair(s); return !!p && close(p[0], h) && close(p[1], k); },
+      eq: [`(${h},${k})`, ` ( ${h} , ${k} ) `, `(${String(h).replace('-', '−')}, ${String(k).replace('-', '−')})`, `x = ${h}, y = ${k}`],
+      wrong: [...(h ? [`(${-h}, ${k})`] : []), ...(h !== k ? [`(${k}, ${h})`] : []), `(${h}, ${k + 1})`], mustNote: h !== k ? [`(${k}, ${h})`] : [],
+      ctx: { mode: 'solve', free: ['x', 'y'], vars: { h, k }, sols: [-2, 0, 1, 3].map((d) => ({ x: h + d, y: f(h + d) })), isSol: (p) => close(p.y, f(p.x)), allSols: true },
+    };
+  },
+  piecewise: (q) => {
+    const m = /^f\(x\) = (.+)\. Find f\((\S+)\)\.$/.exec(q.text);
+    const x = num(m[2]);
+    const pieces = m[1].split('; ').map((pc) => { const k = /^(.+) if (.+)$/.exec(pc); return { e: k[1], holds: logicTruth(k[2]) }; });
+    const live = pieces.filter((pc) => pc.holds(x));
+    if (live.length !== 1) throw new Error(`${live.length} pieces apply at x = ${x}`);
+    // the pieces must not overlap anywhere, and must cover the line
+    for (let t = -12; t <= 12; t += 0.25) if (pieces.filter((pc) => pc.holds(t)).length !== 1) throw new Error(`pieces overlap or leave a gap at x = ${t}`);
+    const v = ev(live[0].e, { x });
+    const j = numJudge(v, { xform: false, exact: true });
+    j.ctx = { mode: 'identity', free: [], names: { [`f(${m[2]})`]: v }, target: () => v };
+    return j;
+  },
+  'step-func': (q) => {
+    let m = /^Evaluate (⌊.+⌋), where ⌊x⌋ is the greatest integer less than or equal to x\.$/.exec(q.text), v, name;
+    if (m) { v = ev(m[1]); name = m[1]; }
+    else { m = /^f\(x\) = (.+), where ⌊x⌋ is the greatest integer less than or equal to x\. Find f\((\S+)\)\.$/.exec(q.text); v = ev(m[1], { x: num(m[2]) }); name = `f(${m[2]})`; }
+    const j = numJudge(v, { xform: false, exact: true });
+    j.ctx = { mode: 'identity', free: [], names: { [name]: v }, target: () => v };
+    return j;
+  },
+  'avg-rate': (q) => {
+    let f, p, r;
+    let m = /of f\(x\) = (.+) from x = (\S+) to x = (\S+)\.$/.exec(q.text);
+    if (m) { const e = m[1]; f = (x) => ev(e, { x }); p = num(m[2]); r = num(m[3]); }
+    else {
+      m = /from x = (\S+) to x = (\S+)\.$/.exec(q.text);
+      const T = readTable(q.figure);
+      f = (x) => { const i = T.xs.findIndex((t) => close(t, x)); if (i < 0) throw new Error(`x = ${x} is not in the table`); return T.ys[i]; };
+      p = num(m[1]); r = num(m[2]);
+    }
+    const v = (f(r) - f(p)) / (r - p);
+    const j = numJudge(v, { xform: false, exact: true });
+    j.ctx = { mode: 'identity', free: [], names: { [`f(${fmtNum(p)})`]: f(p), [`f(${fmtNum(r)})`]: f(r) }, target: () => v };
+    return j;
+  },
+  'table-model': (q) => {
+    const { xs, ys } = readTable(q.figure);
+    if (!xs.every((x, i) => !i || close(x - xs[i - 1], 1))) throw new Error('x-values are not consecutive');
+    const d1 = ys.slice(1).map((y, i) => y - ys[i]), d2 = d1.slice(1).map((y, i) => y - d1[i]);
+    const con = (a) => a.every((v) => close(v, a[0]));
+    const rat = ys.every((y) => y) ? ys.slice(1).map((y, i) => y / ys[i]) : null;
+    const kinds = [con(d1) && 'Linear', con(d2) && !con(d1) && 'Quadratic', rat && con(rat) && !close(rat[0], 1) && 'Exponential'].filter(Boolean);
+    if (kinds.length !== 1) throw new Error(`table fits ${kinds.join(', ') || 'nothing'}`);
+    return { right: (s) => s.startsWith(`${kinds[0]} — `), ctx: { mode: 'numeric' } };
+  },
+  'inverse-var': (q) => {
+    const m = /y = (\S+) when x = (\S+)\. (?:Find y when x = (\S+)\.|What is the constant of variation, k\?)$/.exec(q.text);
+    const k = num(m[1]) * num(m[2]);
+    const v = m[3] ? k / num(m[3]) : k;
+    const j = numJudge(v, { xform: false, exact: true, prefix: m[3] ? 'y = ' : 'k = ' });
+    j.wrong.push(m[3] ? `x = ${fracText(v)}` : `y = ${fracText(v)}`, ...(m[3] ? [fracText(num(m[1]) * num(m[3]) / num(m[2]))] : [fracText(num(m[1]) / num(m[2]))]));
+    j.wrong = j.wrong.filter((w) => !close(num(w), v) || /^[xy] =/.test(w));
+    j.ctx = { mode: 'numeric', vars: { k } };
+    return j;
+  },
+  excluded: (q) => {
+    const e = /^Find all excluded values for (.+)\.$/.exec(q.text)[1];
+    const [N, Dn] = splitFrac(e);
+    const Df = (x) => ev(Dn, { x }), Nf = (x) => ev(N, { x });
+    const rs = polyRoots(fit(Df, 2)).sort((a, b) => a - b);
+    const nz_ = (polyRoots(fit(Nf, 2)) || []).filter((z) => !rs.some((r) => close(r, z)));
+    const readList = (s) => String(s).replace(/≠|!=/g, '=').split(/,|\band\b|\bor\b/).map((t) => t.trim().replace(/^x\s*=\s*/, '')).filter(Boolean).map(num);
+    const right = (s) => { const g = [...new Set(readList(s).map((v) => Math.round(v * 1e9) / 1e9))]; return g.length === rs.length && rs.every((r) => g.some((v) => close(v, r))); };
+    const eq = [rs.join(', '), rs.slice().reverse().map((r) => `x != ${r}`).join(' and '), rs.map((r) => `x=${r}`).join(', '), rs.map((r) => `x ≠ ${String(r).replace('-', '−')}`).join(', '), `{${rs.join(', ')}}`, rs.join(' ')];
+    const wrong = [rs.map((r) => -r).join(', ')].filter((w) => !rs.every((r) => rs.includes(-r)));
+    const mustNote = [];
+    if (rs.length > 1) { wrong.push(String(rs[0])); mustNote.push(String(rs[0])); }
+    if (nz_.length) { const w = [...rs, ...nz_].join(', '); wrong.push(w); mustNote.push(w); wrong.push(nz_.join(', ')); }
+    return { right, eq, wrong, mustNote, ctx: { mode: 'solve', free: ['x'], sols: rs.map((x) => ({ x })), isSol: (a) => Math.abs(Df(a.x)) < 1e-7 } };
+  },
+  'rat-simplify': (q) => { const e = q.text.replace('Simplify: ', ''); return { right: (s) => { try { return sameFunc(eqFn(s), (x) => ev(e, { x })); } catch { return false; } }, ctx: { mode: 'identity', free: ['x'], target: (a) => ev(e, a), targetNeedsVar: true } }; },
+  'rat-muldiv': (q) => {
+    const m = /^(Multiply|Divide): (.+) (·|÷) (.+)$/.exec(q.text);
+    const unwrap = (s) => (/^\[.*\]$/.test(s) ? s.slice(1, -1) : s);
+    if (!splitFrac(unwrap(m[2])) || !splitFrac(unwrap(m[4]))) throw new Error('each side should be one fraction');
+    // The prompt is read exactly as printed, with the standard order of operations —
+    // an unbracketed "A/B ÷ C/D" would mean ((A/B) ÷ C)/D and no longer match the key.
+    const whole = q.text.replace(/^(Multiply|Divide): /, '');
+    const T = (x) => ev(whole, { x });
+    if (m[3] === '÷') { const L = (x) => ev(unwrap(m[2]), { x }), R = (x) => ev(unwrap(m[4]), { x }); if (!sameFunc(T, (x) => L(x) / R(x))) throw new Error('the printed division does not read as (first fraction) ÷ (second fraction) — bracket each fraction'); }
+    return { right: (s) => { try { return sameFunc(eqFn(s), T); } catch { return false; } }, ctx: { mode: 'identity', free: ['x'], target: (a) => T(a.x), targetNeedsVar: true } };
+  },
+  'rat-addsub': (q) => { const e = q.text.replace(/^(Add|Subtract): /, ''); return { right: (s) => { try { return sameFunc(eqFn(s), (x) => ev(e, { x })); } catch { return false; } }, ctx: { mode: 'identity', free: ['x'], target: (a) => ev(e, a), targetNeedsVar: true } }; },
+  'rat-eq': (q) => {
+    const [L, R] = sides(q.text.replace('Solve: ', ''));
+    const g = (x) => ev(L, { x }) - ev(R, { x });
+    const poles = [];
+    for (let p = -30; p <= 30; p++) if (!Number.isFinite(ev(L, { x: p })) || !Number.isFinite(ev(R, { x: p }))) poles.push(p);
+    const h = (x) => g(x) * poles.reduce((acc, p) => acc * (x - p), 1);
+    const c = fitAt(h, [0.31, 0.77, 1.43, 2.19]);
+    const cands = polyRoots(c);
+    if (!cands) throw new Error('identity');
+    const valid = cands.filter((r) => !poles.some((p) => close(p, r))).sort((a, b) => a - b);
+    const ext = cands.filter((r) => poles.some((p) => close(p, r)));
+    const j = rootsJudge(valid, g);
+    if (ext.length) { const w = [...valid, ...ext].map((r) => `x = ${fracText(r)}`).join(', '); j.wrong.push(w); j.mustNote.push(w); if (valid.length) { j.wrong.push(`x = ${ext[0]}`); j.mustNote.push(`x = ${ext[0]}`); } }
+    // the cleared equation's steps hold at every algebraic candidate, extraneous ones included
+    j.ctx = { mode: 'solve', free: ['x'], sols: cands.map((x) => ({ x })), isSol: (a) => cands.some((c) => close(a.x, c)) };
+    return j;
+  },
+  'work-rate': (q) => {
+    const t = q.text;
+    const unit = /Answer in (hours|minutes)/.exec(t)[1], other = unit === 'hours' ? 'minutes' : 'hours';
+    let v, m;
+    if ((m = /alone in (\d+) (?:hours|minutes)\. .+ alone in (\d+) (?:hours|minutes)\./.exec(t))) v = 1 / (1 / +m[1] + 1 / +m[2]);
+    else { m = /can .+ in ([\d.]+) (?:hours|minutes)\. .+ alone takes (\d+) /.exec(t); v = 1 / (1 / +m[1] - 1 / +m[2]); }
+    v = Math.round(v * 1e9) / 1e9;
+    const rounding = /nearest hundredth/.test(t);
+    const right = (s) => {
+      const k = new RegExp(`^(.+?)\\s*(${unit})?$`).exec(String(s).trim().replace(/^(about|≈|~)\s*/, ''));
+      const x = num(k[1]);
+      if (!Number.isFinite(x)) return false;
+      if (close(x, v)) return true;
+      const d = (/\.(\d+)$/.exec(k[1]) || [, ''])[1].length;
+      return rounding && d >= 2 && Math.abs(x - v) <= 0.5 * 10 ** -d + 1e-12;
+    };
+    const eq = [fracText(v), `${fracText(v)} ${unit}`, `t = ${fracText(v)}`, ...(mixedText(v) ? [`${mixedText(v)} ${unit}`] : []), `${fracText(v)} ${unit === 'hours' ? 'hrs' : 'min'}`];
+    if (!terminating(v)) eq.push(v.toFixed(2), `${v.toFixed(3)} ${unit}`, `about ${v.toFixed(2)} ${unit}`, `≈ ${v.toFixed(2)}`, `~${v.toFixed(2)} ${unit}`);
+    else if (!Number.isInteger(v)) eq.push(String(v));
+    const wrong = [`${fracText(v)} ${other}`, terminating(v) ? String(Math.round((v + 0.1) * 100) / 100) : (Math.round((v + 0.01) * 100) / 100).toFixed(2), String(Math.round(v * 2 + 1))];
+    const mustNote = [`${fracText(v)} ${other}`];
+    if (!terminating(v) && Math.abs(+v.toFixed(1) - v) < 0.06) { wrong.push(v.toFixed(1)); mustNote.push(v.toFixed(1)); }
+    return { right, eq, wrong, mustNote, value: v, ctx: { mode: 'numeric', names: { t: v } } };
+  },
+});
+
 /* ======================================================== text hygiene */
 const BAD = [
   [/NaN/, 'NaN'], [/Infinity/, 'Infinity'], [/\bundefined\b/, 'undefined'], [/\bnull\b/, 'null'], [/\[object/, '[object'],
   [/\+ [-−]/, '"+ -"'], [/[-−] [-−]/, '"- -"'], [/(^|[^\d.])1x/, '"1x"'], [/(^|[^\d.])0x/, '"0x"'], [/[+−-] 0x/, '"+ 0x"'],
   [/[xy]¹(?![⁰¹²³⁴⁵⁶⁷⁸⁹])/, 'x¹'], [/\^1(?!\d)/, '^1'], [/[−-]0(?![.\d/])/, '−0'], [/\d\.\d{7,}/, 'float noise'], [/\d\.\d*(0000|9999)\d/, 'float noise'],
-  [/(^|[^\d])1√/, '"1√"'], [/√1(?!\d)/, '√1'],
+  [/(^|[^\d])1√/, '"1√"'], [/√1(?!\d)/, '√1'], [/(^|[\s(=,[])-\d/, 'an ASCII hyphen used as a minus sign'],
 ];
 function hygiene(q) {
   const strings = [q.text, q.answer, ...(q.options || []), q.explanationText, q.figureAlt || '', q.format || '', q.hintText || ''];
   const out = [];
   for (const s of strings) {
     let t = String(s);
-    if (q.skill === 'slope') t = t.replace(/\bundefined\b/g, 'UNDEF');
+    if (q.skill === 'slope' || q.skill === 'graph-slope') t = t.replace(/\bundefined\b/g, 'UNDEF');
     for (const [re, name] of BAD) if (re.test(t)) out.push(`${name} in ${JSON.stringify(t.length > 160 ? t.slice(0, 160) + '…' : t)}`);
+  }
+  return out;
+}
+
+/* Checks for the skills added with the graph and unit 13–14 work:
+   the hint shows a method, not the answer; the alt text describes the
+   figure without stating the answer; and a numeric multiple-choice
+   distractor is never within 1% of the right number. */
+const NEW_SKILLS = new Set(['graph-domain-range', 'vertical-line', 'graph-slope', 'graph-y-int', 'graph-line-eq', 'graph-system', 'graph-parabola', 'parent-func', 'transform-desc', 'transform-write', 'abs-vertex', 'piecewise', 'step-func', 'avg-rate', 'table-model', 'inverse-var', 'excluded', 'rat-simplify', 'rat-muldiv', 'rat-addsub', 'rat-eq', 'work-rate']);
+const plainNumber = (s) => /^\s*[−-]?[\d.,/]+\s*[a-z]*\s*$/i.test(String(s));
+function giveaways(q) {
+  const out = [];
+  const a = String(q.answer);
+  if (!q.hintText) out.push('no hint');
+  else if (a.length >= 3 && q.hintText.includes(a)) out.push(`the hint gives the answer "${a}"`);
+  if (q.figureAlt && !plainNumber(a) && q.figureAlt.toLowerCase().includes(a.toLowerCase())) out.push(`the alt text gives the answer "${a}"`);
+  if (q.figure && !q.figureAlt) out.push('a figure without alt text');
+  if (q.type === 'mc' && q.options && q.options.every(plainNumber)) {
+    const val = (o) => num(String(o).replace(/\s*[a-z]+\s*$/i, ''));
+    const r = val(a);
+    for (const o of q.options) if (o !== a && Math.abs(val(o) - r) <= 0.01 * Math.max(Math.abs(r), 1e-9)) out.push(`distractor "${o}" is within 1% of the answer "${a}"`);
   }
   return out;
 }
@@ -1042,7 +1660,7 @@ if (!(await page.evaluate(() => !!window.CQAlgebra))) {
   if (!(await page.evaluate(() => !!window.CQ))) { console.log('FAIL: study/app.js did not load (no window.CQ)'); process.exit(1); }
   await page.addScriptTag({ url: new URL('algebra.js', STUDY).href });
 }
-const skills = await page.evaluate(() => window.CQAlgebra.skills);
+const skills = (await page.evaluate(() => window.CQAlgebra.skills)).filter((sk) => !ONLY.length || ONLY.includes(sk.id));
 if (!skills.length) { console.log('FAIL: CQAlgebra.skills is empty'); process.exit(1); }
 
 const rows = [];
@@ -1088,6 +1706,13 @@ for (const sk of skills) {
       const [nSteps, badSteps] = checkSteps(q.stepList, ctx);
       row.steps += nSteps;
       for (const b of badSteps) fail(`${diff}: worked step ${b} — in "${q.text}"`);
+      if (j.extra) {
+        let n = 0, b = [];
+        try { [n, b] = j.extra(q.stepList); } catch (e) { b = [`could not be checked: ${e.message}`]; }
+        row.steps += n;
+        for (const x of b) fail(`${diff}: worked step: ${x} — in "${q.text}"`);
+      }
+      if (NEW_SKILLS.has(sk.id)) for (const x of giveaways(q)) fail(`${diff}: ${x} — in "${q.text}"`);
       (keep[sk.id] ||= []).push({ q, ctx });
       if (!j.right(q.answer)) fail(`${diff}: WRONG canonical answer "${q.answer}" for "${q.text}"`);
       if (q.type === 'mc') {
@@ -1132,12 +1757,33 @@ await browser.close();
      FOIL — the Inner product miswritten ("2 · x = 3x");
      inequality — dividing by a negative with the old sign on the math line. */
 const selfTest = [];
-{
+if (!ONLY.length) {
   const f = (keep.foil || []).find(({ q }) => q.stepList.some(([w]) => /^Inner/.test(w)));
   if (!f) selfTest.push('no FOIL problem to mutate');
   else {
     const steps = f.q.stepList.map(([w, m, r]) => (/^Inner/.test(w) ? [w, m.replace(/= (.+)$/, (all, rhs) => `= ${/x/.test(rhs) ? rhs.replace(/^(−?)(\d*)x/, (z, sg, d) => `${sg}${(+d || 1) + 1}x`) : '1x'}`), r] : [w, m, r]));
     if (!checkSteps(steps, f.ctx)[1].length) selfTest.push(`a miswritten FOIL Inner step was not caught: ${JSON.stringify(steps)}`);
+  }
+  // Graph steps: a point off the drawn lines, and a domain with the wrong bracket.
+  const gs = (keep['graph-system'] || [])[0];
+  if (gs) {
+    const jj = J['graph-system'](gs.q);
+    const steps = gs.q.stepList.map(([w, m, r]) => [w, m.replace(/^\((−?\d+), (−?\d+)\)$/, (all, x, y) => `(${x}, ${String(num(y) + 1).replace('-', '−')})`), r]);
+    if (!jj.extra(steps)[1].length) selfTest.push(`a systems step naming a point off the lines was not caught: ${JSON.stringify(steps)}`);
+  }
+  // …and a check step that says "Substitute x = a" but writes "0 × 0 + b" (true arithmetic, wrong substitution).
+  const gz = (keep['graph-system'] || []).find(({ q }) => q.stepList.some(([w]) => /Substitute x = (?!0$)\S+$/.test(w)));
+  if (!gz) selfTest.push('no graph-system problem with a non-zero x to mutate');
+  else {
+    const jj = J['graph-system'](gz.q);
+    const steps = gz.q.stepList.map(([w, m, r]) => (/Substitute x = /.test(w) ? [w, m.replace(/^(\S+) = .*$/, (all, y) => `${y} = 0 × 0 ${y.startsWith('−') ? '−' : '+'} ${y.replace('−', '')} ✓`), r] : [w, m, r]));
+    if (!jj.extra(steps)[1].length) selfTest.push(`a systems check step that substitutes 0 instead of x was not caught: ${JSON.stringify(steps)}`);
+  }
+  const dr = (keep['graph-domain-range'] || []).find(({ q }) => q.stepList.some(([, , r]) => /^Domain: .*[[\]≤]/.test(r)));
+  if (dr) {
+    const jj = J['graph-domain-range'](dr.q);
+    const steps = dr.q.stepList.map(([w, m, r]) => [w, m, /^Domain: /.test(r) ? r.replace(/≤|\[|\]/, (c) => ({ '≤': '<', '[': '(', ']': ')' }[c])) : r]);
+    if (!jj.extra(steps)[1].length) selfTest.push(`a domain step with an endpoint wrongly left out was not caught: ${JSON.stringify(steps)}`);
   }
   const FL = { '<': '>', '>': '<', '≤': '≥', '≥': '≤' };
   const g = (keep.inequality || []).find(({ q }) => q.stepList.some(([w]) => /reverses the inequality sign/.test(w)));
@@ -1161,7 +1807,7 @@ for (const t of selfTest) problems.push(`step-checker self-test: ${t}`);
 const PROSE = new Set(['number-line', 'is-function', 'system-type']);
 for (const r of rows) if (!r.steps && !PROSE.has(r.skill)) problems.push(`${r.skill}: no worked-step clause could be checked`);
 for (const r of short) problems.push(`${r.skill}: only ${r.n} problems checked (need ≥ 400)`);
-console.log(`\nStep-checker self-test: ${selfTest.length ? 'FAILED' : 'a miswritten FOIL step and an unreversed inequality step are both caught'}`);
+console.log(`\nStep-checker self-test: ${ONLY.length ? 'skipped (--skills)' : selfTest.length ? 'FAILED' : 'a miswritten FOIL step, an unreversed inequality step, a systems step off the lines, a systems check that substitutes 0 for x and a domain step with the wrong bracket are all caught'}`);
 if (problems.length || rows.some((r) => r.fails)) {
   console.log(`\n${rows.reduce((s, r) => s + r.fails, 0)} failure(s). First few:`);
   for (const p of problems.slice(0, 60)) console.log(`  ${p}`);

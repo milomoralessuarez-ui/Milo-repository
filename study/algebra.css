@@ -116,7 +116,55 @@
 .alg-tri .alg-tri-label { fill: var(--text); font-size: 16px; font-weight: 700; }
 .alg-tri .alg-tri-label.miss { fill: var(--warm); font-size: 18px; }
 
+/* ---------- coordinate grids (graph problems) ----------
+   Every colour is a theme token, so the grid reads in light and dark. The
+   two lines of a system are purple and pink (different lightness too), and
+   the alt text names both. Labels carry a halo in the figure's background
+   colour so they stay legible where they cross a grid line or a curve. */
+.alg-grid { font-family: var(--font); }
+.q-figure svg.alg-grid { max-width: 380px; max-height: none; }
+.alg-grid .alg-gl { stroke: var(--line); stroke-width: 1; }
+.alg-grid .alg-gl.major { stroke: color-mix(in srgb, var(--text-3) 38%, var(--line)); }
+.alg-grid .alg-gaxis { stroke: var(--text-2); stroke-width: 2; }
+.alg-grid .alg-gaxis-end { fill: var(--text-2); }
+.alg-grid text {
+  fill: var(--text-2); font-size: 13px; font-weight: 700;
+  paint-order: stroke; stroke: var(--surface-2); stroke-width: 4px; stroke-linejoin: round;
+}
+.alg-grid .alg-gname { fill: var(--text); font-size: 15px; font-style: italic; }
+.alg-grid .alg-curve { fill: none; stroke-width: 3.5; stroke-linejoin: round; stroke-linecap: round; }
+.alg-grid .alg-curve.c1 { stroke: var(--brand); }
+.alg-grid .alg-curve.c2 { stroke: var(--brand-3); }
+.alg-grid .alg-arrow.c1 { fill: var(--brand); }
+.alg-grid .alg-arrow.c2 { fill: var(--brand-3); }
+.alg-grid .alg-dot { stroke-width: 3; }
+.alg-grid .alg-dot.c1 { stroke: var(--brand); }
+.alg-grid .alg-dot.c2 { stroke: var(--brand-3); }
+.alg-grid .alg-dot.closed.c1 { fill: var(--brand); }
+.alg-grid .alg-dot.closed.c2 { fill: var(--brand-3); }
+.alg-grid .alg-dot.open { fill: var(--surface-2); }
+.alg-grid .alg-mark { fill: var(--text); stroke: var(--surface-2); stroke-width: 2; }
+
+/* ---------- tables of values ---------- */
+.alg-table-wrap { max-width: 100%; overflow-x: auto; }
+.alg-table { border-collapse: collapse; font-variant-numeric: tabular-nums; font-size: 1.02rem; margin: 0 auto; }
+.alg-table th, .alg-table td { border: 1px solid var(--line); padding: 8px 12px; text-align: center; min-width: 2.8em; }
+.alg-table th { background: var(--surface-3); color: var(--text); font-style: italic; font-weight: 700; }
+.alg-table td { color: var(--text); font-weight: 600; }
+
+/* ---------- piecewise definitions ---------- */
+.alg-pwq { display: grid; gap: 8px; }
+.alg-pw { display: inline-flex; align-items: center; gap: .5em; flex-wrap: wrap; }
+.alg-pw-name { white-space: nowrap; }
+.alg-pw-rows {
+  display: grid; gap: 4px; padding: 2px 0 2px .7em;
+  border-left: 3px solid var(--brand); border-radius: 12px 0 0 12px;
+}
+.alg-pw-row { display: flex; flex-wrap: wrap; gap: 0 .8em; }
+.alg-pw-cond { color: var(--text-2); font-weight: 600; }
+
 @media (max-width: 520px) {
+  .alg-table th, .alg-table td { padding: 7px 8px; min-width: 2.2em; }
   .alg-toolbar { align-items: stretch; }
   .alg-diff { width: 100%; justify-content: space-between; }
   .alg-chip { font-size: .85rem; padding: 8px 12px; }

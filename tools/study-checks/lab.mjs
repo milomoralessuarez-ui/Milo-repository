@@ -2,7 +2,11 @@
  * Problem Lab smoke check, run by tools/smoke-study.mjs: opens the Lab on
  * Concept 3, answers three problems correctly, then uses "Show me how" and
  * confirms the method and the worked solution render — and that the assisted
- * answer earns no mastery.
+ * answer earns no mastery. Then the units after the notes: three problems on
+ * Unit 10 and two on Unit 8 answered right, a formula graded case-sensitively,
+ * "Show me how" on a transition-metal name keeping the Roman numeral back,
+ * "p+ n0 e-" labels accepted, the Lab offered on Unit 5 but not on Unit 7,
+ * and All of Chemistry's skills grouped by unit.
  */
 export default async ({ page, go, check, fail }) => {
   const current = () => page.evaluate(() => {
@@ -75,6 +79,74 @@ export default async ({ page, go, check, fail }) => {
     if (!skills.some((t) => /Temperature/.test(t)) || skills.some((t) => /Dimensional/.test(t))) fail(`Concept 2 shows the wrong skills: ${skills.join(', ')}`);
     await go('/set/c1/lab');
     if (await page.locator('.lab-stage').count()) fail('Problem Lab opened on Concept 1');
+
+    // Units after the notes: The Mole (3 right answers) and Naming (2), each
+    // marked right with a worked solution; the Lab is on Unit 5 but not Unit 7.
+    for (const [setId, n] of [['chem-u10', 3], ['chem-u8', 2]]) {
+      await go(`/set/${setId}/lab`);
+      if (!(await page.locator('.lab-stage .q-card').count())) { fail(`no problem on screen in ${setId}`); continue; }
+      for (let i = 0; i < n; i++) {
+        const q = await current();
+        if (!q) { fail(`CQLab.current is empty on ${setId}`); break; }
+        const set = await page.evaluate((skill) => window.CQLab.skills.find((s) => s.id === skill)?.setId, q.skill);
+        if (set !== setId) fail(`${setId} served a ${q.skill} problem from ${set}`);
+        await answer(q);
+        if (!(await page.locator('.lab-stage .feedback.good').count())) fail(`the right answer "${q.answer}" (${q.skill}) was not marked correct on ${setId}`);
+        if (!(await page.locator('.lab-stage .feedback .lab-work').count())) fail(`no worked solution after a ${q.skill} problem`);
+        const next = page.locator('.lab-stage .btn.primary.lg', { hasText: 'Next problem' });
+        if (!(await next.count())) { fail('no "Next problem" button'); break; }
+        await next.click();
+        await page.waitForTimeout(120);
+      }
+      if ((await streak()) !== n) fail(`${n} right answers on ${setId} but the streak reads ${await streak()}`);
+    }
+    // A formula is graded with its capitals: "co" is not CO.
+    await page.evaluate(() => {
+      let q;
+      for (let i = 0; i < 500; i++) { q = window.CQLab.generate('formula', { difficulty: 1 }); if (q.answer.toLowerCase() !== q.answer) break; }
+      window.CQLab.show(q);
+    });
+    const low = await page.evaluate(() => window.CQLab.current.accept[0].toLowerCase());
+    await page.locator('.lab-stage .q-card input.input').fill(low);
+    await page.locator('.lab-stage .q-card input.input').press('Enter');
+    await page.waitForTimeout(100);
+    if (!(await page.locator('.lab-stage .feedback.bad').count())) fail(`the formula "${low}" (all lower case) was marked right`);
+    // "Show me how" on a transition-metal name teaches the method but does not
+    // hand over the Roman numeral or the metal's charge.
+    const tm = await page.evaluate(() => {
+      let q;
+      for (let i = 0; i < 500; i++) { q = window.CQLab.generate('naming', { difficulty: 3 }); if (/\([IV]+\)/.test(q.answer)) break; }
+      window.CQLab.show(q);
+      return { answer: q.answer, roman: q.answer.match(/\(([IV]+)\)/)[1], charge: ({ I: 1, II: 2, III: 3, IV: 4 })[q.answer.match(/\(([IV]+)\)/)[1]] };
+    });
+    await page.locator('.lab-hint-btn').click();
+    await page.waitForTimeout(100);
+    const tmHint = (await page.locator('.lab-stage .lab-hint .lab-work').textContent()) || '';
+    if (tmHint.includes(`(${tm.roman})`) || new RegExp(`\\+\\s*${tm.charge}(?!\\d)`).test(tmHint)) fail(`"Show me how" gives away ${tm.answer}: ${tmHint}`);
+    // Protons, neutrons, electrons typed with the particle symbols "p+ n0 e-".
+    const pne = await page.evaluate(() => {
+      const q = window.CQLab.generate('pne', { difficulty: 2 });
+      window.CQLab.show(q);
+      const [p, n, e] = q.answer.match(/\d+/g);
+      return `${p} p+ ${n} n0 ${e} e-`;
+    });
+    await page.locator('.lab-stage .q-card input.input').fill(pne);
+    await page.locator('.lab-stage .q-card input.input').press('Enter');
+    await page.waitForTimeout(100);
+    if (!(await page.locator('.lab-stage .feedback.good').count())) fail(`"${pne}" was not accepted`);
+    await go('/set/chem-u5');
+    if (!(await page.locator('.card.mode', { hasText: 'Problem Lab' }).count())) fail('no Problem Lab card on Unit 5');
+    await go('/set/chem-u5/lab');
+    const u5 = await page.locator('.lab-chip').allTextContents();
+    if (!u5.some((t) => /Protons/.test(t)) || u5.some((t) => /Temperature|Molar mass/.test(t))) fail(`Unit 5 shows the wrong skills: ${u5.join(', ')}`);
+    await go('/set/chem-u7');
+    if (await page.locator('.card.mode', { hasText: 'Problem Lab' }).count()) fail('a Problem Lab card on Unit 7');
+    await go('/set/chem-u7/lab');
+    if (await page.locator('.lab-stage').count()) fail('Problem Lab opened on Unit 7');
+    // All of Chemistry groups the skills by unit.
+    await go('/set/chem-all/lab');
+    const groups = await page.locator('.lab-group').allTextContents();
+    for (const g of ['Concept 2', 'Concept 3', 'Unit 5', 'Unit 10', 'Unit 12']) if (!groups.includes(g)) fail(`All of Chemistry has no "${g}" group of skills (${groups.join(', ')})`);
 
     await page.setViewportSize({ width: 390, height: 844 });
     await go('/set/chem-all/lab');

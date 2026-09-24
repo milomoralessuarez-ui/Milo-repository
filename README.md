@@ -109,8 +109,8 @@ Some subjects add their own modes:
 
 | Mode | Where | What it does |
 |---|---|---|
-| **Algebra Lab** | Algebra 1, Units 1–12 | Endless generated problems for 55 skills — equations (including literal and absolute-value), inequalities (including compound), slope and lines, systems, exponents and exponential models, polynomials, factoring (including by grouping), quadratics (factoring, completing the square, the quadratic formula), radicals and statistics — each with worked steps and a hint; answers are checked for equivalence, and for form where the form is the point (factored completely, radical simplified, slope-intercept form) |
-| **Problem Lab** | Chemistry, Concepts 2–3 | Endless calculation problems — metric prefixes, temperature, averages, scientific notation, conversion factors, dimensional analysis — with "Show me how" and a picket-fence worked solution, graded exactly |
+| **Algebra Lab** | Algebra 1, every unit | Endless generated problems for 77 skills — equations (including literal and absolute-value), inequalities (including compound), slope and lines, systems, exponents and exponential models, polynomials, factoring (including by grouping), quadratics (factoring, completing the square, the quadratic formula), radicals, statistics, function transformations, piecewise and step functions, and rational expressions and equations — plus reading slope, intercepts, domain and range, a system's solution and a parabola's vertex and zeros off drawn graphs. Each has worked steps and a hint; answers are checked for equivalence, and for form where the form is the point (factored completely, radical simplified, slope-intercept form) |
+| **Problem Lab** | Chemistry, Concepts 2–3 and Units 5–12 | Endless problems — metric prefixes, temperature, scientific notation, dimensional analysis; protons, neutrons and electrons, average atomic mass, electron configurations; naming compounds and writing formulas; balancing equations; molar mass, mole conversions, percent composition, stoichiometry, limiting reactant, percent yield; gas laws; molarity, dilution and pH — with "Show me how" and a picket-fence worked solution, graded exactly |
 | **Picture Quiz** | Chemistry, Concepts 1, 2, 4 | Name the lab equipment, judge accuracy and precision targets, read a graduated cylinder, spot what a graph is missing — all from drawings |
 
 Problems from these modes also turn up in Gold Quest, Race, Blitz and Mistakes.
@@ -135,7 +135,7 @@ or the app:
 ```bash
 node tools/verify-study.mjs                          # every question in every subject
 node tools/verify-algebra.mjs                        # Algebra Lab: thousands of problems re-solved independently
-node tools/verify-lab.mjs                            # Problem Lab: the same for chemistry calculations
+node tools/verify-lab.mjs                            # Problem Lab: the same for chemistry, plus its element, ion and reaction data
 node tools/smoke-study.mjs http://127.0.0.1:8000     # every mode and subject, in a browser
 ```
 
@@ -144,7 +144,7 @@ answer missing from its options, two options that say the same thing, a prompt
 or definition that gives the answer away, a set too small for Match — and runs
 the app's own answer checker against every accepted answer and a fixed table of
 tricky cases (units and prefixes, variables, ordered pairs, fractions,
-scientific notation, Spanish accents). The two lab verifiers work every
+scientific notation, Spanish accents). The lab verifiers work every
 generated answer out again with their own maths, never the app's, and check
 that near misses are rejected. `smoke-study.mjs` plays each mode through,
 visits every subject, runs the feature checks in `tools/study-checks/`, and

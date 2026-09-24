@@ -1998,6 +1998,8 @@ const CQ = window.CQ = {
   registerPage(def) { if (def && def.id && !pages.has(def.id) && !['set'].includes(def.id)) pages.set(def.id, def); },
   /** fn(set) → extra tap-to-answer questions for Gold Quest, Race and Blitz. */
   addGameSource(fn) { gameSources.push(fn); },
+  // The pool Gold Quest, Race and Blitz draw from (shuffled), for tests.
+  gameQuestions: (set) => gameQuestions(set),
   registerItemResolver(prefix, fn) { resolvers[prefix] = fn; },
   /** A button in the header, before the sound toggle. */
   addHeaderButton({ id, label, ico, href }) {

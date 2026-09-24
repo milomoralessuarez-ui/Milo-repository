@@ -126,7 +126,7 @@
   font-variant-numeric: tabular-nums; overflow-x: auto;
 }
 .lab-formula .ln { font-weight: 600; white-space: nowrap; display: flex; align-items: center; flex-wrap: wrap; gap: 4px; }
-.lab-formula .ln.f { color: var(--text-2); font-weight: 700; }
+.lab-formula .ln.f { color: var(--text-2); font-weight: 700; white-space: normal; }
 .lab-formula .ln + .ln.f { margin-top: 6px; }
 
 /* the prefix chart as one strip: Mega … nano */
@@ -163,6 +163,28 @@
 .lab-hops .pt.now { color: var(--brand); font-size: 1.5em; line-height: .8; }
 .lab-hops .pt.now::after { color: var(--text); bottom: -13px; }
 
+/* ---------- units 5–12: tables of working, the filling order, rounding ---------- */
+.lab-table { border-collapse: collapse; font-variant-numeric: tabular-nums; font-size: .92rem; }
+.lab-table th, .lab-table td {
+  padding: 6px 12px; text-align: left; white-space: nowrap; border-bottom: 1px solid var(--line-soft);
+}
+.lab-table thead th { font-size: .74rem; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; color: var(--text-3); border-bottom: 2px solid var(--line); }
+.lab-table tbody th { font-weight: 800; color: var(--text); }
+.lab-table td { color: var(--text-2); font-weight: 600; }
+.lab-table td:last-child { color: var(--text); }
+.lab-fill { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.lab-fill li {
+  display: grid; justify-items: center; gap: 1px; min-width: 44px;
+  padding: 5px 8px; border-radius: 10px; background: var(--surface); border: 1px solid var(--line-soft);
+}
+.lab-fill li b { font-size: 1rem; }
+.lab-fill li b sup { font-size: .7em; }
+.lab-fill li small { font-size: .7rem; color: var(--text-3); font-variant-numeric: tabular-nums; }
+.lab-round { display: grid; gap: 4px; }
+.lab-ans.wrap { white-space: normal; max-width: 100%; overflow-wrap: anywhere; }
+.lab-note + .lab-note { margin-top: -12px; }
+.opt .lab-mc-text { white-space: normal; }
+
 @media (max-width: 520px) {
   .lab-group { min-width: 100%; }
   .lab-chip { font-size: .86rem; padding-right: 12px; }
@@ -180,6 +202,7 @@
   .lab .toolbar .seg { width: 100%; }
   .lab .seg button { flex: 1; padding: 7px 6px; }
   .lab-fence { font-size: .86rem; }
+  .lab-table th, .lab-table td { padding: 5px 8px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .lab-chip:hover { transform: none; }
