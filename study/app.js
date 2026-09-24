@@ -438,7 +438,7 @@ function masteryOf(set) {
 function panelHead(set, mode, extra) {
   const m = MODES.find((x) => x.id === mode);
   return el('div', { class: 'hero mode-head', style: 'margin-bottom:18px' },
-    el('span', { class: 'eyebrow' }, `${set.emoji} ${set.short} · ${set.title}`),
+    el('span', { class: 'eyebrow' }, set.isAll ? `${set.emoji} ${subjectOf(set).name} · every unit` : `${set.emoji} ${set.short} · ${set.title}`),
     el('h1', {}, `${m.ico} ${m.name}`),
     extra ? el('p', {}, extra) : null,
   );

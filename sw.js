@@ -1,6 +1,6 @@
 /* MiloPlay service worker — makes the whole site playable offline.
    Bump CACHE when assets change; old caches are cleaned up on activate. */
-const CACHE = 'miloplay-v4';
+const CACHE = 'miloplay-v5';
 
 const GAMES = [
 // GAMES:BEGIN

@@ -1,1 +1,186 @@
-/* lab styles */
+/* ==========================================================================
+   Problem Lab (lab.js) — skill chips, the problem card and worked solutions:
+   the picket fence, the prefix chart, the hopping decimal, formulas.
+   Colours come from the theme tokens so light and dark both work.
+   ========================================================================== */
+
+.lab .toolbar { align-items: center; }
+.lab-seg-label { font-weight: 700; }
+.lab .seg button { min-height: 44px; white-space: nowrap; }
+
+/* ---------- skills ---------- */
+.lab-skills { display: grid; gap: 10px; margin-bottom: 14px; }
+.lab-h { font-size: .82rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--text-3); }
+.lab-chips { display: grid; gap: 8px; }
+.lab-chip-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.lab-group { font-size: .78rem; font-weight: 700; color: var(--text-3); min-width: 76px; }
+.lab-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  min-height: 44px; padding: 8px 14px 8px 10px; border-radius: 999px;
+  border: 1.5px dashed var(--line); background: transparent; color: var(--text-2);
+  font-weight: 700; font-size: .9rem; line-height: 1.1;
+  transition: background .15s, border-color .15s, transform .15s;
+}
+.lab-chip:hover { transform: translateY(-1px); border-color: var(--brand); }
+.lab-chip .tick {
+  display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%;
+  background: var(--surface-3); font-size: .8rem; font-weight: 900; color: var(--text-3);
+}
+/* "on" is carried by the tick, the solid border and the fill, not colour alone */
+.lab-chip.on {
+  border-style: solid; border-color: var(--brand); color: var(--text);
+  background: color-mix(in srgb, var(--brand) 14%, var(--surface));
+}
+.lab-chip.on .tick { background: var(--brand); color: #fff; }
+.lab-chip .tally {
+  font-family: var(--mono); font-size: .76rem; font-weight: 700;
+  padding: 2px 7px; border-radius: 999px; background: var(--surface-2); color: var(--text-2);
+}
+.lab-chip .mastery { color: var(--gold); font-size: .8rem; letter-spacing: -1px; }
+
+/* ---------- session stats ---------- */
+.lab-stats { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+.lab-stat {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 7px 12px; border-radius: 12px; background: var(--surface-2);
+  font-size: .88rem; color: var(--text-2);
+}
+.lab-stat b { color: var(--text); font-size: 1rem; font-variant-numeric: tabular-nums; }
+
+/* ---------- the problem card ---------- */
+.lab-card { gap: 16px; }
+.lab-card-head { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.lab-card-head .q-tag { margin-right: auto; }
+.lab-level {
+  font-size: .74rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase;
+  padding: 4px 9px; border-radius: 999px; border: 1px solid var(--line); color: var(--text-2);
+}
+.lab-level.notes { text-transform: none; letter-spacing: 0; font-weight: 700; }
+.lab-card .q-prompt { overflow-wrap: anywhere; }
+.lab-note { color: var(--text-2); font-size: .92rem; margin-top: -8px; }
+.lab-actions { gap: 8px; }
+.lab-hint-btn { border-color: color-mix(in srgb, var(--warm) 55%, var(--line)); }
+.lab-hint {
+  border: 1px dashed color-mix(in srgb, var(--warm) 60%, var(--line));
+  background: color-mix(in srgb, var(--warm) 7%, var(--surface-2));
+  border-radius: 14px; padding: 14px 16px; display: grid; gap: 10px;
+}
+.lab-assisted { font-size: .86rem; font-weight: 700; color: var(--text-2); }
+.lab-why { color: var(--text); font-size: .95rem; }
+.lab-nowrap { white-space: nowrap; }
+.lab-override { justify-self: start; }
+.lab-card .feedback .exp { color: var(--text); }
+.lab-card .feedback { gap: 10px; }
+
+/* ---------- worked solutions ---------- */
+.lab-work { display: grid; gap: 10px; min-width: 0; color: var(--text); }
+.lab-step { line-height: 1.5; }
+.lab-aside { color: var(--text-2); font-size: .9rem; }
+.lab-steps { margin: 0; padding-left: 1.3em; display: grid; gap: 4px; color: var(--text-2); font-size: .93rem; }
+.lab-ans {
+  display: inline-block; padding: 2px 9px; border-radius: 9px;
+  border: 2px solid var(--brand); font-weight: 800; color: var(--text); white-space: nowrap;
+}
+.lab-q { font-weight: 800; color: var(--text-3); }
+.lab-pow { white-space: nowrap; }
+.lab-pow sup { font-size: .68em; line-height: 0; margin-left: 1px; }
+
+.lab-frac {
+  display: inline-grid; vertical-align: middle; text-align: center;
+  margin: 0 3px; line-height: 1.25;
+}
+.lab-frac .num { padding: 0 4px 2px; border-bottom: 2px solid currentColor; }
+.lab-frac .den { padding: 2px 4px 0; }
+.opt .lab-frac { font-weight: 700; }
+
+/* horizontal scroll lives inside the box, never on the page; when there is
+   more to see, the edge fades and a thin scrollbar shows (see scroller()) */
+.lab-scroll {
+  overflow-x: auto; max-width: 100%; -webkit-overflow-scrolling: touch; padding-bottom: 4px;
+  scrollbar-width: thin; scrollbar-color: var(--text-3) transparent;
+}
+.lab-scroll::-webkit-scrollbar { height: 6px; }
+.lab-scroll::-webkit-scrollbar-thumb { background: var(--text-3); border-radius: 6px; }
+.lab-scroll::-webkit-scrollbar-track { background: color-mix(in srgb, var(--text-3) 18%, transparent); border-radius: 6px; }
+.lab-scroll[data-more="right"] { -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 36px), transparent); mask-image: linear-gradient(to right, #000 calc(100% - 36px), transparent); }
+.lab-scroll[data-more="left"] { -webkit-mask-image: linear-gradient(to left, #000 calc(100% - 36px), transparent); mask-image: linear-gradient(to left, #000 calc(100% - 36px), transparent); }
+.lab-scroll[data-more="both"] { -webkit-mask-image: linear-gradient(to right, transparent, #000 36px, #000 calc(100% - 36px), transparent); mask-image: linear-gradient(to right, transparent, #000 36px, #000 calc(100% - 36px), transparent); }
+.lab-fence-wrap { min-width: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; }
+.lab-fence-wrap > .lab-scroll { flex: 0 1 auto; min-width: 0; }
+.lab-fence { border-collapse: collapse; font-variant-numeric: tabular-nums; flex: none; }
+.lab-fence td {
+  padding: 6px 12px; text-align: center; white-space: nowrap; font-weight: 600;
+  border-left: 2px solid var(--text-2);
+}
+.lab-fence td.given { border-left: 0; padding-left: 4px; }
+.lab-fence tr:first-child td { border-bottom: 2px solid var(--text-2); }
+.lab-fence td.blank { color: var(--text-3); font-weight: 800; min-width: 3.5em; background: color-mix(in srgb, var(--warm) 10%, transparent); }
+.lab-cancel { text-decoration: line-through; text-decoration-thickness: 2px; text-decoration-color: var(--bad); color: var(--text-2); }
+.lab-keep { font-weight: 800; }
+.lab-fence-eq { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; flex: 0 1 auto; min-width: 0; max-width: 100%; font-weight: 600; }
+.lab-fence-eq .eq { font-weight: 800; color: var(--text-2); }
+
+.lab-formula {
+  display: grid; gap: 4px; padding: 10px 14px; border-radius: 12px;
+  background: var(--surface); border: 1px solid var(--line-soft);
+  font-variant-numeric: tabular-nums; overflow-x: auto;
+}
+.lab-formula .ln { font-weight: 600; white-space: nowrap; display: flex; align-items: center; flex-wrap: wrap; gap: 4px; }
+.lab-formula .ln.f { color: var(--text-2); font-weight: 700; }
+.lab-formula .ln + .ln.f { margin-top: 6px; }
+
+/* the prefix chart as one strip: Mega … nano */
+.lab-chart { display: flex; gap: 3px; }
+.lab-chart .cell {
+  flex: 1 1 0; min-width: 0; display: grid; justify-items: center; gap: 1px;
+  padding: 5px 1px 4px; border-radius: 8px; background: var(--surface); border: 1px solid var(--line-soft);
+}
+.lab-chart .cell small { font-size: .6rem; color: var(--text-3); max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lab-chart .cell b { font-size: 1rem; }
+.lab-chart .cell .mark { font-weight: 800; color: var(--text); min-height: 1em; }
+.lab-chart .cell.from { border: 2px dashed var(--text-2); }
+.lab-chart .cell.to { border: 2px solid var(--brand); background: color-mix(in srgb, var(--brand) 14%, var(--surface)); }
+
+/* the decimal point hopping from digit to digit */
+.lab-hops {
+  display: inline-flex; align-items: flex-end; padding: 18px 6px 18px;
+  font-family: var(--mono); font-size: 1.25rem; font-weight: 700;
+}
+.lab-hops .dg { position: relative; display: inline-block; min-width: 1.05em; text-align: center; padding: 2px 1px; border-radius: 5px; }
+.lab-hops .dg.hopped { background: color-mix(in srgb, var(--brand) 16%, transparent); }
+.lab-hops .dg.fill { outline: 1.5px dashed var(--text-3); outline-offset: -2px; color: var(--text-2); }
+.lab-hops .hop {
+  position: absolute; top: -17px; left: 50%; transform: translateX(-50%);
+  font-size: .62rem; font-family: var(--font); font-weight: 800; color: var(--text-2);
+}
+.lab-hops .pt { position: relative; display: inline-block; width: .55em; text-align: center; }
+.lab-hops .pt::after {
+  content: attr(data-l); position: absolute; bottom: -16px; left: 50%; transform: translateX(-50%);
+  font-size: .58rem; font-family: var(--font); font-weight: 800; letter-spacing: .04em; text-transform: uppercase;
+}
+.lab-hops .pt.was { color: var(--text-3); }
+.lab-hops .pt.was::after { color: var(--text-3); }
+.lab-hops .pt.now { color: var(--brand); font-size: 1.5em; line-height: .8; }
+.lab-hops .pt.now::after { color: var(--text); bottom: -13px; }
+
+@media (max-width: 520px) {
+  .lab-group { min-width: 100%; }
+  .lab-chip { font-size: .86rem; padding-right: 12px; }
+  .lab-fence td { padding: 5px 7px; }
+  .lab-hops { font-size: 1.1rem; }
+  .lab-chart { gap: 2px; }
+  .lab-chart .cell { padding: 4px 0 3px; }
+  .lab-chart .cell b { font-size: .88rem; }
+  /* the prefix names don't fit, but the base unit keeps its "unit" label so
+     meters' "m" can't be mistaken for milli's "m" */
+  .lab-chart .cell small:first-child { visibility: hidden; font-size: .5rem; }
+  .lab-chart .cell.base small:first-child { visibility: visible; color: var(--text-2); font-weight: 800; }
+  .lab-chart .cell.base { background: var(--surface-3); }
+  .lab-chart .cell .mark { font-size: .5rem; overflow: visible; text-overflow: clip; }
+  .lab .toolbar .seg { width: 100%; }
+  .lab .seg button { flex: 1; padding: 7px 6px; }
+  .lab-fence { font-size: .86rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lab-chip:hover { transform: none; }
+}
