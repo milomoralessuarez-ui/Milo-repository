@@ -1216,7 +1216,7 @@ window.STUDY_SETS = [
    },
    {
     "term": "Base unit",
-    "definition": "Each type of measurement has a base unit; prefixes attach to it, based on multiples of ten.",
+    "definition": "The standard unit for one kind of measurement (m, g, L, s); prefixes attach to it in multiples of ten.",
     "page": 6,
     "topic": "Standard units and SI"
    },
@@ -1354,55 +1354,55 @@ window.STUDY_SETS = [
    },
    {
     "term": "Mega (M)",
-    "definition": "1 Mega = 1,000,000 units",
+    "definition": "1,000,000 of the base unit (a million times it)",
     "page": 10,
     "topic": "Metric prefixes"
    },
    {
     "term": "Kilo (k)",
-    "definition": "1 kilo = 1,000 units",
+    "definition": "1,000 of the base unit (a thousand times it)",
     "page": 10,
     "topic": "Metric prefixes"
    },
    {
     "term": "hecto (h)",
-    "definition": "1 hecto = 100 units",
+    "definition": "100 of the base unit (a hundred times it)",
     "page": 10,
     "topic": "Metric prefixes"
    },
    {
     "term": "deka (da)",
-    "definition": "1 deka = 10 units",
+    "definition": "10 of the base unit (ten times it)",
     "page": 10,
     "topic": "Metric prefixes"
    },
    {
     "term": "deci (d)",
-    "definition": "10 deci = 1 unit",
+    "definition": "One tenth of the base unit — 10 of them make 1 unit",
     "page": 10,
     "topic": "Metric prefixes"
    },
    {
     "term": "centi (c)",
-    "definition": "100 centi = 1 unit",
+    "definition": "One hundredth of the base unit — 100 of them make 1 unit",
     "page": 10,
     "topic": "Metric prefixes"
    },
    {
     "term": "milli (m)",
-    "definition": "1,000 milli = 1 unit",
+    "definition": "One thousandth of the base unit — 1,000 of them make 1 unit",
     "page": 10,
     "topic": "Metric prefixes"
    },
    {
     "term": "micro (u)",
-    "definition": "1,000,000 micro = 1 unit",
+    "definition": "One millionth of the base unit — 1,000,000 of them make 1 unit",
     "page": 10,
     "topic": "Metric prefixes"
    },
    {
     "term": "nano (n)",
-    "definition": "1,000,000,000 nano = 1 unit",
+    "definition": "One billionth of the base unit — 1,000,000,000 of them make 1 unit",
     "page": 10,
     "topic": "Metric prefixes"
    },
@@ -3007,20 +3007,20 @@ window.STUDY_SETS = [
     "topic": "Conversion factors"
    },
    {
-    "term": "24 hours = ? day",
-    "definition": "1 day",
+    "term": "1 day = ? hours",
+    "definition": "24 hours",
     "page": 3,
     "topic": "Conversion factors"
    },
    {
-    "term": "12 inches = ? foot",
-    "definition": "1 foot",
+    "term": "1 foot = ? inches",
+    "definition": "12 inches",
     "page": 4,
     "topic": "Conversion factors"
    },
    {
-    "term": "7 days = ? week",
-    "definition": "1 week",
+    "term": "1 week = ? days",
+    "definition": "7 days",
     "page": 4,
     "topic": "Conversion factors"
    },
@@ -3043,20 +3043,20 @@ window.STUDY_SETS = [
     "topic": "Picket fence method"
    },
    {
-    "term": "365 days = ? year",
-    "definition": "1 year",
+    "term": "1 year = ? days",
+    "definition": "365 days",
     "page": 6,
     "topic": "Conversion factors"
    },
    {
-    "term": "60 min = ? hour",
-    "definition": "1 hour",
+    "term": "1 hour = ? min",
+    "definition": "60 min",
     "page": 6,
     "topic": "Conversion factors"
    },
    {
-    "term": "60 s = ? min",
-    "definition": "1 min",
+    "term": "1 min = ? s",
+    "definition": "60 s",
     "page": 6,
     "topic": "Conversion factors"
    },
@@ -3067,8 +3067,8 @@ window.STUDY_SETS = [
     "topic": "Picket fence method"
    },
    {
-    "term": "1000 g = ? kg",
-    "definition": "1 kg",
+    "term": "1 kg = ? g",
+    "definition": "1000 g",
     "page": 8,
     "topic": "Conversion factor table"
    },
@@ -3085,14 +3085,14 @@ window.STUDY_SETS = [
     "topic": "Conversion factor table"
    },
    {
-    "term": "16 ounces (oz) = ? lb",
-    "definition": "1 lb",
+    "term": "1 lb = ? ounces (oz)",
+    "definition": "16 ounces (oz)",
     "page": 8,
     "topic": "Conversion factor table"
    },
    {
-    "term": "2000 lbs = ? ton",
-    "definition": "1 ton",
+    "term": "1 ton = ? lbs",
+    "definition": "2000 lbs",
     "page": 8,
     "topic": "Conversion factor table"
    },
@@ -3115,38 +3115,38 @@ window.STUDY_SETS = [
     "topic": "Conversion factor table"
    },
    {
-    "term": "1000 mL = ? L",
-    "definition": "1 L",
+    "term": "1 L = ? mL",
+    "definition": "1000 mL",
     "page": 8,
     "topic": "Conversion factor table"
    },
    {
-    "term": "3 tsp = ? Tbsp",
-    "definition": "1 Tbsp",
+    "term": "1 Tbsp = ? tsp",
+    "definition": "3 tsp",
     "page": 8,
     "topic": "Conversion factor table"
    },
    {
-    "term": "16 Tbsp = ? cup",
-    "definition": "1 cup",
+    "term": "1 cup = ? Tbsp",
+    "definition": "16 Tbsp",
     "page": 8,
     "topic": "Conversion factor table"
    },
    {
-    "term": "2 cups = ? pint",
-    "definition": "1 pint",
+    "term": "1 pint = ? cups",
+    "definition": "2 cups",
     "page": 8,
     "topic": "Conversion factor table"
    },
    {
-    "term": "2 pints = ? quart",
-    "definition": "1 quart",
+    "term": "1 quart = ? pints",
+    "definition": "2 pints",
     "page": 8,
     "topic": "Conversion factor table"
    },
    {
-    "term": "4 quarts = ? gallon",
-    "definition": "1 gallon",
+    "term": "1 gallon = ? quarts",
+    "definition": "4 quarts",
     "page": 8,
     "topic": "Conversion factor table"
    },
@@ -3163,8 +3163,8 @@ window.STUDY_SETS = [
     "topic": "Conversion factor table"
    },
    {
-    "term": "3 ft = ? yard",
-    "definition": "1 yard",
+    "term": "1 yard = ? ft",
+    "definition": "3 ft",
     "page": 8,
     "topic": "Conversion factor table"
    },
@@ -4668,7 +4668,7 @@ window.STUDY_SETS = [
    },
    {
     "term": "Theory",
-    "definition": "An explanation, based on evidence, of why things happen. Ex. Evolutionary Theory.",
+    "definition": "An explanation, based on evidence, of why things happen (e.g. evolution).",
     "page": 4,
     "topic": "Laws vs. theories"
    },

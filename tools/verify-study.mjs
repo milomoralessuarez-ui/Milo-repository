@@ -174,9 +174,17 @@ for (const set of SETS) {
   }
 }
 // A recall card ("1 kg = ?") must say which unit it wants: 1 kg is both
-// 1,000,000 mg and 2.2 lbs.
+// 1,000,000 mg and 2.2 lbs. And its answer must not be "1 <unit on the front>"
+// ("2 pints = ? quart" → "1 quart" asks nothing); ask for the number instead.
 for (const set of SETS) for (const t of set.terms || []) {
   if (/=\s*\?\s*$/.test(t.term)) fail(`${set.label} term "${t.term}"`, 'asks "= ?" without naming the unit wanted');
+  if (/=\s*\?\s*\S/.test(t.term) && /^1\s/.test(t.definition)) fail(`${set.label} term "${t.term}"`, `answer "${t.definition}" is already on the front — ask for the number`);
+  // A definition that names its own term gives the card away, and makes
+  // "which term matches this definition?" free marks.
+  const name = t.term.replace(/\s*\(.*?\)/g, '').trim().toLowerCase();
+  if (name.length >= 4 && !/=\s*\?/.test(t.term) && new RegExp(`\\b${name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`).test(t.definition.toLowerCase())) {
+    fail(`${set.label} term "${t.term}"`, 'its definition contains the term itself');
+  }
 }
 
 // The app's own answer checker has to accept every variant the data promises,
