@@ -62,6 +62,8 @@ const ASSETS = [
   './study/collect.css',
   './study/algebra.js',
   './study/algebra.css',
+  './study/physics.js',
+  './study/physics.css',
   './assets/css/style.css',
   './assets/js/engine.js',
   './assets/js/lib/cards.js',

@@ -226,10 +226,10 @@ function earn(id, correct, now = Date.now()) {
 // Modes where the student marks themselves or can retry until right. Parsed
 // the way the router does, so '#set/c1/flashcards' counts too.
 const UNPAID_MODES = new Set(['flashcards', 'match']);
-// Problem Lab and Algebra Lab report every problem of a skill under one id,
+// The generated-practice labs report every problem of a skill under one id,
 // but each problem is brand new and can be answered only once, so each
 // answer there is its own try (the guess guard still applies).
-const FRESH_MODES = new Set(['lab', 'algebra']);
+const FRESH_MODES = new Set(['lab', 'algebra', 'physics', 'geometry']);
 const modeHere = () => {
   const parts = location.hash.replace(/^#\/?/, '').split('/').filter(Boolean);
   return parts[0] === 'set' ? parts[2] || '' : '';
