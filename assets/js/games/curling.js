@@ -21,10 +21,10 @@
     function slide(s, dt, sweeping) {
       var sp = Math.hypot(s.vx, s.vy);
       if (sp < 6) { s.vx = 0; s.vy = 0; return false; }
-      var dec = sweeping ? 14 : 25;
+      var dec = sweeping ? 62 : 110;
       s.vx -= (s.vx / sp) * dec * dt;
       s.vy -= (s.vy / sp) * dec * dt;
-      var curl = 11 * U.clamp(1 - sp / 125, 0, 1) * (sweeping ? .28 : 1);
+      var curl = 55 * U.clamp(1 - sp / 200, 0, 1) * (sweeping ? .28 : 1);
       s.vx += s.handle * curl * dt;
       s.x += s.vx * dt;
       s.y += s.vy * dt;
@@ -106,7 +106,7 @@
         d.msg = 'Pick your line — ←/→ sets the handle, Space locks';
       } else {
         d.phase = 'cpu';
-        d.phaseT = 1.1;
+        d.phaseT = .65;
         d.msg = 'Rink Blue steps into the hack…';
       }
     }
@@ -128,7 +128,7 @@
     // in which case it goes for the takeout. Its line error shrinks each end.
     function cpuThrow(g) {
       var d = g.data;
-      var err = Math.max(6, 34 - d.end * 4);
+      var err = Math.max(13, 48 - d.end * 5);
       var mine = null;
       for (var i = 0; i < d.stones.length; i++) {
         var s = d.stones[i];
@@ -136,11 +136,11 @@
         if (distToButton(s) > HOUSE) continue;
         if (!mine || distToButton(s) < distToButton(mine)) mine = s;
       }
-      var tx = CX, ty = TEE, v = 148, handle = Math.random() < .5 ? 1 : -1;
+      var tx = CX, ty = TEE, v = 310, handle = Math.random() < .5 ? 1 : -1;
       if (mine && distToButton(mine) < 70 && Math.random() < .55 + d.end * .05) {
-        tx = mine.x; ty = mine.y; v = 196;              // takeout weight
+        tx = mine.x; ty = mine.y; v = 410;              // takeout weight
       } else if (d.thrown < 2 && Math.random() < .4) {
-        tx = CX + U.rand(-30, 30); ty = HOG + 40; v = 118;   // guard
+        tx = CX + U.rand(-30, 30); ty = HOG + 40; v = 248;   // guard
       }
       // Search a line that brings the stone to rest on the target.
       var bestAim = CX, bestErr = 1e9;
@@ -181,7 +181,7 @@
       if (who === 'you') Milo.sound.coin(); else if (who === 'cpu') Milo.sound.hit();
       else Milo.sound.click();
       d.phase = 'endscore';
-      d.phaseT = 2.4;
+      d.phaseT = 1.9;
     }
 
     function finish(g) {
@@ -245,7 +245,7 @@
         if (d.phase === 'line') {
           if (k.pressed('left')) { d.handle = -1; Milo.sound.click(); }
           if (k.pressed('right')) { d.handle = 1; Milo.sound.click(); }
-          d.aim += d.aimDir * 190 * dt;
+          d.aim += d.aimDir * 300 * dt;
           if (d.aim > CX + 165) { d.aim = CX + 165; d.aimDir = -1; }
           if (d.aim < CX - 165) { d.aim = CX - 165; d.aimDir = 1; }
           if (tap) {
@@ -257,10 +257,10 @@
         }
 
         if (d.phase === 'weight') {
-          d.weight += d.wDir * .82 * dt;
+          d.weight += d.wDir * 1.25 * dt;
           if (d.weight > 1) { d.weight = 1; d.wDir = -1; }
           if (d.weight < 0) { d.weight = 0; d.wDir = 1; }
-          if (tap) throwStone(g, 'you', d.aim, U.lerp(112, 200, d.weight), d.handle);
+          if (tap) throwStone(g, 'you', d.aim, U.lerp(230, 420, d.weight), d.handle);
           return;
         }
 
@@ -279,11 +279,14 @@
             if (d.sweep < 0) d.sweep = 0;
             if (g.frame % 7 === 0) Milo.sound.tone({ f: 900 + Math.random() * 300, d: .04, v: .035, type: 'triangle' });
           }
-          var moving = false, i, j;
-          for (i = 0; i < d.stones.length; i++) {
-            var s = d.stones[i];
-            if (slide(s, dt, sweeping && s === d.live)) moving = true;
-            s.x = U.clamp(s.x, ICE_L - 40, ICE_R + 40);
+          var moving = false, i, j, sub;
+          // Sub-stepped so a fast takeout cannot pass through a guard.
+          for (sub = 0; sub < 3; sub++) {
+            for (i = 0; i < d.stones.length; i++) {
+              var s = d.stones[i];
+              if (slide(s, dt / 3, sweeping && s === d.live)) moving = true;
+              s.x = U.clamp(s.x, ICE_L - 40, ICE_R + 40);
+            }
           }
           for (i = 0; i < d.stones.length; i++) {
             for (j = i + 1; j < d.stones.length; j++) {
@@ -380,7 +383,7 @@
           var bx = ICE_R + 14, by = 180, bh = 300;
           c.fillStyle = 'rgba(255,255,255,.12)';
           U.roundRect(c, bx, by, 22, bh, 8); c.fill();
-          var zones = [[0, .3, '#38bdf8', 'GUARD'], [.3, .58, '#34d399', 'DRAW'], [.58, 1, '#fb7185', 'TAKE']];
+          var zones = [[0, .24, '#38bdf8', 'GUARD'], [.24, .55, '#34d399', 'DRAW'], [.55, 1, '#fb7185', 'TAKE']];
           for (i = 0; i < zones.length; i++) {
             c.fillStyle = zones[i][2];
             c.globalAlpha = .45;

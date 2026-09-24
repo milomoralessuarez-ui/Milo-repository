@@ -139,6 +139,7 @@
       d.msg = d.turn === 'you'
         ? 'You are not the dealer — take the upcard or pass'
         : 'Rival looks at the upcard first';
+      if (d.turn === 'cpu') d.think = 0.9;
       refresh(g);
     }
 
