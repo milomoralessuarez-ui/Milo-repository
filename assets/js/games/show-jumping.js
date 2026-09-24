@@ -203,34 +203,77 @@
     /* --------------------------------------------------------------- draw */
 
     function drawHorse(c, x, y, phase, airborne, tilt) {
+      var s = Math.sin(phase * 6.283);
       c.save();
       c.translate(x, y);
       c.rotate(tilt);
-      var s = Math.sin(phase * 6.283);
-      c.fillStyle = 'rgba(0,0,0,.2)';
-      if (!airborne) { c.beginPath(); c.ellipse(0, 6, 36, 6, 0, 0, 7); c.fill(); }
-      c.strokeStyle = '#6b3f26'; c.lineWidth = 7; c.lineCap = 'round';
-      var l1 = airborne ? -1.1 : s * .8, l2 = airborne ? -.9 : -s * .8;
+      if (!airborne) {
+        c.fillStyle = 'rgba(0,0,0,.22)';
+        c.beginPath(); c.ellipse(2, 4, 44, 7, 0, 0, 7); c.fill();
+      }
+      c.lineCap = 'round';
+      // hind legs
+      c.strokeStyle = '#6b4023'; c.lineWidth = 9;
+      var h1 = airborne ? -1.15 : s * .75, h2 = airborne ? -.9 : -s * .75;
       c.beginPath();
-      c.moveTo(-20, -26); c.lineTo(-20 + Math.sin(l1) * 18, 4 - (airborne ? 10 : 0));
-      c.moveTo(18, -26); c.lineTo(18 + Math.sin(l2) * 18, 4 - (airborne ? 14 : 0));
+      c.moveTo(-28, -46);
+      c.lineTo(-34 + Math.sin(h1) * 11, -24);
+      c.lineTo(-30 + Math.sin(h1) * 24, airborne ? -18 : 0);
       c.stroke();
-      c.fillStyle = '#8b5a33';
-      U.roundRect(c, -34, -46, 70, 26, 12); c.fill();
       c.beginPath();
-      c.moveTo(30, -42); c.lineTo(52, -62); c.lineTo(58, -54); c.lineTo(38, -30);
-      c.closePath(); c.fill();                                     // neck
+      c.moveTo(-21, -46);
+      c.lineTo(-27 + Math.sin(h2) * 11, -24);
+      c.lineTo(-23 + Math.sin(h2) * 24, airborne ? -13 : 0);
+      c.stroke();
+      // body + quarters
+      c.fillStyle = '#8b5a33';
+      c.beginPath(); c.ellipse(0, -50, 40, 21, 0, 0, 7); c.fill();
+      c.beginPath(); c.arc(-26, -52, 21, 0, 7); c.fill();
+      // neck
+      c.beginPath();
+      c.moveTo(18, -64); c.lineTo(44, -98); c.lineTo(61, -89); c.lineTo(31, -44);
+      c.closePath(); c.fill();
+      // head
+      c.save();
+      c.translate(53, -97); c.rotate(-.5);
       c.fillStyle = '#7a4d2c';
-      U.roundRect(c, 50, -70, 20, 12, 5); c.fill();                // head
-      c.strokeStyle = '#3b2415'; c.lineWidth = 4;
-      c.beginPath(); c.moveTo(-34, -42); c.lineTo(-52, -30 + s * 6); c.stroke();  // tail
+      U.roundRect(c, -6, -9, 31, 16, 7); c.fill();
+      c.fillStyle = '#2b1a0e';
+      c.beginPath(); c.arc(4, -3, 2.4, 0, 7); c.fill();
+      c.fillStyle = '#7a4d2c';
+      c.beginPath(); c.moveTo(-3, -9); c.lineTo(-9, -21); c.lineTo(2, -12); c.closePath(); c.fill();
+      c.restore();
+      // mane + tail
+      c.strokeStyle = '#3b2415'; c.lineWidth = 5;
+      c.beginPath(); c.moveTo(23, -63); c.lineTo(48, -95); c.stroke();
+      c.lineWidth = 6;
+      c.beginPath();
+      c.moveTo(-44, -58); c.quadraticCurveTo(-62, -46 + s * 6, -55, -24 + s * 8); c.stroke();
+      // front legs
+      c.strokeStyle = '#7a4d2c'; c.lineWidth = 9;
+      var f1 = airborne ? -1.45 : -s * .8, f2 = airborne ? -1.2 : s * .8;
+      c.beginPath();
+      c.moveTo(24, -48);
+      c.lineTo(30 + Math.sin(f1) * 12, -25);
+      c.lineTo(26 + Math.sin(f1) * 26, airborne ? -22 : 0);
+      c.stroke();
+      c.beginPath();
+      c.moveTo(17, -48);
+      c.lineTo(23 + Math.sin(f2) * 12, -25);
+      c.lineTo(19 + Math.sin(f2) * 26, airborne ? -17 : 0);
+      c.stroke();
       // rider
       c.fillStyle = '#b91c1c';
-      U.roundRect(c, -8, -74, 16, 26, 7); c.fill();
+      U.roundRect(c, -11, -90, 19, 27, 8); c.fill();
+      c.fillStyle = '#f0c9a8';
+      c.beginPath(); c.arc(-2, -96, 8, 0, 7); c.fill();
       c.fillStyle = '#111827';
-      c.beginPath(); c.arc(0, -82, 8, 0, 7); c.fill();
-      c.strokeStyle = '#111827'; c.lineWidth = 4;
-      c.beginPath(); c.moveTo(4, -66); c.lineTo(30, -56); c.stroke();
+      c.beginPath(); c.arc(-2, -98, 9, Math.PI, 0); c.fill();
+      c.strokeStyle = '#111827'; c.lineWidth = 5;
+      c.beginPath(); c.moveTo(3, -82); c.lineTo(28, -68); c.stroke();
+      c.beginPath(); c.moveTo(-5, -66); c.lineTo(3, -48); c.stroke();
+      c.strokeStyle = 'rgba(40,25,12,.85)'; c.lineWidth = 2;
+      c.beginPath(); c.moveTo(28, -68); c.lineTo(55, -94); c.stroke();
       c.restore();
     }
 
@@ -409,34 +452,34 @@
         /* HUD */
         c.textAlign = 'left';
         c.fillStyle = 'rgba(8,14,26,.72)';
-        U.roundRect(c, 22, 72, 212, 74, 10); c.fill();
+        U.roundRect(c, 22, 134, 212, 74, 10); c.fill();
         c.fillStyle = 'rgba(226,232,240,.6)';
         c.font = '700 10px Outfit, sans-serif';
-        c.fillText('STRIDE LENGTH', 34, 90);
+        c.fillText('STRIDE LENGTH', 34, 152);
         c.fillStyle = 'rgba(255,255,255,.14)';
-        U.roundRect(c, 34, 96, 188, 10, 5); c.fill();
+        U.roundRect(c, 34, 158, 188, 10, 5); c.fill();
         c.fillStyle = '#facc15';
-        U.roundRect(c, 34, 96, 188 * U.clamp((d.v - 4.6) / 4.6, 0, 1), 10, 5); c.fill();
+        U.roundRect(c, 34, 158, 188 * U.clamp((d.v - 4.6) / 4.6, 0, 1), 10, 5); c.fill();
         c.fillStyle = '#f8fafc';
         c.font = '800 13px Outfit, sans-serif';
-        c.fillText(stride(d).toFixed(2) + 'm  ·  ' + d.v.toFixed(1) + ' m/s', 34, 126);
+        c.fillText(stride(d).toFixed(2) + 'm  ·  ' + d.v.toFixed(1) + ' m/s', 34, 188);
         c.fillStyle = 'rgba(226,232,240,.55)';
         c.font = '600 10px Outfit, sans-serif';
         c.fillText(d.round === 2 ? 'JUMP-OFF — against the clock'
-          : 'time allowed ' + ALLOWED + 's', 34, 140);
+          : 'time allowed ' + ALLOWED + 's', 34, 202);
 
         // distance to the next fence
         if (f) {
           var gap = f.x - d.x;
           c.textAlign = 'right';
           c.fillStyle = 'rgba(8,14,26,.72)';
-          U.roundRect(c, W - 214, 72, 192, 56, 10); c.fill();
+          U.roundRect(c, W - 214, 134, 192, 56, 10); c.fill();
           c.fillStyle = gap < 3.4 && gap > 1 ? '#4ade80' : '#f8fafc';
           c.font = '900 24px Outfit, sans-serif';
-          c.fillText(Math.max(0, gap).toFixed(1) + 'm', W - 34, 102);
+          c.fillText(Math.max(0, gap).toFixed(1) + 'm', W - 34, 164);
           c.fillStyle = 'rgba(226,232,240,.6)';
           c.font = '600 10px Outfit, sans-serif';
-          c.fillText('TO FENCE ' + f.name + '  ·  ' + (f.h * 100).toFixed(0) + 'cm', W - 34, 118);
+          c.fillText('TO FENCE ' + f.name + '  ·  ' + (f.h * 100).toFixed(0) + 'cm', W - 34, 180);
         }
 
         c.textAlign = 'center';

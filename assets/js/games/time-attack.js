@@ -7,9 +7,9 @@
 
   // Hand-drawn circuit: a long left sweep, a chicane and two hairpins.
   var CTRL = [
-    [130, 310], [178, 158], [332, 104], [470, 152], [520, 272], [624, 300],
-    [706, 202], [814, 232], [832, 382], [724, 432], [662, 398], [548, 424],
-    [472, 522], [332, 542], [202, 472], [140, 420]
+    [130, 307], [178, 174], [332, 126], [470, 168], [520, 274], [624, 298],
+    [706, 212], [814, 239], [832, 371], [724, 415], [668, 393], [548, 408],
+    [472, 494], [332, 511], [202, 450], [140, 404]
   ];
 
   function mount(host) {
@@ -49,7 +49,7 @@
 
     function loadGhost() {
       var raw = Milo.store.get(KEY, null);
-      if (!raw || !raw.t || !raw.p || raw.p.length !== N || raw.t.length !== N) return null;
+      if (!raw || !raw.tr || raw.tr.length < 6 || !raw.it || raw.it.length !== N) return null;
       return raw;
     }
 
@@ -67,9 +67,11 @@
       d.sect = [0, 0, 0];
       d.bestSect = null;
       d.recT = new Array(N);
-      d.recP = new Array(N);
+      d.trace = [];
+      d.traceT = 0;
       d.ghost = loadGhost();
       d.storedBest = d.ghost ? d.ghost.best : 0;
+      d.bestSect = d.ghost ? d.ghost.s : null;
       d.marks = [];
       d.parts = [];
       d.delta = null;
@@ -79,7 +81,7 @@
       d.phase = 'count';
       d.count = 3.2;
       d.lastBeep = 0;
-      d.started = false;
+      d.started = true;
       g.set('Lap', '1/' + LAPS);
       g.set('Lap time', '0.00');
       g.set('Best', d.storedBest ? (d.storedBest / 1000).toFixed(2) : '—');
@@ -94,20 +96,27 @@
 
     function startLapRecord(d) {
       d.recT = new Array(N);
-      d.recP = new Array(N);
+      d.recT[d.idx] = 0;
+      d.trace = [[0, d.x, d.y, d.a]];
+      d.traceT = 0;
       d.lapT = 0;
       d.sect = [0, 0, 0];
     }
 
     function saveGhost(d) {
-      var t = [], p = [], i;
-      for (i = 0; i < N; i++) {
-        if (d.recT[i] == null) return;                 // incomplete lap, keep the old ghost
-        t.push(Math.round(d.recT[i]));
-        p.push([Math.round(d.recP[i][0] * 10) / 10, Math.round(d.recP[i][1] * 10) / 10,
-        Math.round(d.recP[i][2] * 100) / 100]);
+      if (!d.trace || d.trace.length < 6) return;
+      var it = [], last = 0, i;
+      for (i = 0; i < N; i++) {                        // forward-fill the few gaps at the line
+        if (d.recT[i] != null) last = d.recT[i];
+        it.push(Math.round(last));
       }
-      var rec = { best: Math.round(d.lapT), t: t, p: p, s: d.sect.slice() };
+      var tr = [];
+      for (i = 0; i < d.trace.length; i++) {
+        var s0 = d.trace[i];
+        tr.push([Math.round(s0[0]), Math.round(s0[1] * 10) / 10,
+        Math.round(s0[2] * 10) / 10, Math.round(s0[3] * 100) / 100]);
+      }
+      var rec = { best: Math.round(d.lapT), tr: tr, it: it, s: d.sect.slice() };
       d.ghost = rec;
       d.storedBest = rec.best;
       d.bestSect = rec.s;
@@ -117,19 +126,18 @@
     function ghostAt(d, ms) {
       var gh = d.ghost;
       if (!gh) return null;
-      if (ms >= gh.t[N - 1]) ms = gh.t[N - 1];
-      // binary search the recorded times
-      var lo = 0, hi = N - 1;
+      var tr = gh.tr, n = tr.length;
+      if (ms >= tr[n - 1][0]) return { x: tr[n - 1][1], y: tr[n - 1][2], a: tr[n - 1][3] };
+      var lo = 0, hi = n - 1;
       while (lo < hi - 1) {
         var mid = (lo + hi) >> 1;
-        if (gh.t[mid] <= ms) lo = mid; else hi = mid;
+        if (tr[mid][0] <= ms) lo = mid; else hi = mid;
       }
-      var t0 = gh.t[lo], t1 = gh.t[hi];
-      var f = t1 > t0 ? (ms - t0) / (t1 - t0) : 0;
-      var A = gh.p[lo], B = gh.p[hi];
+      var A = tr[lo], B = tr[hi];
+      var f = B[0] > A[0] ? (ms - A[0]) / (B[0] - A[0]) : 0;
       return {
-        x: U.lerp(A[0], B[0], f), y: U.lerp(A[1], B[1], f),
-        a: A[2] + wrap(B[2] - A[2]) * f
+        x: U.lerp(A[1], B[1], f), y: U.lerp(A[2], B[2], f),
+        a: A[3] + wrap(B[3] - A[3]) * f
       };
     }
 
@@ -224,10 +232,7 @@
           if (step < N / 2) {
             for (i = 1; i <= step; i++) {
               var k = (prev + i) % N;
-              if (d.recT[k] == null) {
-                d.recT[k] = d.lapT;
-                d.recP[k] = [d.x, d.y, d.a];
-              }
+              if (d.recT[k] == null) d.recT[k] = d.lapT;
             }
           }
           // sector boundaries
@@ -236,9 +241,13 @@
           if (crossed(prev, d.idx, 0)) lapDone(g, d);
         }
 
-        // live delta against the ghost's time at this point on the road
-        if (d.ghost && d.ghost.t[d.idx] != null) d.delta = d.lapT - d.ghost.t[d.idx];
-        else d.delta = null;
+        // sample the ghost trace, and read the live delta off the ghost's own timing
+        d.traceT += dt;
+        if (d.traceT >= 0.05 && d.trace.length < 1400) {
+          d.traceT = 0;
+          d.trace.push([d.lapT, d.x, d.y, d.a]);
+        }
+        d.delta = d.ghost ? d.lapT - d.ghost.it[d.idx] : null;
 
         for (i = d.parts.length - 1; i >= 0; i--) {
           var pp = d.parts[i];
@@ -484,7 +493,7 @@
       'you are chasing only ever gets faster. Tip: the sector that costs you is usually the one ' +
       'you entered fastest.',
     controls: ['↑ throttle', '↓ brake', '← → steer'],
-    colors: ['#ff4f79', '#9fd8ff'],
+    colors: ['#9fd8ff', '#3b3f5c'],
     tags: ['time trial', 'ghost', 'laps', 'splits', 'circuit'],
     scoreLabel: 'pts',
     mount: mount

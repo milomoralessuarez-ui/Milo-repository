@@ -2,8 +2,8 @@
 (function () {
   'use strict';
   var W = 900, H = 600, TAU = Math.PI * 2;
-  var N = 200, TRACKW = 56, LAPS = 6;
-  var CX = 450, CY = 306;
+  var N = 200, TRACKW = 48, LAPS = 6;
+  var CX = 450, CY = 324;
 
   var RIVALS = [
     { name: 'Vika', col: '#60a5fa', skill: .93, line: -18 },
@@ -20,8 +20,8 @@
     (function () {
       for (var i = 0; i < N; i++) {
         var th = i / N * TAU;
-        var rx = 334 + 30 * Math.cos(th * 2);
-        var ry = 206 + 26 * Math.sin(th * 3 + 1.1);
+        var rx = 320 + 14 * Math.cos(th * 2);
+        var ry = 196 + 10 * Math.sin(th * 3 + 1.1);
         PATH.push({ x: CX + Math.cos(th) * rx, y: CY + Math.sin(th) * ry });
       }
     })();
@@ -311,13 +311,13 @@
       // snow field
       c.fillStyle = '#e8eef8';
       c.beginPath();
-      strokePath(c, TRACKW + 40);
-      c.lineWidth = (TRACKW + 40) * 2; c.strokeStyle = '#dce6f5';
+      strokePath(c, TRACKW + 30);
+      c.lineWidth = (TRACKW + 30) * 2; c.strokeStyle = '#dce6f5';
       c.lineJoin = 'round'; c.lineCap = 'round';
       c.stroke();
 
       // banks
-      c.lineWidth = (TRACKW + 14) * 2; c.strokeStyle = '#f7fbff'; c.stroke();
+      c.lineWidth = (TRACKW + 12) * 2; c.strokeStyle = '#f7fbff'; c.stroke();
       // ice
       c.lineWidth = TRACKW * 2;
       var ice = c.createLinearGradient(0, 0, W, H);
@@ -406,15 +406,15 @@
       // standings
       var order = d.cars.slice().sort(function (a, b) { return place(d, a) - place(d, b); });
       c.fillStyle = 'rgba(8,16,32,.7)';
-      U.roundRect(c, W - 168, 96, 152, 22 * order.length + 14, 10); c.fill();
+      U.roundRect(c, W - 168, H - 206, 152, 22 * order.length + 14, 10); c.fill();
       c.font = '13px system-ui,sans-serif';
       for (i = 0; i < order.length; i++) {
         var o = order[i];
         c.fillStyle = o.col;
-        c.fillRect(W - 158, 108 + i * 22, 8, 12);
+        c.fillRect(W - 158, H - 194 + i * 22, 8, 12);
         c.fillStyle = o === d.me ? '#fff' : '#b9c9e6';
         c.fillText((i + 1) + '. ' + o.name + (o.done ? ' ✓' : ' · L' + Math.min(LAPS, Math.max(1, o.lap + 1))),
-          W - 144, 118 + i * 22);
+          W - 144, H - 184 + i * 22);
       }
 
       if (d.bestLap) {

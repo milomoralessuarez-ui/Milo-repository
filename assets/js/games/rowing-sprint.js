@@ -12,7 +12,7 @@
     var CREWS = [
       { name: 'Heat — Riverside', base: 6.42, push: .30, sprint: .5 },
       { name: 'Semi — Cambridge Blues', base: 6.74, push: .42, sprint: .68 },
-      { name: 'Final — National Squad', base: 7.02, push: .5, sprint: .8 }
+      { name: 'Final — National Squad', base: 6.92, push: .48, sprint: .78 }
     ];
 
     function reset(g) {
@@ -94,7 +94,7 @@
       if (d.catchQ.length > 8) d.catchQ.shift();
       // A long, loaded stroke at a low rating moves more water than a snatchy
       // one — but you only get so many of them.
-      var load = U.clamp(1.6 - d.rate / 40, .5, 1.5);
+      var load = U.clamp(1.35 - d.rate / 60, .55, 1.3);
       var fatigue = U.clamp(.35 + d.stamina / 100 * .65, .35, 1);
       d.power = q * load * fatigue;
       d.speed += d.power * 3.6;
@@ -335,7 +335,7 @@
         /* --- read-outs --- */
         c.textAlign = 'left';
         c.fillStyle = 'rgba(4,16,30,.72)';
-        U.roundRect(c, 22, 72, 200, 96, 10); c.fill();
+        U.roundRect(c, 22, 128, 200, 96, 10); c.fill();
         var rows = [
           ['SPEED', (d.speed).toFixed(2) + ' m/s', '#38bdf8'],
           ['RATING', Math.round(d.rate) + ' spm', d.rate > 38 ? '#fb7185' : '#e2e8f0'],
@@ -345,36 +345,36 @@
         c.font = '700 10px Outfit, sans-serif';
         for (i = 0; i < rows.length; i++) {
           c.fillStyle = 'rgba(226,232,240,.55)';
-          c.fillText(rows[i][0], 34, 94 + i * 21);
+          c.fillText(rows[i][0], 34, 150 + i * 21);
           c.fillStyle = rows[i][2];
           c.font = '800 13px Outfit, sans-serif';
-          c.fillText(rows[i][1], 116, 94 + i * 21);
+          c.fillText(rows[i][1], 116, 150 + i * 21);
           c.font = '700 10px Outfit, sans-serif';
         }
 
         // stamina
         c.fillStyle = 'rgba(4,16,30,.72)';
-        U.roundRect(c, W - 232, 72, 210, 46, 10); c.fill();
+        U.roundRect(c, W - 232, 128, 210, 46, 10); c.fill();
         c.fillStyle = 'rgba(226,232,240,.6)';
-        c.fillText('CREW STAMINA', W - 220, 90);
+        c.fillText('CREW STAMINA', W - 220, 146);
         c.fillStyle = 'rgba(255,255,255,.14)';
-        U.roundRect(c, W - 220, 96, 186, 12, 6); c.fill();
+        U.roundRect(c, W - 220, 152, 186, 12, 6); c.fill();
         c.fillStyle = d.stamina > 55 ? '#4ade80' : d.stamina > 22 ? '#facc15' : '#fb7185';
-        U.roundRect(c, W - 220, 96, 186 * U.clamp(d.stamina / 100, 0, 1), 12, 6); c.fill();
+        U.roundRect(c, W - 220, 152, 186 * U.clamp(d.stamina / 100, 0, 1), 12, 6); c.fill();
 
         // course bar
         c.fillStyle = 'rgba(255,255,255,.12)';
-        U.roundRect(c, 60, 44, W - 120, 12, 6); c.fill();
+        U.roundRect(c, 60, 100, W - 120, 12, 6); c.fill();
         c.fillStyle = '#f97316';
         c.beginPath();
-        c.arc(60 + (W - 120) * U.clamp(d.rivalDist / COURSE, 0, 1), 50, 6, 0, 7); c.fill();
+        c.arc(60 + (W - 120) * U.clamp(d.rivalDist / COURSE, 0, 1), 106, 6, 0, 7); c.fill();
         c.fillStyle = '#38bdf8';
         c.beginPath();
-        c.arc(60 + (W - 120) * U.clamp(d.dist / COURSE, 0, 1), 50, 7, 0, 7); c.fill();
+        c.arc(60 + (W - 120) * U.clamp(d.dist / COURSE, 0, 1), 106, 7, 0, 7); c.fill();
         c.textAlign = 'center';
         c.fillStyle = 'rgba(226,232,240,.6)';
         c.font = '600 10px Outfit, sans-serif';
-        c.fillText(crew(d).name + '   ·   ' + d.time.toFixed(1) + 's', W / 2, 36);
+        c.fillText(crew(d).name + '   ·   ' + d.time.toFixed(1) + 's', W / 2, 92);
 
         if (d.phase === 'countdown') {
           c.fillStyle = '#fde047';
@@ -409,7 +409,7 @@
       'and again at 400m, and stamina drains faster the higher you rate. 500 metres, three ' +
       'races, and the Heat crew is nothing like the National Squad.',
     controls: ['Space  catch'],
-    colors: ['#0369a1', '#f97316'],
+    colors: ['#0c4a6e', '#f43f5e'],
     tags: ['rowing', 'rhythm', 'timing', 'race', 'stamina'],
     mount: mount
   });

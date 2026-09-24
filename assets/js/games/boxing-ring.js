@@ -383,7 +383,7 @@
           var tc = d.cpu.tell === 'hook' ? '#f97316' : '#fde047';
           c.fillStyle = tc;
           c.font = '900 17px Outfit, sans-serif'; c.textAlign = 'center';
-          c.fillText(d.cpu.tell.toUpperCase() + '!', AX, FLOOR - 190);
+          c.fillText(d.cpu.tell.toUpperCase() + '!', AX, FLOOR - 172);
           c.beginPath();
           c.arc(AX - (d.cpu.tell === 'hook' ? 26 : 14), FLOOR - 118, d.cpu.tell === 'hook' ? 13 : 8, 0, 7);
           c.fill();
@@ -393,17 +393,17 @@
 
         /* HUD */
         c.font = '700 12px Outfit, sans-serif'; c.textAlign = 'left';
-        c.fillStyle = '#93c5fd'; c.fillText('YOU', 26, 74);
-        bar(c, 26, 80, 260, 16, d.you.hp / 140, '#38bdf8');
-        c.fillStyle = 'rgba(226,232,240,.65)'; c.fillText('STAMINA', 26, 114);
-        bar(c, 26, 120, 260, 11, d.you.sta / 100,
+        c.fillStyle = '#93c5fd'; c.fillText('YOU', 26, 150);
+        bar(c, 26, 156, 260, 16, d.you.hp / 140, '#38bdf8');
+        c.fillStyle = 'rgba(226,232,240,.65)'; c.fillText('STAMINA', 26, 190);
+        bar(c, 26, 196, 260, 11, d.you.sta / 100,
           d.you.sta < 25 ? '#ef4444' : d.you.sta < 55 ? '#f59e0b' : '#34d399');
 
         c.textAlign = 'right';
-        c.fillStyle = '#fca5a5'; c.fillText('OPPONENT', W - 26, 74);
-        bar(c, W - 286, 80, 260, 16, d.cpu.hp / 140, '#fb7185');
-        c.fillStyle = 'rgba(226,232,240,.65)'; c.fillText('STAMINA', W - 26, 114);
-        bar(c, W - 286, 120, 260, 11, d.cpu.sta / 100, 'rgba(255,255,255,.45)');
+        c.fillStyle = '#fca5a5'; c.fillText('OPPONENT', W - 26, 150);
+        bar(c, W - 286, 156, 260, 16, d.cpu.hp / 140, '#fb7185');
+        c.fillStyle = 'rgba(226,232,240,.65)'; c.fillText('STAMINA', W - 26, 190);
+        bar(c, W - 286, 196, 260, 11, d.cpu.sta / 100, 'rgba(255,255,255,.45)');
 
         // clock + cards
         c.textAlign = 'center';

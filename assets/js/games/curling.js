@@ -21,10 +21,10 @@
     function slide(s, dt, sweeping) {
       var sp = Math.hypot(s.vx, s.vy);
       if (sp < 6) { s.vx = 0; s.vy = 0; return false; }
-      var dec = sweeping ? 62 : 110;
+      var dec = sweeping ? 84 : 150;
       s.vx -= (s.vx / sp) * dec * dt;
       s.vy -= (s.vy / sp) * dec * dt;
-      var curl = 55 * U.clamp(1 - sp / 200, 0, 1) * (sweeping ? .28 : 1);
+      var curl = 76 * U.clamp(1 - sp / 235, 0, 1) * (sweeping ? .28 : 1);
       s.vx += s.handle * curl * dt;
       s.x += s.vx * dt;
       s.y += s.vy * dt;
@@ -106,7 +106,7 @@
         d.msg = 'Pick your line — ←/→ sets the handle, Space locks';
       } else {
         d.phase = 'cpu';
-        d.phaseT = .65;
+        d.phaseT = .4;
         d.msg = 'Rink Blue steps into the hack…';
       }
     }
@@ -128,7 +128,7 @@
     // in which case it goes for the takeout. Its line error shrinks each end.
     function cpuThrow(g) {
       var d = g.data;
-      var err = Math.max(13, 48 - d.end * 5);
+      var err = Math.max(26, 66 - d.end * 6);
       var mine = null;
       for (var i = 0; i < d.stones.length; i++) {
         var s = d.stones[i];
@@ -136,11 +136,11 @@
         if (distToButton(s) > HOUSE) continue;
         if (!mine || distToButton(s) < distToButton(mine)) mine = s;
       }
-      var tx = CX, ty = TEE, v = 310, handle = Math.random() < .5 ? 1 : -1;
-      if (mine && distToButton(mine) < 70 && Math.random() < .55 + d.end * .05) {
-        tx = mine.x; ty = mine.y; v = 410;              // takeout weight
+      var tx = CX, ty = TEE, v = 362, handle = Math.random() < .5 ? 1 : -1;
+      if (mine && distToButton(mine) < 62 && Math.random() < .22 + d.end * .05) {
+        tx = mine.x; ty = mine.y; v = 478;              // takeout weight
       } else if (d.thrown < 2 && Math.random() < .4) {
-        tx = CX + U.rand(-30, 30); ty = HOG + 40; v = 248;   // guard
+        tx = CX + U.rand(-30, 30); ty = HOG + 40; v = 290;   // guard
       }
       // Search a line that brings the stone to rest on the target.
       var bestAim = CX, bestErr = 1e9;
@@ -149,7 +149,7 @@
         var e = Math.hypot(p.x - tx, p.y - ty);
         if (e < bestErr) { bestErr = e; bestAim = CX + a; }
       }
-      throwStone(g, 'cpu', bestAim + U.rand(-err, err), v * U.rand(.96, 1.04), handle);
+      throwStone(g, 'cpu', bestAim + U.rand(-err, err), v * U.rand(.935, 1.065), handle);
     }
 
     /* ----------------------------------------------------------- end score */
@@ -181,7 +181,7 @@
       if (who === 'you') Milo.sound.coin(); else if (who === 'cpu') Milo.sound.hit();
       else Milo.sound.click();
       d.phase = 'endscore';
-      d.phaseT = 1.9;
+      d.phaseT = 1.5;
     }
 
     function finish(g) {
@@ -245,7 +245,7 @@
         if (d.phase === 'line') {
           if (k.pressed('left')) { d.handle = -1; Milo.sound.click(); }
           if (k.pressed('right')) { d.handle = 1; Milo.sound.click(); }
-          d.aim += d.aimDir * 300 * dt;
+          d.aim += d.aimDir * 330 * dt;
           if (d.aim > CX + 165) { d.aim = CX + 165; d.aimDir = -1; }
           if (d.aim < CX - 165) { d.aim = CX - 165; d.aimDir = 1; }
           if (tap) {
@@ -257,10 +257,10 @@
         }
 
         if (d.phase === 'weight') {
-          d.weight += d.wDir * 1.25 * dt;
+          d.weight += d.wDir * 1.15 * dt;
           if (d.weight > 1) { d.weight = 1; d.wDir = -1; }
           if (d.weight < 0) { d.weight = 0; d.wDir = 1; }
-          if (tap) throwStone(g, 'you', d.aim, U.lerp(230, 420, d.weight), d.handle);
+          if (tap) throwStone(g, 'you', d.aim, U.lerp(268, 490, d.weight), d.handle);
           return;
         }
 
@@ -344,7 +344,9 @@
         c.fillStyle = 'rgba(30,60,100,.45)';
         c.font = '600 11px Outfit, sans-serif'; c.textAlign = 'left';
         c.fillText('HOG LINE', ICE_L + 8, HOG - 7);
-        c.fillText('BACK LINE', ICE_L + 8, BACK - 7);
+        c.textAlign = 'right';
+        c.fillText('BACK LINE', ICE_R - 10, BACK + 16);
+        c.textAlign = 'left';
 
         // hack
         c.fillStyle = '#6b7280';
@@ -407,22 +409,22 @@
 
         // scoreboard strip
         c.fillStyle = 'rgba(8,14,26,.82)';
-        U.roundRect(c, 12, 62, 126, 116, 10); c.fill();
+        U.roundRect(c, 12, 190, 126, 116, 10); c.fill();
         c.fillStyle = '#f8fafc';
         c.font = '800 14px Outfit, sans-serif'; c.textAlign = 'left';
-        c.fillText('END ' + d.end + ' / ' + ENDS, 24, 84);
+        c.fillText('END ' + d.end + ' / ' + ENDS, 24, 212);
         c.font = '700 13px Outfit, sans-serif';
-        c.fillStyle = '#ef4444'; c.fillText('You  ' + d.you, 24, 108);
-        c.fillStyle = '#3b82f6'; c.fillText('Blue ' + d.cpu, 24, 128);
+        c.fillStyle = '#ef4444'; c.fillText('You  ' + d.you, 24, 236);
+        c.fillStyle = '#3b82f6'; c.fillText('Blue ' + d.cpu, 24, 256);
         c.fillStyle = 'rgba(226,232,240,.75)';
         c.font = '600 11px Outfit, sans-serif';
-        c.fillText('Hammer: ' + (d.hammer === 'you' ? 'you' : 'Blue'), 24, 148);
+        c.fillText('Hammer: ' + (d.hammer === 'you' ? 'you' : 'Blue'), 24, 276);
         var left = 8 - d.thrown;
         for (i = 0; i < 8; i++) {
           var mineStone = teamFor(d, i) === 'you';
           c.fillStyle = i < d.thrown ? 'rgba(255,255,255,.18)'
             : (mineStone ? '#ef4444' : '#3b82f6');
-          c.beginPath(); c.arc(26 + i * 13, 165, 5, 0, 7); c.fill();
+          c.beginPath(); c.arc(26 + i * 13, 293, 5, 0, 7); c.fill();
         }
         void left;
 
@@ -451,7 +453,7 @@
       'eight stones the rink with the closest stone scores for every stone inside the ' +
       'opposition\'s best. Six ends, and Rink Blue\'s line error shrinks every end.',
     controls: ['← →  handle', 'Space  lock / sweep'],
-    colors: ['#3b82f6', '#e2e8f0'],
+    colors: ['#2563eb', '#dc2626'],
     tags: ['curling', 'ice', 'aiming', 'vs cpu', 'winter'],
     mount: mount
   });

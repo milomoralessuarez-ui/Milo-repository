@@ -199,7 +199,7 @@
         text: 'Three presses of Space per jump, and each one is a different skill. Six ' +
           'footfalls come at you on a metronome — hit each beat to build run-up speed. ' +
           'Then a fast bar sweeps the take-off board: stop it in the green. Then a faster ' +
-          'one for the arch of your back over the bar. The bar rises 5cm a round and the ' +
+          'one for the arch of your back over the bar. The bar rises 6cm a round and the ' +
           'metronome quickens with it; three failures at one height and you are out.',
         keys: ['Space  beat / take off / arch']
       },
@@ -346,13 +346,15 @@
         c.restore();
         c.fillStyle = '#fef08a';
         c.font = '800 14px Outfit, sans-serif'; c.textAlign = 'left';
-        c.fillText(d.height + 'cm', BARX + 244, barY + 4);
+        c.textAlign = 'right';
+        c.fillText(d.height + 'cm', BARX - 16, barY + 4);
+        c.textAlign = 'left';
 
         drawRunner(c, d);
 
         // the approach beat track
         if (d.phase === 'approach') {
-          var tw = 420, tx = W / 2 - tw / 2, ty = 96;
+          var tw = 420, tx = W / 2 - tw / 2, ty = 178;
           c.fillStyle = 'rgba(0,0,0,.45)';
           U.roundRect(c, tx - 10, ty - 22, tw + 20, 54, 10); c.fill();
           for (i = 0; i < 6; i++) {
@@ -373,28 +375,28 @@
           c.fillText('SPACE ON THE BEAT  ·  step ' + Math.min(6, d.step + 1) + ' of 6', W / 2, ty + 28);
         }
 
-        if (d.phase === 'takeoff') timingBar(c, W / 2 - 200, 100, 400, d.cursor, .62, .8, 'TAKE-OFF', '#fde047');
-        if (d.phase === 'arch') timingBar(c, W / 2 - 200, 100, 400, d.cursor, .36, .64, 'ARCH', '#f472b6');
+        if (d.phase === 'takeoff') timingBar(c, W / 2 - 200, 172, 400, d.cursor, .62, .8, 'TAKE-OFF', '#fde047');
+        if (d.phase === 'arch') timingBar(c, W / 2 - 200, 172, 400, d.cursor, .36, .64, 'ARCH', '#f472b6');
 
         // power read-out
         c.fillStyle = 'rgba(0,0,0,.42)';
-        U.roundRect(c, 24, 74, 190, 66, 10); c.fill();
+        U.roundRect(c, W - 214, 150, 190, 66, 10); c.fill();
         var rows = [['RUN-UP', d.speed], ['TAKE-OFF', d.power], ['ARCH', d.arch]];
         c.font = '700 10px Outfit, sans-serif'; c.textAlign = 'left';
         for (i = 0; i < rows.length; i++) {
           c.fillStyle = 'rgba(226,232,240,.7)';
-          c.fillText(rows[i][0], 34, 92 + i * 19);
+          c.fillText(rows[i][0], W - 204, 168 + i * 19);
           c.fillStyle = 'rgba(255,255,255,.14)';
-          c.fillRect(100, 84 + i * 19, 100, 8);
+          c.fillRect(W - 138, 160 + i * 19, 100, 8);
           c.fillStyle = ['#38bdf8', '#fde047', '#f472b6'][i];
-          c.fillRect(100, 84 + i * 19, 100 * U.clamp(rows[i][1] || 0, 0, 1), 8);
+          c.fillRect(W - 138, 160 + i * 19, 100 * U.clamp(rows[i][1] || 0, 0, 1), 8);
         }
 
         if (d.result && d.resT > 0) {
           c.textAlign = 'center';
           c.fillStyle = d.nextHeight ? '#4ade80' : '#fb7185';
           c.font = '900 30px Outfit, sans-serif';
-          c.fillText(d.result, W / 2, 210);
+          c.fillText(d.result, W / 2, 264);
         }
         if (d.msgT > 0) {
           c.globalAlpha = U.clamp(d.msgT, 0, 1);
@@ -424,7 +426,7 @@
       'speed, while a missed one scores zero and cannot be taken back. Then a sweeping bar ' +
       'for the take-off, with the green window sitting late so you have to hold your nerve, ' +
       'and finally a faster sweep for the arch of your back over the bar. Those three ' +
-      'numbers add up to a height in centimetres — clear the bar and it goes up 5cm with a ' +
+      'numbers add up to a height in centimetres — clear the bar and it goes up 6cm with a ' +
       'quicker metronome, miss three times at one height and the competition is over.',
     controls: ['Space  beat / take off / arch'],
     colors: ['#1d4ed8', '#facc15'],

@@ -382,27 +382,27 @@
         var st = STANCE[d.stance];
         c.textAlign = 'center';
         c.fillStyle = 'rgba(0,0,0,.55)';
-        U.roundRect(c, ax - 78, CY - 176, 156, 42, 9); c.fill();
+        U.roundRect(c, ax - 78, CY - 166, 156, 42, 9); c.fill();
         c.fillStyle = st.col;
         c.font = '900 19px Outfit, sans-serif';
-        c.fillText(st.label, ax, CY - 152);
+        c.fillText(st.label, ax, CY - 142);
         c.fillStyle = 'rgba(226,232,240,.75)';
         c.font = '600 11px Outfit, sans-serif';
-        c.fillText(st.hint, ax, CY - 140);
+        c.fillText(st.hint, ax, CY - 130);
         if (d.stance === 'charge') {
           var f = 1 - U.clamp(d.chargeT / (1.25 * rank(d).tell), 0, 1);
           c.fillStyle = 'rgba(0,0,0,.5)';
-          U.roundRect(c, ax - 60, CY - 130, 120, 9, 4); c.fill();
+          U.roundRect(c, ax - 60, CY - 120, 120, 9, 4); c.fill();
           c.fillStyle = '#ef4444';
-          U.roundRect(c, ax - 58, CY - 128, 116 * f, 5, 3); c.fill();
+          U.roundRect(c, ax - 58, CY - 118, 116 * f, 5, 3); c.fill();
         }
         c.restore();
 
         /* HUD */
         c.textAlign = 'left';
-        meter(c, 28, 84, 240, d.bal, 'YOUR BALANCE');
+        meter(c, 28, 130, 240, d.bal, 'YOUR BALANCE');
         c.textAlign = 'left';
-        meter(c, W - 268, 84, 240, d.cbal, 'HIS BALANCE');
+        meter(c, W - 268, 130, 240, d.cbal, 'HIS BALANCE');
 
         // charge meter
         c.fillStyle = 'rgba(0,0,0,.45)';
@@ -415,18 +415,18 @@
 
         // ring-out bar
         c.fillStyle = 'rgba(0,0,0,.4)';
-        U.roundRect(c, W / 2 - 160, 74, 320, 12, 6); c.fill();
+        U.roundRect(c, W / 2 - 160, 96, 320, 12, 6); c.fill();
         c.fillStyle = '#fbbf24';
-        c.beginPath(); c.arc(W / 2 + d.pos * 156, 80, 8, 0, 7); c.fill();
+        c.beginPath(); c.arc(W / 2 + d.pos * 156, 102, 8, 0, 7); c.fill();
         c.fillStyle = 'rgba(226,232,240,.6)';
         c.font = '600 10px Outfit, sans-serif';
-        c.fillText(rank(d).name + '  ·  ' + rank(d).kg + 'kg  ·  first to 3', W / 2, 64);
+        c.fillText(rank(d).name + '  ·  ' + rank(d).kg + 'kg  ·  first to 3', W / 2, 86);
 
         if (d.msgT > 0) {
           c.globalAlpha = U.clamp(d.msgT * 2, 0, 1);
           c.fillStyle = '#fef3c7';
           c.font = '900 22px Outfit, sans-serif';
-          c.fillText(d.msg, W / 2, 150);
+          c.fillText(d.msg, W / 2, 168);
           c.globalAlpha = 1;
         }
 

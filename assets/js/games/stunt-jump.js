@@ -116,8 +116,8 @@
 
         if (d.phase === 'run') {
           var thr = inp.down('action') || inp.down('up') || inp.pdown;
-          d.vx += (thr ? 900 : 260) * dt;
-          d.vx = Math.min(d.vx, 1250);
+          d.vx += (thr ? 520 : 150) * dt;
+          d.vx = Math.min(d.vx, 1200);
           d.x += d.vx * dt;
           d.y = 420;
           d.a = 0;
@@ -286,16 +286,20 @@
 
     function wrap(a) { while (a > Math.PI) a -= TAU; while (a < -Math.PI) a += TAU; return a; }
 
+    // Always frame the car AND the whole landing area, so the prediction arc is useful.
     function camera(d, dt) {
-      var wide = d.phase === 'air' || d.phase === 'roll' || d.phase === 'result' || d.phase === 'crash';
-      var tz = wide ? U.clamp(520 / Math.max(260, (landEnd(d) - RAMPX + 260)), .34, 1) : 0.85;
-      if (d.phase === 'setup' || d.phase === 'run') tz = 0.85;
-      d.zoom = U.lerp(d.zoom, tz, Math.min(1, dt * 3));
-      var focusX = d.phase === 'setup' ? RAMPX - 60 : d.x;
-      var tx = focusX - (W / 2) / d.zoom;
-      var ty = (d.phase === 'air' ? d.y : 420) - (H * .62) / d.zoom;
+      var left = Math.min(d.x, RAMPX - 120) - 120;
+      var right = Math.max(d.x + 160, landEnd(d) + 150);
+      var tz = U.clamp(W / (right - left), 0.24, 1.0);
+      var tyTop;
+      if (d.phase === 'setup') { left = RAMPX - 420; right = landEnd(d) + 150; tz = U.clamp(W / (right - left), .24, 1); }
+      d.zoom = U.lerp(d.zoom, tz, Math.min(1, dt * 3.5));
+      var cx = (left + right) / 2;
+      var tx = cx - (W / 2) / d.zoom;
+      var focusY = d.phase === 'air' ? Math.min(420, (d.y + 420) / 2) : 420;
+      var ty = focusY - (H * .60) / d.zoom;
       d.camX = U.lerp(d.camX, tx, Math.min(1, dt * 6));
-      d.camY = U.lerp(d.camY, ty, Math.min(1, dt * 4));
+      d.camY = U.lerp(d.camY, ty, Math.min(1, dt * 5));
     }
 
     /* ------------------------------------------------------------ paint */
@@ -306,25 +310,30 @@
       sky.addColorStop(0, '#0d1730'); sky.addColorStop(.62, '#2a3a63'); sky.addColorStop(1, '#6b4a5c');
       c.fillStyle = sky; c.fillRect(0, 0, W, H);
 
-      // crowd stand
-      c.fillStyle = 'rgba(16,22,44,.9)';
-      c.fillRect(0, H * .48, W, H * .1);
-      for (i = 0; i < 90; i++) {
-        c.fillStyle = 'rgba(' + (120 + (i * 37) % 120) + ',' + (110 + (i * 53) % 110) + ',160,.5)';
-        c.fillRect((i * 11 + (d.camX * .08) % 11) % W, H * .48 + (i % 3) * 7, 5, 6);
-      }
-
       c.save();
       c.scale(d.zoom, d.zoom);
       c.translate(-d.camX, -d.camY);
 
       var vx0 = d.camX - 40, vx1 = d.camX + W / d.zoom + 40;
 
+      // grandstand behind the arena
+      c.fillStyle = 'rgba(16,22,44,.92)';
+      c.fillRect(vx0, 300, vx1 - vx0, 120);
+      for (i = Math.floor(vx0 / 18) * 18; i < vx1; i += 18) {
+        var hsh = ((i * 37) % 255 + 255) % 255;
+        c.fillStyle = 'rgba(' + (110 + hsh % 110) + ',' + (100 + (hsh * 3) % 110) + ',170,.55)';
+        c.fillRect(i, 308 + (hsh % 3) * 14, 9, 11);
+      }
+      c.fillStyle = 'rgba(8,12,24,.5)';
+      c.fillRect(vx0, 300, vx1 - vx0, 8);
+
       // ground
-      c.fillStyle = '#2b2f3f';
-      c.fillRect(vx0, 420, vx1 - vx0, 500);
-      c.fillStyle = '#3a4055';
-      c.fillRect(vx0, 420, vx1 - vx0, 8);
+      c.fillStyle = '#464c61';
+      c.fillRect(vx0, 420, vx1 - vx0, 600);
+      c.fillStyle = '#5a6178';
+      c.fillRect(vx0, 420, vx1 - vx0, 10);
+      c.fillStyle = 'rgba(0,0,0,.18)';
+      for (var gx = Math.floor(vx0 / 240) * 240; gx < vx1; gx += 240) c.fillRect(gx, 430, 120, 600);
       // run-up markings
       c.fillStyle = 'rgba(255,255,255,.22)';
       for (i = Math.floor(vx0 / 120) * 120; i < Math.min(RAMPX, vx1); i += 120) {
@@ -503,7 +512,7 @@
       'off the slope and the run is over, so the last thing you do in the air is stop spinning ' +
       'and line the wheels up with the landing ramp.',
     controls: ['← → ramp angle / rotate', 'Space throttle'],
-    colors: ['#22d3ee', '#e8a33d'],
+    colors: ['#e8a33d', '#22d3ee'],
     tags: ['stunt', 'jump', 'ramp', 'physics', 'rounds'],
     scoreLabel: 'pts',
     mount: mount

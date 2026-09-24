@@ -47,6 +47,7 @@
       d.tap = false;
       d.pumpCool = 0;
       d.shake = 0;
+      d.runT = 0;
       for (var i = 0; i < 40; i++) {
         d.snow.push({ x: Math.random() * W, y: Math.random() * H, v: U.rand(20, 70) });
       }
@@ -218,6 +219,10 @@
 
         if (d.phase !== 'ride') return;
 
+        // One run down the pipe: the bottom arrives whether you are ready or not.
+        d.runT += dt;
+        if (d.runT > 75) { finish(g, false); return; }
+
         // Pumping in the flat bottom is the only way to add energy.
         if (tap && d.pumpCool <= 0) {
           if (Math.abs(d.u) < .45) {
@@ -235,6 +240,9 @@
         d.vu += carve * .55 * dt;
 
         d.vu -= GA * slopeOf(d.u) * dt;
+        // You are riding downhill, so a little speed arrives on its own — enough
+        // to reach the lip eventually, nowhere near enough for a real air.
+        d.vu += (d.vu > 0 ? 1 : -1) * .3 * dt;
         d.vu -= d.vu * .13 * dt;
         d.u += d.vu * dt;
         d.board = U.clamp(d.vu * .3, -.9, .9);
@@ -330,28 +338,29 @@
         /* HUD */
         // speed / pump meter
         c.fillStyle = 'rgba(8,14,26,.68)';
-        U.roundRect(c, 22, 72, 178, 56, 10); c.fill();
+        U.roundRect(c, 22, 132, 178, 56, 10); c.fill();
         c.fillStyle = 'rgba(226,232,240,.75)';
         c.font = '700 10px Outfit, sans-serif'; c.textAlign = 'left';
-        c.fillText('SPEED', 34, 90);
+        c.fillText('SPEED', 34, 150);
         c.fillStyle = 'rgba(255,255,255,.16)';
-        U.roundRect(c, 34, 96, 154, 10, 5); c.fill();
+        U.roundRect(c, 34, 156, 154, 10, 5); c.fill();
         c.fillStyle = Math.abs(d.vu) > 2.1 ? '#4ade80' : Math.abs(d.vu) > 1.5 ? '#facc15' : '#fb7185';
-        U.roundRect(c, 34, 96, 154 * U.clamp(Math.abs(d.vu) / 2.8, 0, 1), 10, 5); c.fill();
+        U.roundRect(c, 34, 156, 154 * U.clamp(Math.abs(d.vu) / 2.8, 0, 1), 10, 5); c.fill();
         c.fillStyle = 'rgba(226,232,240,.6)';
         c.font = '600 10px Outfit, sans-serif';
-        c.fillText(Math.abs(d.u) < .45 ? 'IN THE FLAT — PUMP NOW' : 'on the transition', 34, 120);
+        c.fillText(Math.abs(d.u) < .45 ? 'IN THE FLAT — PUMP NOW' : 'on the transition', 34, 180);
 
         // judges card
         c.textAlign = 'right';
         c.fillStyle = 'rgba(8,14,26,.68)';
-        U.roundRect(c, W - 200, 72, 178, 56, 10); c.fill();
+        U.roundRect(c, W - 200, 132, 178, 56, 10); c.fill();
         c.fillStyle = '#fde047';
         c.font = '900 26px Outfit, sans-serif';
-        c.fillText(judged(d) + '/100', W - 34, 104);
+        c.fillText(judged(d) + '/100', W - 34, 164);
         c.fillStyle = 'rgba(226,232,240,.6)';
         c.font = '600 10px Outfit, sans-serif';
-        c.fillText('HIT ' + Math.min(d.hit + 1, HITS) + ' OF ' + HITS + '  ·  ' + d.crashes + '/3 CRASHES', W - 34, 120);
+        c.fillText('HIT ' + Math.min(d.hit + 1, HITS) + ' OF ' + HITS + '  ·  ' + d.crashes +
+          '/3 CRASHES  ·  ' + Math.max(0, Math.ceil(75 - d.runT)) + 's', W - 34, 180);
 
         // run progress ribbon
         c.fillStyle = 'rgba(255,255,255,.12)';
@@ -383,10 +392,10 @@
       'amplitude, and in the air you hold ← or → to spin and Space to grab. Land within the ' +
       'window of a half rotation with the grab released and the judges pay for amplitude, ' +
       'rotation and grab time; land sideways or still holding the board and you wash out. ' +
-      'Six hits down the pipe, the landing window narrows each time, three crashes ends the ' +
-      'run, and 75 out of 100 puts you on the podium.',
+      'Six hits down the pipe or 75 seconds of it, whichever comes first; the landing window ' +
+      'narrows every hit, three crashes ends the run, and 75 out of 100 puts you on the podium.',
     controls: ['← →  carve / spin', 'Space  pump / grab'],
-    colors: ['#0ea5e9', '#e2e8f0'],
+    colors: ['#0f172a', '#67e8f9'],
     tags: ['snowboard', 'tricks', 'winter', 'timing', 'halfpipe'],
     mount: mount
   });

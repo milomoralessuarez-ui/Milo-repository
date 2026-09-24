@@ -516,7 +516,7 @@
       'suspension or landing on the roof breaks the chassis; at 100% damage the run is over. ' +
       'Tip: ease off just before a kicker so the nose does not sky.',
     controls: ['→ gas', '← brake', 'Lean in the air'],
-    colors: ['#7c5cff', '#8a6136'],
+    colors: ['#8b5cf6', '#7a4a1e'],
     tags: ['truck', 'physics', 'stunts', 'suspension', 'jumps'],
     scoreLabel: 'pts',
     mount: mount

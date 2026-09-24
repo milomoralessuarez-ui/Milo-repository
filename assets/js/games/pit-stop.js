@@ -95,7 +95,7 @@
       var total = d.stopT + d.penalty;
       d.stops.push(total);
       d.me.tyre = 0;
-      d.me.fuel = Math.min(TANK, d.me.fuel + d.fuelTake);
+      d.me.fuel = Math.min(TANK, d.me.fuel + Math.round(d.fuelTake));
       d.me.pitting = PITLANE;
       d.phase = 'race';
       say(d, 'Stop: ' + total.toFixed(2) + 's' + (d.penalty ? ' (+' + d.penalty.toFixed(1) + 's penalty)' : '') +
@@ -282,6 +282,7 @@
       var d = g.data;
       d.phase = 'done';
       var p = pos(d, d.me);
+      g.score = scoreOf(d);
       var avg = d.stops.length
         ? (d.stops.reduce(function (a, b) { return a + b; }, 0) / d.stops.length).toFixed(2)
         : '—';
@@ -302,7 +303,7 @@
       c.strokeStyle = '#141a28'; c.lineWidth = 20;
       c.beginPath(); c.ellipse(cx, cy, rx, ry, 0, 0, TAU); c.stroke();
       c.fillStyle = '#fff';
-      c.fillRect(cx + rx - 6, cy - 12, 4, 24);
+      c.fillRect(cx - 2, cy - ry - 13, 4, 26);
       // pit lane
       c.strokeStyle = '#2f3a52'; c.lineWidth = 8;
       c.beginPath(); c.ellipse(cx, cy, rx - 26, ry - 20, 0, -0.5, 0.9); c.stroke();
@@ -362,9 +363,11 @@
           : 'Press Space to call the car in', 36, 516);
 
       // lap-time note
-      c.fillStyle = '#7d88ad'; c.font = '12px system-ui,sans-serif';
-      c.fillText('Lap time now ~' + lapTimeShow(d.me) + 's  ·  fresh tyres are ~' +
-        d.me.pace.toFixed(2) + 's', 360, 556);
+      c.fillStyle = '#7d88ad'; c.font = '13px system-ui,sans-serif';
+      c.textAlign = 'center';
+      c.fillText('Lap time now ~' + lapTimeShow(d.me) + 's   ·   on fresh tyres and low fuel ~' +
+        d.me.pace.toFixed(2) + 's', 620, 492);
+      c.textAlign = 'left';
     }
 
     function lapTimeShow(car) {
@@ -518,7 +521,7 @@
       'and a release you only make when the lane is clear — go into traffic and it is five ' +
       'seconds. Tip: one long stop usually beats two short ones, but only if you fuel it right.',
     controls: ['Space call the car in', 'Space for every crew action'],
-    colors: ['#ff4f79', '#22d3ee'],
+    colors: ['#14b8a6', '#ff4f79'],
     tags: ['pitstop', 'strategy', 'timing', 'motorsport', 'crew'],
     scoreLabel: 'pts',
     mount: mount

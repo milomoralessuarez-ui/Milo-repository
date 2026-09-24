@@ -345,14 +345,14 @@
       c.rotate(d.th + Math.PI / 2);
       if (d.hitT > 0 && (g.frame % 6 < 3)) c.globalAlpha = .4;
       c.shadowColor = d.boosting ? '#ffd257' : '#22d3ee';
-      c.shadowBlur = d.boosting ? 26 : 14;
+      c.shadowBlur = d.boosting ? 30 : 18;
       c.fillStyle = '#e2e8f0';
       c.beginPath();
-      c.moveTo(0, -20); c.lineTo(15, 14); c.lineTo(0, 8); c.lineTo(-15, 14);
+      c.moveTo(0, -28); c.lineTo(21, 20); c.lineTo(0, 11); c.lineTo(-21, 20);
       c.closePath(); c.fill();
       c.shadowBlur = 0;
       c.fillStyle = d.boosting ? '#ffd257' : '#22d3ee';
-      c.beginPath(); c.moveTo(-7, 10); c.lineTo(7, 10); c.lineTo(0, 22 + (d.boosting ? 16 : 0));
+      c.beginPath(); c.moveTo(-10, 14); c.lineTo(10, 14); c.lineTo(0, 30 + (d.boosting ? 22 : 0));
       c.closePath(); c.fill();
       c.globalAlpha = 1;
       c.restore();

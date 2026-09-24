@@ -46,7 +46,7 @@
       var corners = [], s2 = 900;
       while (s2 < r.len - 700) {
         var tight = U.hash2((s2 / 71) | 0, 3, seed | 0);
-        var lim = 92 + tight * 130 - r.steep * 22;
+        var lim = 125 + tight * 145 - r.steep * 26;
         corners.push({ s: s2, len: 260 + tight * 200, lim: Math.round(lim), dir: tight > .5 ? 1 : -1 });
         s2 += 620 + tight * 640;
       }
@@ -164,7 +164,7 @@
       w: W, h: H, bg: '#101a26',
       stats: ['Speed', 'Brakes', 'Load', 'Paid'],
       touch: 'dpad',
-      touchButtons: [{ key: 'action', label: 'A' }],
+      touchButtons: [{ key: 'action', label: 'RAMP' }],
       emo: '🚛',
       start: {
         title: 'Truck Haul',

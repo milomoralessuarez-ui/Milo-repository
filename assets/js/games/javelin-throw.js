@@ -104,7 +104,7 @@
           g.gameOver({ emo: '🚩', title: 'Six fouls', text: 'Not one throw counted.', score: 0 });
         } else {
           g.gameOver({
-            emo: '🎯', title: d.best.toFixed(2) + 'm',
+            emo: '🎽', title: d.best.toFixed(2) + 'm',
             text: txt + ' ' + QUALIFY + 'm was the qualifying mark.', score: sc
           });
         }
@@ -174,7 +174,7 @@
     }
 
     function drawDial(c, d) {
-      var cx = 118, cy = 146, r = 58;
+      var cx = 118, cy = 186, r = 58;
       c.fillStyle = 'rgba(8,14,26,.72)';
       c.beginPath(); c.arc(cx, cy, r + 14, 0, 7); c.fill();
       c.strokeStyle = 'rgba(226,232,240,.25)'; c.lineWidth = 10;
@@ -199,7 +199,7 @@
       id: 'javelin-throw',
       w: W, h: H, bg: '#0b1220',
       stats: ['Throw', 'Best', 'Wind'],
-      emo: '🎯',
+      emo: '🎽',
       touchButtons: [
         { key: 'left', label: '◀' }, { key: 'right', label: '▶' },
         { key: 'action', label: 'THROW' }
@@ -359,7 +359,7 @@
           // distance to the line
           c.fillStyle = 'rgba(226,232,240,.75)';
           c.font = '800 15px Outfit, sans-serif';
-          c.fillText(Math.max(0, -d.pos).toFixed(1) + 'm to the line', W / 2, 136);
+          c.fillText(Math.max(0, -d.pos).toFixed(1) + 'm to the line', W / 2, 140);
         }
 
         // wind flag
@@ -392,7 +392,7 @@
           c.textAlign = 'center';
           c.fillStyle = '#e2e8f0';
           c.font = '800 17px Outfit, sans-serif';
-          c.fillText(d.msg, W / 2, H - 34);
+          c.fillText(d.msg, W / 2, H - 66);
           c.globalAlpha = 1;
         }
 
@@ -414,7 +414,7 @@
   window.Milo.register({
     id: 'javelin-throw',
     title: 'Javelin',
-    emo: '🎯',
+    emo: '🎽',
     category: 'Sports',
     tagline: 'Alternate, aim the dial, release before the line',
     description: 'The run-up is an alternating-key sprint — press ← then → then ← in ' +
@@ -425,7 +425,7 @@
       'too late and it is a foul and a zero. Six throws, the best counts, the wind builds ' +
       'each round, and 70m qualifies.',
     controls: ['← →  run-up', 'Space  release'],
-    colors: ['#0f766e', '#facc15'],
+    colors: ['#065f46', '#fbbf24'],
     tags: ['athletics', 'throwing', 'power', 'track and field', 'wind'],
     mount: mount
   });

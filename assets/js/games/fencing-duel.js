@@ -12,7 +12,7 @@
 
     function fencer(x, dir) {
       return {
-        x: x, dir: dir, state: 'ready', t: 0, ext: 0, dur: .17,
+        x: x, dir: dir, state: 'ready', t: 0, ext: 0, dur: .3,
         moveT: 0, moveDir: 0, moveSpeed: 150, showBlade: 0, feintStage: 0,
         pendingParry: 0, reacted: false,
         reachNow: 0, parry: 0, parryRec: 0, riposte: 0,
@@ -33,7 +33,7 @@
       d.light = 0;                 // 1 you, -1 them, 0 none
       d.lightT = 0;
       d.priority = 0;
-      d.aiNext = 1.1;
+      d.aiNext = .35;
       d.aiPlan = null;
       d.tap = { atk: false, parry: false };
       d.sparks = [];
@@ -58,7 +58,7 @@
       if (!canAct(f)) return;
       f.state = 'extend';
       f.lunge = lunge;
-      f.t = lunge ? .24 : .17;
+      f.t = lunge ? .40 : .30;
       f.dur = f.t;
       f.startT = g.t;
       f.reachNow = lunge ? LUNGE_REACH : REACH;
@@ -68,8 +68,8 @@
 
     function parryNow(g, f) {
       if (!canAct(f)) return;
-      f.parry = .3;
-      f.parryRec = .5;
+      f.parry = .28;
+      f.parryRec = .52;
       Milo.sound.tone({ f: 700, d: .05, v: .045, type: 'triangle' });
     }
 
@@ -155,14 +155,18 @@
     function aiThink(g, dt) {
       var d = g.data, a = d.cpu, you = d.you;
       var gap = dist(d);
-      a.reachNow = REACH;
+      if (a.state === 'ready') a.reachNow = REACH;
 
       // Reacts to your extension with a parry, sometimes.
       if (you.state === 'extend' && a.state === 'ready' && a.parry <= 0 && a.parryRec <= 0 &&
         !a.reacted) {
         a.reacted = true;
-        if (Math.random() < .36 + d.lvl * .06 && you.riposte <= 0) {
+        if (Math.random() < .34 + d.lvl * .06 && you.riposte <= 0) {
           a.pendingParry = .1;
+        } else if (Math.random() < .3 + d.lvl * .05) {
+          // Or he simply breaks distance and lets your attack fall short.
+          a.moveDir = 1; a.moveT = .34; a.moveSpeed = 240 + d.lvl * 18;
+          d.aiNext = Math.max(d.aiNext, .34);
         }
       }
       if (you.state !== 'extend') a.reacted = false;
@@ -171,8 +175,8 @@
         if (a.pendingParry <= 0) { a.pendingParry = 0; parryNow(g, a); }
       }
 
-      if (a.riposte > 0 && a.state === 'ready' && gap < REACH + 24) {
-        extend(g, a, false);
+      if (a.riposte > 0 && a.state === 'ready' && gap < LUNGE_REACH) {
+        extend(g, a, gap > REACH - 8);
         return;
       }
       // You are committed and cannot parry — this is when he comes in.
@@ -187,49 +191,54 @@
       d.aiNext -= dt;
       if (a.state !== 'ready' || d.aiNext > 0) return;
 
-      var speed = 140 + d.lvl * 16;
+      var speed = 200 + d.lvl * 18;
       if (a.feintStage === 1) {
         // The blade goes out far enough to look real, then comes back.
         a.feintStage = 2;
         a.ext = 0;
-        d.aiNext = .26;
-        a.showBlade = .26;
+        d.aiNext = .24;
+        a.showBlade = .24;
         return;
       }
       if (a.feintStage === 2) {
         a.feintStage = 0;
         a.showBlade = 0;
-        if (gap < REACH + 40) extend(g, a, gap > REACH - 10);
-        d.aiNext = U.rand(.5, 1) / (.8 + d.lvl * .1);
+        if (gap < LUNGE_REACH) extend(g, a, gap > REACH - 8);
+        d.aiNext = U.rand(.45, .9) / (.8 + d.lvl * .1);
         return;
       }
 
       var roll = Math.random();
-      if (gap < REACH - 14 && roll < .3) {
-        // Too close to work in: break distance.
-        a.moveDir = 1; a.moveT = U.rand(.25, .5); a.moveSpeed = speed;
+      if (gap > LUNGE_REACH + 6) {
+        // Nothing is on from here — walk him down.
+        a.moveDir = -1; a.moveT = U.rand(.3, .7); a.moveSpeed = speed;
+        d.aiNext = a.moveT * .8;
+      } else if (gap < REACH - 26 && roll < .4) {
+        a.moveDir = 1; a.moveT = U.rand(.2, .45); a.moveSpeed = speed;
         d.aiNext = a.moveT;
-      } else if (gap < REACH + 20 && roll < .34 + d.lvl * .05) {
-        extend(g, a, false);
-        d.aiNext = U.rand(.5, .9);
-      } else if (gap < LUNGE_REACH && roll < .5 + d.lvl * .06) {
-        extend(g, a, true);
-        d.aiNext = U.rand(.7, 1.1);
-      } else if (roll < .62 + d.lvl * .05 && gap < LUNGE_REACH + 60) {
+      } else if (roll < .42 + d.lvl * .05) {
+        extend(g, a, gap > REACH - 8);
+        d.aiNext = U.rand(.45, .85);
+      } else if (roll < .74 + d.lvl * .04) {
         a.feintStage = 1;
         a.showBlade = .3;
         d.aiNext = .3;
         Milo.sound.tone({ f: 380, d: .04, v: .035, type: 'triangle' });
       } else {
-        // footwork: close on you or break distance
-        a.moveDir = gap > 210 ? -1 : gap < 130 ? 1 : (Math.random() < .6 ? -1 : 1);
-        a.moveT = U.rand(.3, .65);
-        a.moveSpeed = speed;
-        d.aiNext = a.moveT + U.rand(.1, .4) / (.8 + d.lvl * .1);
+        a.moveDir = Math.random() < .5 ? -1 : 1;
+        a.moveT = U.rand(.2, .5); a.moveSpeed = speed;
+        d.aiNext = a.moveT;
       }
     }
 
     /* --------------------------------------------------------------- draw */
+
+    // A foil is long: at rest the arm is bent, fully extended the tip sits
+    // exactly at the reach the rules use.
+    function bladeLen(f, ext) {
+      var reach = f.lunge ? LUNGE_REACH : REACH;
+      return 72 + ext * (reach - 72 - (f.lunge ? 26 : 0));
+    }
 
     function drawFencer(c, f, col, extFrac, blade) {
       var x = f.x, dir = f.dir;
@@ -354,7 +363,7 @@
             d.cpu = fencer(556, -1);
             d.phase = 'fence';
             d.priority = 0;
-            d.aiNext = .9;
+            d.aiNext = .35;
             say(d, 'En garde — allez', 1);
           }
           return;
@@ -423,8 +432,8 @@
         c.fillRect(PISTE_R, FLOOR, 30, 40);
 
         var cExt = cpu.state === 'extend' ? cpu.ext : Math.max(cpu.ext, cpu.showBlade > 0 ? .72 : 0);
-        drawFencer(c, you, '#2563eb', you.ext, 26 + you.ext * (you.lunge ? LUNGE_REACH : REACH));
-        drawFencer(c, cpu, '#b91c1c', cpu.ext, 26 + cExt * (cpu.lunge ? LUNGE_REACH : REACH));
+        drawFencer(c, you, '#2563eb', you.ext, bladeLen(you, you.ext));
+        drawFencer(c, cpu, '#b91c1c', cpu.ext, bladeLen(cpu, cExt));
 
         for (i = 0; i < d.sparks.length; i++) {
           c.fillStyle = d.sparks[i].col;
@@ -464,27 +473,27 @@
         var gap = dist(d);
         c.textAlign = 'left';
         c.fillStyle = 'rgba(6,10,20,.8)';
-        U.roundRect(c, 24, 62, 190, 58, 10); c.fill();
+        U.roundRect(c, 24, 126, 190, 58, 10); c.fill();
         c.fillStyle = 'rgba(226,232,240,.6)';
         c.font = '700 10px Outfit, sans-serif';
-        c.fillText('DISTANCE', 36, 80);
+        c.fillText('DISTANCE', 36, 144);
         c.fillStyle = 'rgba(255,255,255,.12)';
-        U.roundRect(c, 36, 86, 166, 12, 6); c.fill();
+        U.roundRect(c, 36, 150, 166, 12, 6); c.fill();
         var inAtk = gap <= REACH, inLunge = gap <= LUNGE_REACH;
         c.fillStyle = inAtk ? '#4ade80' : inLunge ? '#facc15' : '#64748b';
-        U.roundRect(c, 36, 86, 166 * U.clamp(1 - (gap - 60) / 260, .04, 1), 12, 6); c.fill();
+        U.roundRect(c, 36, 150, 166 * U.clamp(1 - (gap - 60) / 260, .04, 1), 12, 6); c.fill();
         c.fillStyle = inAtk ? '#4ade80' : inLunge ? '#facc15' : 'rgba(226,232,240,.55)';
         c.font = '800 11px Outfit, sans-serif';
-        c.fillText(inAtk ? 'IN ATTACK RANGE' : inLunge ? 'LUNGE RANGE ONLY' : 'OUT OF DISTANCE', 36, 112);
+        c.fillText(inAtk ? 'IN ATTACK RANGE' : inLunge ? 'LUNGE RANGE ONLY' : 'OUT OF DISTANCE', 36, 176);
 
         // touch history
         c.textAlign = 'right';
         c.fillStyle = 'rgba(6,10,20,.8)';
-        U.roundRect(c, W - 214, 62, 190, 34, 10); c.fill();
+        U.roundRect(c, W - 214, 126, 190, 34, 10); c.fill();
         for (i = 0; i < 9; i++) {
           var v = d.hist[i];
           c.fillStyle = v === 1 ? '#38bdf8' : v === -1 ? '#fb7185' : 'rgba(255,255,255,.12)';
-          c.beginPath(); c.arc(W - 198 + i * 20, 79, 6, 0, 7); c.fill();
+          c.beginPath(); c.arc(W - 198 + i * 20, 143, 6, 0, 7); c.fill();
         }
 
         c.textAlign = 'center';

@@ -605,7 +605,7 @@
       'the cam, hang on and the limiter cuts power. Three rounds of a bracket ladder, each ' +
       'opponent quicker than the last.',
     controls: ['← → tune', 'Space rev', '↑ launch / shift'],
-    colors: ['#ff4f79', '#ffd257'],
+    colors: ['#ff8a00', '#ffd257'],
     tags: ['drag', 'racing', 'timing', 'reaction', 'gears'],
     scoreLabel: 'pts',
     mount: mount
