@@ -228,6 +228,17 @@ for (const set of SETS) for (const t of set.terms || []) {
       [Q('3.54 × 10^8'), '35.4 x 10^7', false, 'scientific notation with two digits before the point'],
       [Q('205.7'), '2.057 x 10^2', false, 'left in scientific notation when standard was asked'],
       [Q('5 ft', ['5']), 'dunno 5', false, 'a number buried in other words'],
+      [Q('8.1 × 10^-10 m'), '8.1 x 10^-11 m', false, 'a tiny answer off by a power of ten'],
+      [Q('5000 µg'), '5000 g', false, 'the micro prefix dropped'],
+      [Q('5000 µg'), '5000 ug', true, 'micro typed as u'],
+      [Q('5000 µg'), '5000 μg', true, 'micro typed as the Greek letter'],
+      [Q('3 Mm'), '3 mm', false, 'milli for mega'],
+      [Q('3 mm'), '3 MM', false, 'mega for milli'],
+      [Q('10 m'), '10 ms', false, 'milliseconds for meters'],
+      [Q('2 pints'), '2 pint', true, 'a singular unit'],
+      [Q('5 kg'), '5 kgs', true, 'a plural unit abbreviation'],
+      [Q('0'), '0', true, 'zero'],
+      [Q('3 manzanas'), '3 Manzanas', true, 'a capitalised word after a number'],
     ]) {
       if (checkWritten(q, input) !== want) fail('answer checking', `${want ? 'rejects' : 'accepts'} ${JSON.stringify(input)} for ${JSON.stringify(q.answer)} (${why})`);
     }

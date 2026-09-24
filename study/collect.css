@@ -1,1 +1,284 @@
-/* collect styles */
+/* ==========================================================================
+   collect — Blooket-style collectibles (header coin badge, #/collection page,
+   pack-opening reveal). Uses the shared tokens so both themes work.
+   ========================================================================== */
+
+/* Rarity colours. Every rarity is also written out as a word, so colour is
+   never the only signal. */
+[data-rarity="common"] { --rc: #8e98c4; }
+[data-rarity="uncommon"] { --rc: #2fbf87; }
+[data-rarity="rare"] { --rc: #4d8cff; }
+[data-rarity="epic"] { --rc: #b06bff; }
+[data-rarity="legendary"] { --rc: #ffb020; }
+
+/* ---------- header badge ---------- */
+#bag { position: relative; }
+#bag:hover { text-decoration: none; }
+.cq-badge {
+  position: absolute; top: -7px; right: -9px;
+  min-width: 22px; height: 20px; padding: 0 6px;
+  display: grid; place-items: center;
+  border-radius: 999px; border: 2px solid var(--bg);
+  background: var(--grad-gold); color: #3a2600;
+  font-size: .68rem; font-weight: 800; line-height: 1;
+  font-variant-numeric: tabular-nums; pointer-events: none;
+}
+.cq-badge.pulse { animation: cqPulse .6s ease; }
+@keyframes cqPulse {
+  0% { transform: scale(1); }
+  35% { transform: scale(1.45); box-shadow: 0 0 0 5px color-mix(in srgb, var(--gold) 40%, transparent); }
+  100% { transform: scale(1); box-shadow: 0 0 0 0 transparent; }
+}
+.cq-plus {
+  position: absolute; left: 50%; top: 100%;
+  font-size: .8rem; font-weight: 900; color: var(--warm);
+  pointer-events: none; white-space: nowrap;
+  animation: cqPlus .9s ease forwards;
+}
+@keyframes cqPlus {
+  from { opacity: 0; transform: translate(-50%, -4px); }
+  25% { opacity: 1; }
+  to { opacity: 0; transform: translate(-50%, 12px); }
+}
+
+/* The extra header button must not push a 360px phone into sideways
+   scroll: tighten the gap between the header buttons there. */
+@media (max-width: 380px) {
+  .header-actions:has(#bag) { gap: 4px; }
+}
+
+/* ---------- page ---------- */
+.cq-stats { margin-bottom: 4px; }
+.cq-stat-coins b { color: var(--text); }
+.cq-stat-icon b { display: flex; align-items: baseline; gap: 6px; }
+.cq-stat-icon small { font-size: .9rem; font-weight: 700; color: var(--text-2); }
+/* Guess guard: the last 10 first tries — filled dot right, hollow ring
+   miss, faint dot not yet (shape, not only colour, tells them apart). */
+.cq-dots { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; min-height: 1.9rem; }
+.cq-dots i { width: 11px; height: 11px; border-radius: 50%; background: var(--line); }
+.cq-dots i.hit { background: var(--good); }
+.cq-dots i.miss { background: transparent; border: 2px solid var(--bad); }
+.cq-dots.paused + span { color: var(--bad); }
+.cq-hint { color: var(--text-2); margin: -4px 0 8px; }
+
+.cq-packs { display: grid; gap: 14px; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); }
+.cq-pack {
+  --pc: var(--brand);
+  display: grid; grid-template-rows: auto 1fr;
+  border-radius: var(--r-lg); overflow: hidden;
+  background: var(--surface); border: 1px solid var(--line-soft);
+  box-shadow: var(--shadow);
+}
+.cq-pack-art {
+  display: grid; place-items: center; height: 108px;
+  background:
+    radial-gradient(120px 80px at 30% 20%, color-mix(in srgb, #fff 22%, transparent), transparent 70%),
+    linear-gradient(150deg, var(--pc), color-mix(in srgb, var(--pc) 45%, #1d1640));
+}
+.cq-pack-art span { font-size: 3.2rem; line-height: 1; filter: drop-shadow(0 6px 10px rgba(0, 0, 0, .3)); }
+.cq-pack-body { display: grid; gap: 10px; padding: 14px 16px 16px; align-content: start; }
+.cq-pack-body h3 { font-size: 1.08rem; font-weight: 800; }
+.cq-pack-meta { display: flex; justify-content: space-between; gap: 8px; font-size: .88rem; color: var(--text-2); font-weight: 600; }
+.cq-price { color: var(--text); font-weight: 800; }
+.cq-lucky { display: flex; align-items: center; gap: 8px; font-size: .82rem; color: var(--text-2); font-weight: 600; }
+.cq-pips { display: inline-flex; gap: 4px; }
+.cq-pips i {
+  width: 12px; height: 12px; border-radius: 50%;
+  border: 2px solid var(--good); background: transparent;
+}
+.cq-pips i.on { background: var(--good); }
+.cq-lucky-txt { margin-left: auto; color: var(--text); }
+.cq-open { margin-top: 2px; }
+/* "Need N more" / "Pack complete": readable, clearly not a call to action */
+.cq-open:disabled, .cq-actions .btn:disabled {
+  opacity: 1; background: var(--surface-2); border: 1px dashed var(--line);
+  color: var(--text-2); box-shadow: none;
+}
+
+/* drop-rate table */
+.cq-odds {
+  margin-top: 14px; padding: 4px 16px; border-radius: var(--r);
+  background: var(--surface); border: 1px solid var(--line-soft);
+}
+.cq-odds summary {
+  cursor: pointer; font-weight: 700; color: var(--text-2);
+  min-height: 44px; display: flex; align-items: center;
+}
+.cq-odds[open] summary { margin-bottom: 4px; }
+.cq-odds p { color: var(--text-2); font-size: .92rem; max-width: 70ch; }
+.cq-odds ul { color: var(--text-2); font-size: .92rem; max-width: 70ch; margin: 4px 0 12px; padding-left: 1.2em; display: grid; gap: 6px; }
+.cq-info { display: grid; gap: 10px; margin-top: 18px; }
+.cq-info > .cq-odds { margin-top: 0; }
+.cq-odds table { width: 100%; border-collapse: collapse; margin: 12px 0 14px; font-size: .92rem; }
+.cq-odds th, .cq-odds td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line-soft); }
+.cq-odds th { color: var(--text-3); font-size: .74rem; text-transform: uppercase; letter-spacing: .08em; }
+.cq-odds td { font-variant-numeric: tabular-nums; }
+
+/* rarity label */
+.cq-rarity {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 2px 9px; border-radius: 999px;
+  font-size: .72rem; font-weight: 800; letter-spacing: .04em; text-transform: uppercase;
+  background: color-mix(in srgb, var(--rc) 18%, transparent);
+  color: color-mix(in srgb, var(--rc) 55%, var(--text));
+  white-space: nowrap;
+}
+.cq-rarity::before { content: ""; width: 7px; height: 7px; border-radius: 2px; background: var(--rc); transform: rotate(45deg); }
+
+/* critter grid */
+.cq-group { margin-top: 18px; }
+.cq-group h3 { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 1.02rem; margin-bottom: 10px; }
+.cq-grid { display: grid; gap: 10px; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); }
+.cq-tile {
+  position: relative;
+  display: grid; justify-items: center; align-content: start; gap: 6px;
+  min-height: 132px; padding: 14px 8px 12px;
+  border-radius: 16px; text-align: center;
+  background: linear-gradient(170deg, color-mix(in srgb, var(--rc) 16%, var(--surface)), var(--surface) 75%);
+  border: 2px solid color-mix(in srgb, var(--rc) 70%, var(--line));
+  color: var(--text);
+  transition: transform .15s, box-shadow .15s;
+}
+button.cq-tile:hover { transform: translateY(-3px); box-shadow: 0 8px 20px color-mix(in srgb, var(--rc) 25%, transparent); }
+.cq-tile[data-rarity="legendary"]:not(.locked) { box-shadow: 0 0 0 1px var(--rc), 0 0 18px color-mix(in srgb, var(--rc) 35%, transparent); }
+.cq-tile.mine { outline: 3px solid var(--brand); outline-offset: 2px; }
+.cq-tile .cq-emoji { font-size: 2.4rem; line-height: 1.1; }
+.cq-tile .cq-name { font-weight: 700; font-size: .86rem; line-height: 1.2; }
+.cq-count, .cq-mine {
+  position: absolute; top: 6px;
+  padding: 1px 7px; border-radius: 999px;
+  font-size: .72rem; font-weight: 800;
+}
+.cq-count { right: 6px; background: var(--surface-3); color: var(--text); }
+.cq-mine { left: 6px; background: var(--brand); color: #fff; }
+/* not collected: a silhouette with a question mark */
+.cq-tile.locked {
+  background: var(--surface-2);
+  border-style: dashed;
+  border-color: color-mix(in srgb, var(--rc) 45%, var(--line));
+}
+.cq-tile.locked .cq-emoji { filter: brightness(0); opacity: .16; }
+.cq-tile.locked .cq-q {
+  position: absolute; top: 18px; left: 50%; transform: translateX(-50%);
+  font-size: 1.6rem; font-weight: 900; color: var(--text-2);
+}
+.cq-tile.locked .cq-name { color: var(--text-3); letter-spacing: .1em; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .cq-tile.locked .cq-emoji { filter: brightness(0) invert(1); opacity: .13; }
+}
+:root[data-theme="dark"] .cq-tile.locked .cq-emoji { filter: brightness(0) invert(1); opacity: .13; }
+
+/* ---------- reveal overlay ---------- */
+body.cq-lock { overflow: hidden; }
+.cq-reveal {
+  --pc: var(--brand);
+  position: fixed; inset: 0; z-index: 45;
+  display: grid; place-items: center; padding: 16px;
+  background: color-mix(in srgb, var(--bg) 78%, transparent);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  animation: cqFade .2s ease;
+}
+@keyframes cqFade { from { opacity: 0; } }
+.cq-reveal-box {
+  width: min(420px, 100%);
+  display: grid; gap: 18px; justify-items: center;
+  padding: 24px 18px; border-radius: var(--r-xl);
+  background: var(--surface); border: 1px solid var(--line);
+  box-shadow: var(--shadow-lg);
+}
+.cq-stage { position: relative; width: 220px; height: 292px; perspective: 900px; }
+.cq-bigpack {
+  position: absolute; inset: 0;
+  display: grid; place-items: center; align-content: center; gap: 10px;
+  border-radius: 22px;
+  background:
+    radial-gradient(160px 110px at 30% 18%, color-mix(in srgb, #fff 26%, transparent), transparent 70%),
+    linear-gradient(150deg, var(--pc), color-mix(in srgb, var(--pc) 40%, #1d1640));
+  box-shadow: 0 16px 40px color-mix(in srgb, var(--pc) 35%, transparent);
+  color: #fff;
+}
+.cq-bigpack-emoji { font-size: 5rem; line-height: 1; filter: drop-shadow(0 8px 12px rgba(0, 0, 0, .35)); }
+.cq-bigpack-name { font-weight: 900; font-size: 1.2rem; letter-spacing: .02em; text-shadow: 0 2px 8px rgba(0, 0, 0, .35); }
+.cq-bigpack.shake { animation: cqShake .75s ease-in-out; }
+.cq-bigpack.burst { animation: cqBurst .35s ease-in forwards; }
+.cq-bigpack.gone { opacity: 0; visibility: hidden; }
+@keyframes cqShake {
+  0%, 100% { transform: none; }
+  15% { transform: rotate(-6deg) scale(1.02); }
+  30% { transform: rotate(6deg) scale(1.04); }
+  45% { transform: rotate(-8deg) scale(1.05); }
+  60% { transform: rotate(8deg) scale(1.07); }
+  75% { transform: rotate(-4deg) scale(1.09); }
+  90% { transform: rotate(3deg) scale(1.1); }
+}
+@keyframes cqBurst {
+  to { transform: scale(1.5); opacity: 0; filter: brightness(2.2); }
+}
+.cq-card {
+  position: absolute; inset: 0;
+  transform-style: preserve-3d;
+  transition: transform .55s cubic-bezier(.2, .8, .2, 1), opacity .25s;
+  opacity: 0; transform: scale(.7) rotateY(0deg);
+}
+.cq-card.in { opacity: 1; transform: scale(1) rotateY(0deg); }
+.cq-card.in.flip { transform: scale(1) rotateY(180deg); }
+.cq-card.shown { transition: none; }
+.cq-face {
+  position: absolute; inset: 0; border-radius: 22px;
+  backface-visibility: hidden; -webkit-backface-visibility: hidden;
+  display: grid; place-items: center; align-content: center; gap: 10px;
+  padding: 16px; text-align: center;
+}
+.cq-back {
+  background:
+    repeating-linear-gradient(45deg, color-mix(in srgb, #fff 10%, transparent) 0 10px, transparent 10px 20px),
+    linear-gradient(150deg, var(--pc), color-mix(in srgb, var(--pc) 40%, #1d1640));
+  font-size: 3.4rem;
+}
+.cq-front {
+  transform: rotateY(180deg);
+  background: linear-gradient(170deg, color-mix(in srgb, var(--rc) 24%, var(--surface)), var(--surface) 80%);
+  border: 4px solid var(--rc);
+  box-shadow: 0 0 34px color-mix(in srgb, var(--rc) 40%, transparent);
+}
+.cq-front .cq-emoji { font-size: 5.2rem; line-height: 1.05; }
+.cq-card-name { font-size: 1.3rem; font-weight: 900; letter-spacing: -.01em; }
+.cq-tag { font-weight: 800; font-size: .9rem; }
+.cq-tag.new { color: color-mix(in srgb, var(--good) 65%, var(--text)); }
+.cq-tag.dup { color: var(--text-2); }
+.cq-card[data-rarity="legendary"] .cq-front { animation: cqGlow 1.6s ease-in-out infinite alternate; }
+@keyframes cqGlow { to { box-shadow: 0 0 56px color-mix(in srgb, var(--rc) 70%, transparent); } }
+.cq-actions { width: 100%; }
+.cq-actions .btn { flex: 1 1 auto; }
+
+@media (max-width: 520px) {
+  /* packs as compact rows so all four fit near one screen */
+  .cq-packs { gap: 10px; }
+  .cq-pack { grid-template-rows: none; grid-template-columns: 76px 1fr; }
+  .cq-pack-art { height: auto; }
+  .cq-pack-art span { font-size: 2.3rem; }
+  .cq-pack-body { gap: 7px; padding: 12px 12px 12px 14px; }
+  .cq-pack-body h3 { font-size: 1rem; }
+  .cq-grid { grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 8px; }
+  .cq-tile { min-height: 120px; padding: 12px 6px 10px; }
+  .cq-tile .cq-emoji { font-size: 2rem; }
+  .cq-tile .cq-name { font-size: .8rem; }
+  .cq-rarity { font-size: .64rem; padding: 2px 7px; }
+  .cq-stats .stat { flex: 1 1 40%; min-width: 0; }
+  .cq-stage { width: 200px; height: 262px; }
+  .cq-reveal-box { padding: 20px 14px; gap: 14px; }
+  .cq-odds { padding: 4px 12px; }
+  .cq-odds th, .cq-odds td { padding: 7px 6px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cq-badge.pulse, .cq-plus, .cq-reveal, .cq-bigpack.shake, .cq-bigpack.burst,
+  .cq-card[data-rarity="legendary"] .cq-front { animation: none !important; }
+  .cq-card, button.cq-tile { transition: none !important; }
+}
+
+/* .btn.primary / .btn.gold set their own box-shadow, which hides the shared
+   :focus-visible ring; give ours an outline so keyboard focus always shows. */
+.cq-col .btn:focus-visible, .cq-reveal .btn:focus-visible, .cq-tile:focus-visible {
+  outline: 3px solid var(--brand); outline-offset: 2px;
+}

@@ -351,6 +351,7 @@ function norm(s) {
     .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
     .replace(/[−–—]/g, '-')
     .replace(/²/g, '^2').replace(/³/g, '^3')
+    .replace(/[µμ]/g, 'u')
     .toLowerCase()
     .replace(/[×·*]/g, 'x')
     .replace(/[°º]/g, '')
@@ -386,9 +387,17 @@ function checkWritten(q, input) {
   if (typeof q.check === 'function') { try { return !!q.check(input); } catch { return false; } }
   const u = norm(input);
   if (!u) return false;
+  // Units are compared without case, except where case is the whole
+  // difference: M (mega) is not m (milli).
+  const unitOf = (s) => (String(s).trim().match(/\d\s*([A-Za-z]+)[.!]?$/) || [])[1] || '';
+  const ui = unitOf(input), ua = unitOf(q.answer);
+  if (ui && ua && ui.length <= 2 && /^m/i.test(ui) && ui[0] !== ua[0] && ui.toLowerCase() === ua.toLowerCase()) return false;
   const answers = [q.answer, ...(q.accept || [])].map(norm).filter(Boolean);
   if (answers.includes(u)) return true;
-  if (answers.some((a) => a.length > 3 && (u === a + 's' || u + 's' === a))) return true;
+  // A plural typed for a word answer (or the other way round). Numbers with
+  // units go through the unit rule below instead, where "10 ms" is not "10 m".
+  if (answers.some((a) => a.length > 3 && !parseNum(a) && (u === a + 's' || u + 's' === a))) return true;
+  const sameUnit = (x, y) => x === y || (Math.min(x.length, y.length) > 1 && (x === y + 's' || y === x + 's'));
   const un = parseNum(input);
   if (un) {
     // Whether a unit is required comes from the question's own answer, not from
@@ -399,7 +408,7 @@ function checkWritten(q, input) {
     for (const a of [q.answer, ...(q.accept || [])]) {
       const an = parseNum(a);
       if (!an) continue;
-      const tol = Math.max(Math.abs(an.value) * 0.006, 1e-9);
+      const tol = an.value === 0 ? 1e-9 : Math.abs(an.value) * 0.006;
       if (Math.abs(an.value - un.value) > tol) continue;
       // The notation is part of the answer: "Write 354,000,000 in scientific
       // notation" is not answered by copying 354000000 back, nor by 35.4 × 10^7.
@@ -407,7 +416,7 @@ function checkWritten(q, input) {
       // have one digit before the decimal point.
       if (un.sci !== an.sci) continue;
       if (un.sci && !(Math.abs(un.coef) >= 1 && Math.abs(un.coef) < 10)) continue;
-      if (wants && un.unit && un.unit !== canon.unit && un.unit !== an.unit) continue;
+      if (wants && un.unit && !sameUnit(un.unit, canon.unit) && !sameUnit(un.unit, an.unit)) continue;
       // Likewise the variable: "5" answers "x = 5", but "y = 5" does not.
       if (canon && canon.v && un.v && un.v !== canon.v && un.v !== an.v) continue;
       return true;
