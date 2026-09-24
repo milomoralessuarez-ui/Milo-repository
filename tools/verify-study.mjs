@@ -145,6 +145,26 @@ for (const set of SETS) {
   }
 }
 
+// Across concepts: the combined set keeps the first definition of a term two
+// concepts share, so a second, different definition never reaches the
+// student there. Worth knowing about, not a failure.
+{
+  const seen = new Map();
+  for (const set of SETS) for (const t of set.terms || []) {
+    const k = norm(t.term);
+    const prev = seen.get(k);
+    if (prev && prev.set !== set.concept && norm(prev.def) !== norm(t.definition)) {
+      warn(`term "${t.term}"`, `defined differently in Concept ${prev.set} and Concept ${set.concept}; "All concepts" shows Concept ${prev.set}'s`);
+    }
+    if (!prev) seen.set(k, { set: set.concept, def: t.definition });
+  }
+}
+// A recall card ("1 kg = ?") must say which unit it wants: 1 kg is both
+// 1,000,000 mg and 2.2 lbs.
+for (const set of SETS) for (const t of set.terms || []) {
+  if (/=\s*\?\s*$/.test(t.term)) fail(`Concept ${set.concept} term "${t.term}"`, 'asks "= ?" without naming the unit wanted');
+}
+
 // The app's own answer checker has to accept every variant the data promises,
 // and reject a value that is right but carries the wrong unit. Lift the three
 // functions out of app.js rather than re-implementing them here, so this

@@ -107,7 +107,12 @@ function bumpMastery(id, correct) {
   if (correct) { state.stats.correct++; delete state.missed[id]; }
   else state.missed[id] = Date.now();
   save();
+  emit('answer', { id, correct });
 }
+/* A tiny event bus for plugins. */
+const listeners = {};
+function on(evt, fn) { (listeners[evt] ||= []).push(fn); }
+function emit(evt, data) { for (const fn of listeners[evt] || []) { try { fn(data); } catch (e) { console.error(e); } } }
 function recordBest(key, value, higherIsBetter = true) {
   const cur = state.best[key];
   const better = cur == null || (higherIsBetter ? value > cur : value < cur);
@@ -185,7 +190,10 @@ const ALL = {
   id: 'all', concept: 0, title: 'All concepts', short: 'All concepts', emoji: '🌟', color: '#34d399',
   summary: 'Every term and question from Concepts 1–4 in one set — ideal for a unit test.',
   topics: SETS.flatMap((s) => s.topics || []),
-  terms: SETS.flatMap((s) => s.terms),
+  // A term that two concepts both define (Graduated cylinder, Thermometer)
+  // appears once here, as its first concept has it — two cards with the same
+  // front and different backs would read as a contradiction.
+  terms: uniqBy(SETS.flatMap((s) => s.terms), (t) => t.term.trim().toLowerCase()),
   questions: SETS.flatMap((s) => s.questions),
 };
 const getSet = (id) => (id === 'all' ? ALL : SETS.find((s) => s.id === id));
@@ -197,12 +205,21 @@ for (const s of SETS) {
   for (const t of s.terms) ITEMS.set(t.id, { id: t.id, kind: 'term', term: t, setId: s.id });
   for (const q of s.questions) ITEMS.set(q.id, { id: q.id, kind: 'q', q, setId: s.id });
 }
+/** A plugin that generates questions registers a resolver for its id prefix
+    ("lab:" and so on), returning { id, kind: 'gen', setId, label, make() } so
+    the Mistakes list can show the skill and serve a fresh problem for it. */
+const resolvers = {};
+function resolveGenerated(id) {
+  const fn = resolvers[id.split(':')[0]];
+  if (!fn) return null;
+  try { const it = fn(id); return it && it.make ? { kind: 'gen', ...it, id } : null; } catch { return null; }
+}
 /** The set's missed items, newest first; ids from an older data.js are pruned. */
 function mistakesIn(set) {
   let pruned = false;
   const out = [];
   for (const [id, at] of Object.entries(state.missed)) {
-    const it = ITEMS.get(id);
+    const it = ITEMS.get(id) || resolveGenerated(id);
     if (!it) { delete state.missed[id]; pruned = true; continue; }
     if (set.id === 'all' || it.setId === set.id) out.push({ ...it, at });
   }
@@ -221,7 +238,10 @@ const MODES = [
   { id: 'blitz', name: 'Blitz', ico: '⚡', color: '#ff4d9d', desc: 'Rapid-fire questions. Speed and streaks multiply your score.', game: true },
   { id: 'guide', name: 'Study guide', ico: '📖', color: '#a8b0d8', desc: 'Every term and every question with its answer, grouped by topic.' },
 ];
-const MODE_NAMES = Object.fromEntries(MODES.map((m) => [m.id, m.name]));
+const modeName = (id) => (MODES.find((m) => m.id === id) || {}).name || '';
+/** Plugin modes can say which sets they make sense for (a calculation drill
+    has nothing to offer the lab-safety set). Core modes suit every set. */
+const modesFor = (set) => MODES.filter((m) => !m.available || m.available(set));
 
 /* ------------------------------------------------- question generation */
 const stripParens = (s) => s.replace(/\s*\(.*?\)\s*/g, ' ').replace(/\s+/g, ' ').trim();
@@ -273,7 +293,11 @@ function authored(q) {
 function gameQuestions(set) {
   const qs = set.questions.filter((q) => q.type === 'mc' || q.type === 'tf').map(authored);
   const ts = set.terms.map((t) => termMC(t, set));
-  return shuffle([...qs, ...ts]);
+  // Plugin sources (generated problems, picture questions) join the mix; only
+  // tap-to-answer types, since the games have no typing.
+  const extra = gameSources.flatMap((src) => { try { return src(set) || []; } catch (e) { console.error(e); return []; } })
+    .filter((q) => q && (q.type === 'mc' || q.type === 'tf'));
+  return shuffle([...qs, ...ts, ...extra]);
 }
 
 /* ------------------------------------------------ answer checking */
@@ -386,7 +410,7 @@ function renderHome() {
   v.append(grid);
   v.append(el('h2', { class: 'section-title' }, 'How to study'));
   v.append(el('div', { class: 'grid modes' },
-    ...MODES.map((m) => el('a', { class: `card mode${m.game ? ' game' : ''}`, href: `#/set/all/${m.id}`, style: `--c:${m.color}` },
+    ...modesFor(ALL).map((m) => el('a', { class: `card mode${m.game ? ' game' : ''}`, href: `#/set/all/${m.id}`, style: `--c:${m.color}` },
       el('div', { class: 'ico' }, m.ico), el('h3', {}, m.name), el('p', {}, m.desc))),
   ));
   main.append(v);
@@ -420,7 +444,7 @@ function renderSet(set) {
     el('h2', { class: 'section-title' }, 'Study modes'),
   );
   const grid = el('div', { class: 'grid modes' });
-  for (const md of MODES) {
+  for (const md of modesFor(set)) {
     const best = state.best[`${md.id}:${set.id}`];
     let chip = null;
     if (md.id === 'mistakes') {
@@ -567,8 +591,13 @@ function onKeys(fn) {
 function questionCard(q, { onAnswer, showTag = true, instant = true }) {
   const box = el('div', { class: 'q-card' });
   let done = false;
-  const src = q.setId ? `${setOf(q.setId).short} · slide ${q.page}` : '';
+  const src = q.source || (q.setId && q.page ? `${setOf(q.setId).short} · slide ${q.page}` : '');
   if (showTag) box.append(el('div', { class: 'q-tag' }, q.ask || (q.type === 'tf' ? 'True or false?' : 'Choose the best answer')));
+  if (q.figure) {
+    const fig = el('div', { class: 'q-figure', role: 'img', 'aria-label': q.figureAlt || 'Diagram for this question' });
+    if (q.figure instanceof Node) fig.append(q.figure); else fig.innerHTML = q.figure;
+    box.append(fig);
+  }
   box.append(el('div', { class: 'q-prompt' }, q.prompt));
 
   function finish(correct, given, chosenBtn) {
@@ -915,7 +944,8 @@ function renderMatch(set) {
     body.innerHTML = '';
     let pool = set.terms.filter((t) => t.definition.length <= 110);
     if (pool.length < PAIRS) pool = set.terms;
-    const chosen = uniqBy(shuffle(pool), (t) => t.definition).slice(0, PAIRS);
+    // No two tiles may show the same text, or a right pairing could be marked wrong.
+    const chosen = uniqBy(uniqBy(shuffle(pool), (t) => t.definition), (t) => t.term).slice(0, PAIRS);
     if (chosen.length < 2) { body.append(el('div', { class: 'panel empty' }, 'Not enough terms to play.')); return; }
     const tiles = shuffle([
       ...chosen.map((t) => ({ pair: t.id, text: t.term, term: true })),
@@ -977,7 +1007,7 @@ function makeBots(n) {
 function leaderboard(players, meName, fmt = (g) => g.toLocaleString()) {
   const sorted = players.slice().sort((a, b) => b.gold - a.gold);
   return el('div', { class: 'board' }, ...sorted.map((p, i) => el('div', { class: `brow${p.name === meName ? ' me' : ''}` },
-    el('span', { class: 'rank' }, `${i + 1}.`), el('span', { class: 'nm' }, p.name), el('span', { class: 'amt' }, fmt(p.gold)))));
+    el('span', { class: 'rank' }, `${i + 1}.`), el('span', { class: 'nm' }, p.name === meName ? `${CQ.player().icon} ${p.name}` : p.name), el('span', { class: 'amt' }, fmt(p.gold)))));
 }
 
 /* ----------------------------------------------------------- gold quest */
@@ -1248,12 +1278,14 @@ function renderMistakes(set) {
   cleanup = onKeys((e) => { if (keyPick && /^[1-4tf]$/i.test(e.key)) keyPick(e.key.toLowerCase()); });
 
   const asQuestion = (it) => {
+    if (it.kind === 'gen') return it.make();
     if (it.kind === 'q') return authored(it.q);
     // Terms come back the way they are hardest to fake: typed when the name is
     // short enough to type, otherwise as multiple choice.
     return typeable(it.term) && Math.random() < .5 ? termWritten(it.term) : termMC(it.term, setOf(it.setId));
   };
-  const label = (it) => (it.kind === 'q' ? it.q.prompt : `${it.term.term} — ${it.term.definition}`);
+  const label = (it) => (it.kind === 'gen' ? it.label : it.kind === 'q' ? it.q.prompt : `${it.term.term} — ${it.term.definition}`);
+  const where = (it) => (it.kind === 'gen' ? 'practice skill' : `slide ${(it.q || it.term).page}`);
 
   function overview() {
     keyPick = null;
@@ -1290,7 +1322,7 @@ function renderMistakes(set) {
       el('h2', { class: 'section-title' }, 'Most recent first'),
       el('div', {}, ...items.slice(0, 40).map((it) => el('div', { class: 'term-row mistake-row' },
         el('b', {}, label(it)),
-        el('span', { class: 'note' }, `${setOf(it.setId).short} · slide ${(it.q || it.term).page}`)))),
+        el('span', { class: 'note' }, `${setOf(it.setId).short} · ${where(it)}`)))),
       items.length > 40 ? el('p', { class: 'note' }, `…and ${items.length - 40} more.`) : null,
     );
   }
@@ -1510,7 +1542,7 @@ function renderRace(set) {
           el('h2', {}, won ? `You won${isBest ? ' — fastest yet!' : '!'}` : me.finished ? `You finished ${placeNum}${['st', 'nd', 'rd'][placeNum - 1] || 'th'}` : 'The bots all finished first'),
           el('p', {}, `${correct} / ${answered} correct${ms != null ? ` · ${fmtSecs(ms)}` : ` · ${me.pos} of ${LEN} spaces`}${state.best[`race:${set.id}`] != null ? ` · best win ${fmtSecs(state.best[`race:${set.id}`])}` : ''}`)),
         el('div', { class: 'board' }, ...order.map((r, i) => el('div', { class: `brow${r.me ? ' me' : ''}` },
-          el('span', { class: 'rank' }, `${i + 1}.`), el('span', { class: 'nm' }, `${r.car} ${r.name}`),
+          el('span', { class: 'rank' }, `${i + 1}.`), el('span', { class: 'nm' }, r.me ? `${r.car} ${CQ.player().icon} ${r.name}` : `${r.car} ${r.name}`),
           el('span', { class: 'amt' }, r.finished ? fmtSecs(r.time) : `${r.pos} / ${LEN}`)))),
         el('div', { class: 'row center', style: 'margin-top:18px' },
           el('button', { class: 'btn primary lg', onclick: play }, 'Race again'),
@@ -1580,19 +1612,86 @@ function route() {
   window.scrollTo({ top: 0 });
   if (!SETS.length) { main.append(el('div', { class: 'empty' }, 'No study data found — data.js is missing.')); return; }
   const parts = location.hash.replace(/^#\/?/, '').split('/').filter(Boolean);
+  const page = parts[0] && pages.get(parts[0]);
+  if (page) {
+    setCrumbs([[page.name]]);
+    document.title = `${page.name} — ChemQuest`;
+    page.render(parts.slice(1));
+    const h = main.querySelector('h1');
+    if (h) { h.tabIndex = -1; h.focus({ preventScroll: true }); }
+    return;
+  }
   if (parts[0] !== 'set') { setCrumbs([]); document.title = 'ChemQuest — study Concepts 1–4'; return renderHome(); }
   const set = getSet(parts[1]);
   if (!set) { location.hash = '#/'; return; }
   const views = { '': renderSet, flashcards: renderFlashcards, learn: renderLearn, test: renderTest, mistakes: renderMistakes, match: renderMatch, gold: renderGold, race: renderRace, blitz: renderBlitz, guide: renderGuide };
-  // An unrecognised mode in the URL shows the set rather than a half-titled page.
+  for (const m of modesFor(set)) if (m.render && !views[m.id]) views[m.id] = m.render;
+  // An unrecognised mode — or a plugin mode that doesn't suit this set — shows
+  // the set rather than a half-titled page.
   const mode = views[parts[2]] ? parts[2] : '';
-  setCrumbs(mode ? [[set.short, `#/set/${set.id}`], [MODE_NAMES[mode]]] : [[set.short]]);
-  document.title = `${mode ? MODE_NAMES[mode] + ' · ' : ''}${set.title} — ChemQuest`;
+  setCrumbs(mode ? [[set.short, `#/set/${set.id}`], [modeName(mode)]] : [[set.short]]);
+  document.title = `${mode ? modeName(mode) + ' · ' : ''}${set.title} — ChemQuest`;
   views[mode](set);
   // Send the screen reader (and the keyboard) to the new view's heading.
   const h = main.querySelector('h1');
   if (h) { h.tabIndex = -1; h.focus({ preventScroll: true }); }
 }
+/* ------------------------------------------------------------ plugins
+   Features that live in their own files (lab.js, visuals.js, collect.js)
+   reach the app through this object. They load after app.js, so the first
+   render waits until the document has finished parsing. */
+const pages = new Map();
+const gameSources = [];
+const CQ = window.CQ = {
+  // building blocks
+  el, $, shuffle, pick, clamp, pct, uniqBy, fmtTime, fmtSecs, toast, confetti, floatText, sfx, later,
+  // content
+  SETS, ALL, getSet, setOf,
+  // progress
+  state, save, bumpMastery, recordBest,
+  // screens
+  main, questionCard, wireOverride, checkWritten, panelHead, backBtn, onKeys,
+  /** Run fn when the student leaves the current screen (stop timers etc.). */
+  addCleanup(fn) { const prev = cleanup; cleanup = () => { try { if (prev) prev(); } finally { fn(); } }; },
+  on, emit,
+  /** { id, name, ico, color, desc, game?, available?(set), render(set) } */
+  registerMode(def) {
+    if (!def || !def.id || MODES.some((m) => m.id === def.id)) return;
+    const at = def.before ? MODES.findIndex((m) => m.id === def.before) : -1;
+    if (at >= 0) MODES.splice(at, 0, def); else MODES.push(def);
+  },
+  /** A top-level page at #/<id>: { id, name, render(args), homeCard?: { ico, desc, color } } */
+  registerPage(def) { if (def && def.id && !pages.has(def.id) && !['set'].includes(def.id)) pages.set(def.id, def); },
+  /** fn(set) → extra tap-to-answer questions for Gold Quest, Race and Blitz. */
+  addGameSource(fn) { gameSources.push(fn); },
+  registerItemResolver(prefix, fn) { resolvers[prefix] = fn; },
+  /** A button in the header, before the sound toggle. */
+  addHeaderButton({ id, label, ico, href }) {
+    if (document.getElementById(id)) return;
+    const a = el('a', { class: 'icon-btn', id, href, 'aria-label': label, title: label }, ico);
+    $('.header-actions').prepend(a);
+    return a;
+  },
+  /** Who "You" is in the games; a plugin may give the student an icon. */
+  player() { return { name: 'You', icon: '🙂' }; },
+};
+
+/* The home page lists plugin pages that asked for a card. */
+const renderHomeCore = renderHome;
+renderHome = function () {
+  renderHomeCore();
+  const cards = [...pages.values()].filter((p) => p.homeCard);
+  if (!cards.length) return;
+  const view = main.querySelector('.view');
+  const title = el('h2', { class: 'section-title' }, 'More');
+  const grid = el('div', { class: 'grid modes' }, ...cards.map((p) => el('a', { class: 'card mode', href: `#/${p.id}`, style: `--c:${p.homeCard.color || '#7c5cff'}` },
+    el('div', { class: 'ico' }, p.homeCard.ico), el('h3', {}, p.name), el('p', {}, p.homeCard.desc))));
+  // Put "More" straight after the study sets, above "How to study".
+  const how = [...view.querySelectorAll('.section-title')].find((h) => /how to study/i.test(h.textContent));
+  if (how) { view.insertBefore(title, how); view.insertBefore(grid, how); } else view.append(title, grid);
+};
+
 window.addEventListener('hashchange', route);
-route();
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', route);
+else route();
 })();

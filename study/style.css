@@ -358,6 +358,12 @@ kbd {
 
 /* ---------- questions (learn / test / games) ---------- */
 .q-card { display: grid; gap: 18px; }
+.q-figure {
+  display: grid; place-items: center;
+  padding: 12px; border-radius: 16px;
+  background: var(--surface-2); border: 1px solid var(--line-soft);
+}
+.q-figure svg { display: block; width: 100%; max-width: 340px; height: auto; max-height: 240px; }
 .q-prompt { font-size: clamp(1.15rem, 2.6vw, 1.5rem); font-weight: 700; line-height: 1.35; }
 .q-tag { font-size: .78rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--text-3); }
 .opts { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); }

@@ -1437,7 +1437,7 @@ window.STUDY_SETS = [
     "topic": "Metric conversions"
    },
    {
-    "term": "1 kg = ?",
+    "term": "1 kg = ? mg",
     "definition": "1,000,000 mg",
     "page": 12,
     "topic": "Metric conversions"
@@ -3007,19 +3007,19 @@ window.STUDY_SETS = [
     "topic": "Conversion factors"
    },
    {
-    "term": "24 hours = ?",
+    "term": "24 hours = ? day",
     "definition": "1 day",
     "page": 3,
     "topic": "Conversion factors"
    },
    {
-    "term": "12 inches = ?",
+    "term": "12 inches = ? foot",
     "definition": "1 foot",
     "page": 4,
     "topic": "Conversion factors"
    },
    {
-    "term": "7 days = ?",
+    "term": "7 days = ? week",
     "definition": "1 week",
     "page": 4,
     "topic": "Conversion factors"
@@ -3043,19 +3043,19 @@ window.STUDY_SETS = [
     "topic": "Picket fence method"
    },
    {
-    "term": "365 days = ?",
+    "term": "365 days = ? year",
     "definition": "1 year",
     "page": 6,
     "topic": "Conversion factors"
    },
    {
-    "term": "60 min = ?",
+    "term": "60 min = ? hour",
     "definition": "1 hour",
     "page": 6,
     "topic": "Conversion factors"
    },
    {
-    "term": "60 s = ?",
+    "term": "60 s = ? min",
     "definition": "1 min",
     "page": 6,
     "topic": "Conversion factors"
@@ -3067,103 +3067,103 @@ window.STUDY_SETS = [
     "topic": "Picket fence method"
    },
    {
-    "term": "1000 g = ?",
+    "term": "1000 g = ? kg",
     "definition": "1 kg",
     "page": 8,
     "topic": "Conversion factor table"
    },
    {
-    "term": "1 ounce = ?",
+    "term": "1 ounce = ? g",
     "definition": "28.35 g",
     "page": 8,
     "topic": "Conversion factor table"
    },
    {
-    "term": "1 kg = ?",
+    "term": "1 kg = ? lbs",
     "definition": "2.2 lbs",
     "page": 8,
     "topic": "Conversion factor table"
    },
    {
-    "term": "16 ounces (oz) = ?",
+    "term": "16 ounces (oz) = ? lb",
     "definition": "1 lb",
     "page": 8,
     "topic": "Conversion factor table"
    },
    {
-    "term": "2000 lbs = ?",
+    "term": "2000 lbs = ? ton",
     "definition": "1 ton",
     "page": 8,
     "topic": "Conversion factor table"
    },
    {
-    "term": "1 tsp = ?",
+    "term": "1 tsp = ? mL",
     "definition": "5 mL",
     "page": 8,
     "topic": "Conversion factor table"
    },
    {
-    "term": "1 cup = ?",
+    "term": "1 cup = ? mL",
     "definition": "236 mL",
     "page": 8,
     "topic": "Conversion factor table"
    },
    {
-    "term": "1 fluid oz = ?",
+    "term": "1 fluid oz = ? mL",
     "definition": "29.6 mL",
     "page": 8,
     "topic": "Conversion factor table"
    },
    {
-    "term": "1000 mL = ?",
+    "term": "1000 mL = ? L",
     "definition": "1 L",
     "page": 8,
     "topic": "Conversion factor table"
    },
    {
-    "term": "3 tsp = ?",
+    "term": "3 tsp = ? Tbsp",
     "definition": "1 Tbsp",
     "page": 8,
     "topic": "Conversion factor table"
    },
    {
-    "term": "16 Tbsp = ?",
+    "term": "16 Tbsp = ? cup",
     "definition": "1 cup",
     "page": 8,
     "topic": "Conversion factor table"
    },
    {
-    "term": "2 cups = ?",
+    "term": "2 cups = ? pint",
     "definition": "1 pint",
     "page": 8,
     "topic": "Conversion factor table"
    },
    {
-    "term": "2 pints = ?",
+    "term": "2 pints = ? quart",
     "definition": "1 quart",
     "page": 8,
     "topic": "Conversion factor table"
    },
    {
-    "term": "4 quarts = ?",
+    "term": "4 quarts = ? gallon",
     "definition": "1 gallon",
     "page": 8,
     "topic": "Conversion factor table"
    },
    {
-    "term": "1 inch = ?",
+    "term": "1 inch = ? cm",
     "definition": "2.54 cm",
     "page": 8,
     "topic": "Conversion factor table"
    },
    {
-    "term": "1 mile = ?",
+    "term": "1 mile = ? ft",
     "definition": "5,280 ft",
     "page": 8,
     "topic": "Conversion factor table"
    },
    {
-    "term": "3 ft = ?",
+    "term": "3 ft = ? yard",
     "definition": "1 yard",
     "page": 8,
     "topic": "Conversion factor table"
