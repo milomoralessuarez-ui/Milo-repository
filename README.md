@@ -31,7 +31,7 @@ worker (offline play) and for high scores to persist reliably.
 
 ## The games
 
-**444 originals** written for this site, plus **556 remixes** of the arcade
+**484 originals** written for this site, plus **516 remixes** of the arcade
 originals (see [Remixes](#remixes)). Every game has its own page with a
 description of how it actually plays, its controls, a high-score table, and
 its other versions.
@@ -39,15 +39,15 @@ its other versions.
 | Category | Originals | Remixes | Highlights |
 |---|---|---|---|
 | **Sandbox** | 2 | 2 | Blockcraft (first-person voxel world, WebGL), Terra Dig |
-| **Racing** | 9 | 14 | Polly Track — Sunrise Circuit, Canyon, Alpine — and Turbo Drift's 50 grand-prix circuits, plus Kart Sprint, Moto Hill Climb, Highway Rush |
-| **Action** | 41 | 110 | Zombie Siege, Alien Swarm, Mech Storm, Dungeon Dash, Goblin Gates, Shark Escape, Storm Chaser, Volcano Escape, Ninja Slice |
-| **Arcade** | 44 | 123 | Centipede Strike, Photon Cycles, Star Gate, Cube Hopper, Tunnel Digger, Pipe Panic, Bomb Catcher, Tunnel Rush, Neon Snake |
-| **Puzzle** | 97 | 80 | 18 jigsaws, 100 pixel-art nonograms, Skyscrapers, Bridges, Star Battle, Number Link, Unblock Car, five sudoku tiers plus Sudoku X, six minesweeper boards, 16 math drills |
-| **Casual** | 70 | 109 | 10 idle clickers, 14 memory games, Beat Drop, Dance Arrows, Stroop Rush, Juggle Master, Claw Machine, Perfect Slice |
-| **Sports** | 15 | 41 | Table Tennis, Blob Volleyball, Batting Cage, Free Kick, Ski Slalom, Skate Park, Boat Race, Velodrome Dash |
-| **Cards** | 21 | 19 | Klondike, Spider, FreeCell, Yukon, Scorpion, Canfield, Forty Thieves, Tri Peaks, Blackjack, Video Poker |
-| **Word** | 45 | 19 | 20 themed word searches, 10 typing games, Word Guess, Mini Crossword, Honeycomb Words, Missing Vowels, Odd One Out |
-| **Strategy** | 22 | 39 | Chess Blitz, Checkers, Reversi, Battleship, Tower Defence, Space Trader, Factory Lines, Ant Colony |
+| **Racing** | 19 | 33 | Polly Track — Sunrise Circuit, Canyon, Alpine — Turbo Drift's 50 grand-prix circuits, Rally Stage with a co-driver on the pacenotes, Drag Racer, Monster Truck, Ice Racer, Pit Stop, Time Attack against your own ghost |
+| **Action** | 41 | 93 | Zombie Siege, Alien Swarm, Mech Storm, Dungeon Dash, Goblin Gates, Shark Escape, Storm Chaser, Volcano Escape, Ninja Slice |
+| **Arcade** | 44 | 103 | Centipede Strike, Photon Cycles, Star Gate, Cube Hopper, Tunnel Digger, Pipe Panic, Bomb Catcher, Tunnel Rush, Neon Snake |
+| **Puzzle** | 97 | 67 | 18 jigsaws, 100 pixel-art nonograms, Skyscrapers, Bridges, Star Battle, Number Link, Unblock Car, five sudoku tiers plus Sudoku X, six minesweeper boards, 16 math drills |
+| **Casual** | 70 | 90 | 10 idle clickers, 14 memory games, Beat Drop, Dance Arrows, Stroop Rush, Juggle Master, Claw Machine, Perfect Slice |
+| **Sports** | 25 | 61 | Curling, Badminton, Boxing, Sumo, High Jump, Javelin, Snowboard Halfpipe, Rowing Sprint, Show Jumping, Fencing, Table Tennis, Blob Volleyball, Batting Cage |
+| **Cards** | 31 | 16 | Hearts, Spades, Cribbage, Gin Rummy, Euchre, Durak, Oh Hell!, Casino, Rummy 500, Go Fish, plus Klondike, Spider, FreeCell and nine more solitaires |
+| **Word** | 45 | 17 | 20 themed word searches, 10 typing games, Word Guess, Mini Crossword, Honeycomb Words, Missing Vowels, Odd One Out |
+| **Strategy** | 32 | 34 | Go (9×9), Quoridor, Onitama, Hnefatafl, Backgammon, Amazons, Lines of Action, Halma, Dominoes, Conquest, Chess Blitz, Checkers, Reversi, Tower Defence |
 | **Trivia** | 78 | — | 78 quizzes: science, space, dinosaurs, world capitals, flags, rivers, Olympics, classical music, art history, logic riddles, Acronym Quiz, Trivia Ladder… |
 
 Some things worth calling out:
