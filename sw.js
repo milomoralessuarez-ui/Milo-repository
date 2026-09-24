@@ -47,13 +47,13 @@ const GAMES = [
   'spring-heights', 'stack-ball', 'star-battle', 'star-gate', 'stick-bridge', 'storm-chaser',
   'stroop-rush', 'stunt-jump', 'submarine-strike', 'sudoku', 'sudoku-mines-pack', 'sumo-push',
   'sweet-match', 'sword-storm', 'table-tennis', 'tangram-fit', 'tank-arena', 'tempo-tap',
-  'terra-dig', 'tic-tac-toe', 'tile-match', 'tower-defence', 'tower-of-hanoi', 'tower-stack',
-  'traffic-control', 'trivia-ladder', 'truck-haul', 'true-false-blitz', 'tunnel-digger',
-  'tunnel-rush', 'turbo-drift', 'turret-tower', 'typing-pack', 'typing-test', 'ultimate-ttt',
-  'unblock-car', 'velodrome-dash', 'video-poker', 'vine-swing', 'volcano-escape',
-  'volleyball-blobs', 'wall-jumper', 'war-cards', 'water-sort', 'whack-a-mole', 'wind-glider',
-  'word-grid', 'word-guess', 'word-ladder', 'word-search', 'word-search-pack', 'word-sleuth',
-  'wrecking-ball', 'zig-zag', 'zombie-siege'
+  'terra-dig', 'tic-tac-toe', 'tile-match', 'time-attack', 'tower-defence', 'tower-of-hanoi',
+  'tower-stack', 'traffic-control', 'trivia-ladder', 'truck-haul', 'true-false-blitz',
+  'tunnel-digger', 'tunnel-rush', 'turbo-drift', 'turret-tower', 'typing-pack', 'typing-test',
+  'ultimate-ttt', 'unblock-car', 'velodrome-dash', 'video-poker', 'vine-swing',
+  'volcano-escape', 'volleyball-blobs', 'wall-jumper', 'war-cards', 'water-sort',
+  'whack-a-mole', 'wind-glider', 'word-grid', 'word-guess', 'word-ladder', 'word-search',
+  'word-search-pack', 'word-sleuth', 'wrecking-ball', 'zig-zag', 'zombie-siege'
 // GAMES:END
 ];
 
