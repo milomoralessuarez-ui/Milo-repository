@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>ChemQuest — study Concepts 1–4</title>
-<meta name="description" content="Flashcards, Learn, Test, Match and Blooket-style games for General Chemistry Concepts 1–4: lab safety and equipment, measurement, dimensional analysis and scientific notation, and the scientific method.">
+<title>StudyQuest — every subject, one study hub</title>
+<meta name="description" content="Flashcards, practice tests and Blooket-style games for high school subjects: Chemistry, Algebra 1, Geometry, Biology, English, U.S. History, World History and Spanish 1.">
 <meta name="theme-color" content="#0b0e1a" media="(prefers-color-scheme: dark)">
 <meta name="theme-color" content="#f4f6fd" media="(prefers-color-scheme: light)">
 <meta name="color-scheme" content="dark light">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%237c5cff'/><stop offset='1' stop-color='%2322d3ee'/></linearGradient></defs><rect width='100' height='100' rx='24' fill='url(%23g)'/><text x='50' y='72' font-size='58' text-anchor='middle'>🧪</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%237c5cff'/><stop offset='1' stop-color='%2322d3ee'/></linearGradient></defs><rect width='100' height='100' rx='24' fill='url(%23g)'/><text x='50' y='72' font-size='58' text-anchor='middle'>🎓</text></svg>">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -21,9 +21,9 @@
 <body>
 
 <header class="header">
-  <a class="logo" href="#/" aria-label="ChemQuest home">
-    <span class="logo-mark">🧪</span>
-    <span>Chem<b>Quest</b></span>
+  <a class="logo" href="#/" aria-label="StudyQuest home">
+    <span class="logo-mark">🎓</span>
+    <span>Study<b>Quest</b></span>
   </a>
   <nav class="crumbs" id="crumbs" aria-label="Breadcrumb"></nav>
   <div class="header-actions">
@@ -37,13 +37,21 @@
 </main>
 
 <footer class="footer">
-  <p><strong>ChemQuest</strong> — built from the Concept 1–4 class notes. Progress is saved on this device.</p>
+  <p><strong>StudyQuest</strong> — Chemistry is built from your class notes; the other subjects follow standard high school courses. Progress is saved on this device.</p>
   <p style="margin-top:6px"><a href="../">← Back to MiloPlay</a></p>
 </footer>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script src="data.js"></script>
+<!-- One file per subject; each pushes itself onto window.STUDY_SUBJECTS. -->
+<script src="subjects/alg1.js"></script>
+<script src="subjects/geo.js"></script>
+<script src="subjects/bio.js"></script>
+<script src="subjects/ela.js"></script>
+<script src="subjects/ush.js"></script>
+<script src="subjects/wh.js"></script>
+<script src="subjects/span1.js"></script>
 <script src="app.js"></script>
 <!-- Features in their own files; each registers itself through window.CQ. -->
 <script src="lab.js"></script>

@@ -15,7 +15,17 @@ import fs from 'fs';
 
 globalThis.window = {};
 eval(fs.readFileSync('study/data.js', 'utf8'));
-const SETS = globalThis.window.STUDY_SETS;
+// Every other subject is a file in study/subjects/ that pushes itself onto
+// window.STUDY_SUBJECTS; load them all.
+for (const f of fs.readdirSync('study/subjects').filter((x) => x.endsWith('.js')).sort()) {
+  eval(fs.readFileSync(`study/subjects/${f}`, 'utf8'));
+}
+// One flat list of units, each labelled for messages and tagged with its subject.
+const SETS = [
+  ...(globalThis.window.STUDY_SETS || []).map((s) => ({ ...s, label: `Concept ${s.concept}`, subject: 'chem', slides: true })),
+  ...(globalThis.window.STUDY_SUBJECTS || []).flatMap((subj) => (subj.sets || []).map((u, i) => ({ ...u, label: `${subj.name} ${u.id || `unit ${i + 1}`}`, subject: subj.id, slides: false }))),
+];
+const SUBJECT_IDS = new Set((globalThis.window.STUDY_SUBJECTS || []).map((x) => x.id));
 
 const problems = [];
 const warnings = [];
@@ -40,9 +50,10 @@ let totalTerms = 0;
 let totalQuestions = 0;
 const byType = { mc: 0, tf: 0, written: 0 };
 
+const allIds = new Map();
 for (const set of SETS) {
-  const sid = `Concept ${set.concept}`;
-  for (const field of ['concept', 'title', 'summary', 'topics', 'terms', 'questions']) {
+  const sid = set.label;
+  for (const field of [set.slides ? 'concept' : 'id', 'title', 'summary', 'topics', 'terms', 'questions']) {
     if (set[field] == null) fail(sid, `missing "${field}"`);
   }
   const terms = set.terms || [];
@@ -61,7 +72,7 @@ for (const set of SETS) {
   for (const t of terms) {
     const where = `${sid} term "${t.term}"`;
     if (!t.term || !t.definition) fail(where, 'term or definition is empty');
-    if (!Number.isInteger(t.page)) fail(where, `page is ${JSON.stringify(t.page)}, expected a slide number`);
+    if (set.slides && !Number.isInteger(t.page)) fail(where, `page is ${JSON.stringify(t.page)}, expected a slide number`);
     if (!t.topic) fail(where, 'missing topic');
     if (termNames.has(norm(t.term))) fail(where, 'duplicate term');
     termNames.set(norm(t.term), t);
@@ -81,7 +92,10 @@ for (const set of SETS) {
     if (!q.prompt) fail(where, 'empty prompt');
     if (!q.answer) fail(where, 'empty answer');
     if (!q.explanation) fail(where, 'no explanation — every answer screen shows one');
-    if (!Number.isInteger(q.page)) fail(where, `page is ${JSON.stringify(q.page)}, expected a slide number`);
+    if (set.slides && !Number.isInteger(q.page)) fail(where, `page is ${JSON.stringify(q.page)}, expected a slide number`);
+    // Question ids key a student's progress across the whole site.
+    if (q.id && allIds.has(q.id) && allIds.get(q.id) !== set.label) fail(where, `id also used in ${allIds.get(q.id)}`);
+    if (q.id) allIds.set(q.id, set.label);
     if (!['easy', 'medium', 'hard'].includes(q.difficulty)) warn(where, `difficulty is ${JSON.stringify(q.difficulty)}`);
     if (prompts.has(norm(q.prompt))) fail(where, `duplicate prompt of ${prompts.get(norm(q.prompt))}`);
     prompts.set(norm(q.prompt), q.id);
@@ -151,18 +165,18 @@ for (const set of SETS) {
 {
   const seen = new Map();
   for (const set of SETS) for (const t of set.terms || []) {
-    const k = norm(t.term);
+    const k = `${set.subject}|${norm(t.term)}`;
     const prev = seen.get(k);
-    if (prev && prev.set !== set.concept && norm(prev.def) !== norm(t.definition)) {
-      warn(`term "${t.term}"`, `defined differently in Concept ${prev.set} and Concept ${set.concept}; "All concepts" shows Concept ${prev.set}'s`);
+    if (prev && prev.set !== set.label && norm(prev.def) !== norm(t.definition)) {
+      warn(`term "${t.term}"`, `defined differently in ${prev.set} and ${set.label}; the subject's combined set shows ${prev.set}'s`);
     }
-    if (!prev) seen.set(k, { set: set.concept, def: t.definition });
+    if (!prev) seen.set(k, { set: set.label, def: t.definition });
   }
 }
 // A recall card ("1 kg = ?") must say which unit it wants: 1 kg is both
 // 1,000,000 mg and 2.2 lbs.
 for (const set of SETS) for (const t of set.terms || []) {
-  if (/=\s*\?\s*$/.test(t.term)) fail(`Concept ${set.concept} term "${t.term}"`, 'asks "= ?" without naming the unit wanted');
+  if (/=\s*\?\s*$/.test(t.term)) fail(`${set.label} term "${t.term}"`, 'asks "= ?" without naming the unit wanted');
 }
 
 // The app's own answer checker has to accept every variant the data promises,
@@ -186,9 +200,26 @@ for (const set of SETS) for (const t of set.terms || []) {
     warn('answer checking', 'could not lift checkWritten() out of study/app.js — skipped');
   } else {
     const checkWritten = new Function(`${code}; return checkWritten;`)();
+    // Fixed cases the checker must always get right, whatever the data holds.
+    const Q = (answer, accept = []) => ({ answer, accept });
+    for (const [q, input, want, why] of [
+      [Q('(2, -1)'), '(2,-1)', true, 'spacing inside an ordered pair'],
+      [Q('(2, -1)'), '(2, 5)', false, 'an ordered pair is not its first number'],
+      [Q('x = 5', ['5']), '5', true, 'the bare value'],
+      [Q('x = 5', ['5']), 'y = 5', false, 'the wrong variable'],
+      [Q('2/3', ['0.67']), '0.667', true, 'a fraction as a decimal'],
+      [Q('-3'), '−3', true, 'the Unicode minus sign'],
+      [Q('-3'), '3', false, 'a dropped minus sign'],
+      [Q('está', ['esta']), 'esta', true, 'Spanish typed without accents'],
+      [Q('los'), 'las', false, 'a different Spanish word'],
+      [Q('373 K', ['373']), '373 °F', false, 'the wrong unit'],
+      [Q('3.54 × 10^8'), '3.54e8', true, 'e-notation'],
+    ]) {
+      if (checkWritten(q, input) !== want) fail('answer checking', `${want ? 'rejects' : 'accepts'} ${JSON.stringify(input)} for ${JSON.stringify(q.answer)} (${why})`);
+    }
     for (const set of SETS) {
       for (const q of (set.questions || []).filter((x) => x.type === 'written')) {
-        const where = `Concept ${set.concept} ${q.id}`;
+        const where = `${set.label} ${q.id}`;
         for (const variant of [q.answer, ...(q.accept || [])]) {
           if (!checkWritten(q, variant)) fail(where, `the app rejects its own accepted answer ${JSON.stringify(variant)}`);
         }
@@ -206,7 +237,7 @@ for (const set of SETS) for (const t of set.terms || []) {
 for (const w of warnings) console.log(`warn  ${w}`);
 for (const p of problems) console.log(`FAIL  ${p}`);
 
-const summary = `${SETS.length} sets, ${totalTerms} terms, ${totalQuestions} questions `
+const summary = `${1 + SUBJECT_IDS.size} subjects, ${SETS.length} units, ${totalTerms} terms, ${totalQuestions} questions `
   + `(${byType.mc} multiple choice, ${byType.tf} true/false, ${byType.written} written)`;
 
 if (problems.length) {

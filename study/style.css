@@ -112,6 +112,9 @@ button { font: inherit; color: inherit; cursor: pointer; }
 input, select { font: inherit; color: inherit; }
 [hidden] { display: none !important; }
 :focus-visible { outline: none; box-shadow: var(--ring); }
+/* Headings receive focus programmatically on each new screen (so a screen
+   reader starts there); they are not controls, so no focus ring. */
+h1[tabindex="-1"]:focus { outline: none; box-shadow: none; }
 h1, h2, h3 { margin: 0; line-height: 1.15; }
 p { margin: 0; }
 

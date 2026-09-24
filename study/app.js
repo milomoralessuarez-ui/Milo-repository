@@ -1,6 +1,7 @@
 /* ==========================================================================
-   ChemQuest — Quizlet / Blooket style study app for the Concept 1–4 notes.
-   Plain JS, no build step. Data comes from data.js (window.STUDY_SETS).
+   StudyQuest — Quizlet / Blooket style study app, one hub for every subject.
+   Plain JS, no build step. Chemistry comes from data.js (window.STUDY_SETS,
+   built from the class notes); every other subject is a file in subjects/.
    ========================================================================== */
 (() => {
 'use strict';
@@ -176,27 +177,53 @@ function textId(prefix, text) {
   for (let i = 0; i < text.length; i++) { h ^= text.charCodeAt(i); h = Math.imul(h, 16777619); }
   return `${prefix}-${(h >>> 0).toString(36)}`;
 }
-const SETS = (window.STUDY_SETS || []).map((s) => {
-  const id = 'c' + s.concept;
-  const meta = META[s.concept] || { emoji: '📘', color: '#7c5cff' };
+/* A subject is { id, name, emoji, color, blurb, sets }. Chemistry is built
+   from data.js and keeps its original ids (c1–c4) so saved progress survives;
+   every other subject file pushes itself onto window.STUDY_SUBJECTS. */
+const UNIT_COLORS = ['#7c5cff', '#22d3ee', '#ffb020', '#ff4d9d', '#34d399', '#4d8cff', '#fb7185', '#a78bfa', '#f59e0b', '#2dd4bf', '#f472b6', '#60a5fa'];
+function prepSet(raw, subject, id, short, meta) {
   return {
-    ...s, id, ...meta,
-    short: `Concept ${s.concept}`,
-    terms: (s.terms || []).map((t) => ({ ...t, id: textId(`${id}-t`, t.term), setId: id })),
-    questions: (s.questions || []).map((q) => ({ ...q, setId: id })),
+    ...raw, id, subject: subject.id, short, ...meta,
+    terms: (raw.terms || []).map((t) => ({ ...t, id: textId(`${id}-t`, t.term), setId: id })),
+    questions: (raw.questions || []).map((q) => ({ ...q, setId: id })),
   };
-});
-const ALL = {
-  id: 'all', concept: 0, title: 'All concepts', short: 'All concepts', emoji: '🌟', color: '#34d399',
-  summary: 'Every term and question from Concepts 1–4 in one set — ideal for a unit test.',
-  topics: SETS.flatMap((s) => s.topics || []),
-  // A term that two concepts both define (Graduated cylinder, Thermometer)
-  // appears once here, as its first concept has it — two cards with the same
-  // front and different backs would read as a contradiction.
-  terms: uniqBy(SETS.flatMap((s) => s.terms), (t) => t.term.trim().toLowerCase()),
-  questions: SETS.flatMap((s) => s.questions),
+}
+const SUBJECTS = [];
+if ((window.STUDY_SETS || []).length) {
+  const chem = { id: 'chem', name: 'Chemistry', emoji: '🧪', color: '#22d3ee', blurb: 'General Chemistry Concepts 1–4, built from your class notes: lab safety, measurement, dimensional analysis and the scientific method.' };
+  chem.sets = window.STUDY_SETS.map((s) => prepSet(s, chem, 'c' + s.concept, `Concept ${s.concept}`, META[s.concept] || { emoji: '📘', color: '#7c5cff' }));
+  SUBJECTS.push(chem);
+}
+for (const raw of window.STUDY_SUBJECTS || []) {
+  if (!raw || !raw.id || SUBJECTS.some((x) => x.id === raw.id) || !(raw.sets || []).length) continue;
+  const subj = { ...raw };
+  subj.sets = raw.sets.map((u, i) => prepSet(u, subj, u.id || `${raw.id}-u${i + 1}`, `Unit ${u.unit || i + 1}`, { emoji: raw.emoji || '📘', color: UNIT_COLORS[i % UNIT_COLORS.length] }));
+  SUBJECTS.push(subj);
+}
+const SETS = SUBJECTS.flatMap((s) => s.sets);
+for (const subj of SUBJECTS) {
+  const units = subj.sets;
+  subj.all = {
+    id: `${subj.id}-all`, isAll: true, subject: subj.id,
+    title: `All of ${subj.name}`, short: `All ${subj.name}`, emoji: '🌟', color: '#34d399',
+    summary: `Every term and question from all ${units.length} ${subj.id === 'chem' ? 'concepts' : 'units'} of ${subj.name} in one set — ideal before a final.`,
+    topics: units.flatMap((u) => u.topics || []),
+    // A term two units both define (Graduated cylinder, Thermometer) appears
+    // once here, as its first unit has it — two cards with the same front and
+    // different backs would read as a contradiction.
+    terms: uniqBy(units.flatMap((u) => u.terms), (t) => t.term.trim().toLowerCase()),
+    questions: units.flatMap((u) => u.questions),
+  };
+}
+const SUBJECT = new Map(SUBJECTS.map((x) => [x.id, x]));
+const subjectOf = (set) => SUBJECT.get(set && set.subject) || SUBJECTS[0];
+const allOf = (subjectId) => (SUBJECT.get(subjectId) || SUBJECTS[0]).all;
+// Chemistry's combined set, for plugins written when it was the only subject.
+const ALL = SUBJECT.has('chem') ? allOf('chem') : (SUBJECTS[0] || {}).all;
+const getSet = (id) => {
+  if (id === 'all') id = 'chem-all';   // links from before there were subjects
+  return SETS.find((x) => x.id === id) || (SUBJECTS.find((x) => x.all.id === id) || {}).all;
 };
-const getSet = (id) => (id === 'all' ? ALL : SETS.find((s) => s.id === id));
 const setOf = (setId) => getSet(setId) || ALL;
 /* Every answerable item by id, so a mistake recorded in one mode can be
    rebuilt as a question in another. */
@@ -221,7 +248,7 @@ function mistakesIn(set) {
   for (const [id, at] of Object.entries(state.missed)) {
     const it = ITEMS.get(id) || resolveGenerated(id);
     if (!it) { delete state.missed[id]; pruned = true; continue; }
-    if (set.id === 'all' || it.setId === set.id) out.push({ ...it, at });
+    if (set.isAll ? setOf(it.setId).subject === set.subject : it.setId === set.id) out.push({ ...it, at });
   }
   if (pruned) save();
   return out.sort((a, b) => b.at - a.at);
@@ -272,7 +299,7 @@ function termDistractors(term, set, key) {
 }
 function termMC(term, set, dir) {
   dir ||= Math.random() < .5 ? 'def2term' : 'term2def';
-  const set2 = set.terms.length >= 4 ? set : ALL;
+  const set2 = set.terms.length >= 4 ? set : allOf(set.subject);
   if (dir === 'def2term') {
     const ds = termDistractors(term, set2, (t) => t.term);
     return { id: term.id, kind: 'term', type: 'mc', ask: 'Which term matches this definition?', prompt: term.definition, options: shuffle([term.term, ...ds.map((t) => t.term)]), answer: term.term, explanation: `${term.term} — ${term.definition}`, page: term.page, setId: term.setId };
@@ -303,6 +330,11 @@ function gameQuestions(set) {
 /* ------------------------------------------------ answer checking */
 function norm(s) {
   return String(s ?? '')
+    // Accents are optional to type (está / esta); the feedback shows the
+    // correct spelling either way.
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/[−–—]/g, '-')
+    .replace(/²/g, '^2').replace(/³/g, '^3')
     .toLowerCase()
     .replace(/[×·*]/g, 'x')
     .replace(/[°º]/g, '')
@@ -314,16 +346,28 @@ function norm(s) {
     .replace(/[.!?;:]+$/g, '')
     .replace(/^(the|a|an)\s+/, '')
     .replace(/\s+/g, ' ')
+    // "x = 5", "(2, -1)" and "x ≥ 3" read the same however they are spaced.
+    .replace(/\s*([(),=<>≤≥+])\s*/g, '$1')
     .trim();
 }
+/* One number (with an optional unit, "x =" in front, a fraction, or ×10^n),
+   or null. Anything holding two numbers — an ordered pair, an expression — is
+   not a number: comparing only its first number would accept (2, 5) for (2, -1). */
 function parseNum(s) {
-  const m = norm(s).match(/-?\d*\.?\d+(?:x10\^-?\d+)?/);
+  let n = norm(s);
+  let v = '';
+  const lead = n.match(/^([a-z])=(.*)$/);
+  if (lead) { v = lead[1]; n = lead[2]; }
+  const frac = n.match(/^(-?\d+)\/(\d+)\s*([a-z%][a-z0-9/%^]*)?$/);
+  if (frac && Number(frac[2]) !== 0) return { value: Number(frac[1]) / Number(frac[2]), unit: frac[3] || '', v };
+  const m = n.match(/^(-?\d*\.?\d+)(?:x10\^(-?\d+))?\s*([a-z%][a-z0-9/%^]*)?$/);
   if (!m) return null;
-  const [mant, exp] = m[0].split('x10^');
-  const v = parseFloat(mant) * (exp != null ? Math.pow(10, parseInt(exp, 10)) : 1);
-  return Number.isFinite(v) ? { value: v, unit: norm(s).slice(m.index + m[0].length).replace(/[^a-z]/g, '') } : null;
+  const value = parseFloat(m[1]) * (m[2] != null ? Math.pow(10, parseInt(m[2], 10)) : 1);
+  return Number.isFinite(value) ? { value, unit: m[3] || '', v } : null;
 }
 function checkWritten(q, input) {
+  // A generated problem can bring its own checker (algebraic equivalence…).
+  if (typeof q.check === 'function') { try { return !!q.check(input); } catch { return false; } }
   const u = norm(input);
   if (!u) return false;
   const answers = [q.answer, ...(q.accept || [])].map(norm).filter(Boolean);
@@ -342,6 +386,8 @@ function checkWritten(q, input) {
       const tol = Math.max(Math.abs(an.value) * 0.006, 1e-9);
       if (Math.abs(an.value - un.value) > tol) continue;
       if (wants && un.unit && un.unit !== canon.unit && un.unit !== an.unit) continue;
+      // Likewise the variable: "5" answers "x = 5", but "y = 5" does not.
+      if (canon && canon.v && un.v && un.v !== canon.v && un.v !== an.v) continue;
       return true;
     }
   }
@@ -375,44 +421,85 @@ function backBtn(set, label = '← Back to set') {
 }
 
 /* ---------------------------------------------------------- home */
+function setCard(s) {
+  const m = masteryOf(s);
+  const n = mistakesIn(s).length;
+  return el('a', { class: 'card set', href: `#/set/${s.id}`, style: `--c:${s.color}` },
+    el('div', { class: 'ico' }, s.emoji),
+    el('h3', {}, s.isAll ? s.title : `${s.short}: ${s.title}`),
+    el('p', { class: 'sum', title: s.summary }, s.summary),
+    el('div', { class: 'meta' },
+      el('span', { class: 'chip' }, `${s.terms.length} terms`),
+      el('span', { class: 'chip' }, `${s.questions.length} questions`),
+      el('span', { class: `chip ${m >= 80 ? 'good' : m > 0 ? 'warn' : ''}` }, `${m}% mastered`),
+      n ? el('span', { class: 'chip warn' }, `🎯 ${n} to review`) : null,
+    ),
+    el('div', { class: 'progress', style: 'margin-top:12px' }, el('i', { style: `width:${m}%` })),
+  );
+}
 function renderHome() {
   const v = el('div', { class: 'view' });
-  const total = ALL.questions.length;
+  const terms = SETS.reduce((n, x) => n + x.terms.length, 0);
+  const questions = SETS.reduce((n, x) => n + x.questions.length, 0);
+  const toReview = SUBJECTS.reduce((n, x) => n + mistakesIn(x.all).length, 0);
   v.append(
     el('div', { class: 'hero' },
-      el('span', { class: 'eyebrow' }, 'General Chemistry · Concepts 1–4'),
-      el('h1', {}, 'Study smarter for the unit test.'),
-      el('p', {}, `Flashcards, Learn, Test, Match and Blooket-style games built from your Concept 1–4 notes — ${ALL.terms.length} terms and ${total} questions. Pick a concept to start.`),
+      el('span', { class: 'eyebrow' }, 'Your study hub'),
+      el('h1', {}, 'Study smarter, every subject.'),
+      el('p', {}, `${SUBJECTS.length} subjects, ${terms.toLocaleString()} terms and ${questions.toLocaleString()} questions — flashcards, practice tests and Blooket-style games. Pick a subject to start.`),
     ),
     el('div', { class: 'row', style: 'margin-bottom:8px' },
-      el('div', { class: 'stat' }, el('b', {}, `${masteryOf(ALL)}%`), el('span', {}, 'Mastered')),
-      el('div', { class: 'stat' }, el('b', {}, state.stats.answered), el('span', {}, 'Answered')),
+      el('div', { class: 'stat' }, el('b', {}, state.stats.answered.toLocaleString()), el('span', {}, 'Answered')),
       el('div', { class: 'stat' }, el('b', {}, `${pct(state.stats.correct, state.stats.answered)}%`), el('span', {}, 'Accuracy')),
       el('div', { class: 'stat' }, el('b', {}, Object.keys(state.starred).length), el('span', {}, 'Starred')),
+      el('div', { class: 'stat' }, el('b', {}, toReview), el('span', {}, 'To review')),
     ),
-    el('h2', { class: 'section-title' }, 'Study sets'),
   );
-  const grid = el('div', { class: 'grid' });
-  for (const s of [...SETS, ALL]) {
-    const m = masteryOf(s);
-    grid.append(el('a', { class: 'card set', href: `#/set/${s.id}`, style: `--c:${s.color}` },
-      el('div', { class: 'ico' }, s.emoji),
-      el('h3', {}, s.id === 'all' ? s.title : `${s.short}: ${s.title}`),
-      el('p', { class: 'sum', title: s.summary }, s.summary),
+  // Straight back to the last unit studied.
+  const last = state.prefs.last && getSet(state.prefs.last);
+  if (last) {
+    v.append(el('h2', { class: 'section-title' }, 'Pick up where you left off'));
+    v.append(el('div', { class: 'grid' }, setCard(last)));
+  }
+  v.append(el('h2', { class: 'section-title' }, 'Subjects'));
+  v.append(el('div', { class: 'grid' }, ...SUBJECTS.map((subj) => {
+    const m = masteryOf(subj.all);
+    const n = mistakesIn(subj.all).length;
+    return el('a', { class: 'card set subject', href: `#/s/${subj.id}`, style: `--c:${subj.color || '#7c5cff'}` },
+      el('div', { class: 'ico' }, subj.emoji),
+      el('h3', {}, subj.name),
+      el('p', { class: 'sum', title: subj.blurb }, subj.blurb || ''),
       el('div', { class: 'meta' },
-        el('span', { class: 'chip' }, `${s.terms.length} terms`),
-        el('span', { class: 'chip' }, `${s.questions.length} questions`),
+        el('span', { class: 'chip' }, `${subj.sets.length} ${subj.id === 'chem' ? 'concepts' : 'units'}`),
+        el('span', { class: 'chip' }, `${subj.all.questions.length} questions`),
         el('span', { class: `chip ${m >= 80 ? 'good' : m > 0 ? 'warn' : ''}` }, `${m}% mastered`),
+        n ? el('span', { class: 'chip warn' }, `🎯 ${n}`) : null,
       ),
       el('div', { class: 'progress', style: 'margin-top:12px' }, el('i', { style: `width:${m}%` })),
-    ));
-  }
-  v.append(grid);
-  v.append(el('h2', { class: 'section-title' }, 'How to study'));
-  v.append(el('div', { class: 'grid modes' },
-    ...modesFor(ALL).map((m) => el('a', { class: `card mode${m.game ? ' game' : ''}`, href: `#/set/all/${m.id}`, style: `--c:${m.color}` },
-      el('div', { class: 'ico' }, m.ico), el('h3', {}, m.name), el('p', {}, m.desc))),
-  ));
+    );
+  })));
+  main.append(v);
+}
+
+/* --------------------------------------------------------- subject */
+function renderSubject(subj) {
+  const v = el('div', { class: 'view' });
+  const m = masteryOf(subj.all);
+  v.append(
+    el('div', { class: 'hero' },
+      el('span', { class: 'eyebrow' }, `${subj.emoji} Subject`),
+      el('h1', {}, subj.name),
+      el('p', {}, subj.blurb || ''),
+      el('div', { class: 'row', style: 'margin-top:14px;gap:14px' },
+        el('div', { class: 'progress', style: 'flex:1;min-width:160px' }, el('i', { style: `width:${m}%` })),
+        el('b', {}, `${m}% mastered`)),
+    ),
+    el('h2', { class: 'section-title' }, subj.id === 'chem' ? 'Concepts' : 'Units'),
+    el('div', { class: 'grid' }, ...subj.sets.map(setCard), setCard(subj.all)),
+    el('h2', { class: 'section-title' }, `Study all of ${subj.name}`),
+    el('div', { class: 'grid modes' }, ...modesFor(subj.all).map((md) => el('a', { class: `card mode${md.game ? ' game' : ''}`, href: `#/set/${subj.all.id}/${md.id}`, style: `--c:${md.color}` },
+      el('div', { class: 'ico' }, md.ico), el('h3', {}, md.name), el('p', {}, md.desc)))),
+  );
   main.append(v);
 }
 
@@ -422,13 +509,13 @@ function renderSet(set) {
   const m = masteryOf(set);
   v.append(
     el('div', { class: 'hero' },
-      el('span', { class: 'eyebrow' }, `${set.emoji} ${set.id === 'all' ? 'Everything' : set.short}`),
+      el('span', { class: 'eyebrow' }, `${set.emoji} ${subjectOf(set).name} · ${set.isAll ? 'Everything' : set.short}`),
       el('h1', {}, set.title),
       el('p', {}, set.summary),
       el('div', { class: 'row', style: 'margin-top:14px' },
         el('span', { class: 'chip' }, `${set.terms.length} terms`),
         el('span', { class: 'chip' }, `${set.questions.length} questions`),
-        ...(set.id === 'all' ? [] : (set.topics || []).map((t) => el('span', { class: 'chip brand' }, t))),
+        ...(set.isAll ? [] : (set.topics || []).map((t) => el('span', { class: 'chip brand' }, t))),
       ),
       el('div', { class: 'row', style: 'margin-top:14px;gap:14px' },
         el('div', { class: 'progress', style: 'flex:1;min-width:160px' }, el('i', { style: `width:${m}%` })),
@@ -508,7 +595,7 @@ function renderFlashcards(set) {
       el('span', { class: 'hint' }, 'tap to flip'), star);
     const faceBack = el('div', { class: 'flash-face back', 'aria-hidden': flipped ? null : 'true' },
       el('span', { class: 'lbl' }, prefs.defFirst ? 'Term' : 'Definition'), el('div', { class: 'txt' }, back),
-      el('span', { class: 'hint' }, `${setOf(t.setId).short} · slide ${t.page}`));
+      el('span', { class: 'hint' }, `${setOf(t.setId).short}${t.page ? ` · slide ${t.page}` : ''}`));
     const card = el('div', { class: `flash${flipped ? ' flipped' : ''}${dir < 0 ? ' slide-left' : dir > 0 ? ' slide-right' : ''}`, role: 'button', tabindex: '0', 'aria-roledescription': 'flashcard', onclick: flip, onkeydown: (e) => { if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') { e.preventDefault(); flip(); } } },
       faceFront, faceBack);
     dir = 0;
@@ -875,11 +962,11 @@ function renderTest(set) {
         row.append(el('div', { class: `feedback ${r.correct ? 'good' : 'bad'}` },
           el('b', { class: 'title' }, r.correct ? `Your answer: ${r.given}` : `Your answer: ${r.given || '(blank)'} · Correct: ${r.q.answer}`),
           r.q.explanation ? el('div', { class: 'exp' }, r.q.explanation) : null,
-          el('div', { class: 'src' }, `${setOf(r.q.setId).short} · slide ${r.q.page}`)));
+          el('div', { class: 'src' }, `${setOf(r.q.setId).short}${r.q.page ? ` · slide ${r.q.page}` : ''}`)));
       } else {
         const opts = el('div', { class: 'opts' });
         r.q.options.forEach((o, k) => opts.append(el('button', { class: `opt${o === r.q.answer ? ' correct' : o === r.given ? ' wrong' : ' dim'}`, disabled: true }, el('span', { class: 'k' }, r.q.type === 'tf' ? (o === 'True' ? 'T' : 'F') : String(k + 1)), el('span', {}, o))));
-        row.append(opts, el('div', { class: `feedback ${r.correct ? 'good' : 'bad'}` }, r.q.explanation ? el('div', { class: 'exp' }, r.q.explanation) : null, el('div', { class: 'src' }, `${setOf(r.q.setId).short} · slide ${r.q.page}`)));
+        row.append(opts, el('div', { class: `feedback ${r.correct ? 'good' : 'bad'}` }, r.q.explanation ? el('div', { class: 'exp' }, r.q.explanation) : null, el('div', { class: 'src' }, `${setOf(r.q.setId).short}${r.q.page ? ` · slide ${r.q.page}` : ''}`)));
       }
       review.append(row);
     });
@@ -1285,7 +1372,7 @@ function renderMistakes(set) {
     return typeable(it.term) && Math.random() < .5 ? termWritten(it.term) : termMC(it.term, setOf(it.setId));
   };
   const label = (it) => (it.kind === 'gen' ? it.label : it.kind === 'q' ? it.q.prompt : `${it.term.term} — ${it.term.definition}`);
-  const where = (it) => (it.kind === 'gen' ? 'practice skill' : `slide ${(it.q || it.term).page}`);
+  const where = (it) => { if (it.kind === 'gen') return 'practice skill'; const pg = (it.q || it.term).page; return pg ? `slide ${pg}` : (it.q ? 'question' : 'term'); };
 
   function overview() {
     keyPick = null;
@@ -1310,7 +1397,7 @@ function renderMistakes(set) {
         el('div', { class: 'row between' },
           el('div', {},
             el('h2', { style: 'font-size:1.4rem' }, `${items.length} to review`),
-            set.id === 'all' ? el('p', { class: 'note', style: 'margin-top:4px' }, [...byConcept].map(([id, n]) => `${setOf(id).short}: ${n}`).join(' · ')) : null),
+            set.isAll ? el('p', { class: 'note', style: 'margin-top:4px' }, [...byConcept].map(([id, n]) => `${setOf(id).short}: ${n}`).join(' · ')) : null),
           el('div', { class: 'row' },
             el('button', { class: 'btn primary lg', onclick: () => review(items) }, `Review ${items.length > 20 ? 'the newest 20' : 'them'}`),
             el('button', { class: 'btn ghost sm', onclick: () => {
@@ -1570,12 +1657,12 @@ function renderGuide(set) {
   function draw() {
     list.innerHTML = '';
     const match = (s) => !query || s.toLowerCase().includes(query);
-    const sets = set.id === 'all' ? SETS : [set];
+    const sets = set.isAll ? subjectOf(set).sets : [set];
     for (const s of sets) {
       const topics = [...new Set(s.terms.map((t) => t.topic || 'General'))];
       let any = false;
       const block = el('div', {});
-      if (set.id === 'all') block.append(el('h2', { class: 'section-title' }, `${s.emoji} ${s.short}: ${s.title}`));
+      if (set.isAll) block.append(el('h2', { class: 'section-title' }, `${s.emoji} ${s.short}: ${s.title}`));
       for (const tp of topics) {
         const rows = s.terms.filter((t) => (t.topic || 'General') === tp && (match(t.term) || match(t.definition)));
         if (!rows.length) continue;
@@ -1592,7 +1679,7 @@ function renderGuide(set) {
         if (qs.length) {
           any = true;
           const sec = el('div', { class: 'guide-topic' }, el('h3', {}, `Question bank (${qs.length})`));
-          for (const q of qs) sec.append(el('div', { class: 'term-row' }, el('b', {}, q.prompt), el('span', {}, `${q.answer}${q.explanation ? ' — ' + q.explanation : ''}`), el('span', { class: 'note' }, `p.${q.page}`)));
+          for (const q of qs) sec.append(el('div', { class: 'term-row' }, el('b', {}, q.prompt), el('span', {}, `${q.answer}${q.explanation ? ' — ' + q.explanation : ''}`), el('span', { class: 'note' }, q.page ? `p.${q.page}` : '')));
           block.append(sec);
         }
       }
@@ -1615,22 +1702,35 @@ function route() {
   const page = parts[0] && pages.get(parts[0]);
   if (page) {
     setCrumbs([[page.name]]);
-    document.title = `${page.name} — ChemQuest`;
+    document.title = `${page.name} — StudyQuest`;
     page.render(parts.slice(1));
     const h = main.querySelector('h1');
     if (h) { h.tabIndex = -1; h.focus({ preventScroll: true }); }
     return;
   }
-  if (parts[0] !== 'set') { setCrumbs([]); document.title = 'ChemQuest — study Concepts 1–4'; return renderHome(); }
+  if (parts[0] === 's' && SUBJECT.has(parts[1])) {
+    const subj = SUBJECT.get(parts[1]);
+    setCrumbs([[subj.name]]);
+    document.title = `${subj.name} — StudyQuest`;
+    renderSubject(subj);
+    const h = main.querySelector('h1');
+    if (h) { h.tabIndex = -1; h.focus({ preventScroll: true }); }
+    return;
+  }
+  if (parts[0] !== 'set') { setCrumbs([]); document.title = 'StudyQuest — every subject, one study hub'; return renderHome(); }
+  // Before there were subjects, chemistry's combined set was simply "all".
+  if (parts[1] === 'all') { location.replace(`#/set/chem-all${parts[2] ? '/' + parts[2] : ''}`); return; }
   const set = getSet(parts[1]);
   if (!set) { location.hash = '#/'; return; }
+  const subj = subjectOf(set);
+  if (!set.isAll && state.prefs.last !== set.id) { state.prefs.last = set.id; save(); }
   const views = { '': renderSet, flashcards: renderFlashcards, learn: renderLearn, test: renderTest, mistakes: renderMistakes, match: renderMatch, gold: renderGold, race: renderRace, blitz: renderBlitz, guide: renderGuide };
   for (const m of modesFor(set)) if (m.render && !views[m.id]) views[m.id] = m.render;
   // An unrecognised mode — or a plugin mode that doesn't suit this set — shows
   // the set rather than a half-titled page.
   const mode = views[parts[2]] ? parts[2] : '';
-  setCrumbs(mode ? [[set.short, `#/set/${set.id}`], [modeName(mode)]] : [[set.short]]);
-  document.title = `${mode ? modeName(mode) + ' · ' : ''}${set.title} — ChemQuest`;
+  setCrumbs([[subj.name, `#/s/${subj.id}`], ...(mode ? [[set.short, `#/set/${set.id}`], [modeName(mode)]] : [[set.short]])]);
+  document.title = `${mode ? modeName(mode) + ' · ' : ''}${set.title} — StudyQuest`;
   views[mode](set);
   // Send the screen reader (and the keyboard) to the new view's heading.
   const h = main.querySelector('h1');
@@ -1646,7 +1746,7 @@ const CQ = window.CQ = {
   // building blocks
   el, $, shuffle, pick, clamp, pct, uniqBy, fmtTime, fmtSecs, toast, confetti, floatText, sfx, later,
   // content
-  SETS, ALL, getSet, setOf,
+  SETS, ALL, SUBJECTS, getSet, setOf, subjectOf, allOf,
   // progress
   state, save, bumpMastery, recordBest,
   // screens

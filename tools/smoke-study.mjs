@@ -27,7 +27,7 @@ try {
 
 const args = process.argv.slice(2);
 const BASE = (args.find((a) => !a.startsWith('--')) || 'http://127.0.0.1:8099').replace(/\/$/, '');
-const SET = (args.find((a) => a.startsWith('--set=')) || '--set=all').slice(6);
+const SET = (args.find((a) => a.startsWith('--set=')) || '--set=chem-all').slice(6);
 const STUDY = `${BASE}/study/`;
 
 const IGNORE = [/favicon/i, /fonts\.googleapis|fonts\.gstatic/i, /ERR_CERT/i, /AudioContext/i];
@@ -76,7 +76,8 @@ const answerCorrectly = async () => {
   const want = await page.evaluate(() => {
     const prompt = document.querySelector('.q-card .q-prompt')?.textContent.trim();
     if (!prompt) return null;
-    for (const s of window.STUDY_SETS) {
+    const every = [...(window.STUDY_SETS || []), ...(window.STUDY_SUBJECTS || []).flatMap((x) => x.sets || [])];
+    for (const s of every) {
       const q = s.questions.find((x) => x.prompt === prompt);
       if (q) return q.answer;
       const byTerm = s.terms.find((t) => t.term === prompt);
@@ -106,7 +107,7 @@ if (!sets.length) { console.log('FAIL: study/data.js registered no sets'); await
 if (!(await page.locator('.card.set').count())) fail('home page rendered no study-set cards');
 console.log(`Loaded ChemQuest: ${sets.length} sets, ${sets.reduce((n, s) => n + s.terms, 0)} terms, ${sets.reduce((n, s) => n + s.questions, 0)} questions\n`);
 
-const target = SET === 'all' ? 'all' : SET;
+const target = SET === 'all' ? 'chem-all' : SET;
 const results = [];
 const check = async (name, fn) => {
   scope = name;
@@ -191,7 +192,7 @@ await check('match', async () => {
   await page.click('text=Start game');
   const tiles = await page.locator('.tile').count();
   if (tiles < 4) return fail(`dealt only ${tiles} tiles`);
-  const pairs = await page.evaluate(() => window.STUDY_SETS.flatMap((s) => s.terms).map((t) => [t.term, t.definition]));
+  const pairs = await page.evaluate(() => [...(window.STUDY_SETS || []), ...(window.STUDY_SUBJECTS || []).flatMap((x) => x.sets || [])].flatMap((s) => s.terms).map((t) => [t.term, t.definition]));
   // Tile text must match exactly: one card's answer can be a prefix of another
   // card's question ("1 kg" and "1 kg = ?"), which a player tells apart on
   // sight but a substring match would not.
@@ -205,7 +206,10 @@ await check('match', async () => {
     }
     if (await page.locator('.game-intro h2').count()) break;
   }
-  if (!(await page.locator('.game-intro h2').count())) fail('board never cleared — a pair could not be matched');
+  // The result screen follows the last match by a moment; wait for it rather
+  // than racing it.
+  const cleared = await page.locator('.game-intro h2').waitFor({ timeout: 2500 }).then(() => true, () => false);
+  if (!cleared) fail(`board never cleared — left: ${JSON.stringify(await page.locator('.tile:not(.gone)').allTextContents())}`);
 });
 
 await check('gold quest', async () => {
