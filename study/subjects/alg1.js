@@ -7154,6 +7154,1166 @@
      "difficulty": "easy"
     }
    ]
+  },
+  {
+   "id": "alg1-u13",
+   "unit": 13,
+   "title": "Function Families and Transformations",
+   "summary": "Explore the shapes of parent functions — linear, quadratic, absolute value, square root, and exponential — and see how shifts, reflections, and stretches transform their graphs. Learn to evaluate piecewise and step functions, compare linear, quadratic, and exponential growth patterns, and read domain, range, and average rate of change from a graph.",
+   "topics": [
+    "Parent Functions",
+    "Transformations",
+    "Absolute Value Functions",
+    "Piecewise & Step Functions",
+    "Domain and Range",
+    "Comparing Models & Rate of Change"
+   ],
+   "terms": [
+    {
+     "term": "Parent function",
+     "definition": "The simplest function of its type; every other function in that family is a transformation of it.",
+     "topic": "Parent Functions"
+    },
+    {
+     "term": "Linear parent function",
+     "definition": "y = x, a straight line through the origin with slope 1.",
+     "topic": "Parent Functions"
+    },
+    {
+     "term": "Quadratic parent function",
+     "definition": "y = x², a U-shaped parabola with vertex at the origin.",
+     "topic": "Parent Functions"
+    },
+    {
+     "term": "Absolute value parent function",
+     "definition": "y = |x|, a V-shaped graph with vertex at the origin.",
+     "topic": "Parent Functions"
+    },
+    {
+     "term": "Square root parent function",
+     "definition": "y = √x, a curve starting at the origin, defined only for x ≥ 0.",
+     "topic": "Parent Functions"
+    },
+    {
+     "term": "Exponential parent function",
+     "definition": "y = bˣ, where b > 0 and b ≠ 1, a curve that grows or decays by a constant ratio.",
+     "topic": "Parent Functions"
+    },
+    {
+     "term": "Vertical translation",
+     "definition": "A shift of a graph up or down, produced by f(x) + k.",
+     "topic": "Transformations"
+    },
+    {
+     "term": "Horizontal translation",
+     "definition": "A shift of a graph left or right, produced by f(x − h).",
+     "topic": "Transformations"
+    },
+    {
+     "term": "Reflection over the x-axis",
+     "definition": "A flip of a graph upside down, produced by −f(x).",
+     "topic": "Transformations"
+    },
+    {
+     "term": "Vertical stretch",
+     "definition": "a·f(x) with |a| > 1: y-values are multiplied by a, pulling the graph away from the x-axis.",
+     "topic": "Transformations"
+    },
+    {
+     "term": "Vertical shrink",
+     "definition": "A transformation that makes a graph wider or flatter, from a·f(x) when 0 < |a| < 1.",
+     "topic": "Transformations"
+    },
+    {
+     "term": "Vertex form",
+     "definition": "An equation written as y = a(x − h)² + k, which shows a function's transformations directly.",
+     "topic": "Transformations"
+    },
+    {
+     "term": "Vertex (absolute value function)",
+     "definition": "The point (h, k) where the graph of y = a|x − h| + k changes direction.",
+     "topic": "Absolute Value Functions"
+    },
+    {
+     "term": "Axis of symmetry",
+     "definition": "The vertical line through the vertex, x = h, across which the graph is a mirror image.",
+     "topic": "Absolute Value Functions"
+    },
+    {
+     "term": "Piecewise function",
+     "definition": "A function built from different rules, each applying over a specific interval of the domain.",
+     "topic": "Piecewise & Step Functions"
+    },
+    {
+     "term": "Step function",
+     "definition": "A piecewise function that is constant on intervals, so its graph looks like a staircase of horizontal segments.",
+     "topic": "Piecewise & Step Functions"
+    },
+    {
+     "term": "Greatest integer function",
+     "definition": "f(x) = ⌊x⌋: rounds x down to the nearest integer at or below x (for example, ⌊4.7⌋ = 4 and ⌊−2.3⌋ = −3).",
+     "topic": "Piecewise & Step Functions"
+    },
+    {
+     "term": "Domain",
+     "definition": "The complete set of possible input (x) values of a function.",
+     "topic": "Domain and Range"
+    },
+    {
+     "term": "Range",
+     "definition": "The complete set of possible output (y) values of a function.",
+     "topic": "Domain and Range"
+    },
+    {
+     "term": "Constant difference",
+     "definition": "When consecutive table outputs change by the same added amount, a sign of a linear pattern.",
+     "topic": "Comparing Models & Rate of Change"
+    },
+    {
+     "term": "Constant ratio",
+     "definition": "When consecutive table outputs are multiplied by the same factor, a sign of an exponential pattern.",
+     "topic": "Comparing Models & Rate of Change"
+    },
+    {
+     "term": "Average rate of change",
+     "definition": "The slope between two points on a graph; change in output divided by change in input over an interval.",
+     "topic": "Comparing Models & Rate of Change"
+    },
+    {
+     "term": "Exponential growth",
+     "definition": "A pattern where a quantity is repeatedly multiplied by a factor greater than 1 over equal intervals.",
+     "topic": "Comparing Models & Rate of Change"
+    },
+    {
+     "term": "Exponential decay",
+     "definition": "A pattern where a quantity is repeatedly multiplied by a factor between 0 and 1 over equal intervals.",
+     "topic": "Comparing Models & Rate of Change"
+    }
+   ],
+   "questions": [
+    {
+     "id": "alg1-u13-q1",
+     "type": "mc",
+     "prompt": "Which parent function's graph is V-shaped, with its vertex at the origin?",
+     "options": [
+      "y = |x|",
+      "y = x²",
+      "y = √x",
+      "y = x"
+     ],
+     "answer": "y = |x|",
+     "explanation": "The absolute value parent function y = |x| equals x for x ≥ 0 and −x for x < 0, meeting at the vertex (0, 0) to form a V-shape.",
+     "topic": "Parent Functions",
+     "difficulty": "easy"
+    },
+    {
+     "id": "alg1-u13-q2",
+     "type": "mc",
+     "prompt": "Which parent function's graph is a U-shaped parabola with vertex at the origin?",
+     "options": [
+      "y = x²",
+      "y = |x|",
+      "y = x",
+      "y = √x"
+     ],
+     "answer": "y = x²",
+     "explanation": "The quadratic parent function y = x² produces a parabola opening upward with its lowest point (vertex) at (0, 0).",
+     "topic": "Parent Functions",
+     "difficulty": "easy"
+    },
+    {
+     "id": "alg1-u13-q3",
+     "type": "tf",
+     "prompt": "True or False: The parent function y = √x is defined for all real numbers x.",
+     "options": [
+      "True",
+      "False"
+     ],
+     "answer": "False",
+     "explanation": "A square root of a negative number is not real, so y = √x is only defined for x ≥ 0.",
+     "topic": "Parent Functions",
+     "difficulty": "easy"
+    },
+    {
+     "id": "alg1-u13-q4",
+     "type": "mc",
+     "prompt": "Which parent function has a domain restricted to x ≥ 0?",
+     "options": [
+      "y = √x",
+      "y = x²",
+      "y = |x|",
+      "y = 2ˣ"
+     ],
+     "answer": "y = √x",
+     "explanation": "y = √x requires a nonnegative value under the radical, so its domain is x ≥ 0, unlike the other listed parent functions, which allow all real x.",
+     "topic": "Parent Functions",
+     "difficulty": "medium"
+    },
+    {
+     "id": "alg1-u13-q5",
+     "type": "mc",
+     "prompt": "For the exponential parent function y = bˣ with b > 1, what happens to y as x increases?",
+     "options": [
+      "y increases without bound",
+      "y decreases toward 0",
+      "y stays constant",
+      "y decreases without bound"
+     ],
+     "answer": "y increases without bound",
+     "explanation": "When the base b is greater than 1, each unit increase in x multiplies y by b, so y grows larger as x increases.",
+     "topic": "Parent Functions",
+     "difficulty": "medium"
+    },
+    {
+     "id": "alg1-u13-q6",
+     "type": "written",
+     "prompt": "Write the equation of the linear parent function in the form y = ...",
+     "answer": "y = x",
+     "accept": [
+      "y=x",
+      "x"
+     ],
+     "explanation": "The linear parent function is the simplest line, passing through the origin with slope 1, written as y = x.",
+     "topic": "Parent Functions",
+     "difficulty": "easy"
+    },
+    {
+     "id": "alg1-u13-q7",
+     "type": "mc",
+     "prompt": "The graph of g(x) = f(x) + 3 is the graph of f(x) shifted:",
+     "options": [
+      "up 3 units",
+      "down 3 units",
+      "left 3 units",
+      "right 3 units"
+     ],
+     "answer": "up 3 units",
+     "explanation": "Adding a constant outside the function, f(x) + k, moves the graph vertically; since k = 3 is positive, the shift is up 3 units.",
+     "topic": "Transformations",
+     "difficulty": "easy"
+    },
+    {
+     "id": "alg1-u13-q8",
+     "type": "mc",
+     "prompt": "The graph of g(x) = f(x − 5) is the graph of f(x) shifted:",
+     "options": [
+      "right 5 units",
+      "left 5 units",
+      "up 5 units",
+      "down 5 units"
+     ],
+     "answer": "right 5 units",
+     "explanation": "Subtracting inside the parentheses, f(x − h), shifts the graph horizontally right by h units; here h = 5.",
+     "topic": "Transformations",
+     "difficulty": "easy"
+    },
+    {
+     "id": "alg1-u13-q9",
+     "type": "tf",
+     "prompt": "True or False: The graph of g(x) = f(x) − 4 is the graph of f(x) shifted down 4 units.",
+     "options": [
+      "True",
+      "False"
+     ],
+     "answer": "True",
+     "explanation": "Adding a constant k = −4 outside the function moves the whole graph down 4 units.",
+     "topic": "Transformations",
+     "difficulty": "easy"
+    },
+    {
+     "id": "alg1-u13-q10",
+     "type": "tf",
+     "prompt": "True or False: In g(x) = f(x + 2), the graph of f(x) is shifted right 2 units.",
+     "options": [
+      "True",
+      "False"
+     ],
+     "answer": "False",
+     "explanation": "f(x + 2) matches f(x − h) with h = −2, which shifts the graph left 2 units, not right.",
+     "topic": "Transformations",
+     "difficulty": "medium"
+    },
+    {
+     "id": "alg1-u13-q11",
+     "type": "mc",
+     "prompt": "Which transformation reflects the graph of f(x) over the x-axis?",
+     "options": [
+      "−f(x)",
+      "f(x − 1)",
+      "2f(x)",
+      "f(x) + 1"
+     ],
+     "answer": "−f(x)",
+     "explanation": "Multiplying the entire output by −1 flips every point (x, y) to (x, −y), which is a reflection over the x-axis.",
+     "topic": "Transformations",
+     "difficulty": "medium"
+    },
+    {
+     "id": "alg1-u13-q12",
+     "type": "mc",
+     "prompt": "If g(x) = 3·f(x), the graph of g is a vertical ______ of f by a factor of 3.",
+     "options": [
+      "stretch",
+      "shrink",
+      "translation",
+      "reflection"
+     ],
+     "answer": "stretch",
+     "explanation": "Since |a| = 3 is greater than 1 in a·f(x), every y-value triples, stretching the graph vertically away from the x-axis.",
+     "topic": "Transformations",
+     "difficulty": "medium"
+    },
+    {
+     "id": "alg1-u13-q13",
+     "type": "mc",
+     "prompt": "The graph of f(x) = x² is transformed to g(x) = ½·x². Compared to f, the graph of g is:",
+     "options": [
+      "vertically shrunk (wider/flatter)",
+      "vertically stretched (narrower)",
+      "shifted up ½ unit",
+      "reflected over the x-axis"
+     ],
+     "answer": "vertically shrunk (wider/flatter)",
+     "explanation": "Since a = ½ satisfies 0 < |a| < 1 in a·f(x), every y-value is halved, flattening the parabola — a vertical shrink.",
+     "topic": "Transformations",
+     "difficulty": "hard"
+    },
+    {
+     "id": "alg1-u13-q14",
+     "type": "mc",
+     "prompt": "For y = a|x − h| + k, the vertex of the graph is located at:",
+     "options": [
+      "(h, k)",
+      "(−h, k)",
+      "(h, −k)",
+      "(k, h)"
+     ],
+     "answer": "(h, k)",
+     "explanation": "The graph's turning point occurs where x − h = 0, giving x = h and y = k, so the vertex is (h, k).",
+     "topic": "Absolute Value Functions",
+     "difficulty": "easy"
+    },
+    {
+     "id": "alg1-u13-q15",
+     "type": "mc",
+     "prompt": "What is the vertex of the graph of y = 2|x − 3| + 5?",
+     "options": [
+      "(3, 5)",
+      "(−3, 5)",
+      "(3, −5)",
+      "(5, 3)"
+     ],
+     "answer": "(3, 5)",
+     "explanation": "Matching y = 2|x − 3| + 5 to y = a|x − h| + k gives h = 3 and k = 5, so the vertex is (3, 5).",
+     "topic": "Absolute Value Functions",
+     "difficulty": "medium"
+    },
+    {
+     "id": "alg1-u13-q16",
+     "type": "mc",
+     "prompt": "In y = a|x − h| + k, if a < 0, the graph:",
+     "options": [
+      "opens downward",
+      "opens upward",
+      "shifts left",
+      "shifts right"
+     ],
+     "answer": "opens downward",
+     "explanation": "A negative leading coefficient a flips the V-shape upside down, so the graph opens downward with a maximum at the vertex.",
+     "topic": "Absolute Value Functions",
+     "difficulty": "medium"
+    },
+    {
+     "id": "alg1-u13-q17",
+     "type": "tf",
+     "prompt": "True or False: The graph of y = |x − h| + k is symmetric about the vertical line x = h.",
+     "options": [
+      "True",
+      "False"
+     ],
+     "answer": "True",
+     "explanation": "Each branch of the V mirrors the other across the vertical line through the vertex, x = h.",
+     "topic": "Absolute Value Functions",
+     "difficulty": "medium"
+    },
+    {
+     "id": "alg1-u13-q18",
+     "type": "written",
+     "prompt": "What is the vertex of the graph of y = |x + 6| − 2? Write your answer as an ordered pair.",
+     "answer": "(-6, -2)",
+     "accept": [
+      "(-6,-2)",
+      "-6,-2"
+     ],
+     "explanation": "Rewrite x + 6 as x − (−6), so h = −6 and k = −2, giving the vertex (−6, −2).",
+     "topic": "Absolute Value Functions",
+     "difficulty": "medium"
+    },
+    {
+     "id": "alg1-u13-q19",
+     "type": "mc",
+     "prompt": "A function is defined as f(x) = x + 2 for x < 0, and f(x) = x² for x ≥ 0. What is f(3)?",
+     "options": [
+      "9",
+      "5",
+      "3",
+      "11"
+     ],
+     "answer": "9",
+     "explanation": "Since 3 ≥ 0, use f(x) = x²: f(3) = 3² = 9.",
+     "topic": "Piecewise & Step Functions",
+     "difficulty": "medium"
+    },
+    {
+     "id": "alg1-u13-q20",
+     "type": "written",
+     "prompt": "Using f(x) = x + 2 for x < 0, and f(x) = x² for x ≥ 0, find f(−2).",
+     "answer": "0",
+     "accept": [
+      "0.0"
+     ],
+     "explanation": "Since −2 < 0, use f(x) = x + 2: f(−2) = −2 + 2 = 0.",
+     "topic": "Piecewise & Step Functions",
+     "difficulty": "medium"
+    },
+    {
+     "id": "alg1-u13-q21",
+     "type": "written",
+     "prompt": "For the piecewise function f(x) = 2x when x ≤ 4, and f(x) = x + 10 when x > 4, find f(4).",
+     "answer": "8",
+     "accept": [
+      "8.0"
+     ],
+     "explanation": "Since 4 ≤ 4, use f(x) = 2x: f(4) = 2(4) = 8.",
+     "topic": "Piecewise & Step Functions",
+     "difficulty": "medium"
+    },
+    {
+     "id": "alg1-u13-q22",
+     "type": "mc",
+     "prompt": "The greatest integer function ⌊x⌋ gives:",
+     "options": [
+      "the greatest integer less than or equal to x",
+      "the smallest integer greater than or equal to x",
+      "x rounded to the nearest integer",
+      "the value of x with its sign removed"
+     ],
+     "answer": "the greatest integer less than or equal to x",
+     "explanation": "By definition, the greatest integer (floor) function rounds down to the nearest integer that does not exceed x.",
+     "topic": "Piecewise & Step Functions",
+     "difficulty": "easy"
+    },
+    {
+     "id": "alg1-u13-q23",
+     "type": "mc",
+     "prompt": "What is ⌊4.7⌋?",
+     "options": [
+      "4",
+      "5",
+      "4.7",
+      "0"
+     ],
+     "answer": "4",
+     "explanation": "The greatest integer less than or equal to 4.7 is 4, since 5 is greater than 4.7.",
+     "topic": "Piecewise & Step Functions",
+     "difficulty": "medium"
+    },
+    {
+     "id": "alg1-u13-q24",
+     "type": "written",
+     "prompt": "What is ⌊−2.3⌋?",
+     "answer": "-3",
+     "accept": [
+      "−3"
+     ],
+     "explanation": "The greatest integer that is still less than or equal to −2.3 is −3, since −2 is greater than −2.3.",
+     "topic": "Piecewise & Step Functions",
+     "difficulty": "hard"
+    },
+    {
+     "id": "alg1-u13-q25",
+     "type": "tf",
+     "prompt": "True or False: A step function's graph looks like a series of flat, horizontal segments.",
+     "options": [
+      "True",
+      "False"
+     ],
+     "answer": "True",
+     "explanation": "Step functions, like the greatest integer function, stay constant over intervals and jump to new constant values, forming a staircase of horizontal segments.",
+     "topic": "Piecewise & Step Functions",
+     "difficulty": "easy"
+    },
+    {
+     "id": "alg1-u13-q26",
+     "type": "mc",
+     "prompt": "A graph shows a parabola opening upward with vertex at (2, −3) that extends upward without bound. What is the range?",
+     "options": [
+      "y ≥ −3",
+      "y ≤ −3",
+      "x ≥ 2",
+      "all real numbers"
+     ],
+     "answer": "y ≥ −3",
+     "explanation": "Since the parabola opens upward from its lowest point at y = −3, every output value is −3 or greater, so the range is y ≥ −3.",
+     "topic": "Domain and Range",
+     "difficulty": "medium"
+    },
+    {
+     "id": "alg1-u13-q27",
+     "type": "tf",
+     "prompt": "True or False: The domain of a function is the set of all possible output (y) values.",
+     "options": [
+      "True",
+      "False"
+     ],
+     "answer": "False",
+     "explanation": "The domain is the set of possible input (x) values; the set of possible output values is the range.",
+     "topic": "Domain and Range",
+     "difficulty": "easy"
+    },
+    {
+     "id": "alg1-u13-q28",
+     "type": "written",
+     "prompt": "For the graph of y = |x − 1| − 4, what is the minimum y-value (the lower bound of the range)?",
+     "answer": "-4",
+     "accept": [
+      "−4",
+      "y=-4",
+      "y = -4"
+     ],
+     "explanation": "The vertex of y = |x − 1| − 4 is (1, −4), and since a = 1 > 0 the graph opens upward, so −4 is the smallest y-value in the range.",
+     "topic": "Domain and Range",
+     "difficulty": "medium"
+    },
+    {
+     "id": "alg1-u13-q29",
+     "type": "mc",
+     "prompt": "A table shows y-values of 3, 6, 12, 24, 48 for consecutive whole-number x-values. This pattern represents:",
+     "options": [
+      "an exponential function (constant ratio)",
+      "a linear function (constant difference)",
+      "a quadratic function",
+      "a step function"
+     ],
+     "answer": "an exponential function (constant ratio)",
+     "explanation": "Each output is double the one before it (6/3 = 2, 12/6 = 2, 24/12 = 2, 48/24 = 2), a constant ratio, which signals exponential growth.",
+     "topic": "Comparing Models & Rate of Change",
+     "difficulty": "medium"
+    },
+    {
+     "id": "alg1-u13-q30",
+     "type": "mc",
+     "prompt": "A table shows y-values of 2, 5, 8, 11, 14 for x = 0, 1, 2, 3, 4. This pattern represents:",
+     "options": [
+      "a linear function (constant difference)",
+      "an exponential function (constant ratio)",
+      "a quadratic function",
+      "a step function"
+     ],
+     "answer": "a linear function (constant difference)",
+     "explanation": "Each output increases by the same amount, 3 (5−2=3, 8−5=3, 11−8=3, 14−11=3), a constant difference, which indicates a linear function.",
+     "topic": "Comparing Models & Rate of Change",
+     "difficulty": "medium"
+    },
+    {
+     "id": "alg1-u13-q31",
+     "type": "tf",
+     "prompt": "True or False: A table in which outputs are multiplied by the same factor for each equal step in x represents a linear function.",
+     "options": [
+      "True",
+      "False"
+     ],
+     "answer": "False",
+     "explanation": "A constant ratio between outputs signals an exponential function; a linear function instead has a constant difference between outputs.",
+     "topic": "Comparing Models & Rate of Change",
+     "difficulty": "medium"
+    },
+    {
+     "id": "alg1-u13-q32",
+     "type": "written",
+     "prompt": "A population is recorded as 100, 150, 225, and 337.5 at years 0, 1, 2, and 3. Each year the population is multiplied by the same constant ratio. What is that ratio?",
+     "answer": "1.5",
+     "accept": [
+      "3/2"
+     ],
+     "explanation": "Dividing consecutive terms gives 150/100 = 1.5 and 225/150 = 1.5, confirming a constant ratio of 1.5.",
+     "topic": "Comparing Models & Rate of Change",
+     "difficulty": "medium"
+    },
+    {
+     "id": "alg1-u13-q33",
+     "type": "mc",
+     "prompt": "For f(x) = x², what is the average rate of change from x = 1 to x = 4?",
+     "options": [
+      "5",
+      "15",
+      "3",
+      "4"
+     ],
+     "answer": "5",
+     "explanation": "Average rate of change = (f(4) − f(1))/(4 − 1) = (16 − 1)/3 = 15/3 = 5.",
+     "topic": "Comparing Models & Rate of Change",
+     "difficulty": "hard"
+    },
+    {
+     "id": "alg1-u13-q34",
+     "type": "written",
+     "prompt": "For f(x) = x² − 1, what is the average rate of change from x = 0 to x = 3?",
+     "answer": "3",
+     "accept": [
+      "3.0"
+     ],
+     "explanation": "Average rate of change = (f(3) − f(0))/(3 − 0) = ((9−1) − (0−1))/3 = (8 − (−1))/3 = 9/3 = 3.",
+     "topic": "Comparing Models & Rate of Change",
+     "difficulty": "hard"
+    }
+   ]
+  },
+  {
+   "id": "alg1-u14",
+   "unit": 14,
+   "title": "Rational Expressions and Equations",
+   "summary": "Learn to simplify, multiply, divide, add, and subtract rational expressions, and use these skills to solve rational equations and inverse variation problems. Practice finding excluded values, using the least common denominator, dividing polynomials by monomials, checking for extraneous solutions, and solving work-rate word problems.",
+   "topics": [
+    "Inverse Variation",
+    "Excluded Values & Domain",
+    "Simplifying Rational Expressions",
+    "Multiplying & Dividing Rational Expressions",
+    "Adding & Subtracting Rational Expressions",
+    "Dividing Polynomials by Monomials",
+    "Solving Rational Equations"
+   ],
+   "terms": [
+    {
+     "term": "Rational expression",
+     "definition": "A fraction whose numerator and denominator are both polynomials.",
+     "topic": "Simplifying Rational Expressions"
+    },
+    {
+     "term": "Simplify",
+     "definition": "To factor the numerator and denominator, then divide out any common factors.",
+     "topic": "Simplifying Rational Expressions"
+    },
+    {
+     "term": "Common factor",
+     "definition": "A factor shared by both the numerator and denominator of a fraction.",
+     "topic": "Simplifying Rational Expressions"
+    },
+    {
+     "term": "Factoring",
+     "definition": "Rewriting a polynomial as a product of two or more simpler polynomials.",
+     "topic": "Simplifying Rational Expressions"
+    },
+    {
+     "term": "Difference of squares",
+     "definition": "The pattern a² − b² = (a + b)(a − b), used to factor certain binomials.",
+     "topic": "Simplifying Rational Expressions"
+    },
+    {
+     "term": "Inverse variation",
+     "definition": "A relationship of the form y = k/x, where k is a nonzero constant.",
+     "topic": "Inverse Variation"
+    },
+    {
+     "term": "Constant of variation (k)",
+     "definition": "The fixed value found by multiplying corresponding x- and y-values in y = k/x.",
+     "topic": "Inverse Variation"
+    },
+    {
+     "term": "Hyperbola",
+     "definition": "The two-branch curve produced when graphing an inverse variation equation.",
+     "topic": "Inverse Variation"
+    },
+    {
+     "term": "Excluded value",
+     "definition": "A value of the variable that makes a denominator equal to zero.",
+     "topic": "Excluded Values & Domain"
+    },
+    {
+     "term": "Undefined",
+     "definition": "Having no numerical value, as happens when a fraction's denominator equals zero.",
+     "topic": "Excluded Values & Domain"
+    },
+    {
+     "term": "Domain",
+     "definition": "The set of all input values for which an expression is defined.",
+     "topic": "Excluded Values & Domain"
+    },
+    {
+     "term": "Reciprocal",
+     "definition": "The result of swapping a fraction's numerator and denominator.",
+     "topic": "Multiplying & Dividing Rational Expressions"
+    },
+    {
+     "term": "Dividing rational expressions",
+     "definition": "Multiplying the first expression by the reciprocal of the second.",
+     "topic": "Multiplying & Dividing Rational Expressions"
+    },
+    {
+     "term": "Least common denominator (LCD)",
+     "definition": "The smallest expression divisible by each denominator in a set of fractions.",
+     "topic": "Adding & Subtracting Rational Expressions"
+    },
+    {
+     "term": "Like denominators",
+     "definition": "Denominators that are identical, so numerators can be combined directly.",
+     "topic": "Adding & Subtracting Rational Expressions"
+    },
+    {
+     "term": "Unlike denominators",
+     "definition": "Denominators that differ, requiring a common denominator before combining fractions.",
+     "topic": "Adding & Subtracting Rational Expressions"
+    },
+    {
+     "term": "Monomial",
+     "definition": "A polynomial made up of exactly one term.",
+     "topic": "Dividing Polynomials by Monomials"
+    },
+    {
+     "term": "Polynomial",
+     "definition": "An expression made of terms with variables raised to whole-number exponents.",
+     "topic": "Dividing Polynomials by Monomials"
+    },
+    {
+     "term": "Term-by-term division",
+     "definition": "Dividing each part of a polynomial separately by a monomial, then combining the results.",
+     "topic": "Dividing Polynomials by Monomials"
+    },
+    {
+     "term": "Rational equation",
+     "definition": "An equation that contains one or more rational expressions with a variable in a denominator.",
+     "topic": "Solving Rational Equations"
+    },
+    {
+     "term": "Cross-multiplying",
+     "definition": "Multiplying the numerator of each side by the other side's denominator when two fractions are set equal.",
+     "topic": "Solving Rational Equations"
+    },
+    {
+     "term": "Extraneous solution",
+     "definition": "A value obtained while solving that does not satisfy the original equation, often because it creates a zero denominator.",
+     "topic": "Solving Rational Equations"
+    },
+    {
+     "term": "Work rate",
+     "definition": "The portion of a task completed per unit of time, often written as 1/t.",
+     "topic": "Solving Rational Equations"
+    }
+   ],
+   "questions": [
+    {
+     "id": "alg1-u14-q1",
+     "type": "mc",
+     "prompt": "If y varies inversely with x, and y = 8 when x = 3, what is the constant of variation k?",
+     "options": [
+      "24",
+      "11",
+      "8/3",
+      "3/8"
+     ],
+     "answer": "24",
+     "explanation": "Since y = k/x, we get k = xy = 3 · 8 = 24.",
+     "topic": "Inverse Variation",
+     "difficulty": "easy"
+    },
+    {
+     "id": "alg1-u14-q2",
+     "type": "mc",
+     "prompt": "For an inverse variation with k = 20, what is y when x = 4?",
+     "options": [
+      "5",
+      "80",
+      "16",
+      "0.2"
+     ],
+     "answer": "5",
+     "explanation": "y = k/x = 20/4 = 5.",
+     "topic": "Inverse Variation",
+     "difficulty": "easy"
+    },
+    {
+     "id": "alg1-u14-q3",
+     "type": "mc",
+     "prompt": "Which equation represents inverse variation between x and y?",
+     "options": [
+      "y = k/x",
+      "y = kx",
+      "y = kx²",
+      "y = x/k"
+     ],
+     "answer": "y = k/x",
+     "explanation": "Inverse variation is defined by y = k/x for a nonzero constant k; direct variation instead uses y = kx.",
+     "topic": "Inverse Variation",
+     "difficulty": "easy"
+    },
+    {
+     "id": "alg1-u14-q4",
+     "type": "tf",
+     "prompt": "In an inverse variation y = k/x with k > 0, as x increases, y also increases.",
+     "options": [
+      "True",
+      "False"
+     ],
+     "answer": "False",
+     "explanation": "Since y = k/x, increasing x makes y smaller, not larger — the values move in opposite directions.",
+     "topic": "Inverse Variation",
+     "difficulty": "medium"
+    },
+    {
+     "id": "alg1-u14-q5",
+     "type": "written",
+     "prompt": "y varies inversely with x. If y = 12 when x = 2, find y when x = 8.",
+     "answer": "3",
+     "accept": [
+      "y=3",
+      "3.0"
+     ],
+     "explanation": "First find k = xy = 2 · 12 = 24. Then y = k/x = 24/8 = 3.",
+     "topic": "Inverse Variation",
+     "difficulty": "easy"
+    },
+    {
+     "id": "alg1-u14-q6",
+     "type": "mc",
+     "prompt": "For the expression 5/(x − 3), which value of x must be excluded?",
+     "options": [
+      "x = 3",
+      "x = −3",
+      "x = 0",
+      "x = 5"
+     ],
+     "answer": "x = 3",
+     "explanation": "The denominator x − 3 equals 0 when x = 3, so x = 3 must be excluded from the domain.",
+     "topic": "Excluded Values & Domain",
+     "difficulty": "easy"
+    },
+    {
+     "id": "alg1-u14-q7",
+     "type": "mc",
+     "prompt": "Which values must be excluded from (x + 2)/[(x − 1)(x + 4)]?",
+     "options": [
+      "x = 1 and x = −4",
+      "x = −1 and x = 4",
+      "x = 1 and x = 4",
+      "x = −2 only"
+     ],
+     "answer": "x = 1 and x = −4",
+     "explanation": "The denominator is 0 when x − 1 = 0 or x + 4 = 0, so x = 1 and x = −4 are excluded.",
+     "topic": "Excluded Values & Domain",
+     "difficulty": "medium"
+    },
+    {
+     "id": "alg1-u14-q8",
+     "type": "tf",
+     "prompt": "The expression 7/(x + 4) is undefined when x = −4.",
+     "options": [
+      "True",
+      "False"
+     ],
+     "answer": "True",
+     "explanation": "Substituting x = −4 makes the denominator x + 4 equal 0, so the expression is undefined there.",
+     "topic": "Excluded Values & Domain",
+     "difficulty": "easy"
+    },
+    {
+     "id": "alg1-u14-q9",
+     "type": "written",
+     "prompt": "State the excluded value for the expression 2x/(x + 7).",
+     "answer": "x=-7",
+     "accept": [
+      "-7",
+      "x = -7",
+      "x≠-7",
+      "x ≠ -7",
+      "x!=-7",
+      "x != -7",
+      "−7",
+      "x = −7"
+     ],
+     "explanation": "The denominator x + 7 equals 0 when x = −7, so x = −7 must be excluded.",
+     "topic": "Excluded Values & Domain",
+     "difficulty": "easy"
+    },
+    {
+     "id": "alg1-u14-q10",
+     "type": "mc",
+     "prompt": "Simplify 4x/(8x²), x ≠ 0.",
+     "options": [
+      "1/(2x)",
+      "1/2",
+      "2/x",
+      "x/2"
+     ],
+     "answer": "1/(2x)",
+     "explanation": "Write 4x/(8x²) = (4x · 1)/(4x · 2x), then divide out the common factor 4x to get 1/(2x).",
+     "topic": "Simplifying Rational Expressions",
+     "difficulty": "medium"
+    },
+    {
+     "id": "alg1-u14-q11",
+     "type": "mc",
+     "prompt": "Simplify (x² − 4)/(x² + 5x + 6).",
+     "options": [
+      "(x − 2)/(x + 3)",
+      "(x + 2)/(x + 3)",
+      "(x − 2)/(x − 3)",
+      "x − 2"
+     ],
+     "answer": "(x − 2)/(x + 3)",
+     "explanation": "Factor to get (x−2)(x+2)/[(x+2)(x+3)]; canceling the common factor (x+2) leaves (x−2)/(x+3).",
+     "topic": "Simplifying Rational Expressions",
+     "difficulty": "hard"
+    },
+    {
+     "id": "alg1-u14-q12",
+     "type": "tf",
+     "prompt": "You can simplify a rational expression by canceling any matching terms in the numerator and denominator, even if they are not factors.",
+     "options": [
+      "True",
+      "False"
+     ],
+     "answer": "False",
+     "explanation": "Only common factors (things being multiplied) can be canceled; canceling terms that are added or subtracted gives a wrong result.",
+     "topic": "Simplifying Rational Expressions",
+     "difficulty": "medium"
+    },
+    {
+     "id": "alg1-u14-q13",
+     "type": "mc",
+     "prompt": "Simplify 5x²/(15x), x ≠ 0.",
+     "answer": "x/3",
+     "accept": [
+      "x/3"
+     ],
+     "explanation": "Write 5x²/(15x) = (5x · x)/(5x · 3), then divide out the common factor 5x to get x/3.",
+     "topic": "Simplifying Rational Expressions",
+     "difficulty": "medium",
+     "options": [
+      "x/3",
+      "3/x",
+      "x²/3",
+      "1/(3x)"
+     ]
+    },
+    {
+     "id": "alg1-u14-q14",
+     "type": "mc",
+     "prompt": "Multiply: (2/x) · (x/5), x ≠ 0.",
+     "options": [
+      "2/5",
+      "2/(5x)",
+      "10/x",
+      "x/10"
+     ],
+     "answer": "2/5",
+     "explanation": "Multiply straight across to get 2x/(5x); the x's cancel, leaving 2/5.",
+     "topic": "Multiplying & Dividing Rational Expressions",
+     "difficulty": "easy"
+    },
+    {
+     "id": "alg1-u14-q15",
+     "type": "mc",
+     "prompt": "Divide: (3/x) ÷ (6/x²), x ≠ 0.",
+     "options": [
+      "x/2",
+      "2/x",
+      "x²/2",
+      "18/x³"
+     ],
+     "answer": "x/2",
+     "explanation": "Multiply by the reciprocal: (3/x) · (x²/6) = 3x²/6x, which simplifies to x/2.",
+     "topic": "Multiplying & Dividing Rational Expressions",
+     "difficulty": "medium"
+    },
+    {
+     "id": "alg1-u14-q16",
+     "type": "mc",
+     "prompt": "Multiply: (x + 1)/(x − 2) · (x − 2)/(x + 3), x ≠ 2, −3.",
+     "options": [
+      "(x + 1)/(x + 3)",
+      "(x − 2)/(x + 3)",
+      "(x + 1)/(x − 2)",
+      "1/(x + 3)"
+     ],
+     "answer": "(x + 1)/(x + 3)",
+     "explanation": "The (x − 2) factors cancel, leaving (x + 1)/(x + 3).",
+     "topic": "Multiplying & Dividing Rational Expressions",
+     "difficulty": "medium"
+    },
+    {
+     "id": "alg1-u14-q17",
+     "type": "tf",
+     "prompt": "To divide two rational expressions, you multiply the first expression by the reciprocal of the second.",
+     "options": [
+      "True",
+      "False"
+     ],
+     "answer": "True",
+     "explanation": "Dividing by a fraction is the same as multiplying by its reciprocal, and the same rule applies to rational expressions.",
+     "topic": "Multiplying & Dividing Rational Expressions",
+     "difficulty": "easy"
+    },
+    {
+     "id": "alg1-u14-q18",
+     "type": "mc",
+     "prompt": "Add: 3/x + 5/x, x ≠ 0.",
+     "options": [
+      "8/x",
+      "8/x²",
+      "8/2x",
+      "15/x²"
+     ],
+     "answer": "8/x",
+     "explanation": "Since the denominators match, add the numerators: 3 + 5 = 8, giving 8/x.",
+     "topic": "Adding & Subtracting Rational Expressions",
+     "difficulty": "easy"
+    },
+    {
+     "id": "alg1-u14-q19",
+     "type": "mc",
+     "prompt": "What is the least common denominator (LCD) of 1/x and 1/(x + 2)?",
+     "options": [
+      "x(x + 2)",
+      "x + 2",
+      "x²",
+      "2x + 2"
+     ],
+     "answer": "x(x + 2)",
+     "explanation": "Since x and x + 2 share no common factor, the LCD is their product, x(x + 2).",
+     "topic": "Adding & Subtracting Rational Expressions",
+     "difficulty": "medium"
+    },
+    {
+     "id": "alg1-u14-q20",
+     "type": "mc",
+     "prompt": "Subtract 2/x − 3/(x + 1) using the LCD x(x + 1). Which expression equals the result?",
+     "options": [
+      "(2 − x)/[x(x + 1)]",
+      "(x − 2)/[x(x + 1)]",
+      "(5x + 2)/[x(x + 1)]",
+      "(2x − 1)/[x(x + 1)]"
+     ],
+     "answer": "(2 − x)/[x(x + 1)]",
+     "explanation": "Rewrite each fraction: 2(x+1)/[x(x+1)] − 3x/[x(x+1)] = (2x + 2 − 3x)/[x(x+1)] = (2 − x)/[x(x+1)].",
+     "topic": "Adding & Subtracting Rational Expressions",
+     "difficulty": "hard"
+    },
+    {
+     "id": "alg1-u14-q21",
+     "type": "tf",
+     "prompt": "When adding rational expressions with unlike denominators, you must first rewrite them with a common denominator.",
+     "options": [
+      "True",
+      "False"
+     ],
+     "answer": "True",
+     "explanation": "Just like with numeric fractions, the denominators must match before the numerators can be combined.",
+     "topic": "Adding & Subtracting Rational Expressions",
+     "difficulty": "easy"
+    },
+    {
+     "id": "alg1-u14-q23",
+     "type": "mc",
+     "prompt": "Divide: (12x³ + 8x²)/(4x²), x ≠ 0.",
+     "options": [
+      "3x + 2",
+      "3x² + 2x",
+      "3x³ + 2x²",
+      "2x + 3x²"
+     ],
+     "answer": "3x + 2",
+     "explanation": "Divide each term by 4x²: 12x³/4x² = 3x and 8x²/4x² = 2, so the quotient is 3x + 2.",
+     "topic": "Dividing Polynomials by Monomials",
+     "difficulty": "medium"
+    },
+    {
+     "id": "alg1-u14-q24",
+     "type": "mc",
+     "prompt": "Divide: (15x² − 10x)/(5x), x ≠ 0.",
+     "options": [
+      "3x − 2",
+      "3x + 2",
+      "3x² − 2",
+      "15x − 2"
+     ],
+     "answer": "3x − 2",
+     "explanation": "Divide each term by 5x: 15x²/5x = 3x and 10x/5x = 2, so the quotient is 3x − 2.",
+     "topic": "Dividing Polynomials by Monomials",
+     "difficulty": "medium"
+    },
+    {
+     "id": "alg1-u14-q25",
+     "type": "tf",
+     "prompt": "Dividing a polynomial by a monomial means dividing every term of the polynomial by that monomial separately.",
+     "options": [
+      "True",
+      "False"
+     ],
+     "answer": "True",
+     "explanation": "Each term in the numerator is divided by the single-term denominator one at a time, then the results are combined.",
+     "topic": "Dividing Polynomials by Monomials",
+     "difficulty": "easy"
+    },
+    {
+     "id": "alg1-u14-q27",
+     "type": "mc",
+     "prompt": "When solving (x + 3)/(x − 2) = 5/(x − 2), a student gets x = 2. Why is x = 2 an extraneous solution?",
+     "options": [
+      "It makes the denominator x − 2 equal zero",
+      "It makes the numerator x + 3 equal zero",
+      "It makes the left side a negative number",
+      "It makes the two numerators unequal"
+     ],
+     "answer": "It makes the denominator x − 2 equal zero",
+     "explanation": "Multiplying both sides by x − 2 gives x + 3 = 5, so x = 2. But substituting x = 2 into the original equation makes the denominators 0, so the equation is undefined and x = 2 must be rejected.",
+     "topic": "Solving Rational Equations",
+     "difficulty": "hard"
+    },
+    {
+     "id": "alg1-u14-q28",
+     "type": "tf",
+     "prompt": "When solving a rational equation, every value found algebraically is guaranteed to satisfy the original equation.",
+     "options": [
+      "True",
+      "False"
+     ],
+     "answer": "False",
+     "explanation": "Multiplying by the LCD or cross-multiplying can introduce extraneous solutions that make a denominator zero, so each result must be checked.",
+     "topic": "Solving Rational Equations",
+     "difficulty": "medium"
+    },
+    {
+     "id": "alg1-u14-q29",
+     "type": "written",
+     "prompt": "Solve for x: 4/x = 8/6.",
+     "answer": "x=3",
+     "accept": [
+      "3",
+      "x = 3"
+     ],
+     "explanation": "Cross-multiply: 4 · 6 = 8 · x, so 24 = 8x and x = 3. Check: 4/3 and 8/6 both equal about 1.33.",
+     "topic": "Solving Rational Equations",
+     "difficulty": "medium"
+    },
+    {
+     "id": "alg1-u14-q30",
+     "type": "written",
+     "prompt": "Pipe A can fill a pool in 6 hours, and Pipe B can fill the same pool in 3 hours. Working together, how many hours will it take to fill the pool?",
+     "answer": "2",
+     "accept": [
+      "2 hours",
+      "2 hrs",
+      "2 hr",
+      "2 h",
+      "x=2",
+      "t=2",
+      "2.0"
+     ],
+     "explanation": "Add the rates: 1/6 + 1/3 = 1/6 + 2/6 = 3/6 = 1/2 pool per hour, so the time is 1 ÷ (1/2) = 2 hours. Check: in 2 hours A fills 2/6 and B fills 2/3 = 4/6, and 2/6 + 4/6 = 1 pool.",
+     "topic": "Solving Rational Equations",
+     "difficulty": "hard"
+    }
+   ]
   }
  ]
 });
