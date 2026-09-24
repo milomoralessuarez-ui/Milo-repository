@@ -2947,6 +2947,638 @@
    ]
   },
   {
+   "id": "ela-u6",
+   "unit": 6,
+   "title": "Argument, Rhetoric and Research",
+   "summary": "Learn how writers build arguments with a thesis, claims, counterclaims, rebuttals, evidence and reasoning, and how topic sentences and transitions organize them. The unit also covers appealing to an audience and purpose through ethos, pathos, logos and rhetorical questions, and spotting common logical fallacies. Finally, it covers using primary and secondary sources responsibly: avoiding plagiarism, paraphrasing, summarizing and quoting, and writing basic MLA in-text citations.",
+   "topics": [
+    "Argument Basics",
+    "Organization & Transitions",
+    "Rhetorical Appeals",
+    "Logical Fallacies",
+    "Audience & Purpose",
+    "Research & Sources",
+    "MLA Citation"
+   ],
+   "terms": [
+    {
+     "term": "Thesis",
+     "definition": "The sentence stating a writer's central claim or argument for an entire piece of writing.",
+     "topic": "Argument Basics"
+    },
+    {
+     "term": "Claim",
+     "definition": "A statement of position on an issue that must be supported with evidence and reasoning.",
+     "topic": "Argument Basics"
+    },
+    {
+     "term": "Counterclaim",
+     "definition": "An opposing viewpoint that challenges or disagrees with a writer's main argument.",
+     "topic": "Argument Basics"
+    },
+    {
+     "term": "Rebuttal",
+     "definition": "A response that addresses an opposing view and explains why it is weaker or flawed.",
+     "topic": "Argument Basics"
+    },
+    {
+     "term": "Evidence",
+     "definition": "Facts, examples, statistics, or expert statements used to support a claim.",
+     "topic": "Argument Basics"
+    },
+    {
+     "term": "Reasoning",
+     "definition": "The explanation connecting evidence to a claim, showing why the evidence actually supports it.",
+     "topic": "Argument Basics"
+    },
+    {
+     "term": "Topic sentence",
+     "definition": "The statement, usually first in a paragraph, that announces the paragraph's main idea.",
+     "topic": "Organization & Transitions"
+    },
+    {
+     "term": "Transition",
+     "definition": "A word or phrase, such as \"however\" or \"as a result,\" that links ideas between sentences or paragraphs.",
+     "topic": "Organization & Transitions"
+    },
+    {
+     "term": "Ethos",
+     "definition": "A persuasive appeal based on the speaker's credibility, character, or trustworthiness.",
+     "topic": "Rhetorical Appeals"
+    },
+    {
+     "term": "Pathos",
+     "definition": "A persuasive appeal that stirs the audience's emotions, such as sympathy or anger.",
+     "topic": "Rhetorical Appeals"
+    },
+    {
+     "term": "Logos",
+     "definition": "A persuasive appeal based on logic, facts, statistics, or clear reasoning.",
+     "topic": "Rhetorical Appeals"
+    },
+    {
+     "term": "Ad hominem",
+     "definition": "A fallacy that attacks a person's character rather than responding to their argument.",
+     "topic": "Logical Fallacies"
+    },
+    {
+     "term": "Straw man",
+     "definition": "A fallacy that distorts or oversimplifies an opponent's argument to make it easier to knock down.",
+     "topic": "Logical Fallacies"
+    },
+    {
+     "term": "Bandwagon",
+     "definition": "A fallacy claiming an idea must be correct because many people already accept it.",
+     "topic": "Logical Fallacies"
+    },
+    {
+     "term": "Slippery slope",
+     "definition": "A fallacy claiming one small action will inevitably trigger a chain of extreme, unlikely results.",
+     "topic": "Logical Fallacies"
+    },
+    {
+     "term": "False dilemma",
+     "definition": "A fallacy that presents only two choices when other reasonable options actually exist.",
+     "topic": "Logical Fallacies"
+    },
+    {
+     "term": "Hasty generalization",
+     "definition": "A fallacy that reaches a broad conclusion from a sample that is too small or limited.",
+     "topic": "Logical Fallacies"
+    },
+    {
+     "term": "Red herring",
+     "definition": "A fallacy that introduces an irrelevant point to pull attention away from the real issue.",
+     "topic": "Logical Fallacies"
+    },
+    {
+     "term": "Appeal to authority",
+     "definition": "A fallacy that treats a claim as true only because a famous or powerful figure said it.",
+     "topic": "Logical Fallacies"
+    },
+    {
+     "term": "Audience and purpose",
+     "definition": "The specific readers a text targets, and the writer's goal, such as to persuade or inform them.",
+     "topic": "Audience & Purpose"
+    },
+    {
+     "term": "Primary vs. secondary source",
+     "definition": "Firsthand material created during an event, versus later material that interprets or analyzes it.",
+     "topic": "Research & Sources"
+    },
+    {
+     "term": "Plagiarism",
+     "definition": "Presenting someone else's words or ideas as your own without giving proper credit.",
+     "topic": "Research & Sources"
+    },
+    {
+     "term": "Paraphrase",
+     "definition": "Restating another writer's idea fully in your own words and sentence structure, still crediting the source.",
+     "topic": "Research & Sources"
+    },
+    {
+     "term": "Summary",
+     "definition": "A brief restatement, in your own words, of only the main points of a longer text.",
+     "topic": "Research & Sources"
+    },
+    {
+     "term": "Quotation",
+     "definition": "A source's exact words, copied precisely, set inside double punctuation marks (\" \"), and cited.",
+     "topic": "Research & Sources"
+    },
+    {
+     "term": "In-text citation",
+     "definition": "A brief MLA note, usually the author's last name and page number, pointing to the full source entry.",
+     "topic": "MLA Citation"
+    }
+   ],
+   "questions": [
+    {
+     "id": "ela-u6-q1",
+     "type": "mc",
+     "prompt": "Which sentence best defines a thesis statement?",
+     "options": [
+      "The sentence that states a writer's central claim for an entire piece of writing.",
+      "A list of every source consulted while writing a paper.",
+      "A question posed only to create suspense for the reader.",
+      "A summary of the strongest opposing argument."
+     ],
+     "answer": "The sentence that states a writer's central claim for an entire piece of writing.",
+     "explanation": "A thesis statement announces the writer's main argument or position for the whole piece, unlike a source list, a suspense-building question, or an opposing summary.",
+     "topic": "Argument Basics",
+     "difficulty": "easy"
+    },
+    {
+     "id": "ela-u6-q2",
+     "type": "mc",
+     "prompt": "A student's essay argues, 'Schools should start classes later in the morning.' Which sentence from the essay is a counterclaim?",
+     "options": [
+      "Later start times let teenagers get more sleep, which improves focus in class.",
+      "Some parents argue that later start times would make after-school schedules harder to manage.",
+      "Studies show that sleep-deprived teens react more slowly to stimuli.",
+      "Because students would feel more alert, test scores could rise."
+     ],
+     "answer": "Some parents argue that later start times would make after-school schedules harder to manage.",
+     "explanation": "A counterclaim presents the opposing side of the argument; this sentence raises a concern against the proposal, while the others all support the original claim.",
+     "topic": "Argument Basics",
+     "difficulty": "medium"
+    },
+    {
+     "id": "ela-u6-q3",
+     "type": "mc",
+     "prompt": "Continuing the same essay, the counterclaim is: 'Critics say later start times would make after-school sports scheduling difficult.' Which sentence is the strongest rebuttal?",
+     "options": [
+      "Later starts help teenagers get more sleep every night.",
+      "While schedules would need some adjusting, districts that switched found practices could shift by under an hour without major problems.",
+      "Sleep is essential for a teenager's physical and mental health.",
+      "Many students report feeling exhausted during first period."
+     ],
+     "answer": "While schedules would need some adjusting, districts that switched found practices could shift by under an hour without major problems.",
+     "explanation": "A rebuttal directly answers the counterclaim and explains why it does not outweigh the argument; this option addresses the scheduling concern head-on, while the others just restate unrelated support.",
+     "topic": "Argument Basics",
+     "difficulty": "medium"
+    },
+    {
+     "id": "ela-u6-q4",
+     "type": "mc",
+     "prompt": "Which word most clearly signals a contrast between two ideas?",
+     "options": [
+      "However",
+      "Similarly",
+      "For example",
+      "In addition"
+     ],
+     "answer": "However",
+     "explanation": "\"However\" signals contrast, while \"similarly,\" \"for example,\" and \"in addition\" all signal comparison or continuation rather than contrast.",
+     "topic": "Organization & Transitions",
+     "difficulty": "easy"
+    },
+    {
+     "id": "ela-u6-q5",
+     "type": "mc",
+     "prompt": "A speaker opens a speech by describing her 20 years of experience as a firefighter. This mainly appeals to:",
+     "options": [
+      "Ethos",
+      "Pathos",
+      "Logos",
+      "Reasoning"
+     ],
+     "answer": "Ethos",
+     "explanation": "Citing relevant experience builds the speaker's credibility, which is an appeal to ethos rather than emotion (pathos) or logic (logos).",
+     "topic": "Rhetorical Appeals",
+     "difficulty": "easy"
+    },
+    {
+     "id": "ela-u6-q6",
+     "type": "mc",
+     "prompt": "'Imagine losing your home to a flood that could have been prevented' mainly appeals to:",
+     "options": [
+      "Logos",
+      "Pathos",
+      "Ethos",
+      "A rhetorical question"
+     ],
+     "answer": "Pathos",
+     "explanation": "The sentence is meant to stir fear and sympathy in the audience, which makes it an appeal to pathos rather than logic or credibility.",
+     "topic": "Rhetorical Appeals",
+     "difficulty": "medium"
+    },
+    {
+     "id": "ela-u6-q7",
+     "type": "mc",
+     "prompt": "'In a two-year study, people who used this toothpaste had 30 percent fewer cavities than people who did not' mainly appeals to:",
+     "options": [
+      "Pathos",
+      "Ethos",
+      "Logos",
+      "Bandwagon"
+     ],
+     "answer": "Logos",
+     "explanation": "The sentence relies on study data and statistics as proof, which is an appeal to logos rather than to emotion (pathos), the speaker's credibility (ethos), or popularity (bandwagon).",
+     "topic": "Rhetorical Appeals",
+     "difficulty": "medium"
+    },
+    {
+     "id": "ela-u6-q8",
+     "type": "mc",
+     "prompt": "'You can't trust her opinion on the recycling policy — she got a speeding ticket last year.' This is an example of:",
+     "options": [
+      "Ad hominem",
+      "Straw man",
+      "Red herring",
+      "Slippery slope"
+     ],
+     "answer": "Ad hominem",
+     "explanation": "The argument attacks the person's unrelated driving record instead of addressing her actual opinion on recycling, which is an ad hominem attack.",
+     "topic": "Logical Fallacies",
+     "difficulty": "easy"
+    },
+    {
+     "id": "ela-u6-q9",
+     "type": "mc",
+     "prompt": "A student says, 'We should have a longer lunch period.' A classmate responds, 'So you think students should just goof off all day instead of learning?' This is an example of:",
+     "options": [
+      "Straw man",
+      "Bandwagon",
+      "False dilemma",
+      "Appeal to authority"
+     ],
+     "answer": "Straw man",
+     "explanation": "The response exaggerates and distorts the original request into an extreme position that is easier to attack, which is a straw man.",
+     "topic": "Logical Fallacies",
+     "difficulty": "medium"
+    },
+    {
+     "id": "ela-u6-q10",
+     "type": "mc",
+     "prompt": "'Everyone is already buying the new phone, so it must be the best one on the market.' This is an example of:",
+     "options": [
+      "Hasty generalization",
+      "Bandwagon",
+      "Red herring",
+      "Ad hominem"
+     ],
+     "answer": "Bandwagon",
+     "explanation": "The claim treats popularity itself as proof of quality, which is the bandwagon fallacy.",
+     "topic": "Logical Fallacies",
+     "difficulty": "easy"
+    },
+    {
+     "id": "ela-u6-q11",
+     "type": "mc",
+     "prompt": "'If we allow students to redo one quiz, soon they'll expect to redo every test, and eventually grades will mean nothing.' This is an example of:",
+     "options": [
+      "Slippery slope",
+      "False dilemma",
+      "Straw man",
+      "Hasty generalization"
+     ],
+     "answer": "Slippery slope",
+     "explanation": "The argument assumes one small change will unavoidably trigger a chain of extreme outcomes, which is a slippery slope fallacy.",
+     "topic": "Logical Fallacies",
+     "difficulty": "medium"
+    },
+    {
+     "id": "ela-u6-q12",
+     "type": "mc",
+     "prompt": "'Either we ban all phones in school, or students will never focus on their schoolwork.' This is an example of:",
+     "options": [
+      "False dilemma",
+      "Slippery slope",
+      "Bandwagon",
+      "Red herring"
+     ],
+     "answer": "False dilemma",
+     "explanation": "The statement presents only two extreme options when other reasonable alternatives, such as limited phone use, clearly exist.",
+     "topic": "Logical Fallacies",
+     "difficulty": "medium"
+    },
+    {
+     "id": "ela-u6-q13",
+     "type": "mc",
+     "prompt": "A writer surveys three classmates and concludes, 'Most teenagers hate reading.' This is an example of:",
+     "options": [
+      "Hasty generalization",
+      "Straw man",
+      "Appeal to authority",
+      "Ad hominem"
+     ],
+     "answer": "Hasty generalization",
+     "explanation": "Drawing a broad conclusion about all teenagers from only three classmates is a hasty generalization based on too small a sample.",
+     "topic": "Logical Fallacies",
+     "difficulty": "medium"
+    },
+    {
+     "id": "ela-u6-q14",
+     "type": "mc",
+     "prompt": "During a debate about school lunch prices, a speaker says, 'Why are we even discussing lunch prices when there are bigger problems, like the parking lot?' This is an example of:",
+     "options": [
+      "Red herring",
+      "Slippery slope",
+      "Bandwagon",
+      "False dilemma"
+     ],
+     "answer": "Red herring",
+     "explanation": "The speaker distracts from the actual topic by introducing an unrelated issue, which is a red herring.",
+     "topic": "Logical Fallacies",
+     "difficulty": "medium"
+    },
+    {
+     "id": "ela-u6-q15",
+     "type": "mc",
+     "prompt": "'This diet must be healthy because a famous actor promotes it in a commercial.' Which logical fallacy is this?",
+     "options": [
+      "Appeal to authority",
+      "Straw man",
+      "Red herring",
+      "Hasty generalization"
+     ],
+     "answer": "Appeal to authority",
+     "explanation": "The claim relies on a celebrity's fame rather than relevant medical expertise, which is a fallacious appeal to authority.",
+     "topic": "Logical Fallacies",
+     "difficulty": "medium"
+    },
+    {
+     "id": "ela-u6-q16",
+     "type": "mc",
+     "prompt": "A writer planning a persuasive letter to the city council about a new park mainly considers which two elements to shape word choice and tone?",
+     "options": [
+      "Audience and purpose",
+      "Thesis and rebuttal",
+      "Ethos and pathos",
+      "Primary and secondary sources"
+     ],
+     "answer": "Audience and purpose",
+     "explanation": "Knowing who will read the letter and why it is being written guides decisions about tone and word choice.",
+     "topic": "Audience & Purpose",
+     "difficulty": "easy"
+    },
+    {
+     "id": "ela-u6-q17",
+     "type": "mc",
+     "prompt": "A diary written by a soldier during World War II, describing his own experiences, is an example of a:",
+     "options": [
+      "Primary source",
+      "Secondary source",
+      "Paraphrase",
+      "Summary"
+     ],
+     "answer": "Primary source",
+     "explanation": "A primary source is a firsthand account created at the time of the event, which describes the diary.",
+     "topic": "Research & Sources",
+     "difficulty": "easy"
+    },
+    {
+     "id": "ela-u6-q18",
+     "type": "mc",
+     "prompt": "Which of the following is an example of plagiarism?",
+     "options": [
+      "Copying a sentence from a website directly into an essay without any citation",
+      "Paraphrasing an idea in new words and citing the original source",
+      "Quoting a source word-for-word with quotation marks and a citation",
+      "Summarizing an article's main points and crediting the author"
+     ],
+     "answer": "Copying a sentence from a website directly into an essay without any citation",
+     "explanation": "Using another writer's exact words without credit is plagiarism, while paraphrasing, quoting, and summarizing with proper citation are all acceptable.",
+     "topic": "Research & Sources",
+     "difficulty": "medium"
+    },
+    {
+     "id": "ela-u6-q19",
+     "type": "mc",
+     "prompt": "Which of the following is a correctly formatted MLA in-text citation for a quotation from page 42 of a book by author Maria Lopez?",
+     "options": [
+      "(Lopez, 42)",
+      "(Lopez 42)",
+      "(Lopez pg. 42)",
+      "(Maria Lopez, page 42)"
+     ],
+     "answer": "(Lopez 42)",
+     "explanation": "Standard MLA in-text citations list the author's last name followed by the page number with no comma and no abbreviation, as in (Lopez 42).",
+     "topic": "MLA Citation",
+     "difficulty": "medium"
+    },
+    {
+     "id": "ela-u6-q20",
+     "type": "mc",
+     "prompt": "A student writes: 'Climate change is accelerating faster than predicted' (Green 15). What does the '15' refer to?",
+     "options": [
+      "The year the source was published",
+      "The page number where the information appears",
+      "The number of sources used in the paper",
+      "The paragraph number in the source"
+     ],
+     "answer": "The page number where the information appears",
+     "explanation": "In MLA in-text citations, the number after the author's name is the page number where the cited information can be found.",
+     "topic": "MLA Citation",
+     "difficulty": "hard"
+    },
+    {
+     "id": "ela-u6-q21",
+     "type": "tf",
+     "prompt": "A claim is a statement of position that must be supported with evidence and reasoning.",
+     "options": [
+      "True",
+      "False"
+     ],
+     "answer": "True",
+     "explanation": "By definition, a claim requires support; an unsupported assertion is not considered a well-formed claim in an argument.",
+     "topic": "Argument Basics",
+     "difficulty": "easy"
+    },
+    {
+     "id": "ela-u6-q22",
+     "type": "tf",
+     "prompt": "Evidence and reasoning serve the exact same purpose in an argument, so a writer only needs to include one of them.",
+     "options": [
+      "True",
+      "False"
+     ],
+     "answer": "False",
+     "explanation": "Evidence supplies facts or examples, while reasoning explains why that evidence actually supports the claim — both are needed, not just one.",
+     "topic": "Argument Basics",
+     "difficulty": "medium"
+    },
+    {
+     "id": "ela-u6-q23",
+     "type": "tf",
+     "prompt": "A topic sentence usually states the main idea of the paragraph it belongs to.",
+     "options": [
+      "True",
+      "False"
+     ],
+     "answer": "True",
+     "explanation": "A topic sentence introduces and summarizes the central idea that the rest of the paragraph develops.",
+     "topic": "Organization & Transitions",
+     "difficulty": "easy"
+    },
+    {
+     "id": "ela-u6-q24",
+     "type": "tf",
+     "prompt": "A slippery slope fallacy claims that one small action will unavoidably lead to a chain of extreme, unlikely consequences.",
+     "options": [
+      "True",
+      "False"
+     ],
+     "answer": "True",
+     "explanation": "This matches the standard definition of a slippery slope: it assumes an inevitable chain reaction without evidence that each step will actually follow.",
+     "topic": "Logical Fallacies",
+     "difficulty": "medium"
+    },
+    {
+     "id": "ela-u6-q25",
+     "type": "tf",
+     "prompt": "Citing a respected expert in the relevant field is not automatically an appeal to authority fallacy.",
+     "options": [
+      "True",
+      "False"
+     ],
+     "answer": "True",
+     "explanation": "Citing a genuine, relevant expert is legitimate support. The fallacy occurs when the source's fame or authority has nothing to do with the claim, or when someone's say-so alone is treated as proof.",
+     "topic": "Logical Fallacies",
+     "difficulty": "medium"
+    },
+    {
+     "id": "ela-u6-q26",
+     "type": "tf",
+     "prompt": "A text's purpose is always to persuade the reader to take a specific action.",
+     "options": [
+      "True",
+      "False"
+     ],
+     "answer": "False",
+     "explanation": "Purpose can also be to inform, entertain, describe, or explain — persuasion is only one of several possible purposes.",
+     "topic": "Audience & Purpose",
+     "difficulty": "medium"
+    },
+    {
+     "id": "ela-u6-q27",
+     "type": "tf",
+     "prompt": "A secondary source is always more reliable than a primary source simply because it has gone through editorial review.",
+     "options": [
+      "True",
+      "False"
+     ],
+     "answer": "False",
+     "explanation": "Reliability depends on the quality and accuracy of a specific source, not simply on whether it is classified as primary or secondary.",
+     "topic": "Research & Sources",
+     "difficulty": "medium"
+    },
+    {
+     "id": "ela-u6-q28",
+     "type": "written",
+     "prompt": "What term names the sentence that states a writer's central claim or argument for an entire piece of writing?",
+     "answer": "Thesis",
+     "accept": [
+      "thesis statement",
+      "Thesis statement",
+      "Thesis Statement"
+     ],
+     "explanation": "The thesis statement announces the writer's main argument and typically appears near the beginning of the piece.",
+     "topic": "Argument Basics",
+     "difficulty": "easy"
+    },
+    {
+     "id": "ela-u6-q29",
+     "type": "written",
+     "prompt": "What term names the sentence, usually first in a paragraph, that states that paragraph's main idea?",
+     "answer": "Topic sentence",
+     "accept": [],
+     "explanation": "The topic sentence introduces the central idea that the rest of the paragraph explains or supports.",
+     "topic": "Organization & Transitions",
+     "difficulty": "easy"
+    },
+    {
+     "id": "ela-u6-q30",
+     "type": "written",
+     "prompt": "What term names the persuasive appeal based on logic, facts, and reasoning?",
+     "answer": "Logos",
+     "accept": [
+      "logical appeal",
+      "appeal to logic",
+      "logos appeal"
+     ],
+     "explanation": "Logos appeals to an audience's sense of reason using facts, statistics, and logical arguments, unlike ethos (credibility) or pathos (emotion).",
+     "topic": "Rhetorical Appeals",
+     "difficulty": "medium"
+    },
+    {
+     "id": "ela-u6-q31",
+     "type": "written",
+     "prompt": "A politician says, 'Don't listen to my opponent's tax plan — he can't even balance his own checkbook.' Name the logical fallacy used.",
+     "answer": "Ad hominem",
+     "accept": [
+      "Ad hominem attack",
+      "ad hominem fallacy",
+      "personal attack"
+     ],
+     "explanation": "The statement attacks the opponent's personal finances instead of addressing the actual tax plan, which is an ad hominem attack.",
+     "topic": "Logical Fallacies",
+     "difficulty": "medium"
+    },
+    {
+     "id": "ela-u6-q32",
+     "type": "written",
+     "prompt": "A 2020 textbook chapter that analyzes and explains a historic soldier's diary is an example of what type of source?",
+     "answer": "Secondary source",
+     "accept": [
+      "secondary"
+     ],
+     "explanation": "Because the textbook interprets and reports on the original diary rather than being created at the time of the event, it is a secondary source.",
+     "topic": "Research & Sources",
+     "difficulty": "medium"
+    },
+    {
+     "id": "ela-u6-q33",
+     "type": "written",
+     "prompt": "What term names restating a source's idea in your own words and sentence structure, at about the same length, while still crediting the source?",
+     "answer": "Paraphrase",
+     "accept": [
+      "paraphrasing",
+      "Paraphrasing"
+     ],
+     "explanation": "A paraphrase rewords an entire passage in new language without cutting its length, unlike a summary, which condenses it.",
+     "topic": "Research & Sources",
+     "difficulty": "medium"
+    },
+    {
+     "id": "ela-u6-q34",
+     "type": "written",
+     "prompt": "What is the name for the brief MLA note in parentheses that points a reader to a source's full entry?",
+     "answer": "In-text citation",
+     "accept": [
+      "in text citation",
+      "parenthetical citation",
+      "parenthetical reference",
+      "citation"
+     ],
+     "explanation": "An in-text citation gives just enough information, usually author and page number, for a reader to find the complete source on the Works Cited page.",
+     "topic": "MLA Citation",
+     "difficulty": "easy"
+    }
+   ]
+  },
+  {
    "id": "ela-u7",
    "unit": 7,
    "title": "Roots, Prefixes and Suffixes",

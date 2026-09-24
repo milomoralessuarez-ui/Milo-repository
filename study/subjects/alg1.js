@@ -2370,7 +2370,10 @@
      "prompt": "In the equation d = 60t, distance d depends on time t. Which variable, d or t, is the independent variable?",
      "answer": "t",
      "accept": [
-      "time"
+      "time",
+      "time t",
+      "t (time)",
+      "t time"
      ],
      "explanation": "The independent variable is the input that is chosen freely; here time t is chosen and distance d depends on it.",
      "topic": "Independent and Dependent Variables",
@@ -2492,12 +2495,12 @@
     },
     {
      "term": "Parallel lines",
-     "definition": "Lines in the same plane that never intersect and always have equal steepness values.",
+     "definition": "Lines in the same plane that never intersect; non-vertical ones have equal steepness values, and any two vertical lines are also this type.",
      "topic": "Parallel & Perpendicular Lines"
     },
     {
      "term": "Perpendicular lines",
-     "definition": "Lines that intersect at a right angle and whose steepness values are negative reciprocals of each other.",
+     "definition": "Lines that intersect at a right angle; when neither line is vertical, their steepness values are negative reciprocals of each other.",
      "topic": "Parallel & Perpendicular Lines"
     },
     {
@@ -3588,7 +3591,7 @@
   {
    "id": "alg1-u7",
    "unit": 7,
-   "title": "Unit 7: Exponents and Exponential Functions",
+   "title": "Exponents and Exponential Functions",
    "summary": "Master the laws of exponents — product, quotient, and power rules, plus zero and negative exponents — and use them to read and write numbers in scientific notation. Then model real growth and decay with y = a·bˣ, connecting growth/decay factors and rates to geometric sequences and their common ratio.",
    "topics": [
     "Exponent Rules",

@@ -874,7 +874,7 @@
     {
      "id": "wh-u2-q10",
      "type": "mc",
-     "prompt": "Which group made up most of the Roman Senate during the Republic?",
+     "prompt": "Which group dominated the Roman Senate in the early Republic?",
      "options": [
       "Wealthy landowners (patricians)",
       "Common citizens (plebeians)",
@@ -882,7 +882,7 @@
       "Foreign merchants"
      ],
      "answer": "Wealthy landowners (patricians)",
-     "explanation": "The Senate was dominated by patricians, members of Rome's wealthy, land-owning upper class.",
+     "explanation": "In the early Republic the Senate was dominated by patricians, members of Rome's wealthy, land-owning upper class; wealthy plebeians entered it in larger numbers only later.",
      "topic": "The Roman Republic",
      "difficulty": "medium"
     },
@@ -943,7 +943,7 @@
      ],
      "answer": "Triumvirate",
      "explanation": "\"Triumvirate\" describes rule by three men; the First Triumvirate informally united Caesar, Pompey, and Crassus starting in 60 BCE.",
-     "topic": "The Roman Empire",
+     "topic": "The Roman Republic",
      "difficulty": "hard"
     },
     {
@@ -1160,7 +1160,9 @@
      "answer": "Augustus",
      "accept": [
       "Octavian",
-      "Caesar Augustus"
+      "Caesar Augustus",
+      "Augustus Caesar",
+      "Octavius"
      ],
      "explanation": "Octavian took the title Augustus after defeating his rivals, becoming Rome's first emperor and beginning the Pax Romana.",
      "topic": "The Roman Empire",
@@ -1686,7 +1688,9 @@
      "answer": "Judea",
      "accept": [
       "Roman Judea",
-      "Judaea"
+      "Judaea",
+      "Palestine",
+      "Roman Palestine"
      ],
      "explanation": "Christianity began in the 1st century CE in Judea, a province of the Roman Empire in the Middle East.",
      "topic": "Christianity",
@@ -1735,12 +1739,15 @@
     {
      "id": "wh-u3-q29",
      "type": "written",
-     "prompt": "What Hindu and Buddhist belief holds that the soul is reborn into a new body after death?",
+     "prompt": "What Hindu belief holds that the soul is reborn into a new body after death?",
      "answer": "Reincarnation",
      "accept": [
-      "rebirth"
+      "rebirth",
+      "transmigration",
+      "transmigration of the soul",
+      "transmigration of souls"
      ],
-     "explanation": "Reincarnation is the belief that the soul is reborn into a new body after death, shaped by the person's past actions.",
+     "explanation": "Reincarnation is the Hindu belief that the soul is reborn into a new body after death, shaped by the person's past actions (karma). Buddhism also teaches rebirth, but without a permanent soul.",
      "topic": "Hinduism",
      "difficulty": "medium"
     },
@@ -2069,7 +2076,10 @@
       "The Hagia Sofia",
       "Ayasofya",
       "Aya Sofya",
-      "Church of Holy Wisdom"
+      "Church of Holy Wisdom",
+      "Church of the Holy Wisdom",
+      "The Church of the Holy Wisdom",
+      "Holy Wisdom"
      ],
      "explanation": "Justinian had the Hagia Sophia built (finished in 537). Its huge dome made it the masterpiece of Byzantine architecture.",
      "topic": "Byzantine Empire",
@@ -2989,7 +2999,10 @@
       "Heliocentric model",
       "Heliocentric",
       "Heliocentric system",
-      "Heliocentric view"
+      "Heliocentric view",
+      "Copernican theory",
+      "Copernican model",
+      "Copernican system"
      ],
      "explanation": "This theory, proposed by Copernicus, replaced the earlier Earth-centered (geocentric) model of the universe.",
      "topic": "Scientific Revolution",
@@ -3005,7 +3018,9 @@
       "Universal gravitation",
       "Gravitational force",
       "Force of gravity",
-      "Law of universal gravitation"
+      "Law of universal gravitation",
+      "Gravitational pull",
+      "Law of gravity"
      ],
      "explanation": "Newton's law of universal gravitation explained that gravity is an attractive force acting between all masses, including planets and falling objects.",
      "topic": "Scientific Revolution",
@@ -3621,7 +3636,7 @@
   {
    "id": "wh-u7",
    "unit": 7,
-   "title": "Unit 7: Enlightenment and Revolutions",
+   "title": "Enlightenment and Revolutions",
    "summary": "Enlightenment thinkers like Locke, Montesquieu, Rousseau, and Voltaire introduced new ideas about natural rights and government that helped spark revolutions in France, Haiti, and Latin America. This unit also covers Napoleon's rise and fall and how the Industrial Revolution transformed how and where people worked.",
    "topics": [
     "Enlightenment Ideas",
@@ -4197,7 +4212,7 @@
   {
    "id": "wh-u8",
    "unit": 8,
-   "title": "Unit 8: Imperialism and the World Wars",
+   "title": "Imperialism and the World Wars",
    "summary": "This unit traces the path from European imperialism in Africa through the two world wars to the founding of the United Nations, examining how competition for colonies, rigid alliances, and harsh peace terms repeatedly pushed the world toward catastrophic conflict. Students explore the human cost of total war, revolution, and genocide, and the postwar effort to build lasting international cooperation.",
    "topics": [
     "Imperialism and the Scramble for Africa",
@@ -4813,7 +4828,7 @@
   {
    "id": "wh-u9",
    "unit": 9,
-   "title": "Unit 9: The Modern World",
+   "title": "The Modern World",
    "summary": "This unit covers the ideological rivalry of the Cold War, the wave of decolonization across Africa and Asia, and transformative changes in China, South Africa, and the Soviet Union. Students will also see how globalization reshaped the interconnected world that emerged from these late-20th-century events.",
    "topics": [
     "The Cold War",

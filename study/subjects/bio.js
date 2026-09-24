@@ -261,7 +261,7 @@
     {
      "id": "bio-u1-q8",
      "type": "mc",
-     "prompt": "All of the frogs living in the same pond at the same time are best described as a:",
+     "prompt": "All of the bullfrogs living in the same pond at the same time are best described as a:",
      "options": [
       "Community",
       "Population",
@@ -269,7 +269,7 @@
       "Biosphere"
      ],
      "answer": "Population",
-     "explanation": "A population consists of all the members of a single species living in the same area at the same time; here that species is frogs.",
+     "explanation": "A population consists of all the members of a single species living in the same area at the same time; here that species is the bullfrog.",
      "topic": "Levels of Organization",
      "difficulty": "medium"
     },
@@ -502,7 +502,9 @@
      "type": "written",
      "prompt": "What term describes an organism's maintenance of stable internal conditions despite changes in its external environment?",
      "answer": "Homeostasis",
-     "accept": [],
+     "accept": [
+      "homoeostasis"
+     ],
      "explanation": "Homeostasis is the regulation of a stable internal environment, such as temperature or water balance, even as outside conditions change.",
      "topic": "Characteristics of Life",
      "difficulty": "easy"
@@ -529,8 +531,13 @@
      "accept": [
       "temp",
       "the temperature",
+      "temperatures",
       "water temperature",
-      "water bath temperature"
+      "the water temperature",
+      "water temperatures",
+      "temperature of the water",
+      "water bath temperature",
+      "water bath temperatures"
      ],
      "explanation": "The independent variable is the factor the experimenter deliberately changes. Here the student sets each water bath to a different temperature.",
      "topic": "Experimental Design",
@@ -600,7 +607,7 @@
   {
    "id": "bio-u2",
    "unit": 2,
-   "title": "Unit 2: The Chemistry of Life",
+   "title": "The Chemistry of Life",
    "summary": "This unit explores the chemistry that underlies all living things, from atoms and chemical bonds to water's life-sustaining properties and the pH scale. Students also learn how the four macromolecules and enzymes work together to build and power living cells.",
    "topics": [
     "Atoms and Elements",
@@ -738,7 +745,7 @@
     },
     {
      "term": "Denaturation",
-     "definition": "A permanent change in a protein's shape caused by heat or extreme pH that stops it from working.",
+     "definition": "A change in a protein's shape, caused by factors such as high heat or extreme pH, that stops it from working; the change is usually permanent.",
      "topic": "Enzymes and Reactions"
     }
    ],
@@ -1107,7 +1114,8 @@
      "prompt": "What is the general term for a small repeating unit that links together with others to build a larger macromolecule?",
      "answer": "Monomer",
      "accept": [
-      "monomers"
+      "monomers",
+      "a monomer"
      ],
      "explanation": "Monomers are the individual building-block units that bond together in repeating chains to form polymers.",
      "topic": "Macromolecules",
@@ -2019,13 +2027,13 @@
      "type": "mc",
      "prompt": "Which of the following is an example of facilitated diffusion?",
      "options": [
-      "Glucose moving through a channel protein down its gradient",
+      "Glucose moving through a carrier protein down its gradient",
       "Sodium being pumped against its gradient by a protein pump",
       "A white blood cell engulfing a bacterium",
       "A vesicle releasing hormones outside the cell"
      ],
-     "answer": "Glucose moving through a channel protein down its gradient",
-     "explanation": "Facilitated diffusion is passive movement with the concentration gradient through a protein channel, unlike the other options which involve energy use or bulk transport.",
+     "answer": "Glucose moving through a carrier protein down its gradient",
+     "explanation": "Facilitated diffusion is passive movement down the concentration gradient through a transport protein (a carrier or channel protein). The other options involve energy use or bulk transport.",
      "topic": "Passive Transport",
      "difficulty": "medium"
     },
@@ -2296,7 +2304,9 @@
      "type": "written",
      "prompt": "What term describes the passive movement of particles from an area of high concentration to an area of low concentration?",
      "answer": "Diffusion",
-     "accept": [],
+     "accept": [
+      "Simple diffusion"
+     ],
      "explanation": "Diffusion describes particles spreading out from high to low concentration without using cellular energy.",
      "topic": "Passive Transport",
      "difficulty": "easy"
@@ -2309,7 +2319,10 @@
      "accept": [
       "Pump protein",
       "protein pumps",
-      "Pump protein (active transport)"
+      "Pump protein (active transport)",
+      "pump",
+      "membrane pump",
+      "active transport pump"
      ],
      "explanation": "A protein pump uses ATP energy to move ions or molecules against their concentration gradient.",
      "topic": "Active Transport",
@@ -2733,7 +2746,14 @@
       "6CO2",
       "6 CO2",
       "6CO₂",
-      "6 CO₂"
+      "6 CO₂",
+      "6 molecules",
+      "six molecules",
+      "6 carbon dioxide",
+      "six carbon dioxide",
+      "6 carbon dioxide molecules",
+      "six carbon dioxide molecules",
+      "6 CO2 molecules"
      ],
      "explanation": "The balanced equation is C6H12O6 + 6O2 → 6CO2 + 6H2O + energy. Glucose's six carbon atoms end up in six CO2 molecules.",
      "topic": "Cellular Respiration Overview",
@@ -3125,7 +3145,7 @@
       "Telophase"
      ],
      "answer": "Metaphase",
-     "explanation": "Metaphase gets its name from chromosomes aligning at the cell's \"middle\" (the metaphase plate) before they are pulled apart.",
+     "explanation": "In metaphase, spindle fibers line the chromosomes up along the cell's middle (the metaphase plate) before they are pulled apart. A handy memory trick: M for metaphase, M for middle.",
      "topic": "Mitosis",
      "difficulty": "easy"
     },
@@ -3185,7 +3205,11 @@
       "Gap 1",
       "Gap 1 phase",
       "gap one",
-      "first gap phase"
+      "first gap phase",
+      "first growth phase",
+      "growth 1",
+      "growth phase 1",
+      "first growth stage"
      ],
      "explanation": "After division ends, each new cell starts the cycle over in G1, the first growth stage of interphase, before moving on to S and G2.",
      "topic": "Cell Cycle",
@@ -4686,7 +4710,7 @@
   {
    "id": "bio-u9",
    "unit": 9,
-   "title": "Unit 9: Evolution",
+   "title": "Evolution",
    "summary": "Explore how Charles Darwin's observations on the Galápagos Islands led to the theory of natural selection, and see how variation, overproduction, competition, adaptation, and fitness drive change in populations over time. Learn to interpret fossils, homologous, analogous, and vestigial structures, embryology, and DNA as evidence for evolution. Discover how new species form through speciation and how genetic drift and gene flow change the genetic makeup of populations.",
    "topics": [
     "Darwin and the Galápagos",

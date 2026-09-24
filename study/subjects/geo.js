@@ -138,7 +138,7 @@
     },
     {
      "term": "Angle Addition Postulate",
-     "definition": "If a ray lies in the interior of an angle, the two smaller angles it creates sum to the whole angle's measure",
+     "definition": "If a ray from the vertex lies in the interior of an angle, the two smaller angles it creates sum to the whole angle's measure",
      "topic": "Bisectors & Addition Postulates"
     },
     {
@@ -522,7 +522,9 @@
       "a line",
       "A straight line",
       "straight line",
-      "Lines"
+      "Lines",
+      "one line",
+      "exactly one line"
      ],
      "explanation": "A basic postulate of geometry states that if two distinct planes intersect, their intersection is exactly one line, like where a wall meets the floor.",
      "topic": "Points, Lines & Planes",
@@ -1026,7 +1028,14 @@
       "it did not snow today",
       "no snow",
       "did not snow",
-      "it does not snow"
+      "it does not snow",
+      "it didn't snow",
+      "it didn't snow today",
+      "didn't snow",
+      "it was not snowing",
+      "it wasn't snowing",
+      "not snowing",
+      "no snow today"
      ],
      "explanation": "The contrapositive is \"If school is not canceled, then it did not snow,\" so since school was not canceled, it did not snow.",
      "topic": "Related Conditionals",
@@ -1081,7 +1090,9 @@
      "prompt": "Joining a true conditional and its true converse with \"if and only if\" creates what type of statement? Answer in one word.",
      "answer": "biconditional",
      "accept": [
-      "biconditional statement"
+      "biconditional statement",
+      "bi-conditional",
+      "bi-conditional statement"
      ],
      "explanation": "When a true conditional and its true converse are combined with \"if and only if,\" the result is called a biconditional statement.",
      "topic": "Biconditional Statements",
@@ -1210,7 +1221,9 @@
      "answer": "Given",
      "accept": [
       "the given",
-      "given statement"
+      "given statement",
+      "given information",
+      "given info"
      ],
      "explanation": "A two-column proof typically begins with the \"Given\" information as its first statement.",
      "topic": "Two-Column Proofs",
@@ -1867,7 +1880,7 @@
   {
    "id": "geo-u4",
    "unit": 4,
-   "title": "Unit 4: Triangles and Congruence",
+   "title": "Triangles and Congruence",
    "summary": "This unit covers how to classify triangles by their sides and angles and how to use the Triangle Angle-Sum and Exterior Angle Theorems. It explains what congruent figures are and how to prove two triangles congruent using SSS, SAS, ASA, AAS and HL, and why SSA and AAA fall short. Students then use CPCTC to show that the remaining corresponding parts are congruent, and learn the angle relationships in isosceles and equilateral triangles.",
    "topics": [
     "Classifying Triangles",
@@ -2412,7 +2425,13 @@
       "Side Angle Side",
       "side-angle-side",
       "side angle side",
-      "SAS Postulate"
+      "SAS Postulate",
+      "SAS Theorem",
+      "SAS Congruence",
+      "SAS Congruence Postulate",
+      "SAS Congruence Theorem",
+      "Side-Angle-Side Postulate",
+      "Side-Angle-Side Congruence Theorem"
      ],
      "explanation": "Two sides and the angle between them (the included angle) match the Side-Angle-Side (SAS) criterion.",
      "topic": "Triangle Congruence Postulates",
@@ -2430,7 +2449,11 @@
       "Hypotenuse Leg",
       "Hypotenuse Leg Theorem",
       "hypotenuse-leg",
-      "hypotenuse leg"
+      "hypotenuse leg",
+      "HL Congruence",
+      "HL Congruence Theorem",
+      "Hypotenuse-Leg Congruence Theorem",
+      "Hypotenuse Leg Congruence Theorem"
      ],
      "explanation": "The Hypotenuse-Leg (HL) theorem is a congruence shortcut that applies only to right triangles.",
      "topic": "Triangle Congruence Postulates",
@@ -2486,7 +2509,7 @@
   {
    "id": "geo-u5",
    "unit": 5,
-   "title": "Unit 5: Relationships in Triangles and Similarity",
+   "title": "Relationships in Triangles and Similarity",
    "summary": "Explore the special segments and points of concurrency in triangles—midsegments, bisectors, medians, and altitudes—and see how the Triangle Inequality Theorem controls which side lengths can form a triangle. Then extend proportional reasoning to similar polygons, applying AA, SSS, and SAS similarity to solve scale-factor and indirect-measurement problems.",
    "topics": [
     "Midsegments",
@@ -3147,7 +3170,7 @@
   {
    "id": "geo-u6",
    "unit": 6,
-   "title": "Unit 6: Right Triangles and Trigonometry",
+   "title": "Right Triangles and Trigonometry",
    "summary": "Learn to find missing sides of right triangles with the Pythagorean Theorem and its converse, and recognize the special 45-45-90 and 30-60-90 triangle ratios. Then use sine, cosine, tangent, and their inverses to solve for unknown sides and angles, including real-world elevation and depression problems.",
    "topics": [
     "Pythagorean Theorem",
@@ -4328,7 +4351,7 @@
   {
    "id": "geo-u8",
    "unit": 8,
-   "title": "Unit 8: Transformations",
+   "title": "Transformations",
    "summary": "Explore how translations, reflections, rotations, and dilations move and resize figures on the coordinate plane, including the rules that describe them algebraically. Learn which transformations preserve distance and angle measure (isometries), how to combine multiple transformations, and how symmetry connects to these motions.",
    "topics": [
     "Translations",
@@ -4952,7 +4975,7 @@
   {
    "id": "geo-u9",
    "unit": 9,
-   "title": "Unit 9: Circles",
+   "title": "Circles",
    "summary": "Explore the parts and language of circles — radii, chords, secants, tangents, and arcs — and see how central and inscribed angles connect to the arcs they intercept. Practice computing circumference, arc length, circle and sector area, and writing a circle's equation from its center and radius.",
    "topics": [
     "Circle Parts & Vocabulary",

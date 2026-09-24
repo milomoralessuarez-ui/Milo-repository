@@ -394,7 +394,10 @@
      "type": "written",
      "prompt": "What term describes a crop grown mainly to be sold for profit, such as tobacco or rice?",
      "answer": "Cash crop",
-     "accept": [],
+     "accept": [
+      "cash crops",
+      "a cash crop"
+     ],
      "explanation": "A cash crop is raised for sale rather than for the farmer's own use, and tobacco and rice were the South's chief cash crops.",
      "topic": "Colonial Regions & Economies",
      "difficulty": "medium"
@@ -576,14 +579,14 @@
      "type": "mc",
      "prompt": "What was one major effect of the Treaty of Paris (1763), which ended the French and Indian War?",
      "options": [
-      "France ceded nearly all of its North American territory to Britain",
+      "France ceded Canada and its lands east of the Mississippi River to Britain",
       "France gained control of Virginia and the Carolinas",
       "Britain returned Canada to France",
       "Spain lost all of its colonies in the Americas"
      ],
-     "answer": "France ceded nearly all of its North American territory to Britain",
+     "answer": "France ceded Canada and its lands east of the Mississippi River to Britain",
      "accept": [],
-     "explanation": "The Treaty of Paris (1763) ended French power on the mainland, as France gave up nearly all its North American territory to Britain.",
+     "explanation": "In the Treaty of Paris (1763), France gave Canada and its lands east of the Mississippi River to Britain (Louisiana west of the Mississippi had gone to Spain), ending French power on the North American mainland.",
      "topic": "The French and Indian War",
      "difficulty": "hard"
     },
@@ -1128,7 +1131,9 @@
       "Common Sense (Thomas Paine)",
       "Paine's Common Sense",
       "Thomas Paine's Common Sense",
-      "Commonsense"
+      "Commonsense",
+      "Common Sense by Thomas Paine",
+      "Common Sense by Paine"
      ],
      "explanation": "Thomas Paine's pamphlet Common Sense used direct, accessible language to persuade ordinary colonists to support independence.",
      "topic": "Road to War",
@@ -2352,7 +2357,13 @@
       "the 36 30 line",
       "the 36°30' line",
       "36.5",
-      "36.5 degrees"
+      "36.5 degrees",
+      "36 30 N",
+      "36 30 north",
+      "36°30' north latitude",
+      "36 30 north latitude",
+      "36 degrees 30 minutes north latitude",
+      "36.5 degrees north"
      ],
      "explanation": "The compromise drew the line at 36°30' north latitude (36.5°). It prohibited slavery in Louisiana Purchase land above that line, except in Missouri.",
      "topic": "Sectional Compromises",
@@ -3649,7 +3660,7 @@
   {
    "id": "ush-u7",
    "unit": 7,
-   "title": "Unit 7: World War I and the 1920s",
+   "title": "World War I and the 1920s",
    "summary": "This unit covers the causes and course of World War I — from militarism, alliances, imperialism, and nationalism to the Lusitania, the Zimmermann Telegram, and U.S. entry in 1917 — through Wilson's Fourteen Points, the League of Nations, and the Treaty of Versailles. It then follows America into the 1920s, tracing the cultural energy of the Roaring Twenties and the Harlem Renaissance alongside Prohibition and the stock market crash of 1929.",
    "topics": [
     "Causes of World War I",
@@ -4228,7 +4239,7 @@
   {
    "id": "ush-u8",
    "unit": 8,
-   "title": "Unit 8: The Great Depression and World War II",
+   "title": "The Great Depression and World War II",
    "summary": "This unit covers the economic collapse and human hardship of the Great Depression, FDR's New Deal response, and America's path through World War II from Pearl Harbor to Japan's surrender. Students will learn the key causes, turning points, and consequences of both crises, including the Holocaust and the dawn of the atomic age.",
    "topics": [
     "Causes of the Depression",
@@ -4892,7 +4903,7 @@
   {
    "id": "ush-u9",
    "unit": 9,
-   "title": "Unit 9: The Cold War and Civil Rights",
+   "title": "The Cold War and Civil Rights",
    "summary": "This unit explores how the United States confronted the spread of communism abroad through containment, alliances, and proxy conflicts from Korea to Vietnam, while grappling with fears of subversion at home. It also traces the fight for racial equality, from Brown v. Board through landmark civil rights legislation, alongside the political crisis of Watergate and the Cold War's eventual end.",
    "topics": [
     "Containment & Cold War Origins",

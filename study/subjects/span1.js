@@ -257,7 +257,7 @@
     {
      "id": "span1-u1-q8",
      "type": "mc",
-     "prompt": "Which phrase correctly completes the sentence: \"Me llamo Ana. ¿Cómo ___?\"",
+     "prompt": "You meet a new classmate your own age and want to find out their name. Which phrase correctly completes the sentence: \"Me llamo Ana. ¿Cómo ___?\"",
      "options": [
       "te llamas",
       "se llama usted",
@@ -265,7 +265,7 @@
       "estás"
      ],
      "answer": "te llamas",
-     "explanation": "Te llamas is the informal way to ask someone's name, matching the informal, friendly tone of the sentence.",
+     "explanation": "¿Cómo te llamas? is the informal way to ask someone's name, which fits a classmate your own age. ¿Cómo se llama usted? is the formal version, and ¿Cómo estás? / ¿Cómo está usted? ask how someone is, not their name.",
      "topic": "Introductions",
      "difficulty": "medium"
     },
@@ -317,7 +317,7 @@
     {
      "id": "span1-u1-q12",
      "type": "mc",
-     "prompt": "Which phrase would you say to a friend you expect to see again tomorrow?",
+     "prompt": "Which farewell specifically means \"See you tomorrow\"?",
      "options": [
       "Hasta mañana",
       "Hasta luego",
@@ -325,7 +325,7 @@
       "De nada"
      ],
      "answer": "Hasta mañana",
-     "explanation": "Hasta mañana specifically means 'see you tomorrow,' fitting a next-day meeting.",
+     "explanation": "Hasta mañana specifically means 'see you tomorrow' (mañana = tomorrow), while hasta luego is a general 'see you later' with no set time.",
      "topic": "Farewells",
      "difficulty": "medium"
     },
@@ -538,7 +538,13 @@
      "type": "written",
      "prompt": "Translate to Spanish: \"See you later\"",
      "answer": "Hasta luego",
-     "accept": [],
+     "accept": [
+      "Nos vemos",
+      "Nos vemos luego",
+      "Nos vemos más tarde",
+      "Hasta más tarde",
+      "Hasta la vista"
+     ],
      "explanation": "Hasta luego is the common phrase for 'see you later,' used without specifying an exact time.",
      "topic": "Farewells",
      "difficulty": "easy"
@@ -552,9 +558,12 @@
       "What's your name?",
       "what is your name",
       "whats your name",
-      "What is your name"
+      "What is your name",
+      "What are you called?",
+      "How do you call yourself?",
+      "What do you call yourself?"
      ],
-     "explanation": "¿Cómo te llamas? is the informal way to ask 'What is your name?' in Spanish.",
+     "explanation": "¿Cómo te llamas? is the informal way to ask 'What is your name?' in Spanish (literally 'How do you call yourself?').",
      "topic": "Introductions",
      "difficulty": "medium"
     },
@@ -568,9 +577,15 @@
       "como estas",
       "Cómo estás",
       "Como estás?",
-      "¿Como estas?"
+      "¿Como estas?",
+      "¿Cómo estás tú?",
+      "Como estas tu",
+      "¿Qué tal?",
+      "Que tal",
+      "¿Cómo te sientes?",
+      "Como te sientes"
      ],
-     "explanation": "¿Cómo estás? is the informal question used with friends and peers to ask how someone is feeling.",
+     "explanation": "¿Cómo estás? is the informal question used with friends and peers to ask how someone is feeling; ¿Qué tal? is another common informal option.",
      "topic": "Well-Being",
      "difficulty": "medium"
     },
@@ -604,7 +619,7 @@
   {
    "id": "span1-u2",
    "unit": 2,
-   "title": "Unit 2: Numbers, Dates and Time",
+   "title": "Numbers, Dates and Time",
    "summary": "Learn to count from 0 to 100, name the days, months, and seasons, and give the date in Spanish. Practice asking and telling time, including half-past and quarter-to expressions like y media and menos cuarto.",
    "topics": [
     "Numbers 0-100",
@@ -784,7 +799,7 @@
     {
      "id": "span1-u2-q4",
      "type": "mc",
-     "prompt": "¿Cuál es el primer día de la semana en un calendario hispanohablante?",
+     "prompt": "¿Cuál es el primer día de la semana en un calendario de España?",
      "options": [
       "lunes",
       "domingo",
@@ -792,7 +807,7 @@
       "sábado"
      ],
      "answer": "lunes",
-     "explanation": "Spanish-language calendars typically list lunes (Monday) as the first day of the week, unlike U.S. calendars that start with Sunday.",
+     "explanation": "Calendars in Spain (and in several other Spanish-speaking countries) list lunes (Monday) as the first day of the week, unlike U.S. calendars that start with Sunday.",
      "topic": "Days of the Week",
      "difficulty": "easy"
     },
@@ -892,12 +907,12 @@
      "prompt": "Which is the correct way to say 'the first of April' in Spanish?",
      "options": [
       "el primero de abril",
-      "el uno de abril",
+      "el primera de abril",
       "el primer de abril",
-      "el uno de marzo"
+      "el primero de marzo"
      ],
      "answer": "el primero de abril",
-     "explanation": "Unlike other days of the month, which use cardinal numbers (dos, tres...), the first day uses the ordinal el primero.",
+     "explanation": "Other days of the month use cardinal numbers (el dos, el tres...), but the first day is usually el primero (masculine, because it refers to el día). You may also hear el uno de abril, especially in Spain.",
      "topic": "Asking and Giving the Date",
      "difficulty": "hard"
     },
@@ -1070,13 +1085,13 @@
     {
      "id": "span1-u2-q24",
      "type": "tf",
-     "prompt": "In most Spanish-speaking countries, calendars show the week starting on Sunday, just as in the United States.",
+     "prompt": "In Spain, calendars show the week starting on Sunday, just as in the United States.",
      "options": [
       "True",
       "False"
      ],
      "answer": "False",
-     "explanation": "Spanish-language calendars typically start the week on lunes (Monday) rather than Sunday.",
+     "explanation": "Calendars in Spain (and in several other Spanish-speaking countries) start the week on lunes (Monday), not Sunday.",
      "topic": "Days of the Week",
      "difficulty": "medium"
     },
@@ -1128,9 +1143,11 @@
      "prompt": "Following the pattern of 'el 5 de mayo', how do you write the date for March 10th in Spanish?",
      "answer": "el diez de marzo",
      "accept": [
-      "diez de marzo"
+      "diez de marzo",
+      "el 10 de marzo",
+      "10 de marzo"
      ],
-     "explanation": "Spanish dates follow el + number + de + month, so March 10th is el diez de marzo.",
+     "explanation": "Spanish dates follow el + number + de + month, so March 10th is el diez de marzo (el 10 de marzo).",
      "topic": "Asking and Giving the Date",
      "difficulty": "medium"
     },
@@ -1139,8 +1156,10 @@
      "type": "written",
      "prompt": "It is exactly 2:00. Write the Spanish phrase for this time.",
      "answer": "Son las dos",
-     "accept": [],
-     "explanation": "Two o'clock uses the plural son with las, giving Son las dos.",
+     "accept": [
+      "Son las dos en punto"
+     ],
+     "explanation": "Two o'clock uses the plural son with las, giving Son las dos (or Son las dos en punto for 'exactly').",
      "topic": "Telling Time",
      "difficulty": "medium"
     },
@@ -1745,9 +1764,11 @@
      "answer": "Levántense",
      "accept": [
       "levantense",
-      "Levantense"
+      "Levantense",
+      "Pónganse de pie",
+      "ponganse de pie"
      ],
-     "explanation": "'Levántense' is the plural command form of 'levantarse' (to stand up).",
+     "explanation": "'Levántense' is the plural command form of 'levantarse' (to stand up). 'Pónganse de pie' is another common way to say it.",
      "topic": "Classroom Commands",
      "difficulty": "medium"
     },
@@ -1782,7 +1803,7 @@
   {
    "id": "span1-u4",
    "unit": 4,
-   "title": "Unit 4: Describing People with Ser",
+   "title": "Describing People with Ser",
    "summary": "Learn the Spanish subject pronouns and master the irregular verb ser to describe people's personalities and physical traits. Practice matching adjectives to nouns in gender and number and asking ¿Cómo es...? to request a description.",
    "topics": [
     "Subject Pronouns",
@@ -2299,7 +2320,10 @@
      "explanation": "\"Perezoso\" is the masculine singular adjective meaning \"lazy\"; add -a for the feminine form.",
      "topic": "Personality Adjectives",
      "difficulty": "medium",
-     "accept": []
+     "accept": [
+      "flojo",
+      "vago"
+     ]
     },
     {
      "id": "span1-u4-q28",
@@ -4030,7 +4054,7 @@
   {
    "id": "span1-u8",
    "unit": 8,
-   "title": "Unit 8: Places, Estar and Ir",
+   "title": "Places, Estar and Ir",
    "summary": "Learn vocabulary for common places around town while mastering the irregular verbs estar and ir in the present tense. Practice choosing between ser and estar, building ir a + infinitivo to talk about future plans, and using the contractions al and del.",
    "topics": [
     "Places in Town",
