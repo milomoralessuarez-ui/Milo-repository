@@ -506,6 +506,48 @@ kbd {
 }
 @keyframes floatUp { from { opacity: 0; transform: translate(-50%, -30%) scale(.8); } 30% { opacity: 1; } to { opacity: 0; transform: translate(-50%, -90%) scale(1.15); } }
 
+/* ---------- race ---------- */
+.track {
+  display: grid; gap: 8px;
+  padding: 14px 16px; border-radius: 18px;
+  background: var(--surface); border: 1px solid var(--line-soft);
+}
+.lane { display: grid; grid-template-columns: minmax(84px, 120px) 1fr; align-items: center; gap: 10px; }
+.lane-name { font-weight: 700; font-size: .88rem; color: var(--text-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lane.me .lane-name { color: var(--text); }
+.lane-track {
+  position: relative; height: 42px; border-radius: 12px;
+  border: 1px solid var(--line-soft);
+  /* dashed centre line, like road markings */
+  background:
+    linear-gradient(90deg, var(--line) 50%, transparent 0) 0 50% / 22px 2px repeat-x,
+    var(--surface-2);
+}
+.lane.me .lane-track { border-color: var(--brand); box-shadow: 0 0 0 1px var(--brand) inset; }
+.lane.finished .lane-track { border-color: var(--good); }
+/* Car emoji face left on most platforms; flip them toward the flag. */
+.racer {
+  position: absolute; top: 50%; left: 0;
+  font-size: 1.65rem; line-height: 1; width: 2.2rem; text-align: center;
+  transform: translateY(-50%) scaleX(-1);
+  transition: left .45s cubic-bezier(.2, .8, .2, 1);
+}
+.flag { position: absolute; right: 6px; top: 50%; transform: translateY(-50%); font-size: 1.15rem; opacity: .85; }
+/* On a phone the track has to leave room for the question below it, so the
+   lanes stay single-row with a narrow name column rather than stacking. */
+@media (max-width: 520px) {
+  .track { gap: 6px; padding: 10px 12px; }
+  .lane { grid-template-columns: 58px 1fr; gap: 8px; }
+  .lane-name { font-size: .72rem; }
+  .lane-track { height: 34px; }
+  .racer { font-size: 1.35rem; width: 1.9rem; }
+}
+
+/* ---------- mistakes ---------- */
+.term-row.mistake-row { grid-template-columns: 1fr auto; }
+.term-row.mistake-row b { font-weight: 600; }
+@media (max-width: 640px) { .term-row.mistake-row { grid-template-columns: 1fr; } }
+
 /* ---------- study guide ---------- */
 .guide-topic { margin-top: 22px; }
 .guide-topic h3 { font-size: 1.05rem; color: var(--brand-2); margin-bottom: 10px; }

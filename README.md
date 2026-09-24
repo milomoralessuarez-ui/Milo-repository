@@ -83,8 +83,10 @@ method. Open `study/index.html` (or `/study/` on the deployed site).
 | **Flashcards** | Flip through every term; sort into "know" / "still learning", star the hard ones |
 | **Learn** | Adaptive rounds of multiple choice, true/false and typed answers until every item is mastered |
 | **Test** | Graded practice test (10 / 20 / 30 / all questions) with an explanation for each question |
+| **Mistakes** | Everything you have missed in any mode, reviewed until you get each one right |
 | **Match** | Race the clock pairing terms with definitions |
 | **Gold Quest** | Blooket-style: answer to open chests, swap or steal gold, beat the bots |
+| **Race** | Blooket-style: each right answer drives your car forward; beat four bots to the flag |
 | **Blitz** | Rapid-fire questions where speed and streaks multiply your score |
 | **Study guide** | Every term and question with its answer, grouped by topic and searchable |
 

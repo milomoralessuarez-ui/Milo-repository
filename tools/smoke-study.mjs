@@ -66,6 +66,28 @@ const answerOne = async (typed = 'x') => {
   }
   return false;
 };
+/** Pick the right option for whatever question is showing, using the data
+    itself, so a check can prove that a correct answer is rewarded. */
+const answerCorrectly = async () => {
+  const want = await page.evaluate(() => {
+    const prompt = document.querySelector('.q-card .q-prompt')?.textContent.trim();
+    if (!prompt) return null;
+    for (const s of window.STUDY_SETS) {
+      const q = s.questions.find((x) => x.prompt === prompt);
+      if (q) return q.answer;
+      const byTerm = s.terms.find((t) => t.term === prompt);
+      if (byTerm) return byTerm.definition;
+      const byDef = s.terms.find((t) => t.definition === prompt);
+      if (byDef) return byDef.term;
+    }
+    return null;
+  });
+  if (want == null) return false;
+  const opt = page.locator('.opt:not([disabled])').filter({ has: page.locator(`text="${want.replace(/"/g, '\\"')}"`) }).first();
+  if (!(await opt.count())) return false;
+  await opt.click();
+  return true;
+};
 /** Click the continue/next button a mode shows after feedback, if present. */
 const advance = async () => {
   const next = page.locator('.q-card .row .btn.primary, .panel > .row .btn.primary').first();
@@ -135,6 +157,31 @@ await check('test', async () => {
   if (!(await page.locator('.score-ring').count())) fail('no score shown after submitting');
 });
 
+await check('mistakes', async () => {
+  // The Test check above answered every question with its first option, so
+  // most of those were wrong — they should be waiting here.
+  await go(`/set/${target}/mistakes`);
+  const heading = await page.locator('.panel h2').first().textContent().catch(() => '');
+  const n = Number((heading.match(/(\d+) to review/) || [])[1] || 0);
+  if (!n) return fail(`wrong answers from the Test did not reach the Mistakes list (heading: ${JSON.stringify(heading)})`);
+  await page.locator('.panel .btn.primary.lg').first().click();
+  await page.waitForTimeout(250);
+  let cleared = 0;
+  for (let i = 0; i < 6; i++) {
+    if (await page.locator('.game-intro h2').count()) break;
+    const ok = await answerCorrectly();
+    if (!ok && !(await answerOne())) { fail(`no question to answer on review step ${i + 1}`); break; }
+    if (ok) cleared++;
+    await page.waitForTimeout(200);
+    await page.locator('.q-card .row .btn.primary').first().click().catch(() => {});
+    await page.waitForTimeout(150);
+  }
+  await go(`/set/${target}/mistakes`);
+  const after = await page.locator('.panel h2').first().textContent().catch(() => '');
+  const m = Number((after.match(/(\d+) to review/) || [])[1] || 0);
+  if (cleared && m >= n) fail(`answered ${cleared} correctly but the list stayed at ${m} (was ${n})`);
+});
+
 await check('match', async () => {
   await go(`/set/${target}/match`);
   await page.click('text=Start game');
@@ -172,6 +219,29 @@ await check('gold quest', async () => {
   if (!opened) fail('never reached a chest after answering correctly');
 });
 
+await check('race', async () => {
+  await go(`/set/${target}/race`);
+  await page.click('text=Start race');
+  const lanes = await page.locator('.lane').count();
+  if (lanes !== 5) return fail(`expected 5 lanes (you and four bots), found ${lanes}`);
+  const posOf = async () => Number(((await page.locator('#r-pos').textContent()) || '0').split('/')[0]);
+  let moved = false;
+  for (let i = 0; i < 6 && !moved; i++) {
+    const before = await posOf();
+    if (await answerCorrectly()) {
+      await page.waitForTimeout(300);
+      if ((await posOf()) > before) moved = true;
+      else fail('a correct answer did not move the car');
+    } else {
+      await answerOne();
+      await page.waitForTimeout(200);
+      await advance();
+    }
+    await page.waitForTimeout(500);
+  }
+  if (!moved) fail('never managed a correct answer to test movement');
+});
+
 await check('blitz', async () => {
   await go(`/set/${target}/blitz`);
   await page.click('text=Go!');
@@ -196,7 +266,7 @@ await check('study guide', async () => {
 
 await check('phone width', async () => {
   await page.setViewportSize({ width: 390, height: 844 });
-  for (const mode of ['', '/flashcards', '/learn', '/test', '/match', '/guide']) {
+  for (const mode of ['', '/flashcards', '/learn', '/test', '/mistakes', '/match', '/race', '/guide']) {
     await go(`/set/${target}${mode}`);
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1);
     if (overflow) fail(`horizontal scroll at 390px on "${mode || 'set page'}"`);

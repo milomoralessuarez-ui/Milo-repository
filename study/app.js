@@ -76,8 +76,8 @@ const KEY = 'chemquest:v1';
 function loadState() { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch { return {}; } }
 /** Fill in anything a payload from an older version is missing. */
 function hydrate(raw) {
-  const s = Object.assign({ theme: '', sound: true, starred: {}, mastery: {}, best: {}, stats: {}, prefs: {} }, raw || {});
-  for (const k of ['starred', 'mastery', 'best', 'prefs', 'stats']) {
+  const s = Object.assign({ theme: '', sound: true, starred: {}, mastery: {}, missed: {}, best: {}, stats: {}, prefs: {} }, raw || {});
+  for (const k of ['starred', 'mastery', 'missed', 'best', 'prefs', 'stats']) {
     if (!s[k] || typeof s[k] !== 'object') s[k] = {};
   }
   s.stats.answered = Number(s.stats.answered) || 0;
@@ -95,6 +95,7 @@ window.addEventListener('storage', (e) => {
   const incoming = hydrate(JSON.parse(e.newValue || '{}'));
   state.starred = incoming.starred;
   state.mastery = incoming.mastery;
+  state.missed = incoming.missed;
   state.best = incoming.best;
   state.stats = incoming.stats;
 });
@@ -103,7 +104,8 @@ function bumpMastery(id, correct) {
   const m = state.mastery[id] || 0;
   state.mastery[id] = correct ? Math.min(2, m + 1) : 0;
   state.stats.answered++;
-  if (correct) state.stats.correct++;
+  if (correct) { state.stats.correct++; delete state.missed[id]; }
+  else state.missed[id] = Date.now();
   save();
 }
 function recordBest(key, value, higherIsBetter = true) {
@@ -188,13 +190,34 @@ const ALL = {
 };
 const getSet = (id) => (id === 'all' ? ALL : SETS.find((s) => s.id === id));
 const setOf = (setId) => getSet(setId) || ALL;
+/* Every answerable item by id, so a mistake recorded in one mode can be
+   rebuilt as a question in another. */
+const ITEMS = new Map();
+for (const s of SETS) {
+  for (const t of s.terms) ITEMS.set(t.id, { id: t.id, kind: 'term', term: t, setId: s.id });
+  for (const q of s.questions) ITEMS.set(q.id, { id: q.id, kind: 'q', q, setId: s.id });
+}
+/** The set's missed items, newest first; ids from an older data.js are pruned. */
+function mistakesIn(set) {
+  let pruned = false;
+  const out = [];
+  for (const [id, at] of Object.entries(state.missed)) {
+    const it = ITEMS.get(id);
+    if (!it) { delete state.missed[id]; pruned = true; continue; }
+    if (set.id === 'all' || it.setId === set.id) out.push({ ...it, at });
+  }
+  if (pruned) save();
+  return out.sort((a, b) => b.at - a.at);
+}
 
 const MODES = [
   { id: 'flashcards', name: 'Flashcards', ico: '🃏', color: '#7c5cff', desc: 'Flip through every term and sort them into "know" and "still learning".' },
   { id: 'learn', name: 'Learn', ico: '🧠', color: '#22d3ee', desc: 'Adaptive rounds of multiple choice and typed answers until everything is mastered.' },
   { id: 'test', name: 'Test', ico: '📝', color: '#34d399', desc: 'A graded practice test with an explanation for every question.' },
+  { id: 'mistakes', name: 'Mistakes', ico: '🎯', color: '#fb7185', desc: 'Everything you have missed in any mode, in one place, until you get each one right.' },
   { id: 'match', name: 'Match', ico: '🧩', color: '#ffb020', desc: 'Race the clock pairing terms with their definitions.' },
   { id: 'gold', name: 'Gold Quest', ico: '💰', color: '#ffcc33', desc: 'Blooket-style: answer questions to open chests, swap gold and top the leaderboard.', game: true },
+  { id: 'race', name: 'Race', ico: '🏁', color: '#4d8cff', desc: 'Blooket-style: every right answer drives your car forward. Beat four bots to the flag.', game: true },
   { id: 'blitz', name: 'Blitz', ico: '⚡', color: '#ff4d9d', desc: 'Rapid-fire questions. Speed and streaks multiply your score.', game: true },
   { id: 'guide', name: 'Study guide', ico: '📖', color: '#a8b0d8', desc: 'Every term and every question with its answer, grouped by topic.' },
 ];
@@ -388,8 +411,8 @@ function renderSet(set) {
         el('b', {}, `${m}% mastered`),
         el('button', { class: 'btn ghost sm', onclick: () => {
           if (!confirm(`Reset your progress for ${set.title}?`)) return;
-          for (const t of set.terms) delete state.mastery[t.id];
-          for (const q of set.questions) delete state.mastery[q.id];
+          for (const t of set.terms) { delete state.mastery[t.id]; delete state.missed[t.id]; }
+          for (const q of set.questions) { delete state.mastery[q.id]; delete state.missed[q.id]; }
           save(); route(); toast('Progress reset');
         } }, 'Reset progress'),
       ),
@@ -398,12 +421,19 @@ function renderSet(set) {
   );
   const grid = el('div', { class: 'grid modes' });
   for (const md of MODES) {
-    const best = md.id === 'match' ? state.best[`match:${set.id}`] : md.id === 'gold' ? state.best[`gold:${set.id}`] : md.id === 'blitz' ? state.best[`blitz:${set.id}`] : null;
+    const best = state.best[`${md.id}:${set.id}`];
+    let chip = null;
+    if (md.id === 'mistakes') {
+      const n = mistakesIn(set).length;
+      chip = el('span', { class: `chip ${n ? 'warn' : 'good'}` }, n ? `${n} to review` : 'All clear');
+    } else if (best != null && ['match', 'gold', 'blitz', 'race'].includes(md.id)) {
+      chip = el('span', { class: 'chip warn' }, md.id === 'match' || md.id === 'race' ? `Best ${fmtSecs(best)}` : `Best ${best.toLocaleString()}`);
+    }
     grid.append(el('a', { class: `card mode${md.game ? ' game' : ''}`, href: `#/set/${set.id}/${md.id}`, style: `--c:${md.color}` },
       el('div', { class: 'ico' }, md.ico),
       el('h3', {}, md.name),
       el('p', {}, md.desc),
-      best != null ? el('div', { class: 'meta' }, el('span', { class: 'chip warn' }, md.id === 'match' ? `Best ${fmtSecs(best)}` : `Best ${best.toLocaleString()}`)) : null,
+      chip ? el('div', { class: 'meta' }, chip) : null,
     ));
   }
   v.append(grid);
@@ -520,6 +550,7 @@ function wireOverride(card, id, after) {
   card.addEventListener('override', () => {
     state.mastery[id] = Math.min(2, (state.mastery[id] || 0) + 1);
     state.stats.correct++;
+    delete state.missed[id];
     save();
     if (after) after();
   });
@@ -1153,7 +1184,10 @@ function renderBlitz(set) {
       clock.classList.toggle('low', left < 10000);
       if (left <= 0) finish();
     }, 250);
-    const SPEED_MS = 8000;
+    // The speed bonus drains over a window sized to the reading: four long
+    // definitions deserve longer than a one-line true/false.
+    let SPEED_MS = 8000;
+    const readMs = (q) => clamp(5000 + (q.prompt.length + (q.options || []).join('').length) * 30, 8000, 20000);
     const frame = () => { const f = clamp(1 - (Date.now() - qStart) / SPEED_MS, 0, 1); bar.firstChild.style.width = `${f * 100}%`; raf = requestAnimationFrame(frame); };
     raf = requestAnimationFrame(frame);
     function nextQuestion() {
@@ -1161,6 +1195,7 @@ function renderBlitz(set) {
       stage.innerHTML = '';
       const q = pool[qi++ % pool.length];
       const inst = q.type === 'mc' ? { ...q, options: shuffle(q.options) } : q;
+      SPEED_MS = readMs(inst);
       qStart = Date.now();
       const card = questionCard(inst, { instant: false, onAnswer: (ok) => {
         if (!live) return;
@@ -1197,6 +1232,281 @@ function renderBlitz(set) {
       ));
     }
     updateHud();
+    nextQuestion();
+  }
+  intro();
+}
+
+/* ------------------------------------------------------------ mistakes */
+function renderMistakes(set) {
+  const v = el('div', { class: 'view' });
+  v.append(panelHead(set, 'mistakes', 'Every question you have got wrong in any mode lands here. Answer it correctly and it leaves the list.'));
+  const body = el('div', { class: 'stack' });
+  v.append(body);
+  main.append(v);
+  let keyPick = null;
+  cleanup = onKeys((e) => { if (keyPick && /^[1-4tf]$/i.test(e.key)) keyPick(e.key.toLowerCase()); });
+
+  const asQuestion = (it) => {
+    if (it.kind === 'q') return authored(it.q);
+    // Terms come back the way they are hardest to fake: typed when the name is
+    // short enough to type, otherwise as multiple choice.
+    return typeable(it.term) && Math.random() < .5 ? termWritten(it.term) : termMC(it.term, setOf(it.setId));
+  };
+  const label = (it) => (it.kind === 'q' ? it.q.prompt : `${it.term.term} — ${it.term.definition}`);
+
+  function overview() {
+    keyPick = null;
+    body.innerHTML = '';
+    const items = mistakesIn(set);
+    if (!items.length) {
+      body.append(el('div', { class: 'panel game-intro' },
+        el('div', { class: 'big-ico' }, '🎯'),
+        el('h2', {}, 'Nothing to review'),
+        el('p', {}, `You have no outstanding mistakes in ${set.title}. Missed questions from Learn, Test, Match and the games collect here automatically.`),
+        el('div', { class: 'row center' },
+          el('a', { class: 'btn primary', href: `#/set/${set.id}/test` }, 'Take a test'),
+          el('a', { class: 'btn', href: `#/set/${set.id}/learn` }, 'Learn'),
+          backBtn(set, 'Back to set')),
+      ));
+      return;
+    }
+    const byConcept = new Map();
+    for (const it of items) byConcept.set(it.setId, (byConcept.get(it.setId) || 0) + 1);
+    body.append(
+      el('div', { class: 'panel stack' },
+        el('div', { class: 'row between' },
+          el('div', {},
+            el('h2', { style: 'font-size:1.4rem' }, `${items.length} to review`),
+            set.id === 'all' ? el('p', { class: 'note', style: 'margin-top:4px' }, [...byConcept].map(([id, n]) => `${setOf(id).short}: ${n}`).join(' · ')) : null),
+          el('div', { class: 'row' },
+            el('button', { class: 'btn primary lg', onclick: () => review(items) }, `Review ${items.length > 20 ? 'the newest 20' : 'them'}`),
+            el('button', { class: 'btn ghost sm', onclick: () => {
+              if (!confirm(`Clear all ${items.length} mistakes from the list? Your mastery is not affected.`)) return;
+              for (const it of items) delete state.missed[it.id];
+              save(); overview(); toast('Mistakes list cleared');
+            } }, 'Clear list'))),
+      ),
+      el('h2', { class: 'section-title' }, 'Most recent first'),
+      el('div', {}, ...items.slice(0, 40).map((it) => el('div', { class: 'term-row mistake-row' },
+        el('b', {}, label(it)),
+        el('span', { class: 'note' }, `${setOf(it.setId).short} · slide ${(it.q || it.term).page}`)))),
+      items.length > 40 ? el('p', { class: 'note' }, `…and ${items.length - 40} more.`) : null,
+    );
+  }
+
+  function review(items) {
+    const round = items.slice(0, 20);
+    const queue = round.slice();
+    const retried = new Set();
+    let cleared = 0;
+    const next = () => {
+      keyPick = null;
+      body.innerHTML = '';
+      if (!queue.length) return summary(round.length, cleared);
+      const it = queue[0];
+      const q = asQuestion(it);
+      const card = questionCard(q, { onAnswer: (ok) => {
+        bumpMastery(it.id, ok);
+        queue.shift();
+        if (ok) { cleared++; sfx.good(); }
+        else {
+          sfx.bad();
+          // one more go later in this round, then it waits for next time
+          if (!retried.has(it.id)) { retried.add(it.id); queue.push(it); }
+        }
+        const btn = el('button', { class: 'btn primary lg', onclick: next }, 'Continue →');
+        card.append(el('div', { class: 'row' }, btn));
+        btn.focus();
+      } });
+      wireOverride(card, it.id, () => {
+        cleared++;
+        const i = queue.lastIndexOf(it);
+        if (i >= 0) queue.splice(i, 1);
+      });
+      body.append(
+        el('div', { class: 'learn-head' },
+          el('div', { class: 'row between' }, backBtn(set), el('span', {}, `${round.length - queue.length + 1} of ${round.length}${retried.size ? ` · ${retried.size} coming back` : ''}`)),
+          el('div', { class: 'progress good' }, el('i', { style: `width:${pct(round.length - queue.length, round.length)}%` }))),
+        el('div', { class: 'panel' }, card));
+      keyPick = (k) => card.pickByKey && card.pickByKey(k);
+    };
+    next();
+  }
+
+  function summary(total, cleared) {
+    const left = mistakesIn(set).length;
+    if (!left) { sfx.win(); confetti(); }
+    body.append(el('div', { class: 'panel game-intro' },
+      el('div', { class: 'big-ico' }, left ? '💪' : '🎉'),
+      el('h2', {}, `Cleared ${cleared} of ${total}`),
+      el('p', {}, left ? `${left} still on the list. They will be here when you come back.` : 'Your mistakes list is empty.'),
+      el('div', { class: 'row center' },
+        left ? el('button', { class: 'btn primary lg', onclick: overview }, `See the ${left} left`) : null,
+        backBtn(set, 'Back to set')),
+    ));
+  }
+  overview();
+}
+
+/* ---------------------------------------------------------------- race */
+function renderRace(set) {
+  const prefs = state.prefs.race ||= { length: 15, level: 'normal' };
+  const v = el('div', { class: 'view' });
+  v.append(panelHead(set, 'race', 'Every right answer moves your car one space. Three in a row gives a boost. First across the line wins.'));
+  const body = el('div', { class: 'stack' });
+  v.append(body);
+  main.append(v);
+  let tick = 0;
+  let keyPick = null;
+  const offKeys = onKeys((e) => { if (keyPick && /^[1-4tf]$/i.test(e.key)) keyPick(e.key.toLowerCase()); });
+  cleanup = () => { clearInterval(tick); offKeys(); };
+
+  // Seconds per space for each bot, drawn from this range. The race is decided
+  // by the fastest of four draws, so the ranges sit slower than a single bot's
+  // pace would suggest. Simulated over 15 spaces, the chance of winning is:
+  //                     strong (4s, 90%)  steady (6s, 80%)  average (8s, 70%)
+  //   easy   [13, 18]        100%              ~95%              ~55%
+  //   normal [8, 11.5]       ~98%              ~55%               ~7%
+  //   hard   [5.5, 7.5]      ~73%               ~7%                0%
+  // (seconds per question and accuracy; a wrong answer costs 2.6 s).
+  const LEVELS = { easy: [13, 18], normal: [8, 11.5], hard: [5.5, 7.5] };
+  const CARS = ['🚗', '🚙', '🚕', '🚓'];
+
+  function intro() {
+    clearInterval(tick);
+    keyPick = null;
+    body.innerHTML = '';
+    const best = state.best[`race:${set.id}`];
+    body.append(el('div', { class: 'panel game-intro' },
+      el('div', { class: 'big-ico' }, '🏁'),
+      el('h2', {}, 'Race'),
+      el('p', {}, `Race four bots to the flag. ${best != null ? `Your fastest win is ${fmtSecs(best)}.` : 'Win a race to set a best time.'}`),
+      el('div', { class: 'field' }, el('label', {}, 'Track length'),
+        el('div', { class: 'seg', role: 'group', 'aria-label': 'Track length' }, ...[10, 15, 20].map((n) => el('button', { class: prefs.length === n ? 'on' : '', 'aria-pressed': prefs.length === n ? 'true' : 'false', onclick: () => { prefs.length = n; save(); intro(); } }, `${n} spaces`)))),
+      el('div', { class: 'field' }, el('label', {}, 'Bots'),
+        el('div', { class: 'seg', role: 'group', 'aria-label': 'Bot speed' }, ...Object.keys(LEVELS).map((k) => el('button', { class: prefs.level === k ? 'on' : '', 'aria-pressed': prefs.level === k ? 'true' : 'false', onclick: () => { prefs.level = k; save(); intro(); } }, k[0].toUpperCase() + k.slice(1))))),
+      el('div', { class: 'row center' }, el('button', { class: 'btn primary lg', onclick: play }, 'Start race'), backBtn(set, 'Back to set')),
+    ));
+  }
+
+  function play() {
+    const pool = gameQuestions(set);
+    if (!pool.length) { body.innerHTML = ''; body.append(el('div', { class: 'panel empty' }, 'No questions available.')); return; }
+    const LEN = prefs.length;
+    const [slow, fast] = LEVELS[prefs.level] || LEVELS.normal;
+    const me = { name: 'You', car: '🏎️', pos: 0, me: true, done: 0 };
+    const bots = shuffle(BOT_NAMES).slice(0, 4).map((name, i) => ({
+      name, car: CARS[i], pos: 0, done: 0,
+      secs: fast + Math.random() * (slow - fast),   // this bot's seconds per space
+    }));
+    const racers = [me, ...bots];
+    const finishers = [];
+    const t0 = Date.now();
+    let qi = 0, streak = 0, answered = 0, correct = 0, live = true;
+
+    const lanes = racers.map((r) => {
+      const car = el('span', { class: 'racer', 'aria-hidden': 'true' }, r.car);
+      const lane = el('div', { class: `lane${r.me ? ' me' : ''}` },
+        el('span', { class: 'lane-name' }, r.name),
+        el('div', { class: 'lane-track' }, car, el('span', { class: 'flag', 'aria-hidden': 'true' }, '🏁')));
+      r.el = car; r.lane = lane;
+      return lane;
+    });
+    const status = el('p', { class: 'sr-only', role: 'status', 'aria-live': 'polite' });
+    const place = el('b', { id: 'r-place' }, '—');
+    const hud = el('div', { class: 'game-hud', role: 'group', 'aria-label': 'Race status' },
+      el('div', { class: 'stat' }, el('b', { id: 'r-pos' }, `0 / ${LEN}`), el('span', {}, 'Spaces')),
+      el('div', { class: 'stat' }, el('b', { class: 'streak', id: 'r-streak' }, '0'), el('span', {}, 'Streak')),
+      el('div', { class: 'stat' }, place, el('span', {}, 'Place')));
+    const stage = el('div', { class: 'panel' });
+    body.innerHTML = '';
+    body.append(el('div', { class: 'row between' }, backBtn(set), el('span', { class: 'note' }, set.title)),
+      el('div', { class: 'track' }, ...lanes), hud, status, stage);
+
+    const standing = () => racers.slice().sort((a, b) => (b.done ? 1e9 - b.done : b.pos) - (a.done ? 1e9 - a.done : a.pos));
+    const draw = () => {
+      for (const r of racers) r.el.style.left = `calc(4px + (100% - 2.2rem - 8px) * ${Math.min(1, r.pos / LEN)})`;
+      $('#r-pos', hud).textContent = `${me.pos} / ${LEN}`;
+      $('#r-streak', hud).textContent = String(streak);
+      const i = standing().indexOf(me) + 1;
+      place.textContent = `${i}${['st', 'nd', 'rd'][i - 1] || 'th'}`;
+    };
+    const advance = (r, n) => {
+      if (r.done || !live) return;
+      r.pos = Math.min(LEN, r.pos + n);
+      if (r.pos >= LEN) { r.done = Date.now(); finishers.push(r); r.lane.classList.add('finished'); }
+    };
+
+    // Bots roll every half second; each move is a coin flip weighted by its speed.
+    tick = setInterval(() => {
+      if (!live) return;
+      for (const b of bots) if (!b.done && Math.random() < 0.5 / b.secs) advance(b, 1);
+      draw();
+      if (bots.every((b) => b.done)) finish();
+    }, 500);
+
+    function nextQuestion() {
+      if (!live) return;
+      stage.innerHTML = '';
+      const q = pool[qi++ % pool.length];
+      const inst = q.type === 'mc' ? { ...q, options: shuffle(q.options) } : q;
+      const card = questionCard(inst, { instant: false, onAnswer: (ok) => {
+        if (!live) return;
+        answered++;
+        bumpMastery(q.id, ok);
+        if (ok) {
+          correct++; streak++;
+          const boost = streak >= 3 && streak % 3 === 0;
+          advance(me, boost ? 2 : 1);
+          sfx.good();
+          floatText(boost ? 'Boost! +2' : '+1', boost ? 'var(--warm)' : 'var(--good)');
+          status.textContent = `Correct. ${me.pos} of ${LEN} spaces.${boost ? ' Boost!' : ''}`;
+          draw();
+          if (me.done) return later(finish, 350);
+          later(nextQuestion, 450);
+        } else {
+          streak = 0; sfx.bad();
+          status.textContent = `Not quite. The answer is ${q.answer}.`;
+          card.append(el('div', { class: 'feedback bad' }, el('b', { class: 'title' }, `✗ Answer: ${q.answer}`), q.explanation ? el('div', { class: 'exp' }, q.explanation) : null),
+            el('div', { class: 'row' }, el('button', { class: 'btn primary', onclick: nextQuestion }, 'Next →')));
+          later(() => { if (document.body.contains(card)) nextQuestion(); }, 2600);
+          draw();
+        }
+      } });
+      stage.append(card);
+      keyPick = (k) => card.pickByKey && card.pickByKey(k);
+    }
+
+    function finish() {
+      if (!live) return;
+      live = false;
+      clearInterval(tick);
+      keyPick = null;
+      draw();
+      const order = standing();
+      const placeNum = order.indexOf(me) + 1;
+      const ms = me.done ? me.done - t0 : null;
+      const won = placeNum === 1 && me.done;
+      const isBest = won && recordBest(`race:${set.id}`, ms, false);
+      if (won) { sfx.win(); confetti(); } else sfx.lose();
+      const medal = ['🥇', '🥈', '🥉'][placeNum - 1] || '🏁';
+      body.innerHTML = '';
+      body.append(el('div', { class: 'panel' },
+        el('div', { class: 'game-intro' },
+          el('div', { class: 'big-ico' }, medal),
+          el('h2', {}, won ? `You won${isBest ? ' — fastest yet!' : '!'}` : me.done ? `You finished ${placeNum}${['st', 'nd', 'rd'][placeNum - 1] || 'th'}` : 'The bots all finished first'),
+          el('p', {}, `${correct} / ${answered} correct${ms != null ? ` · ${fmtSecs(ms)}` : ` · ${me.pos} of ${LEN} spaces`}${state.best[`race:${set.id}`] != null ? ` · best win ${fmtSecs(state.best[`race:${set.id}`])}` : ''}`)),
+        el('div', { class: 'board' }, ...order.map((r, i) => el('div', { class: `brow${r.me ? ' me' : ''}` },
+          el('span', { class: 'rank' }, `${i + 1}.`), el('span', { class: 'nm' }, `${r.car} ${r.name}`),
+          el('span', { class: 'amt' }, r.done ? fmtSecs(r.done - t0) : `${r.pos} / ${LEN}`)))),
+        el('div', { class: 'row center', style: 'margin-top:18px' },
+          el('button', { class: 'btn primary lg', onclick: play }, 'Race again'),
+          el('button', { class: 'btn ghost', onclick: intro }, 'Change track'),
+          backBtn(set, 'Back to set')),
+      ));
+    }
+    draw();
     nextQuestion();
   }
   intro();
@@ -1261,7 +1571,7 @@ function route() {
   if (parts[0] !== 'set') { setCrumbs([]); document.title = 'ChemQuest — study Concepts 1–4'; return renderHome(); }
   const set = getSet(parts[1]);
   if (!set) { location.hash = '#/'; return; }
-  const views = { '': renderSet, flashcards: renderFlashcards, learn: renderLearn, test: renderTest, match: renderMatch, gold: renderGold, blitz: renderBlitz, guide: renderGuide };
+  const views = { '': renderSet, flashcards: renderFlashcards, learn: renderLearn, test: renderTest, mistakes: renderMistakes, match: renderMatch, gold: renderGold, race: renderRace, blitz: renderBlitz, guide: renderGuide };
   // An unrecognised mode in the URL shows the set rather than a half-titled page.
   const mode = views[parts[2]] ? parts[2] : '';
   setCrumbs(mode ? [[set.short, `#/set/${set.id}`], [MODE_NAMES[mode]]] : [[set.short]]);
