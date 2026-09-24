@@ -79,8 +79,17 @@ Blooket, one hub for a student's whole schedule. Open `study/index.html` (or
 
 | Subject | Where the content comes from |
 |---|---|
-| **Chemistry** (Concepts 1–4) | Built from the class notes: lab safety and equipment, measurement, dimensional analysis and scientific notation, the scientific method |
-| **Algebra 1, Geometry, Biology, English, U.S. History, World History, Spanish 1** | Standard high school courses, unit by unit; every item written, then fact-checked item by item by a separate reviewer |
+| **Chemistry**, Concepts 1–4 | Built from the class notes: lab safety and equipment, measurement, dimensional analysis and scientific notation, the scientific method |
+| **Chemistry**, Units 5–12 ("Beyond your notes") | The rest of a first-year course: atoms, the periodic table, bonding, naming, reactions, the mole, gases, solutions, acids and bases |
+| **Math:** Algebra 1 (14 units), Geometry, Algebra 2 | Standard high school courses, unit by unit |
+| **Science:** Biology, Physics, Earth & Space Science | Standard high school courses, unit by unit |
+| **English and languages:** English, Spanish 1 | Standard high school courses, unit by unit |
+| **Social studies:** U.S. History, World History, U.S. Government & Civics, Economics & Personal Finance, Psychology | Standard high school courses, unit by unit |
+
+Everything except the class-notes concepts was written unit by unit, fact-checked
+item by item by a separate reviewer, then checked again by a second, independent
+reviewer; `verify-study.mjs` (below) then rejects anything a student could not
+answer.
 
 Every unit works in every mode:
 
@@ -96,17 +105,37 @@ Every unit works in every mode:
 | **Blitz** | Rapid-fire questions where speed and streaks multiply your score |
 | **Study guide** | Every term and question with its answer, grouped by topic and searchable |
 
-Progress, starred terms, mistakes and best scores are saved in `localStorage`.
-Chemistry lives in `study/data.js`; every other subject is a file in
-`study/subjects/` that pushes itself onto `window.STUDY_SUBJECTS`. The app is
-`study/app.js` and `study/style.css`; features in their own files register
-through the small `window.CQ` interface at the bottom of `app.js`.
+Some subjects add their own modes:
 
-Two checks guard the content and the interface. Run both before changing a
-subject or the app:
+| Mode | Where | What it does |
+|---|---|---|
+| **Algebra Lab** | Algebra 1, Units 1–12 | Endless generated problems for 55 skills — equations (including literal and absolute-value), inequalities (including compound), slope and lines, systems, exponents and exponential models, polynomials, factoring (including by grouping), quadratics (factoring, completing the square, the quadratic formula), radicals and statistics — each with worked steps and a hint; answers are checked for equivalence, and for form where the form is the point (factored completely, radical simplified, slope-intercept form) |
+| **Problem Lab** | Chemistry, Concepts 2–3 | Endless calculation problems — metric prefixes, temperature, averages, scientific notation, conversion factors, dimensional analysis — with "Show me how" and a picket-fence worked solution, graded exactly |
+| **Picture Quiz** | Chemistry, Concepts 1, 2, 4 | Name the lab equipment, judge accuracy and precision targets, read a graduated cylinder, spot what a graph is missing — all from drawings |
+
+Problems from these modes also turn up in Gold Quest, Race, Blitz and Mistakes.
+**Collection** (🎒 in the header) pays 10 coins for a question answered right on
+the first try anywhere on the site; coins open packs of collectible critters,
+and one can be your icon in the games. Guessing does not pay: each question
+gets one paid try per 10 minutes, coins pause while more than half of the last
+10 first tries were wrong, and flashcards and Match never pay.
+
+Progress, starred terms, mistakes, best scores and the collection are saved in
+`localStorage`. Chemistry's class-notes concepts live in `study/data.js`; every
+other subject is a file in `study/subjects/` that pushes itself onto
+`window.STUDY_SUBJECTS` (a file marked `extend` adds units to a subject that
+already exists). The app is `study/app.js` and `study/style.css`; the modes
+above are `algebra.js`, `lab.js`, `visuals.js` and `collect.js`, each
+registering itself through the small `window.CQ` interface at the bottom of
+`app.js`.
+
+Checks guard the content and the interface. Run them before changing a subject
+or the app:
 
 ```bash
 node tools/verify-study.mjs                          # every question in every subject
+node tools/verify-algebra.mjs                        # Algebra Lab: thousands of problems re-solved independently
+node tools/verify-lab.mjs                            # Problem Lab: the same for chemistry calculations
 node tools/smoke-study.mjs http://127.0.0.1:8000     # every mode and subject, in a browser
 ```
 
@@ -114,36 +143,12 @@ node tools/smoke-study.mjs http://127.0.0.1:8000     # every mode and subject, i
 answer missing from its options, two options that say the same thing, a prompt
 or definition that gives the answer away, a set too small for Match — and runs
 the app's own answer checker against every accepted answer and a fixed table of
-tricky cases (units, variables, ordered pairs, fractions, scientific notation,
-Spanish accents). `smoke-study.mjs` plays each mode through, visits every
-subject, and fails on any console error.
-
----|---|
-| **Flashcards** | Flip through every term; sort into "know" / "still learning", star the hard ones |
-| **Learn** | Adaptive rounds of multiple choice, true/false and typed answers until every item is mastered |
-| **Test** | Graded practice test (10 / 20 / 30 / all questions) with an explanation for each question |
-| **Mistakes** | Everything you have missed in any mode, reviewed until you get each one right |
-| **Match** | Race the clock pairing terms with definitions |
-| **Gold Quest** | Blooket-style: answer to open chests, swap or steal gold, beat the bots |
-| **Race** | Blooket-style: each right answer drives your car forward; beat four bots to the flag |
-| **Blitz** | Rapid-fire questions where speed and streaks multiply your score |
-| **Study guide** | Every term and question with its answer, grouped by topic and searchable |
-
-Progress, starred terms and best scores are saved in `localStorage`. All content
-lives in `study/data.js`; the app itself is `study/app.js` and `study/style.css`.
-
-The questions are extracted from the class notes rather than hand-written, so
-two checks guard them. Run both before changing `study/data.js`:
-
-```bash
-node tools/verify-study.mjs                          # the questions themselves
-node tools/smoke-study.mjs http://127.0.0.1:8000     # every mode, in a browser
-```
-
-`verify-study.mjs` fails on a question a student could not answer — a right
-answer missing from its options, two options that say the same thing, a prompt
-that gives the answer away, a set too small for Match to deal a round.
-`smoke-study.mjs` plays each mode through and fails on any console error.
+tricky cases (units and prefixes, variables, ordered pairs, fractions,
+scientific notation, Spanish accents). The two lab verifiers work every
+generated answer out again with their own maths, never the app's, and check
+that near misses are rejected. `smoke-study.mjs` plays each mode through,
+visits every subject, runs the feature checks in `tools/study-checks/`, and
+fails on any console error.
 
 ---
 

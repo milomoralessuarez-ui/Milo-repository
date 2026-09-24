@@ -1,0 +1,126 @@
+/* ==========================================================================
+   Algebra Lab — generated Algebra 1 practice (study/algebra.js).
+   Uses only the theme tokens from style.css, so light and dark both work.
+   ========================================================================== */
+
+/* ---------- toolbar ---------- */
+.alg-toolbar { justify-content: space-between; }
+.alg-diff { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.alg-diff-label { font-size: .82rem; font-weight: 700; color: var(--text-2); }
+.alg .seg button { min-height: 44px; min-width: 44px; padding: 8px 14px; }
+
+/* ---------- skill picker ---------- */
+.alg-picker { margin-bottom: 14px; padding-top: 12px; padding-bottom: 12px; }
+.alg-picker > summary,
+.alg-more > summary {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  min-height: 44px; cursor: pointer; list-style: none;
+  font-weight: 700; border-radius: 10px;
+}
+.alg-picker > summary::-webkit-details-marker,
+.alg-more > summary::-webkit-details-marker { display: none; }
+.alg-picker > summary::before,
+.alg-more > summary::before {
+  content: "▸"; display: inline-block; width: 1em; color: var(--text-3);
+  transition: transform .15s;
+}
+.alg-picker[open] > summary::before,
+.alg-more[open] > summary::before { transform: rotate(90deg); }
+.alg-sum-title { font-size: 1.02rem; }
+.alg-count { font-size: .82rem; font-weight: 600; color: var(--text-3); }
+.alg-more { margin-top: 10px; border-top: 1px solid var(--line-soft); padding-top: 6px; }
+.alg-more > summary { color: var(--text-2); font-size: .92rem; }
+.alg-unit { margin-top: 12px; display: grid; gap: 8px; }
+.alg-unit-btn {
+  justify-self: start; border: 0; background: transparent; padding: 6px 4px;
+  min-height: 44px; text-align: left;
+  font-weight: 700; font-size: .88rem; color: var(--brand-2); border-radius: 8px;
+}
+.alg-unit-btn:hover { text-decoration: underline; }
+.alg-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.alg-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  min-height: 44px; padding: 8px 14px; border-radius: 999px;
+  border: 1px solid var(--line); background: var(--surface-2); color: var(--text-2);
+  font-weight: 600; font-size: .88rem; line-height: 1.2; text-align: left;
+  transition: background .15s, border-color .15s, color .15s;
+}
+.alg-chip:hover { border-color: var(--brand); }
+.alg-chip.on {
+  background: var(--surface-3);
+  background: color-mix(in srgb, var(--brand) 22%, var(--surface-2));
+  border-color: var(--brand); color: var(--text);
+}
+.alg-chip.on::before { content: "✓"; font-weight: 800; color: var(--brand); }
+.alg-chip-m { color: var(--gold); font-size: .9rem; }
+.alg-chip-m:empty { display: none; }
+
+/* ---------- stats ---------- */
+.alg-hud { margin-bottom: 10px; }
+.alg-tally { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+.alg-tally:empty { display: none; }
+
+/* ---------- problem ---------- */
+.alg-panel { display: grid; gap: 14px; }
+.alg-skillline { display: flex; flex-wrap: wrap; gap: 6px; }
+.alg-prompt { display: grid; gap: 8px; }
+.alg-fmt { display: block; font-size: .85rem; font-weight: 500; color: var(--text-3); }
+.alg-sys { display: grid; gap: 4px; margin-top: 6px; padding-left: 14px; border-left: 3px solid var(--brand); }
+.alg-actions { gap: 10px; }
+.alg-actions .note { margin-left: 4px; }
+.alg-hint:empty { display: none; }
+.alg-hint {
+  display: grid; gap: 4px;
+  padding: 12px 14px; border-radius: 14px;
+  background: var(--surface-2);
+  background: color-mix(in srgb, var(--warm) 12%, var(--surface-2));
+  border: 1px solid color-mix(in srgb, var(--warm) 45%, var(--line));
+  font-size: .95rem;
+}
+.alg-hint b { color: var(--warm); }
+.alg-note {
+  margin: 0; padding: 8px 12px; border-radius: 10px;
+  background: var(--surface-3); color: var(--text); font-weight: 600; font-size: .92rem;
+}
+
+/* ---------- worked steps ---------- */
+.alg-steps-title { display: block; margin-bottom: 6px; color: var(--text); font-size: .9rem; }
+.alg-steps { margin: 0; padding-left: 1.5em; display: grid; gap: 10px; }
+.alg-steps li { padding-left: 4px; }
+.alg-steps li::marker { color: var(--text-3); font-weight: 700; }
+.alg-why { display: block; color: var(--text-2); }
+.alg-math, .alg-res {
+  display: block; margin-top: 2px;
+  font-variant-numeric: tabular-nums; overflow-wrap: anywhere;
+}
+.alg-math { color: var(--text); font-weight: 600; }
+.alg-res { color: var(--good); font-weight: 700; }
+
+/* ---------- figures (number line, triangle, scatter plot) ---------- */
+.alg-nl, .alg-tri, .alg-scatter { font-family: var(--font); }
+.alg-scatter { width: 100%; max-width: 360px; height: auto; }
+.alg-scatter .alg-axis { stroke: var(--text-3); stroke-width: 2; }
+.alg-scatter .alg-label { fill: var(--text-2); font-size: 13px; font-weight: 700; font-style: italic; }
+.alg-scatter .alg-pt { fill: var(--brand); stroke: var(--surface); stroke-width: 1.5; }
+.alg-nl .alg-axis, .alg-nl .alg-tick { stroke: var(--text-3); stroke-width: 2; }
+.alg-nl .alg-axis-end { fill: var(--text-3); }
+.alg-nl .alg-label { fill: var(--text-2); font-size: 12px; font-weight: 600; }
+.alg-nl .alg-label.on { fill: var(--text); font-weight: 800; }
+.alg-nl .alg-ray { stroke: var(--brand); stroke-width: 5; stroke-linecap: round; }
+.alg-nl .alg-ray-end { fill: var(--brand); }
+.alg-nl .alg-dot { stroke: var(--brand); stroke-width: 3; }
+.alg-nl .alg-dot.closed { fill: var(--brand); }
+.alg-nl .alg-dot.open { fill: var(--surface-2); }
+.alg-tri .alg-tri-shape { fill: color-mix(in srgb, var(--brand) 14%, transparent); stroke: var(--brand); stroke-width: 3; stroke-linejoin: round; }
+.alg-tri .alg-tri-right { fill: none; stroke: var(--text-2); stroke-width: 2; }
+.alg-tri .alg-tri-label { fill: var(--text); font-size: 16px; font-weight: 700; }
+.alg-tri .alg-tri-label.miss { fill: var(--warm); font-size: 18px; }
+
+@media (max-width: 520px) {
+  .alg-toolbar { align-items: stretch; }
+  .alg-diff { width: 100%; justify-content: space-between; }
+  .alg-chip { font-size: .85rem; padding: 8px 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .alg-picker > summary::before, .alg-more > summary::before, .alg-chip { transition: none; }
+}
