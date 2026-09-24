@@ -1,6 +1,6 @@
 /* MiloPlay service worker — makes the whole site playable offline.
    Bump CACHE when assets change; old caches are cleaned up on activate. */
-const CACHE = 'miloplay-v5';
+const CACHE = 'miloplay-v6';
 
 const GAMES = [
 // GAMES:BEGIN
@@ -46,6 +46,10 @@ const ASSETS = [
   './study/subjects/ush.js',
   './study/subjects/wh.js',
   './study/subjects/span1.js',
+  './study/subjects/chem.js',
+  './study/subjects/gov.js',
+  './study/subjects/econ.js',
+  './study/subjects/psych.js',
   './study/app.js',
   './study/lab.js',
   './study/lab.css',

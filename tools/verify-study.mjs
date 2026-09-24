@@ -237,6 +237,11 @@ for (const set of SETS) for (const t of set.terms || []) {
       [Q('2 pints'), '2 pint', true, 'a singular unit'],
       [Q('5 kg'), '5 kgs', true, 'a plural unit abbreviation'],
       [Q('0'), '0', true, 'zero'],
+      [Q('H₂O'), 'H2O', true, 'a formula typed without subscripts'],
+      [Q('$1,250'), '1250', true, 'money typed without the dollar sign'],
+      [Q('$1,250'), '1,250 dollars', true, 'money typed as dollars'],
+      [Q('1250'), '$1250', true, 'a dollar sign the answer does not show'],
+      [Q('$1,250'), '$1,205', false, 'the wrong amount of money'],
       [Q('3 manzanas'), '3 Manzanas', true, 'a capitalised word after a number'],
     ]) {
       if (checkWritten(q, input) !== want) fail('answer checking', `${want ? 'rejects' : 'accepts'} ${JSON.stringify(input)} for ${JSON.stringify(q.answer)} (${why})`);

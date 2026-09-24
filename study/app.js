@@ -369,7 +369,10 @@ function norm(s) {
     .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
     .replace(/[−–—]/g, '-')
     .replace(/²/g, '^2').replace(/³/g, '^3')
+    .replace(/[₀-₉]/g, (d) => String(d.charCodeAt(0) - 0x2080))   // H₂O reads as H2O
     .replace(/[µμ]/g, 'u')
+    // A dollar sign is optional: "$1,250" and "1250" are the same answer.
+    .replace(/\$\s*/g, '')
     .toLowerCase()
     .replace(/[×·*]/g, 'x')
     .replace(/[°º]/g, '')
