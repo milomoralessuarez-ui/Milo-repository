@@ -6563,220 +6563,587 @@
    "id": "alg1-u12",
    "unit": 12,
    "title": "Data and Statistics",
-   "summary": "Wrote Algebra 1 Unit 12 (Data and Statistics) into study/subjects/alg1.js: 26 terms and 34 questions (18 mc / 8 tf / 8 written) across 6 topics — Center and Spread; Quartiles and Box Plots; Dot Plots and Histograms; Scatter Plots and Correlation; Line of Best Fit; Two-Way Tables. Covers mean/median/mode/range, quartiles/IQR/box plots/outliers, dot plots/histograms, scatter plots and correlation (including the correlation coefficient r), line of best fit with interpolation/extrapolation and correlation-vs-causation, and two-way frequency tables (joint/marginal/relative frequency). All numeric answers were computed and double-checked by a generator script, and the file passes the repo's own `node tools/verify-study.mjs` content checker with zero warnings or failures for alg1 (full-site run also exits 0). The file is study/subjects/alg1.js (previously an empty placeholder); it registers itself onto window.STUDY_SUBJECTS with subject metadata (id 'alg1', name 'Algebra 1') and a sets array currently holding just this one unit (u12), ready for future units 1–11 to be appended into the same push. Change is unstaged/uncommitted in the working tree, matching the state of sibling subject files already present.",
+   "summary": "Learn to summarize data sets using mean, median, mode, range, quartiles, and box plots, then spot and describe outliers, skew, and shape in dot plots and histograms. Analyze relationships between two variables with scatter plots, correlation, lines of best fit, and two-way frequency tables — and learn why correlation isn't causation.",
    "topics": [
     "Center and Spread",
     "Quartiles and Box Plots",
-    "Dot Plots and Histograms",
+    "Displaying Data",
     "Scatter Plots and Correlation",
-    "Line of Best Fit",
-    "Two-Way Tables"
+    "Two-Way Frequency Tables"
    ],
    "terms": [
     {
      "term": "Mean",
-     "definition": "The sum of all data values divided by the number of values; the arithmetic average.",
+     "definition": "The sum of a data set divided by the number of values.",
      "topic": "Center and Spread"
     },
     {
      "term": "Median",
-     "definition": "The middle number in an ordered data set, or the average of the two middle numbers when there is an even count.",
+     "definition": "The middle value of an ordered data set, or the average of the two middle values.",
      "topic": "Center and Spread"
     },
     {
      "term": "Mode",
-     "definition": "The value that appears most often in a data set; a set can have one such value, several, or none.",
+     "definition": "The value or values that occur most frequently in a data set.",
      "topic": "Center and Spread"
     },
     {
      "term": "Range",
-     "definition": "The difference between the greatest and least values in a data set.",
+     "definition": "The difference between the maximum and minimum values in a data set.",
      "topic": "Center and Spread"
     },
     {
+     "term": "Measure of central tendency",
+     "definition": "A value that describes the typical or middle value of a data set, such as mean or median.",
+     "topic": "Center and Spread"
+    },
+    {
+     "term": "Quartile",
+     "definition": "One of three values that divide an ordered data set into four equal parts.",
+     "topic": "Quartiles and Box Plots"
+    },
+    {
      "term": "First quartile (Q1)",
-     "definition": "The median of the lower half of an ordered data set; about a quarter of the values fall below it.",
+     "definition": "The median of the lower half of an ordered data set.",
      "topic": "Quartiles and Box Plots"
     },
     {
      "term": "Third quartile (Q3)",
-     "definition": "The median of the upper half of an ordered data set; about three-quarters of the values fall below it.",
+     "definition": "The median of the upper half of an ordered data set.",
      "topic": "Quartiles and Box Plots"
     },
     {
      "term": "Interquartile range (IQR)",
-     "definition": "The distance between the third and first quartiles, found by subtracting Q1 from Q3; measures the middle half's spread.",
+     "definition": "The difference between the third and first quartiles: Q3 − Q1.",
      "topic": "Quartiles and Box Plots"
     },
     {
      "term": "Five-number summary",
-     "definition": "The minimum, first quartile, median, third quartile, and maximum of an ordered data set.",
+     "definition": "The minimum, first quartile, median, third quartile, and maximum of a data set.",
      "topic": "Quartiles and Box Plots"
     },
     {
      "term": "Box plot",
-     "definition": "A graph of the five-number summary: a rectangle from Q1 to Q3, split at the median, with whiskers to the extremes.",
+     "definition": "A graph displaying a data set's five-number summary using a box and two whiskers.",
      "topic": "Quartiles and Box Plots"
     },
     {
      "term": "Outlier",
-     "definition": "A data value far removed from the rest of a set, often identified as below Q1 − 1.5·IQR or above Q3 + 1.5·IQR.",
+     "definition": "A value far from the rest of the data; often below Q1 − 1.5·IQR or above Q3 + 1.5·IQR.",
      "topic": "Quartiles and Box Plots"
     },
     {
      "term": "Dot plot",
-     "definition": "A graph showing each data value as a mark above a number line, with repeated values stacked in a column.",
-     "topic": "Dot Plots and Histograms"
+     "definition": "A graph showing individual data values as dots stacked above a number line.",
+     "topic": "Displaying Data"
     },
     {
      "term": "Histogram",
-     "definition": "A bar graph of grouped numerical data where each bar shows the frequency of an equal-width interval, with bars touching.",
-     "topic": "Dot Plots and Histograms"
+     "definition": "A bar graph showing frequencies of numerical data grouped into equal intervals.",
+     "topic": "Displaying Data"
     },
     {
      "term": "Frequency",
-     "definition": "The number of times a particular value or category occurs in a data set.",
-     "topic": "Dot Plots and Histograms"
+     "definition": "The number of times a value or range of values occurs in a data set.",
+     "topic": "Displaying Data"
+    },
+    {
+     "term": "Skewed distribution",
+     "definition": "A distribution with data stretched farther toward one side of its peak than the other.",
+     "topic": "Displaying Data"
     },
     {
      "term": "Scatter plot",
-     "definition": "A graph of ordered pairs used to display and study the relationship between two numerical variables.",
+     "definition": "A graph of paired numerical data shown as points on a coordinate plane.",
      "topic": "Scatter Plots and Correlation"
     },
     {
      "term": "Positive correlation",
-     "definition": "A pattern in which one variable tends to increase as the other variable increases.",
+     "definition": "A pattern in which one variable tends to increase as the other increases.",
      "topic": "Scatter Plots and Correlation"
     },
     {
      "term": "Negative correlation",
-     "definition": "A pattern in which one variable tends to decrease as the other variable increases.",
+     "definition": "A pattern in which one variable tends to increase as the other decreases.",
      "topic": "Scatter Plots and Correlation"
     },
     {
      "term": "No correlation",
-     "definition": "A scatter plot pattern in which the points show no clear upward or downward trend.",
+     "definition": "The absence of a clear linear pattern between two variables in a scatter plot.",
      "topic": "Scatter Plots and Correlation"
     },
     {
      "term": "Correlation coefficient (r)",
-     "definition": "A number between −1 and 1 that measures how strong, and in what direction, a linear relationship is.",
+     "definition": "A number from −1 to 1 measuring the strength and direction of a linear relationship.",
      "topic": "Scatter Plots and Correlation"
     },
     {
      "term": "Line of best fit",
-     "definition": "A straight-graph linear model drawn through a scatter plot that most closely follows the overall trend of the data.",
-     "topic": "Line of Best Fit"
-    },
-    {
-     "term": "Interpolation",
-     "definition": "Using a model, such as a line of best fit, to estimate a value that falls within the range of collected data.",
-     "topic": "Line of Best Fit"
-    },
-    {
-     "term": "Extrapolation",
-     "definition": "Using a model, such as a line of best fit, to estimate a value that falls outside the range of collected data.",
-     "topic": "Line of Best Fit"
+     "definition": "A straight line that best models the trend in a set of paired data.",
+     "topic": "Scatter Plots and Correlation"
     },
     {
      "term": "Correlation vs causation",
-     "definition": "The idea that two variables changing together does not by itself prove that one variable produces the change in the other.",
-     "topic": "Line of Best Fit"
+     "definition": "The principle that a relationship between two variables does not prove one causes the other.",
+     "topic": "Scatter Plots and Correlation"
     },
     {
      "term": "Two-way frequency table",
-     "definition": "A grid of counts for data classified by two categorical variables, one shown in rows and one in columns.",
-     "topic": "Two-Way Tables"
+     "definition": "A table showing counts of data organized by two categorical variables at once.",
+     "topic": "Two-Way Frequency Tables"
     },
     {
      "term": "Joint frequency",
-     "definition": "A count inside the body of a two-way table showing how many data values share one specific row and column.",
-     "topic": "Two-Way Tables"
+     "definition": "A count in a two-way table showing how often two specific categories occur together.",
+     "topic": "Two-Way Frequency Tables"
     },
     {
      "term": "Marginal frequency",
-     "definition": "A row total or column total in a two-way table, written along its outer edge.",
-     "topic": "Two-Way Tables"
-    },
-    {
-     "term": "Relative frequency",
-     "definition": "A count expressed as a fraction, decimal, or percent of a total instead of as a raw number.",
-     "topic": "Two-Way Tables"
+     "definition": "A row or column total in a two-way frequency table.",
+     "topic": "Two-Way Frequency Tables"
     }
    ],
    "questions": [
     {
      "id": "alg1-u12-q1",
      "type": "mc",
-     "prompt": "What is the mean of the data set 4, 7, 7, 9, 13?",
-     "answer": "8",
-     "explanation": "Sum = 4 + 7 + 7 + 9 + 13 = 40; mean = 40 ÷ 5 = 8.",
-     "topic": "Center and Spread",
-     "difficulty": "easy",
+     "prompt": "What is the mean of the data set 4, 8, 6, 10, 12?",
      "options": [
       "8",
-      "7",
-      "9",
-      "10"
-     ]
+      "6",
+      "10",
+      "40"
+     ],
+     "answer": "8",
+     "explanation": "Add all values: 4+8+6+10+12 = 40. Divide by the 5 data values: 40 ÷ 5 = 8.",
+     "topic": "Center and Spread",
+     "difficulty": "easy"
     },
     {
      "id": "alg1-u12-q2",
      "type": "mc",
-     "prompt": "What is the median of the data set 4, 7, 7, 9, 13?",
-     "answer": "7",
-     "explanation": "The values are already in order; with 5 values, the median is the 3rd value: 7.",
-     "topic": "Center and Spread",
-     "difficulty": "easy",
+     "prompt": "What is the median of the data set 2, 9, 3, 7, 5?",
      "options": [
+      "5",
+      "3",
       "7",
-      "8",
-      "9",
-      "13"
-     ]
+      "2"
+     ],
+     "answer": "5",
+     "explanation": "Order the values: 2, 3, 5, 7, 9. With 5 values, the median is the middle (3rd) value, which is 5.",
+     "topic": "Center and Spread",
+     "difficulty": "easy"
     },
     {
      "id": "alg1-u12-q3",
      "type": "written",
-     "prompt": "What is the mode of the data set 2, 5, 5, 5, 8, 9?",
-     "answer": "5",
-     "explanation": "5 appears three times, more than any other value, so it is the mode.",
+     "prompt": "Find the mode of the data set: 2, 3, 3, 5, 7, 3, 8.",
+     "answer": "3",
+     "accept": [],
+     "explanation": "The value 3 appears three times, more often than any other value, so 3 is the mode.",
      "topic": "Center and Spread",
-     "difficulty": "easy",
+     "difficulty": "easy"
+    },
+    {
+     "id": "alg1-u12-q4",
+     "type": "tf",
+     "prompt": "The range of the data set 10, 2, 8, 15, 6 is 13.",
+     "options": [
+      "True",
+      "False"
+     ],
+     "answer": "True",
+     "explanation": "Range = maximum − minimum = 15 − 2 = 13, so the statement is true.",
+     "topic": "Center and Spread",
+     "difficulty": "easy"
+    },
+    {
+     "id": "alg1-u12-q5",
+     "type": "mc",
+     "prompt": "A bowler's scores for 5 games are 150, 162, 150, 178, 165. Which measure of center equals 150?",
+     "options": [
+      "Mode",
+      "Mean",
+      "Median",
+      "Range"
+     ],
+     "answer": "Mode",
+     "explanation": "150 occurs twice, more often than any other score, so 150 is the mode. (The mean is 805÷5 = 161 and the median, from ordered scores 150,150,162,165,178, is 162.)",
+     "topic": "Center and Spread",
+     "difficulty": "medium"
+    },
+    {
+     "id": "alg1-u12-q6",
+     "type": "mc",
+     "prompt": "Which measure of center is most affected by adding one very large outlier to a data set?",
+     "options": [
+      "Mean",
+      "Median",
+      "Mode",
+      "All are affected equally"
+     ],
+     "answer": "Mean",
+     "explanation": "The mean uses every value in its sum, so one extreme value pulls it up or down. The median depends only on the middle value(s), and the mode depends only on repeated values, so both resist outliers.",
+     "topic": "Center and Spread",
+     "difficulty": "medium"
+    },
+    {
+     "id": "alg1-u12-q7",
+     "type": "mc",
+     "prompt": "In a five-number summary, which value has about 25% of the data below it and about 75% above it?",
+     "options": [
+      "Q1",
+      "Q2",
+      "Q3",
+      "Minimum"
+     ],
+     "answer": "Q1",
+     "explanation": "Q1, the first quartile, is the median of the lower half of the data. About one quarter of the values fall below it and three quarters fall above it.",
+     "topic": "Quartiles and Box Plots",
+     "difficulty": "easy"
+    },
+    {
+     "id": "alg1-u12-q8",
+     "type": "written",
+     "prompt": "Find the interquartile range (IQR) of the ordered data set: 4, 8, 15, 16, 23, 42.",
+     "answer": "15",
+     "accept": [],
+     "explanation": "The lower half {4,8,15} has median Q1 = 8. The upper half {16,23,42} has median Q3 = 23. IQR = Q3 − Q1 = 23 − 8 = 15.",
+     "topic": "Quartiles and Box Plots",
+     "difficulty": "medium"
+    },
+    {
+     "id": "alg1-u12-q9",
+     "type": "mc",
+     "prompt": "A data set has Q1 = 20 and Q3 = 32. Using the 1.5×IQR rule, which of these values would count as a low outlier?",
+     "options": [
+      "0",
+      "5",
+      "10",
+      "15"
+     ],
+     "answer": "0",
+     "explanation": "IQR = 32 − 20 = 12, so 1.5×IQR = 18. The lower fence is 20 − 18 = 2; any value below 2, such as 0, is a low outlier.",
+     "topic": "Quartiles and Box Plots",
+     "difficulty": "hard"
+    },
+    {
+     "id": "alg1-u12-q10",
+     "type": "tf",
+     "prompt": "In a box plot, the box itself represents the middle 50% of the data.",
+     "options": [
+      "True",
+      "False"
+     ],
+     "answer": "True",
+     "explanation": "The box stretches from Q1 to Q3, and by definition the interquartile range contains the middle 50% of the data.",
+     "topic": "Quartiles and Box Plots",
+     "difficulty": "easy"
+    },
+    {
+     "id": "alg1-u12-q11",
+     "type": "mc",
+     "prompt": "In a box plot, what do the whiskers represent?",
+     "options": [
+      "The spread from the minimum to Q1 and from Q3 to the maximum",
+      "The spread from Q1 to the median and from the median to Q3",
+      "The spread from the mean to Q1 and from the mean to Q3",
+      "The spread of the middle 50% of the data, from Q1 to Q3"
+     ],
+     "answer": "The spread from the minimum to Q1 and from Q3 to the maximum",
+     "explanation": "The box covers Q1 to Q3. The whiskers extend from the ends of the box out to the minimum and maximum, showing the lowest 25% and highest 25% of the data.",
+     "topic": "Quartiles and Box Plots",
+     "difficulty": "easy"
+    },
+    {
+     "id": "alg1-u12-q12",
+     "type": "written",
+     "prompt": "Find the median of the data set: 12, 5, 9, 20, 7, 16.",
+     "answer": "10.5",
      "accept": [
-      "5.0",
-      "five",
-      "mode = 5",
-      "mode=5"
-     ]
+      "21/2",
+      "10 1/2",
+      "10½"
+     ],
+     "explanation": "Order the values: 5, 7, 9, 12, 16, 20. With 6 values, the median is the average of the 3rd and 4th values: (9 + 12) ÷ 2 = 21 ÷ 2 = 10.5.",
+     "topic": "Center and Spread",
+     "difficulty": "medium"
+    },
+    {
+     "id": "alg1-u12-q13",
+     "type": "mc",
+     "prompt": "Which graph groups numerical data into equal-width intervals and shows bars with no gaps between them?",
+     "options": [
+      "Histogram",
+      "Dot plot",
+      "Scatter plot",
+      "Box plot"
+     ],
+     "answer": "Histogram",
+     "explanation": "A histogram groups continuous data into equal intervals (bins) and draws touching bars to show frequency in each interval.",
+     "topic": "Displaying Data",
+     "difficulty": "easy"
+    },
+    {
+     "id": "alg1-u12-q14",
+     "type": "mc",
+     "prompt": "Which graph displays each individual data value as a dot stacked above a number line?",
+     "options": [
+      "Dot plot",
+      "Histogram",
+      "Two-way table",
+      "Scatter plot"
+     ],
+     "answer": "Dot plot",
+     "explanation": "A dot plot places one dot above its value on a number line for every data point, with stacks showing repeated values.",
+     "topic": "Displaying Data",
+     "difficulty": "easy"
+    },
+    {
+     "id": "alg1-u12-q15",
+     "type": "tf",
+     "prompt": "A distribution with a long tail stretching toward the higher values is called left-skewed.",
+     "options": [
+      "True",
+      "False"
+     ],
+     "answer": "False",
+     "explanation": "A distribution with a long tail toward the higher (right side) values is called right-skewed, not left-skewed.",
+     "topic": "Displaying Data",
+     "difficulty": "medium"
+    },
+    {
+     "id": "alg1-u12-q16",
+     "type": "mc",
+     "prompt": "A histogram of test scores has a tall bar for 80–89, a medium bar for 70–79, a short bar for 60–69, and several small bars stretching down to 20–29. Which best describes the shape?",
+     "options": [
+      "Left-skewed",
+      "Right-skewed",
+      "Symmetric",
+      "Uniform"
+     ],
+     "answer": "Left-skewed",
+     "explanation": "Most scores cluster high (70s–80s), with a long tail stretching toward the low scores. A distribution whose tail points toward the lower values is left-skewed.",
+     "topic": "Displaying Data",
+     "difficulty": "medium"
+    },
+    {
+     "id": "alg1-u12-q17",
+     "type": "mc",
+     "prompt": "A scatter plot shows that as hours studied increases, test scores also tend to increase. This is an example of:",
+     "options": [
+      "Positive correlation",
+      "Negative correlation",
+      "No correlation",
+      "Causation"
+     ],
+     "answer": "Positive correlation",
+     "explanation": "Both variables increase together, which is the pattern of a positive correlation.",
+     "topic": "Scatter Plots and Correlation",
+     "difficulty": "easy"
+    },
+    {
+     "id": "alg1-u12-q18",
+     "type": "mc",
+     "prompt": "A scatter plot shows that as a car's age increases, its resale value tends to decrease. This is an example of:",
+     "options": [
+      "Negative correlation",
+      "Positive correlation",
+      "No correlation",
+      "Causation"
+     ],
+     "answer": "Negative correlation",
+     "explanation": "One variable increases while the other decreases, which is the pattern of a negative correlation.",
+     "topic": "Scatter Plots and Correlation",
+     "difficulty": "easy"
     },
     {
      "id": "alg1-u12-q19",
      "type": "mc",
-     "prompt": "Which correlation coefficient shows the strongest negative linear relationship?",
-     "answer": "−0.95",
-     "explanation": "The strength of a correlation depends on how close |r| is to 1; among these, −0.95 has the largest absolute value and is negative, so it is the strongest negative relationship.",
-     "topic": "Scatter Plots and Correlation",
-     "difficulty": "medium",
+     "prompt": "Which correlation coefficient r represents the strongest linear relationship?",
      "options": [
-      "−0.95",
-      "−0.2",
-      "0.1",
-      "0.85"
-     ]
+      "r = −0.95",
+      "r = 0.5",
+      "r = 0.1",
+      "r = −0.2"
+     ],
+     "answer": "r = −0.95",
+     "explanation": "Strength of correlation depends on how close |r| is to 1, not its sign; |−0.95| = 0.95 is the closest to 1 among the choices, so it shows the strongest linear relationship.",
+     "topic": "Scatter Plots and Correlation",
+     "difficulty": "medium"
     },
     {
-     "id": "alg1-u12-q34",
+     "id": "alg1-u12-q20",
      "type": "tf",
-     "prompt": "In a two-way frequency table, a joint frequency is a row total or column total.",
-     "answer": "False",
-     "explanation": "False — a row or column total is a marginal frequency; a joint frequency is the count inside one specific cell, where one row and one column meet.",
-     "topic": "Two-Way Tables",
-     "difficulty": "medium",
+     "prompt": "A correlation coefficient of r = 0 means there is a strong negative linear relationship between the variables.",
      "options": [
       "True",
       "False"
-     ]
+     ],
+     "answer": "False",
+     "explanation": "r = 0 indicates no linear relationship between the variables; a strong negative relationship would instead have r close to −1.",
+     "topic": "Scatter Plots and Correlation",
+     "difficulty": "medium"
+    },
+    {
+     "id": "alg1-u12-q21",
+     "type": "written",
+     "prompt": "A line of best fit is given by y = 3x + 5. What is the predicted y-value when x = 4?",
+     "answer": "17",
+     "accept": [
+      "y=17",
+      "y = 17",
+      "17.0"
+     ],
+     "explanation": "Substitute x = 4: y = 3(4) + 5 = 12 + 5 = 17.",
+     "topic": "Scatter Plots and Correlation",
+     "difficulty": "medium"
+    },
+    {
+     "id": "alg1-u12-q22",
+     "type": "mc",
+     "prompt": "A scatter plot of hours worked (x) and pay in dollars (y) has a line of best fit passing through (0, 10) and (5, 60). What is the equation of the line of best fit?",
+     "options": [
+      "y = 10x + 10",
+      "y = 50x + 10",
+      "y = 10x + 5",
+      "y = 5x + 10"
+     ],
+     "answer": "y = 10x + 10",
+     "explanation": "Slope = (60 − 10)/(5 − 0) = 50/5 = 10. Using (0, 10) as the y-intercept gives y = 10x + 10; checking x = 5: y = 10(5)+10 = 60, which matches.",
+     "topic": "Scatter Plots and Correlation",
+     "difficulty": "hard"
+    },
+    {
+     "id": "alg1-u12-q23",
+     "type": "tf",
+     "prompt": "Ice cream sales and drowning incidents both increase in summer, but this does not mean ice cream sales cause drownings.",
+     "options": [
+      "True",
+      "False"
+     ],
+     "answer": "True",
+     "explanation": "Both are driven by a third factor, hot weather, illustrating that correlation between two variables does not prove one causes the other.",
+     "topic": "Scatter Plots and Correlation",
+     "difficulty": "easy"
+    },
+    {
+     "id": "alg1-u12-q24",
+     "type": "mc",
+     "prompt": "A study finds that fires with more fire trucks at the scene tend to cause more damage. What is the most likely explanation?",
+     "options": [
+      "Bigger fires bring more trucks and also cause more damage",
+      "The fire trucks themselves are what cause the extra damage",
+      "Sending fewer trucks to each fire would reduce the damage",
+      "The number of trucks and the damage are not related at all"
+     ],
+     "answer": "Bigger fires bring more trucks and also cause more damage",
+     "explanation": "Fire size is a lurking variable: bigger fires need more trucks and also cause more damage. The correlation is real, but it does not mean the trucks cause the damage.",
+     "topic": "Scatter Plots and Correlation",
+     "difficulty": "hard"
+    },
+    {
+     "id": "alg1-u12-q25",
+     "type": "mc",
+     "prompt": "In a two-way frequency table, a count found at a specific row-and-column intersection (not a total) is called a:",
+     "options": [
+      "Joint frequency",
+      "Marginal frequency",
+      "Conditional frequency",
+      "Cumulative frequency"
+     ],
+     "answer": "Joint frequency",
+     "explanation": "A joint frequency is the count where one specific row category and one specific column category overlap. Row and column totals are marginal frequencies.",
+     "topic": "Two-Way Frequency Tables",
+     "difficulty": "easy"
+    },
+    {
+     "id": "alg1-u12-q26",
+     "type": "mc",
+     "prompt": "Of 50 students surveyed, 30 play a sport, 20 play an instrument, and 10 do both. How many students do neither?",
+     "options": [
+      "10",
+      "20",
+      "0",
+      "40"
+     ],
+     "answer": "10",
+     "explanation": "Students doing at least one activity = 30 + 20 − 10 (counted twice) = 40. Neither = 50 − 40 = 10.",
+     "topic": "Two-Way Frequency Tables",
+     "difficulty": "medium"
+    },
+    {
+     "id": "alg1-u12-q27",
+     "type": "written",
+     "prompt": "A two-way table of 50 students shows: 18 boys like pizza, 7 boys dislike pizza, 15 girls like pizza, and 10 girls dislike pizza. What is the marginal (row) total for boys?",
+     "answer": "25",
+     "accept": [],
+     "explanation": "Add the boys' joint frequencies across both columns: 18 (like) + 7 (dislike) = 25.",
+     "topic": "Two-Way Frequency Tables",
+     "difficulty": "medium"
+    },
+    {
+     "id": "alg1-u12-q28",
+     "type": "tf",
+     "prompt": "A marginal frequency is the same thing as a joint frequency in a two-way table.",
+     "options": [
+      "True",
+      "False"
+     ],
+     "answer": "False",
+     "explanation": "A marginal frequency is a row or column total, while a joint frequency is a single count at the intersection of one row and one column; they are different.",
+     "topic": "Two-Way Frequency Tables",
+     "difficulty": "medium"
+    },
+    {
+     "id": "alg1-u12-q29",
+     "type": "written",
+     "prompt": "If 5 is added to every value in the data set 45, 38, 52, 41, 60, 33, what is the range of the new data set?",
+     "answer": "27",
+     "accept": [
+      "27.0"
+     ],
+     "explanation": "The new values are 50, 43, 57, 46, 65, 38, so the range is 65 − 38 = 27. That equals the original range (60 − 33 = 27), because adding a constant shifts every value but does not change the spread.",
+     "topic": "Center and Spread",
+     "difficulty": "medium"
+    },
+    {
+     "id": "alg1-u12-q30",
+     "type": "mc",
+     "prompt": "A box plot has minimum = 10, Q1 = 18, median = 25, Q3 = 34, maximum = 50. What is the interquartile range?",
+     "options": [
+      "16",
+      "24",
+      "40",
+      "9"
+     ],
+     "answer": "16",
+     "explanation": "IQR = Q3 − Q1 = 34 − 18 = 16.",
+     "topic": "Quartiles and Box Plots",
+     "difficulty": "medium"
+    },
+    {
+     "id": "alg1-u12-q31",
+     "type": "written",
+     "prompt": "Five test scores have a mean of 84. Four of the scores are 80, 90, 75, and 88. What is the fifth score?",
+     "answer": "87",
+     "accept": [],
+     "explanation": "Total of 5 scores = 84 × 5 = 420. Sum of the four known scores = 80+90+75+88 = 333. Fifth score = 420 − 333 = 87.",
+     "topic": "Center and Spread",
+     "difficulty": "hard"
+    },
+    {
+     "id": "alg1-u12-q32",
+     "type": "tf",
+     "prompt": "A scatter plot with points scattered randomly and no visible pattern shows no correlation.",
+     "options": [
+      "True",
+      "False"
+     ],
+     "answer": "True",
+     "explanation": "When there is no linear pattern connecting the two variables, the scatter plot shows no correlation.",
+     "topic": "Scatter Plots and Correlation",
+     "difficulty": "easy"
     }
    ]
   }
