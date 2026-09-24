@@ -302,6 +302,35 @@ await check('blitz', async () => {
   }
 }
 
+await check('every subject', async () => {
+  // Each subject with content: its page lists units, and a unit plays a Learn
+  // round and a short test without errors.
+  const subjects = await page.evaluate(() => (window.STUDY_SUBJECTS || []).map((x) => ({ id: x.id, first: (x.sets[0] || {}).id })));
+  for (const subj of subjects) {
+    await go(`/s/${subj.id}`);
+    if (!(await page.locator('.card.set').count())) { fail(`${subj.id}: subject page lists no units`); continue; }
+    await go(`/set/${subj.first}/learn`);
+    for (let i = 0; i < 3; i++) {
+      if (!(await answerCorrectly()) && !(await answerOne('x'))) { fail(`${subj.id}: Learn showed no question`); break; }
+      await page.waitForTimeout(150);
+      await advance();
+    }
+    await go(`/set/${subj.first}/test`);
+    await page.locator('.seg button', { hasText: /^10$/ }).click();
+    await page.click('text=Start test');
+    const rows = page.locator('.test-q');
+    const n = await rows.count();
+    for (let i = 0; i < n; i++) {
+      const r = rows.nth(i);
+      if (await r.locator('input').count()) await r.locator('input').fill('x'); else await r.locator('.opt').first().click();
+    }
+    await page.click('text=Submit test');
+    if (await page.locator('text=submit anyway').count()) await page.click('text=submit anyway');
+    await page.waitForTimeout(300);
+    if (!(await page.locator('.score-ring').count())) fail(`${subj.id}: the test did not grade`);
+  }
+});
+
 await check('study guide', async () => {
   await go(`/set/${target}/guide`);
   if (!(await page.locator('.term-row').count())) return fail('guide listed no terms');
