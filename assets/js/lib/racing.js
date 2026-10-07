@@ -13,6 +13,8 @@
   'use strict';
   var Milo = global.Milo = global.Milo || {};
 
+  var TAU = Math.PI * 2;
+
   /* ============================================================== mat4 */
 
   var M = {};
@@ -85,59 +87,103 @@
   /* ====================================================== mesh builder */
 
   /**
-   * Vertices are pos(3) + colour(3) + shade(1) + tint(1). `tint` blends the
+   * Vertices are pos(3) + colour(3) + normal(3) + tint(1). `tint` blends the
    * vertex colour toward a per-draw uniform, so one car mesh serves every
    * paint job without rebuilding a buffer.
+   *
+   * Normals are real surface normals taken from the geometry, not hand-picked
+   * brightness constants: the shader lights them against a sun direction, so
+   * a face's shading follows how it actually sits in the world rather than
+   * which way it happened to be pointing when someone typed a number.
    */
   function Mesh() { this.v = []; }
 
-  Mesh.prototype.vert = function (x, y, z, col, shade, tint) {
-    this.v.push(x, y, z, col[0], col[1], col[2], shade, tint || 0);
+  var STRIDE = 10;
+  Mesh.STRIDE = STRIDE;
+
+  /** Unit normal of the triangle a-b-c, following its winding. */
+  function faceNormal(a, b, c) {
+    var ux = b[0] - a[0], uy = b[1] - a[1], uz = b[2] - a[2];
+    var vx = c[0] - b[0], vy = c[1] - b[1], vz = c[2] - b[2];
+    var nx = uy * vz - uz * vy, ny = uz * vx - ux * vz, nz = ux * vy - uy * vx;
+    var l = Math.hypot(nx, ny, nz) || 1;
+    return [nx / l, ny / l, nz / l];
+  }
+  Mesh.faceNormal = faceNormal;
+
+  Mesh.prototype.vert = function (x, y, z, col, n, tint) {
+    this.v.push(x, y, z, col[0], col[1], col[2], n[0], n[1], n[2], tint || 0);
   };
 
-  Mesh.prototype.tri = function (a, b, c, col, shade, tint) {
-    this.vert(a[0], a[1], a[2], col, shade, tint);
-    this.vert(b[0], b[1], b[2], col, shade, tint);
-    this.vert(c[0], c[1], c[2], col, shade, tint);
+  /**
+   * `shade` tints the stored colour (kerb stripes, worn tarmac and the like).
+   * It is a material choice now, not a stand-in for lighting.
+   */
+  Mesh.prototype.tri = function (a, b, c, col, shade, tint, nrm) {
+    var n = nrm || faceNormal(a, b, c);
+    var k = shade == null ? 1 : shade;
+    var cc = [col[0] * k, col[1] * k, col[2] * k];
+    this.vert(a[0], a[1], a[2], cc, n, tint);
+    this.vert(b[0], b[1], b[2], cc, n, tint);
+    this.vert(c[0], c[1], c[2], cc, n, tint);
   };
 
-  Mesh.prototype.quad = function (a, b, c, d, col, shade, tint) {
-    this.tri(a, b, c, col, shade, tint);
-    this.tri(a, c, d, col, shade, tint);
+  Mesh.prototype.quad = function (a, b, c, d, col, shade, tint, nrm) {
+    var n = nrm || faceNormal(a, b, c);
+    this.tri(a, b, c, col, shade, tint, n);
+    this.tri(a, c, d, col, shade, tint, n);
   };
 
-  /** Axis-aligned box from centre + half-extents, with per-face shading. */
-  Mesh.prototype.box = function (cx, cy, cz, hx, hy, hz, col, tint, shadeScale) {
-    var s = shadeScale == null ? 1 : shadeScale;
+  /** Axis-aligned box from centre + half-extents. */
+  Mesh.prototype.box = function (cx, cy, cz, hx, hy, hz, col, tint, shade) {
     var x0 = cx - hx, x1 = cx + hx, y0 = cy - hy, y1 = cy + hy, z0 = cz - hz, z1 = cz + hz;
     var t = this;
-    t.quad([x0, y1, z0], [x0, y1, z1], [x1, y1, z1], [x1, y1, z0], col, 1.00 * s, tint);
-    t.quad([x0, y0, z1], [x0, y0, z0], [x1, y0, z0], [x1, y0, z1], col, 0.45 * s, tint);
-    t.quad([x0, y0, z1], [x1, y0, z1], [x1, y1, z1], [x0, y1, z1], col, 0.80 * s, tint);
-    t.quad([x1, y0, z0], [x0, y0, z0], [x0, y1, z0], [x1, y1, z0], col, 0.66 * s, tint);
-    t.quad([x1, y0, z1], [x1, y0, z0], [x1, y1, z0], [x1, y1, z1], col, 0.90 * s, tint);
-    t.quad([x0, y0, z0], [x0, y0, z1], [x0, y1, z1], [x0, y1, z0], col, 0.58 * s, tint);
+    t.quad([x0, y1, z0], [x0, y1, z1], [x1, y1, z1], [x1, y1, z0], col, shade, tint, [0, 1, 0]);
+    t.quad([x0, y0, z1], [x0, y0, z0], [x1, y0, z0], [x1, y0, z1], col, shade, tint, [0, -1, 0]);
+    t.quad([x0, y0, z1], [x1, y0, z1], [x1, y1, z1], [x0, y1, z1], col, shade, tint, [0, 0, 1]);
+    t.quad([x1, y0, z0], [x0, y0, z0], [x0, y1, z0], [x1, y1, z0], col, shade, tint, [0, 0, -1]);
+    t.quad([x1, y0, z1], [x1, y0, z0], [x1, y1, z0], [x1, y1, z1], col, shade, tint, [1, 0, 0]);
+    t.quad([x0, y0, z0], [x0, y0, z1], [x0, y1, z1], [x0, y1, z0], col, shade, tint, [-1, 0, 0]);
   };
 
   /**
    * Box rotated about Y. Local +z runs along the given yaw, +x to its right,
    * which is what track-side buildings need to face the road.
    */
-  Mesh.prototype.boxR = function (cx, cy, cz, hx, hy, hz, yaw, col, tint, shadeScale) {
-    var sc = shadeScale == null ? 1 : shadeScale;
+  Mesh.prototype.boxR = function (cx, cy, cz, hx, hy, hz, yaw, col, tint, shade) {
     var c = Math.cos(yaw), s = Math.sin(yaw);
     function P(x, y, z) { return [cx + x * c + z * s, cy + y, cz - x * s + z * c]; }
+    function N(x, y, z) { return [x * c + z * s, y, -x * s + z * c]; }
     var p000 = P(-hx, -hy, -hz), p100 = P(hx, -hy, -hz), p010 = P(-hx, hy, -hz), p110 = P(hx, hy, -hz);
     var p001 = P(-hx, -hy, hz), p101 = P(hx, -hy, hz), p011 = P(-hx, hy, hz), p111 = P(hx, hy, hz);
-    this.quad(p010, p011, p111, p110, col, 1.00 * sc, tint);
-    this.quad(p001, p000, p100, p101, col, .45 * sc, tint);
-    this.quad(p001, p101, p111, p011, col, .80 * sc, tint);
-    this.quad(p100, p000, p010, p110, col, .66 * sc, tint);
-    this.quad(p101, p100, p110, p111, col, .90 * sc, tint);
-    this.quad(p000, p001, p011, p010, col, .58 * sc, tint);
+    this.quad(p010, p011, p111, p110, col, shade, tint, [0, 1, 0]);
+    this.quad(p001, p000, p100, p101, col, shade, tint, [0, -1, 0]);
+    this.quad(p001, p101, p111, p011, col, shade, tint, N(0, 0, 1));
+    this.quad(p100, p000, p010, p110, col, shade, tint, N(0, 0, -1));
+    this.quad(p101, p100, p110, p111, col, shade, tint, N(1, 0, 0));
+    this.quad(p000, p001, p011, p010, col, shade, tint, N(-1, 0, 0));
   };
 
-  Mesh.prototype.count = function () { return this.v.length / 8; };
+  /** A cylinder about the local X axis — wheels, rollers, pipes. */
+  Mesh.prototype.cylX = function (cx, cy, cz, half, radius, seg, col, tint, shade) {
+    var i;
+    for (i = 0; i < seg; i++) {
+      var a0 = i / seg * TAU, a1 = (i + 1) / seg * TAU;
+      var y0 = Math.cos(a0) * radius, z0 = Math.sin(a0) * radius;
+      var y1 = Math.cos(a1) * radius, z1 = Math.sin(a1) * radius;
+      var nA = [0, Math.cos(a0), Math.sin(a0)], nB = [0, Math.cos(a1), Math.sin(a1)];
+      // Tread: one quad per segment, with normals fanning out from the axis so
+      // the barrel lights as a curve rather than as a set of flat panels.
+      var pA0 = [cx - half, cy + y0, cz + z0], pA1 = [cx + half, cy + y0, cz + z0];
+      var pB0 = [cx - half, cy + y1, cz + z1], pB1 = [cx + half, cy + y1, cz + z1];
+      this.tri(pA0, pA1, pB1, col, shade, tint, nA);
+      this.tri(pA0, pB1, pB0, col, shade, tint, nB);
+      this.tri([cx + half, cy, cz], pA1, pB1, col, shade == null ? 1 : shade * .92, tint, [1, 0, 0]);
+      this.tri([cx - half, cy, cz], pB0, pA0, col, shade == null ? 1 : shade * .92, tint, [-1, 0, 0]);
+    }
+  };
+
+  Mesh.prototype.count = function () { return this.v.length / STRIDE; };
   Mesh.prototype.data = function () { return new Float32Array(this.v); };
 
   Milo.Mesh = Mesh;
@@ -156,8 +202,6 @@
   }
 
   /* ================================================ track generation */
-
-  var TAU = Math.PI * 2;
 
   /**
    * A periodic wobble built from whole-numbered harmonics, so it closes on
@@ -472,14 +516,14 @@
   /* ============================================================ themes */
 
   var THEMES = {
-    dawn: { sky: [.99, .71, .45], fog: [.99, .78, .58], ground: [.42, .30, .26], road: [.28, .27, .34], kerbA: [.94, .35, .29], kerbB: [.97, .95, .92], wall: [.98, .84, .40], accent: [1, .55, .25], scen: 'rock' },
-    grass: { sky: [.42, .72, .95], fog: [.68, .84, .96], ground: [.36, .63, .32], road: [.30, .30, .36], kerbA: [.90, .24, .24], kerbB: [.97, .97, .97], wall: [.95, .95, .97], accent: [.20, .80, .55], scen: 'tree' },
-    night: { sky: [.05, .05, .12], fog: [.08, .07, .18], ground: [.10, .10, .18], road: [.16, .16, .22], kerbA: [.20, .90, .95], kerbB: [.65, .30, .95], wall: [.30, .85, .95], accent: [.25, .95, .85], scen: 'neon' },
-    snow: { sky: [.75, .85, .95], fog: [.88, .93, .98], ground: [.90, .93, .97], road: [.34, .36, .44], kerbA: [.85, .30, .35], kerbB: [.98, .98, 1], wall: [.70, .82, .92], accent: [.45, .75, .95], scen: 'pine' },
-    desert: { sky: [.62, .80, .93], fog: [.90, .82, .64], ground: [.82, .70, .45], road: [.36, .33, .32], kerbA: [.92, .55, .20], kerbB: [.98, .95, .88], wall: [.85, .72, .48], accent: [.95, .70, .25], scen: 'cactus' },
-    volcano: { sky: [.20, .07, .08], fog: [.36, .12, .10], ground: [.18, .10, .10], road: [.20, .18, .20], kerbA: [.98, .42, .12], kerbB: [.30, .26, .28], wall: [.55, .18, .12], accent: [1, .45, .12], scen: 'rock' },
-    ocean: { sky: [.48, .80, .90], fog: [.62, .87, .93], ground: [.16, .48, .62], road: [.28, .32, .40], kerbA: [.98, .82, .30], kerbB: [.96, .98, 1], wall: [.30, .70, .82], accent: [.20, .85, .80], scen: 'palm' },
-    space: { sky: [.03, .02, .08], fog: [.08, .05, .16], ground: [.09, .07, .16], road: [.18, .17, .26], kerbA: [.75, .30, .95], kerbB: [.35, .80, 1], wall: [.55, .35, .90], accent: [.80, .40, 1], scen: 'crystal' }
+    dawn: { sun: [.62, .30, .72], sunCol: [1, .78, .52], sky: [.99, .71, .45], fog: [.99, .78, .58], ground: [.42, .30, .26], road: [.28, .27, .34], kerbA: [.94, .35, .29], kerbB: [.97, .95, .92], wall: [.98, .84, .40], accent: [1, .55, .25], scen: 'rock' },
+    grass: { sun: [.42, .80, .43], sunCol: [1, .98, .92], sky: [.42, .72, .95], fog: [.68, .84, .96], ground: [.36, .63, .32], road: [.30, .30, .36], kerbA: [.90, .24, .24], kerbB: [.97, .97, .97], wall: [.95, .95, .97], accent: [.20, .80, .55], scen: 'tree' },
+    night: { sun: [-.35, .66, .66], sunCol: [.55, .72, 1], sky: [.05, .05, .12], fog: [.08, .07, .18], ground: [.10, .10, .18], road: [.16, .16, .22], kerbA: [.20, .90, .95], kerbB: [.65, .30, .95], wall: [.30, .85, .95], accent: [.25, .95, .85], scen: 'neon' },
+    snow: { sun: [.30, .78, .55], sunCol: [.92, .96, 1], sky: [.75, .85, .95], fog: [.88, .93, .98], ground: [.90, .93, .97], road: [.34, .36, .44], kerbA: [.85, .30, .35], kerbB: [.98, .98, 1], wall: [.70, .82, .92], accent: [.45, .75, .95], scen: 'pine' },
+    desert: { sun: [.18, .92, .35], sunCol: [1, .95, .80], sky: [.62, .80, .93], fog: [.90, .82, .64], ground: [.82, .70, .45], road: [.36, .33, .32], kerbA: [.92, .55, .20], kerbB: [.98, .95, .88], wall: [.85, .72, .48], accent: [.95, .70, .25], scen: 'cactus' },
+    volcano: { sun: [.55, .38, .74], sunCol: [1, .55, .30], sky: [.20, .07, .08], fog: [.36, .12, .10], ground: [.18, .10, .10], road: [.20, .18, .20], kerbA: [.98, .42, .12], kerbB: [.30, .26, .28], wall: [.55, .18, .12], accent: [1, .45, .12], scen: 'rock' },
+    ocean: { sun: [.48, .74, .47], sunCol: [1, .97, .90], sky: [.48, .80, .90], fog: [.62, .87, .93], ground: [.16, .48, .62], road: [.28, .32, .40], kerbA: [.98, .82, .30], kerbB: [.96, .98, 1], wall: [.30, .70, .82], accent: [.20, .85, .80], scen: 'palm' },
+    space: { sun: [-.50, .58, .64], sunCol: [.82, .62, 1], sky: [.03, .02, .08], fog: [.08, .05, .16], ground: [.09, .07, .16], road: [.18, .17, .26], kerbA: [.75, .30, .95], kerbB: [.35, .80, 1], wall: [.55, .35, .90], accent: [.80, .40, 1], scen: 'crystal' }
   };
 
   /* ============================================================= cars */
