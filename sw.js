@@ -1,6 +1,6 @@
 /* MiloPlay service worker — makes the whole site playable offline.
    Bump CACHE when assets change; old caches are cleaned up on activate. */
-const CACHE = 'miloplay-v2';
+const CACHE = 'miloplay-v11';
 
 const GAMES = [
 // GAMES:BEGIN
@@ -61,6 +61,39 @@ const ASSETS = [
   './',
   './index.html',
   './manifest.webmanifest',
+  // StudyQuest — the study site is part of the offline promise too.
+  './study/',
+  './study/index.html',
+  './study/manifest.webmanifest',
+  './study/style.css',
+  './study/data.js',
+  './study/subjects/alg1.js',
+  './study/subjects/geo.js',
+  './study/subjects/bio.js',
+  './study/subjects/ela.js',
+  './study/subjects/ush.js',
+  './study/subjects/wh.js',
+  './study/subjects/span1.js',
+  './study/subjects/alg2.js',
+  './study/subjects/phys.js',
+  './study/subjects/earth.js',
+  './study/subjects/chem.js',
+  './study/subjects/gov.js',
+  './study/subjects/econ.js',
+  './study/subjects/psych.js',
+  './study/app.js',
+  './study/lab.js',
+  './study/lab.css',
+  './study/visuals.js',
+  './study/visuals.css',
+  './study/collect.js',
+  './study/collect.css',
+  './study/algebra.js',
+  './study/algebra.css',
+  './study/geometry.js',
+  './study/geometry.css',
+  './study/physics.js',
+  './study/physics.css',
   './assets/css/style.css',
   './assets/js/engine.js',
   './assets/js/lib/cards.js',
@@ -96,16 +129,29 @@ self.addEventListener('fetch', (e) => {
   if (url.origin !== self.location.origin) return;   // let fonts etc. go to the network
 
   // Navigations: try the network first so a redeploy is picked up immediately,
-  // and fall back to the cached shell when offline.
+  // and fall back to the cached shell when offline. The portal and the study
+  // site are separate pages, so each refreshes and falls back to its own shell
+  // — caching every navigation under one key would leave whichever was opened
+  // last standing in for both offline.
   if (req.mode === 'navigate') {
+    const scope = new URL(self.registration.scope).pathname;
+    const rel = url.pathname.startsWith(scope) ? url.pathname.slice(scope.length) : url.pathname;
+    const study = /^study(\/|$)/.test(rel);
+    const shell = study ? './study/index.html' : './index.html';
+    // Only the shell page itself may stand in for the shell offline — never a
+    // redirect (…/study → …/study/), the 404 page of a mistyped URL, or some
+    // other file opened directly (README.md, dist/miloplay.html).
+    const isShell = study ? /^study\/(index\.html)?$/.test(rel) : /^(index\.html)?$/.test(rel);
     e.respondWith(
       fetch(req)
         .then((res) => {
-          const copy = res.clone();
-          caches.open(CACHE).then((c) => c.put('./index.html', copy));
+          if (isShell && res.ok && res.type === 'basic' && !res.redirected) {
+            const copy = res.clone();
+            caches.open(CACHE).then((c) => c.put(shell, copy));
+          }
           return res;
         })
-        .catch(() => caches.match('./index.html').then((r) => r || caches.match('./')))
+        .catch(() => caches.match(shell).then((r) => r || caches.match('./index.html')))
     );
     return;
   }

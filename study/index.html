@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>StudyQuest — every subject, one study hub</title>
+<meta name="description" content="Flashcards, practice tests and Blooket-style games for high school subjects: Algebra 1, Geometry, Algebra 2, Chemistry, Biology, Physics, Earth Science, English, Spanish 1, U.S. History, World History, Government, Economics and Psychology.">
+<meta name="theme-color" content="#0b0e1a" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f4f6fd" media="(prefers-color-scheme: light)">
+<meta name="color-scheme" content="dark light">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%237c5cff'/><stop offset='1' stop-color='%2322d3ee'/></linearGradient></defs><rect width='100' height='100' rx='24' fill='url(%23g)'/><text x='50' y='72' font-size='58' text-anchor='middle'>🎓</text></svg>">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="lab.css">
+<link rel="stylesheet" href="visuals.css">
+<link rel="stylesheet" href="collect.css">
+<link rel="stylesheet" href="algebra.css">
+<link rel="stylesheet" href="geometry.css">
+<link rel="stylesheet" href="physics.css">
+</head>
+<body>
+
+<header class="header">
+  <a class="logo" href="#/" aria-label="StudyQuest home">
+    <span class="logo-mark">🎓</span>
+    <span>Study<b>Quest</b></span>
+  </a>
+  <nav class="crumbs" id="crumbs" aria-label="Breadcrumb"></nav>
+  <div class="header-actions">
+    <button class="icon-btn" id="sound" type="button" aria-label="Toggle sound" title="Sound">🔔</button>
+    <button class="icon-btn" id="theme" type="button" aria-label="Toggle theme" title="Theme">🌙</button>
+  </div>
+</header>
+
+<main class="main" id="main">
+  <div class="empty">Loading…</div>
+</main>
+
+<footer class="footer">
+  <p><strong>StudyQuest</strong> — Chemistry Concepts 1–4 are built from your class notes; everything else follows standard high school courses. Progress is saved on this device.</p>
+  <p style="margin-top:6px"><a href="../">← Back to MiloPlay</a></p>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="data.js"></script>
+<!-- One file per subject; each pushes itself onto window.STUDY_SUBJECTS. -->
+<script src="subjects/alg1.js"></script>
+<script src="subjects/geo.js"></script>
+<script src="subjects/alg2.js"></script>
+<script src="subjects/bio.js"></script>
+<script src="subjects/earth.js"></script>
+<script src="subjects/ela.js"></script>
+<script src="subjects/ush.js"></script>
+<script src="subjects/wh.js"></script>
+<script src="subjects/span1.js"></script>
+<script src="subjects/chem.js"></script>
+<script src="subjects/phys.js"></script>
+<script src="subjects/gov.js"></script>
+<script src="subjects/econ.js"></script>
+<script src="subjects/psych.js"></script>
+<script src="app.js"></script>
+<!-- Features in their own files; each registers itself through window.CQ. -->
+<script src="lab.js"></script>
+<script src="visuals.js"></script>
+<script src="collect.js"></script>
+<script src="algebra.js"></script>
+<script src="geometry.js"></script>
+<script src="physics.js"></script>
+
+<script>
+  // Register the portal's service worker so the study site works offline even
+  // for a student who opened /study/ directly and never visited the portal.
+  if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+    addEventListener('load', function () {
+      navigator.serviceWorker.register('../sw.js').catch(function () { /* offline support is optional */ });
+    });
+  }
+</script>
+</body>
+</html>

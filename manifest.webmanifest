@@ -1,7 +1,7 @@
 {
   "name": "MiloPlay — free browser games",
   "short_name": "MiloPlay",
-  "description": "30 free games that run instantly in your browser. No downloads, no sign-up.",
+  "description": "1,000 free games that run instantly in your browser. No downloads, no sign-up.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

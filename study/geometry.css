@@ -1,0 +1,155 @@
+/* ==========================================================================
+   Geometry Lab (geometry.js) — skill chips, the problem card, drawn figures
+   and worked solutions. Every colour comes from the theme tokens, and the
+   figures draw with currentColor, so light and dark mode both work.
+   ========================================================================== */
+
+.gm .toolbar { align-items: center; }
+.gm-seg-label { font-weight: 700; }
+.gm .seg button { min-height: 44px; white-space: nowrap; }
+
+/* ---------- skills ---------- */
+.gm-skills { display: grid; gap: 10px; margin-bottom: 14px; }
+.gm-h { font-size: .82rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--text-3); }
+.gm-count { font-size: .82rem; }
+.gm-fold > summary {
+  display: flex; align-items: center; gap: 12px; min-height: 44px; cursor: pointer;
+  list-style: none; border-radius: 10px;
+}
+.gm-fold > summary::-webkit-details-marker { display: none; }
+.gm-fold > summary::before {
+  content: "▸"; font-size: .9rem; color: var(--text-2); transition: transform .15s;
+}
+.gm-fold[open] > summary::before { transform: rotate(90deg); }
+.gm-fold[open] > summary { margin-bottom: 8px; }
+.gm-chips { display: grid; gap: 8px; }
+.gm-chip-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.gm-group {
+  min-height: 44px; min-width: 76px; padding: 6px 12px; border-radius: 12px;
+  border: 1px solid var(--line); background: var(--surface-2); color: var(--text-2);
+  font-size: .8rem; font-weight: 800; letter-spacing: .02em;
+}
+.gm-group:hover { border-color: var(--brand); color: var(--text); }
+.gm-group.on { border-color: var(--brand); color: var(--text); background: color-mix(in srgb, var(--brand) 14%, var(--surface-2)); }
+.gm-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  min-height: 44px; padding: 8px 14px 8px 10px; border-radius: 999px;
+  border: 1.5px dashed var(--line); background: transparent; color: var(--text-2);
+  font-weight: 700; font-size: .9rem; line-height: 1.1; text-align: left;
+  transition: background .15s, border-color .15s, transform .15s;
+}
+.gm-chip:hover { transform: translateY(-1px); border-color: var(--brand); }
+.gm-chip .tick {
+  display: grid; place-items: center; flex: none; width: 22px; height: 22px; border-radius: 50%;
+  background: var(--surface-3); font-size: .8rem; font-weight: 900; color: var(--text-3);
+}
+/* "on" is carried by the tick, the solid border and the fill, not colour alone */
+.gm-chip.on { border-style: solid; border-color: var(--brand); color: var(--text); background: color-mix(in srgb, var(--brand) 14%, var(--surface)); }
+.gm-chip.on .tick { background: var(--brand); color: #fff; }
+.gm-chip .tally {
+  font-family: var(--mono); font-size: .76rem; font-weight: 700;
+  padding: 2px 7px; border-radius: 999px; background: var(--surface-2); color: var(--text-2);
+}
+.gm-chip .mastery { color: var(--gold); font-size: .8rem; letter-spacing: -1px; }
+
+/* ---------- session stats ---------- */
+.gm-stats { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+.gm-stat {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 7px 12px; border-radius: 12px; background: var(--surface-2);
+  font-size: .88rem; color: var(--text-2);
+}
+.gm-stat b { color: var(--text); font-size: 1rem; font-variant-numeric: tabular-nums; }
+
+/* ---------- the problem card ---------- */
+.gm-card { gap: 16px; }
+.gm-card-head { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.gm-card-head .q-tag { margin-right: auto; }
+.gm-level {
+  font-size: .74rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase;
+  padding: 4px 9px; border-radius: 999px; border: 1px solid var(--line); color: var(--text-2);
+}
+.gm-level.unit { text-transform: none; letter-spacing: 0; font-weight: 700; }
+.gm-card .q-prompt { overflow-wrap: anywhere; }
+.gm-card .q-figure { padding: 10px; }
+.gm-card .q-figure svg { max-width: 360px; max-height: 280px; }
+.gm-actions { gap: 8px; }
+.gm-tool { min-width: 44px; font-size: 1rem; font-weight: 800; }
+.gm-hint-btn { border-color: color-mix(in srgb, var(--warm) 55%, var(--line)); }
+.gm-hint {
+  border: 1px dashed color-mix(in srgb, var(--warm) 60%, var(--line));
+  background: color-mix(in srgb, var(--warm) 7%, var(--surface-2));
+  border-radius: 14px; padding: 14px 16px; display: grid; gap: 10px;
+}
+.gm-assisted { font-size: .86rem; font-weight: 700; color: var(--text-2); }
+.gm-why { color: var(--text); font-size: .95rem; }
+.gm-nowrap { white-space: nowrap; }
+.gm-override { justify-self: start; }
+.gm-keys { font-size: .8rem; }
+.gm-card .feedback { gap: 10px; }
+.gm-card .feedback .exp { color: var(--text); }
+
+/* ---------- worked solutions: one line per step ---------- */
+.gm-work { display: grid; gap: 10px; min-width: 0; color: var(--text); }
+.feedback .gm-work { color: var(--text); }
+.gm-step { line-height: 1.5; }
+.gm-aside { color: var(--text-2); font-size: .9rem; }
+.gm-list { margin: 0; padding-left: 1.3em; display: grid; gap: 4px; }
+.gm-eqs {
+  display: grid; gap: 6px; padding: 10px 14px; border-radius: 12px;
+  background: var(--surface); border: 1px solid var(--line-soft);
+  font-variant-numeric: tabular-nums; min-width: 0;
+}
+.gm-ln { font-weight: 600; line-height: 1.45; overflow-wrap: anywhere; }
+.gm-ans {
+  display: inline-block; padding: 1px 9px; border-radius: 9px;
+  border: 2px solid var(--brand); font-weight: 800; color: var(--text); white-space: nowrap;
+}
+.gm-q { font-weight: 800; color: var(--text-3); }
+.gm-mini { justify-self: start; }
+.gm-mini svg { display: block; width: 140px; height: auto; }
+
+/* ---------- figures ---------- */
+.gm-svg { display: block; width: 100%; height: auto; overflow: visible; color: var(--text); }
+.gm-svg line, .gm-svg polyline, .gm-svg path, .gm-svg polygon, .gm-svg circle, .gm-svg ellipse { vector-effect: non-scaling-stroke; }
+.gm-svg .gm-seg { stroke: currentColor; stroke-width: 2; fill: none; stroke-linecap: round; }
+.gm-svg .gm-shape { stroke: currentColor; stroke-width: 2; stroke-linejoin: round; fill: color-mix(in srgb, var(--brand-2) 9%, transparent); }
+.gm-svg .gm-shape.gm-nofill, .gm-svg .gm-nofill { fill: none; }
+.gm-svg .gm-shape2 { stroke: var(--brand); stroke-width: 2.4; stroke-dasharray: 7 4; stroke-linejoin: round; fill: color-mix(in srgb, var(--brand) 12%, transparent); }
+.gm-svg .gm-hl { stroke: var(--brand); stroke-width: 3; fill: none; stroke-linecap: round; }
+.gm-svg .gm-mark { stroke: var(--text-2); stroke-width: 1.8; fill: none; stroke-linecap: round; }
+.gm-svg .gm-dash { stroke: var(--text-2); stroke-width: 1.6; stroke-dasharray: 5 4; fill: none; }
+.gm-svg .gm-brace { stroke: var(--text-2); stroke-width: 1.5; fill: none; }
+.gm-svg .gm-grid { stroke: var(--line); stroke-width: 1; }
+.gm-svg .gm-axis { stroke: var(--text-2); stroke-width: 1.6; }
+.gm-svg .gm-refl { stroke: var(--good); stroke-width: 1.8; stroke-dasharray: 6 4; }
+.gm-svg .gm-ground { stroke: var(--text-3); stroke-width: 2.5; }
+.gm-svg .gm-sector { stroke: currentColor; stroke-width: 2; fill: color-mix(in srgb, var(--brand) 24%, transparent); }
+.gm-svg .gm-dot { fill: currentColor; stroke: none; }
+/* labels keep a halo of the panel colour so a line never runs through them */
+.gm-svg text {
+  fill: currentColor; font-family: var(--font); font-size: 14px; font-weight: 600;
+  paint-order: stroke; stroke: var(--surface-2); stroke-width: 4px; stroke-linejoin: round;
+}
+.gm-mini .gm-svg text { stroke: var(--surface); }
+.gm-svg .gm-vx { font-size: 15px; font-weight: 800; }
+.gm-svg .gm-small { font-size: 12.5px; }
+.gm-svg .gm-tick { font-size: 10px; font-weight: 600; fill: var(--text-2); }
+.gm-svg .gm-axl, .gm-svg .gm-it { font-style: italic; font-weight: 700; }
+.gm-svg .gm-num { font-size: 13px; font-weight: 800; }
+.gm-svg .gm-num.gm-off { fill: var(--text-2); font-weight: 600; }
+.gm-svg .gm-num.gm-on { font-size: 15px; font-weight: 900; text-decoration: underline; }
+.gm-svg .gm-soft { fill: var(--text-2); font-weight: 500; }
+.gm-svg .gm-nts { font-size: 11px; font-style: italic; font-weight: 500; fill: var(--text-2); }
+
+@media (max-width: 520px) {
+  .gm-chip { font-size: .86rem; padding-right: 12px; }
+  .gm .toolbar .seg { width: 100%; }
+  .gm .seg button { flex: 1; padding: 7px 6px; }
+  .gm-eqs { padding: 9px 10px; }
+  .gm-card .q-figure { padding: 6px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .gm-chip:hover { transform: none; }
+  .gm-fold > summary::before { transition: none; }
+}

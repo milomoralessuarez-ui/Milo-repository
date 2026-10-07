@@ -56,6 +56,8 @@ for (const src of sources) {
 // --- drop the things a single file cannot use ------------------------------
 html = html
   .replace(/<link rel="manifest"[^>]*>\s*/, '')
+  // StudyQuest is a separate site in study/; a single file cannot link to it.
+  .replace(/\s*<a href="study\/">StudyQuest<\/a> ·/, '')
   // The service worker needs its own file; a bundle has nothing to register.
   .replace(/\s*<script>\s*if \('serviceWorker' in navigator[\s\S]*?<\/script>/, '');
 

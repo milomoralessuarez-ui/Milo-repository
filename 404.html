@@ -9,16 +9,19 @@
   // just a mistyped URL. On a GitHub Pages project site the app lives under
   // /<repo>/, so send people to the first path segment; at the domain root
   // that reduces to "/".
-  (function () {
-    var seg = location.pathname.split('/').filter(Boolean)[0];
-    location.replace((seg ? '/' + seg + '/' : '/') + '#/');
-  })();
+  // A mistyped StudyQuest URL (…/study/…) goes back to StudyQuest instead.
+  var parts = location.pathname.split('/').filter(Boolean);
+  var at = parts.indexOf('study');
+  var keep = at >= 0 ? parts.slice(0, at + 1) : parts.slice(0, 1);
+  var target = (keep.length ? '/' + keep.join('/') + '/' : '/') + '#/';
+  location.replace(target);
 </script>
 </head>
 <body style="background:#0b0e1a;color:#a8b0d8;font-family:system-ui,sans-serif;display:grid;place-items:center;height:100vh;margin:0">
   <div style="text-align:center">
     <div style="font-size:2.6rem">🎮</div>
-    <p>That page doesn’t exist — heading back to <a href="/" style="color:#22d3ee">MiloPlay</a>…</p>
+    <p>That page doesn’t exist — heading back to <a id="back" href="/" style="color:#22d3ee">MiloPlay</a>…</p>
+    <script>document.getElementById('back').href = target;</script>
   </div>
 </body>
 </html>
