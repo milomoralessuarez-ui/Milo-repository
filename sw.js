@@ -1,6 +1,6 @@
 /* MiloPlay service worker — makes the whole site playable offline.
    Bump CACHE when assets change; old caches are cleaned up on activate. */
-const CACHE = 'miloplay-v10';
+const CACHE = 'miloplay-v11';
 
 const GAMES = [
 // GAMES:BEGIN
@@ -134,12 +134,21 @@ self.addEventListener('fetch', (e) => {
   // — caching every navigation under one key would leave whichever was opened
   // last standing in for both offline.
   if (req.mode === 'navigate') {
-    const shell = url.pathname.includes('/study/') ? './study/index.html' : './index.html';
+    const scope = new URL(self.registration.scope).pathname;
+    const rel = url.pathname.startsWith(scope) ? url.pathname.slice(scope.length) : url.pathname;
+    const study = /^study(\/|$)/.test(rel);
+    const shell = study ? './study/index.html' : './index.html';
+    // Only the shell page itself may stand in for the shell offline — never a
+    // redirect (…/study → …/study/), the 404 page of a mistyped URL, or some
+    // other file opened directly (README.md, dist/miloplay.html).
+    const isShell = study ? /^study\/(index\.html)?$/.test(rel) : /^(index\.html)?$/.test(rel);
     e.respondWith(
       fetch(req)
         .then((res) => {
-          const copy = res.clone();
-          caches.open(CACHE).then((c) => c.put(shell, copy));
+          if (isShell && res.ok && res.type === 'basic' && !res.redirected) {
+            const copy = res.clone();
+            caches.open(CACHE).then((c) => c.put(shell, copy));
+          }
           return res;
         })
         .catch(() => caches.match(shell).then((r) => r || caches.match('./index.html')))

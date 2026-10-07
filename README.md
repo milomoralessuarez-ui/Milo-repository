@@ -107,8 +107,9 @@ exact size) and entries from `tools/gen-variant-entries.mjs`.
 ## StudyQuest — study site
 
 `study/` is a separate, self-contained study app in the style of Quizlet and
-Blooket, one hub for a student's whole schedule. Open `study/index.html` (or
-`/study/` on the deployed site).
+Blooket, one hub for a student's whole schedule. Open `study/index.html`, or
+<https://milomoralessuarez-ui.github.io/Milo-repository/study/> on the deployed
+site (the portal's footer links to it).
 
 | Subject | Where the content comes from |
 |---|---|
@@ -205,8 +206,12 @@ tools/dump-registry.mjs     dumps the live catalogue as JSON
 tools/plan-variants.mjs     allocates remixes to reach an exact catalogue size
 tools/gen-variant-entries.mjs  writes remix titles, copy and colours
 tools/build-variants.mjs    assembles assets/js/variants.js
-tools/build-single.mjs      bundles the site into one self-contained file
+tools/build-single.mjs      bundles the portal into one self-contained file
 dist/miloplay.html          that bundle — open it directly, no server needed
+study/                      StudyQuest, the separate study site (see above)
+tools/verify-study.mjs      checks every StudyQuest question
+tools/smoke-study.mjs       plays every StudyQuest mode and subject (+ tools/study-checks/)
+tools/verify-{algebra,geometry,physics,lab}.mjs  re-solve the generated labs' problems
 ```
 
 ### The engine
@@ -283,8 +288,9 @@ Two things worth knowing:
 
 ### One-file build
 
-`dist/miloplay.html` is the entire site — CSS, engine, all 1,000 games —
-inlined into a single file with no external references. Open it straight from
+`dist/miloplay.html` is the entire game portal — CSS, engine, all 1,000 games —
+inlined into a single file with no external references (StudyQuest, a separate
+site in `study/`, is not part of it). Open it straight from
 disk, email it, or drop it on a USB stick and it works. Rebuild it after
 changing anything:
 

@@ -9,9 +9,18 @@
  * paying for the whole catalogue. --shard=2/4 plays every 4th game starting
  * at the 2nd, so a full run can be split across parallel processes.
  *
- * Requires playwright on NODE_PATH (globally installed in this environment).
+ * Needs playwright: a local install, or the global one (ES modules ignore
+ * NODE_PATH, so the global root is resolved through `npm root -g`).
  */
-import { chromium } from 'playwright';
+let chromium;
+try {
+  ({ chromium } = await import('playwright'));
+} catch {
+  const { execSync } = await import('node:child_process');
+  const root = (process.env.NODE_PATH || '').split(':').filter(Boolean)[0]
+    || execSync('npm root -g', { encoding: 'utf8' }).trim();
+  ({ chromium } = await import(`file://${root}/playwright/index.mjs`));
+}
 
 const args = process.argv.slice(2);
 const BASE = args.find((a) => !a.startsWith('--')) || 'http://127.0.0.1:8099';
